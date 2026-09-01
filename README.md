@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Movie Z
 
-## Getting Started
+A public movie browsing app built with Next.js. It includes a homepage hero, searchable movie carousels, genre pages, a watchlist, and trailer/watch screens.
 
-First, run the development server:
+## Features
+
+- Homepage with hero banner and movie rows
+- Search by title
+- Filter by genre
+- Multi-page movie details
+- Watchlist using localStorage
+- Trailer embed pages
+- TMDB-ready API layer with local fallback data
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## TMDB setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a local environment file:
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Add your TMDB API key:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+TMDB_API_KEY=your_tmdb_read_access_token_here
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If no key is present, the app falls back to the locally bundled movie catalog.
 
-## Deploy on Vercel
+## GitHub setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git init
+# optional if repo already exists
+git add .
+git commit -m "Initial movie app"
+git branch -M main
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then push to GitHub:
+
+```bash
+git remote add origin https://github.com/<your-user>/<your-repo>.git
+git push -u origin main
+```
+
+## Vercel deployment
+
+1. Go to https://vercel.com
+2. Import the GitHub repository
+3. In project settings, add environment variables:
+   - `TMDB_API_KEY`
+   - `NEXT_PUBLIC_APP_URL`
+4. Deploy the project
+
+## Notes
+
+This project is a public movie catalog and trailer site. It does not host full copyrighted video files; it uses trailer embeds and public poster metadata.
