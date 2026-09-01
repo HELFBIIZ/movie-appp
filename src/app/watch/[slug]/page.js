@@ -4,6 +4,7 @@ import { getMovieBySlug } from '@/lib/movies'
 
 export function generateStaticParams() {
   return [
+    { slug: 'spider-man-brand-new-day' },
     { slug: 'dear-santa' },
     { slug: 'how-to-train-your-dragon' },
     { slug: 'alien-romulus' },

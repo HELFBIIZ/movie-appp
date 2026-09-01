@@ -1,6 +1,7 @@
-'use client'
+2'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { movies as fallbackMovies } from '@/lib/movies'
 
@@ -45,7 +46,9 @@ export default function WatchlistPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {watchlist.map((movie) => (
             <Link key={movie.slug} href={`/movie/${movie.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
-              <img src={movie.poster} alt={movie.title} className="h-72 w-full object-cover" />
+              <div className="relative h-72 w-full">
+                <Image src={movie.poster} alt={movie.title} fill className="object-cover" />
+              </div>
               <div className="space-y-2 p-4">
                 <h2 className="text-lg font-semibold">{movie.title}</h2>
                 <p className="text-sm text-slate-500 dark:text-slate-400">{movie.year} • {movie.rating}/10</p>

@@ -1,5 +1,21 @@
 export const movies = [
   {
+    slug: 'spider-man-brand-new-day',
+    title: 'Spider-Man: Brand New Day',
+    year: 2026,
+    rating: 8.6,
+    genres: ['Action', 'Adventure', 'Sci-Fi'],
+    runtime: '2h 18m',
+    language: 'English',
+    director: 'Destin Daniel Cretton',
+    cast: ['Tom Holland', 'Zendaya', 'Jacob Batalon'],
+    plot: 'Peter Parker faces a new chapter of heroism as old enemies return, new allies emerge, and his life is forced to balance between responsibility, heart, and destiny.',
+    poster: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80',
+    banner: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1400&q=80',
+    trailerYouTubeId: '8Qn_spdMlt4',
+    category: 'upcoming'
+  },
+  {
     slug: 'dear-santa',
     title: 'Dear Santa',
     year: 2024,
@@ -207,6 +223,54 @@ export const movies = [
     trailerYouTubeId: 'BdJKm16Co6M',
     category: 'top-rated'
   }
+  {
+    slug: 'oppenheimer',
+    title: 'Oppenheimer',
+    year: 2023,
+    rating: 8.5,
+    genres: ['Drama', 'History'],
+    runtime: '3h 1m',
+    language: 'English',
+    director: 'Christopher Nolan',
+    cast: ['Cillian Murphy', 'Emily Blunt', 'Robert Downey Jr.'],
+    plot: 'The story of J. Robert Oppenheimer and the creation of the atomic bomb, exploring ambition, science, and the moral consequences of invention.',
+    poster: 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=800&q=80',
+    banner: 'https://images.unsplash.com/photo-1542206395-9feb3edaa68d?auto=format&fit=crop&w=1400&q=80',
+    trailerYouTubeId: 'Ngc9gn_gnJ0',
+    category: 'top-rated'
+  },
+  {
+    slug: 'barbie',
+    title: 'Barbie',
+    year: 2023,
+    rating: 7.0,
+    genres: ['Comedy', 'Fantasy'],
+    runtime: '1h 54m',
+    language: 'English',
+    director: 'Greta Gerwig',
+    cast: ['Margot Robbie', 'Ryan Gosling', 'America Ferrera'],
+    plot: 'A playful and satirical adventure where Barbie discovers the complexities of identity and the real world beyond Barbieland.',
+    poster: 'https://images.unsplash.com/photo-1511763368359-8f31d1d9f6b3?auto=format&fit=crop&w=800&q=80',
+    banner: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1400&q=80',
+    trailerYouTubeId: 'Q0CbN8sfihY',
+    category: 'popular'
+  },
+  {
+    slug: 'guardians-of-the-galaxy-vol-3',
+    title: 'Guardians of the Galaxy Vol. 3',
+    year: 2023,
+    rating: 7.9,
+    genres: ['Action', 'Adventure', 'Sci-Fi'],
+    runtime: '2h 30m',
+    language: 'English',
+    director: 'James Gunn',
+    cast: ['Chris Pratt', 'Zoe Saldana', 'Dave Bautista'],
+    plot: 'The Guardians face new threats and old wounds as they band together for one final, emotional mission to protect their found family.',
+    poster: 'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80',
+    banner: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1400&q=80',
+    trailerYouTubeId: 'dW1BIid8Osg',
+    category: 'popular'
+  },
 ]
 
 export const fallbackMovies = movies

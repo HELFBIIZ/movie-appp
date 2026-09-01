@@ -1,6 +1,7 @@
 "use client"
- 
+
 import Link from "next/link"
+import Image from "next/image"
 import {
   Carousel,
   CarouselContent,
@@ -17,9 +18,12 @@ export default function MovieCarousel({ title, movies }) {
       <div className="container px-4">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <Button variant="link" className="text-sm">
+          <Link
+            href={`/movies?category=${encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'))}`}
+            className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300"
+          >
             See more →
-          </Button>
+          </Link>
         </div>
  
         <Carousel
@@ -39,10 +43,12 @@ export default function MovieCarousel({ title, movies }) {
                   <Card className="border-0 bg-transparent shadow-none">
                     <CardContent className="p-0">
                       <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
-                        <img
+                        <Image
                           src={movie.poster}
                           alt={movie.title}
-                          className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                          fill
+                          sizes="(max-width: 640px) 50vw, 200px"
+                          className="object-cover transition-transform duration-300 hover:scale-105"
                         />
                       </div>
                       <div className="mt-2.5 space-y-1">
