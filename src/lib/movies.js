@@ -222,7 +222,7 @@ export const movies = [
     banner: 'https://images.unsplash.com/photo-1522262837797-9e88a3f975f5?auto=format&fit=crop&w=1400&q=80',
     trailerYouTubeId: 'BdJKm16Co6M',
     category: 'top-rated'
-  }
+  },
   {
     slug: 'oppenheimer',
     title: 'Oppenheimer',
