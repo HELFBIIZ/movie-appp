@@ -202,6 +202,18 @@ export async function createUser({ email, username, password }) {
   )
   return { user, xp: { gained: 50, level: 1, status: 'ok' } }
 }
+/** Promote/demote a user's role by email (SERVER-ONLY — never exposed to client). */
+export async function setUserRoleByEmail(email, roleCode) {
+  const valid = ['USER', 'MODERATOR', 'ADMIN', 'SUPER_ADMIN']
+  if (!valid.includes(roleCode)) throw new Error(`Invalid roleCode: ${roleCode}`)
+  const client = await getClient()
+  const res = await client.execute(
+    `UPDATE users SET role_id = (SELECT id FROM roles WHERE code = ?)
+     WHERE email = ? AND deleted_at IS NULL`,
+    [roleCode, email.toUpperCase()]
+  )
+  return res.rowsAffected > 0
+}
 /** Fetch a user by email/username with their current XP + streak (for login). */
 export async function findUserForLogin(identifier) {
   return qOne(
