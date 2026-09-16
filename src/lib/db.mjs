@@ -257,7 +257,7 @@ export async function getUserBySessionToken(token) {
      FROM sessions s
      JOIN users u ON u.id = s.user_id
      JOIN roles r ON r.id = u.role_id
-     WHERE s.token_hash = ? AND s.expires_at > datetime('now') LIMIT 1`,
+      WHERE s.token_hash = ? AND s.expires_at > datetime('now') AND u.deleted_at IS NULL LIMIT 1`,
     [hashSessionToken(token)]
   )
 }
@@ -570,9 +570,20 @@ export async function adminOverview() {
     activeSubscriptions: n(await one(
       `SELECT COUNT(*) AS c FROM subscriptions WHERE status = 'ACTIVE' AND datetime(expires_at) > datetime(?)`, now
     ), 'c'),
-    revenueMnt: sum(await one(`SELECT COALESCE(SUM(amount_mnt), 0) AS s FROM payments WHERE status = 'SUCCESSFUL'`), 's'),
-    successfulPayments: n(await one(`SELECT COUNT(*) AS c FROM payments WHERE status = 'SUCCESSFUL'`), 'c'),
+    revenueMnt: sum(await one(`SELECT COALESCE(SUM(amount_mnt), 0) AS s FROM payments WHERE status = 'SUCCESSFUL' AND provider != 'local_dev'`), 's'),
+    successfulPayments: n(await one(`SELECT COUNT(*) AS c FROM payments WHERE status = 'SUCCESSFUL' AND provider != 'local_dev'`), 'c'),
+    demoPayments: n(await one(`SELECT COUNT(*) AS c FROM payments WHERE status = 'SUCCESSFUL' AND provider = 'local_dev'`), 'c'),
     pendingReceipts: n(await one(`SELECT COUNT(*) AS c FROM payment_receipts WHERE status = 'PENDING'`), 'c'),
+    unverifiedActiveSubscriptions: n(await one(`
+      SELECT COUNT(*) AS c FROM subscriptions s
+      JOIN subscription_plans p ON p.id = s.plan_id
+      WHERE s.status = 'ACTIVE' AND datetime(s.expires_at) > datetime(?) AND p.price_mnt > 0
+        AND NOT EXISTS (
+          SELECT 1 FROM payments pay
+          WHERE pay.user_id = s.user_id AND pay.plan_id = s.plan_id AND pay.status = 'SUCCESSFUL'
+            AND pay.provider IN ('bank', 'qpay')
+        )
+    `, now), 'c'),
     totalXp: sum(await one(`SELECT COALESCE(SUM(xp), 0) AS s FROM xp_accounts`), 's'),
     reviews: n(await one(`SELECT COUNT(*) AS c FROM reviews`), 'c'),
     watchHistory: n(await one(`SELECT COUNT(*) AS c FROM watch_history`), 'c'),
@@ -594,6 +605,142 @@ export async function adminOverview() {
     },
   }
 }
+
+export async function getUserRoleByUserId(userId) {
+  return qOne(`
+    SELECT u.id, r.code AS roleCode FROM users u
+    JOIN roles r ON r.id = u.role_id
+    WHERE u.id = ?
+  `, [userId])
+}
+
+export async function listUsers({ search = '', includeDeleted = false } = {}) {
+  const clauses = []
+  const args = []
+  if (!includeDeleted) clauses.push('u.deleted_at IS NULL')
+  const query = String(search || '').trim()
+  if (query) {
+    clauses.push('(LOWER(u.email) LIKE ? OR LOWER(u.username) LIKE ?)')
+    const pattern = `%${query.toLowerCase()}%`
+    args.push(pattern, pattern)
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''
+  return qAll(`
+    WITH active_subscriptions AS (
+      SELECT s.*,
+             ROW_NUMBER() OVER (
+               PARTITION BY s.user_id
+               ORDER BY datetime(s.expires_at) DESC, datetime(s.created_at) DESC, s.id DESC
+             ) AS rn
+      FROM subscriptions s
+      WHERE s.status = 'ACTIVE' AND datetime(s.expires_at) > datetime('now')
+    )
+    SELECT u.id, u.email, u.username, r.code AS roleCode,
+           u.deleted_at AS deletedAt, u.created_at AS createdAt,
+           s.status AS subscriptionStatus, s.expires_at AS subscriptionExpiresAt,
+           p.code AS planCode, p.name AS planName,
+           COUNT(DISTINCT CASE WHEN pay.status = 'SUCCESSFUL'
+             AND pay.provider IN ('bank', 'qpay') THEN pay.id END) AS verifiedPayments,
+           COUNT(DISTINCT CASE WHEN pay.status = 'SUCCESSFUL'
+             AND pay.provider = 'local_dev' THEN pay.id END) AS demoPayments
+    FROM users u
+    JOIN roles r ON r.id = u.role_id
+    LEFT JOIN active_subscriptions s ON s.user_id = u.id AND s.rn = 1
+    LEFT JOIN subscription_plans p ON p.id = s.plan_id
+    LEFT JOIN payments pay ON pay.user_id = u.id
+    ${where}
+    GROUP BY u.id, s.id
+    ORDER BY u.created_at DESC
+  `, args)
+}
+
+export async function revokeUserSubscriptions({ userId, reviewedBy = null } = {}) {
+  const active = await qAll(`
+    SELECT s.id, p.code AS planCode FROM subscriptions s
+    JOIN subscription_plans p ON p.id = s.plan_id
+    WHERE s.user_id = ? AND s.status = 'ACTIVE' AND p.price_mnt > 0
+  `, [userId])
+  if (!active.length) return { count: 0, subscriptions: [] }
+
+  const writes = []
+  for (const sub of active) {
+    writes.push({
+      sql: `UPDATE subscriptions SET status = 'REVOKED', updated_at = datetime('now') WHERE id = ?`,
+      args: [sub.id],
+    })
+    writes.push({
+      sql: `INSERT INTO security_logs (id, user_id, type, detail, ip, created_at)
+            VALUES (?, ?, 'subscription-revoke', ?, NULL, datetime('now'))`,
+      args: [crypto.randomUUID(), userId, `${sub.planCode} revoked by ${reviewedBy || 'admin'}`],
+    })
+  }
+  writes.push({
+    sql: `INSERT INTO notifications (id, user_id, type, title, body, link, created_at)
+          VALUES (?, ?, 'info', 'VIP эрх цуцлагдлаа',
+                  'Демо төлбөр эсвэл баталгаажаагүй төлбөрөөр идэвхжсэн VIP эрхийг админ цуцаллаа. Khan Bank шилжүүлгээ илгээж, админаар баталгаажуулна уу.',
+                  '/pricing', datetime('now'))`,
+    args: [crypto.randomUUID(), userId],
+  })
+  await batchWrite(writes)
+  return { count: active.length, subscriptions: active }
+}
+
+export async function revokeUnverifiedSubscriptions({ reviewedBy = 'audit' } = {}) {
+  const candidates = await qAll(`
+    SELECT s.id, s.user_id, p.code AS planCode FROM subscriptions s
+    JOIN subscription_plans p ON p.id = s.plan_id
+    WHERE s.status = 'ACTIVE' AND datetime(s.expires_at) > datetime('now')
+      AND p.price_mnt > 0
+      AND NOT EXISTS (
+        SELECT 1 FROM payments pay
+        WHERE pay.user_id = s.user_id AND pay.plan_id = s.plan_id
+          AND pay.status = 'SUCCESSFUL' AND pay.provider IN ('bank', 'qpay')
+      )
+  `)
+  if (!candidates.length) return { count: 0, subscriptions: [] }
+
+  const writes = []
+  for (const sub of candidates) {
+    writes.push({
+      sql: `UPDATE subscriptions SET status = 'REVOKED', updated_at = datetime('now') WHERE id = ?`,
+      args: [sub.id],
+    })
+    writes.push({
+      sql: `INSERT INTO security_logs (id, user_id, type, detail, ip, created_at)
+            VALUES (?, ?, 'subscription-revoke', ?, NULL, datetime('now'))`,
+      args: [crypto.randomUUID(), sub.user_id, `${sub.planCode} revoked by ${reviewedBy}`],
+    })
+  }
+  for (const sub of candidates) {
+    writes.push({
+      sql: `INSERT INTO notifications (id, user_id, type, title, body, link, created_at)
+            VALUES (?, ?, 'info', 'VIP эрх цуцлагдлаа',
+                    'Баталгаажаагүй төлбөрөөр идэвхжсэн VIP эрхийг цуцаллаа. Khan Bank шилжүүлгээ илгээж, админаар баталгаажуулна уу.',
+                    '/pricing', datetime('now'))`,
+      args: [crypto.randomUUID(), sub.user_id],
+    })
+  }
+  await batchWrite(writes)
+  return { count: candidates.length, subscriptions: candidates }
+}
+
+export async function setUserDeleted({ userId, deleted, reviewedBy }) {
+  const target = await qOne(`SELECT id, email, username FROM users WHERE id = ?`, [userId])
+  if (!target) return { error: { code: 'USER_NOT_FOUND', status: 404 } }
+  const revoked = deleted ? await revokeUserSubscriptions({ userId, reviewedBy }) : null
+  await qRun(
+    `UPDATE users SET deleted_at = ?, updated_at = datetime('now') WHERE id = ?`,
+    [deleted ? new Date().toISOString() : null, userId],
+  )
+  if (deleted) await qRun(`DELETE FROM sessions WHERE user_id = ?`, [userId])
+  await qRun(
+    `INSERT INTO security_logs (id, user_id, type, detail, ip, created_at)
+     VALUES (?, ?, ?, ?, NULL, datetime('now'))`,
+    [crypto.randomUUID(), userId, deleted ? 'user-ban' : 'user-restore', `${target.email} ${deleted ? 'banned' : 'restored'} by ${reviewedBy}`],
+  )
+  return { user: { ...target, deleted }, revoked }
+}
+
 /**
  * Flip a PENDING/PROCESSING payment to SUCCESSFUL and materialise the
  * subscription in the SAME commit: new ACTIVE row whose expiry is stacked on

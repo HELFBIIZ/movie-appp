@@ -72,6 +72,9 @@ export default function AdminPage() {
             <h1 className="mt-1 text-3xl font-bold md:text-4xl gradient-text">Dashboard</h1>
           </div>
           <div className="flex gap-2">
+            <Link href="/admin/users" className="rounded-lg border border-[#d6b456]/40 px-4 py-2 text-sm font-semibold text-amber-300 transition-all hover:bg-[#d6b456]/10">
+              Manage users
+            </Link>
             <Link href="/admin/payments" className="rounded-lg border border-amber-500/40 px-4 py-2 text-sm font-semibold text-amber-300 transition-all hover:bg-amber-500/10">
               Review manual payments →
             </Link>
@@ -96,6 +99,12 @@ export default function AdminPage() {
               <Card label="Reviews" value={data.stats.reviews} />
               <Card label="Watch events" value={data.stats.watchHistory} />
             </div>
+
+            {(data.stats.demoPayments > 0 || data.stats.unverifiedActiveSubscriptions > 0) && (
+              <div className="rounded-2xl border border-red-700 bg-red-950/30 p-4 text-sm text-red-200">
+                <b>Баталгаа шаардлагатай:</b> demo төлбөр {data.stats.demoPayments} ширхэг, баталгаажаагүй идэвхтэй VIP {data.stats.unverifiedActiveSubscriptions} ширхэг байна. /admin/users хуудсаас VIP эрхийг цуцална уу.
+              </div>
+            )}
 
             <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm">
               <span className="text-slate-400">Catalog:</span> <span className="text-white">{data.catalog.movies} movies</span> ·

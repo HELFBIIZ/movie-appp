@@ -12,6 +12,7 @@ export default function PricingPage() {
   const [myRewards, setMyRewards] = useState([])
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
+  const [paymentOptions, setPaymentOptions] = useState(null)
   const [bankPlan, setBankPlan] = useState('')
   const [phone, setPhone] = useState('')
   const [note, setNote] = useState('')
@@ -25,6 +26,7 @@ export default function PricingPage() {
       setRewards(d.rewards ?? [])
       setMyRewards(d.myRewards ?? [])
     })
+    fetch('/api/payment-options').then((r) => (r.ok ? r.json() : {})).then(setPaymentOptions)
   }, [])
 
   async function checkout(planCode, provider) {
@@ -156,20 +158,27 @@ export default function PricingPage() {
                 <div className="mt-2 text-2xl font-bold gradient-text inline-block">{fmt(p.priceMnt)}</div>
                 <div className="text-sm text-slate-400">{p.durationDays} days</div>
                 <div className="mt-4 flex flex-col gap-2">
-                  <button
-                    disabled={busy === `${p.code}:local_dev`}
-                    onClick={() => checkout(p.code, 'local_dev')}
-                    className="rounded-xl bg-gradient-to-r from-[#c9a227] via-[#e7c779] to-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110 shadow-[0_8px_24px_-8px_rgba(214,180,86,0.45)] disabled:opacity-50 disabled:shadow-none"
-                  >
-                    {busy === `${p.code}:local_dev` ? 'Activating…' : 'Buy with card (demo)'}
-                  </button>
-                  <button
-                    disabled={busy === `${p.code}:qpay`}
-                    onClick={() => checkout(p.code, 'qpay')}
-                    className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
-                  >
-                    {busy === `${p.code}:qpay` ? '…' : 'QPay'} ₮
-                  </button>
+                  {paymentOptions?.demo === true && (
+                    <button
+                      disabled={busy === `${p.code}:local_dev`}
+                      onClick={() => checkout(p.code, 'local_dev')}
+                      className="rounded-xl bg-gradient-to-r from-[#c9a227] via-[#e7c779] to-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110 shadow-[0_8px_24px_-8px_rgba(214,180,86,0.45)] disabled:opacity-50 disabled:shadow-none"
+                    >
+                      {busy === `${p.code}:local_dev` ? 'Activating…' : 'Buy with card (demo)'}
+                    </button>
+                  )}
+                  {paymentOptions?.qpay && (
+                    <button
+                      disabled={busy === `${p.code}:qpay`}
+                      onClick={() => checkout(p.code, 'qpay')}
+                      className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
+                    >
+                      {busy === `${p.code}:qpay` ? '…' : 'QPay'} ₮
+                    </button>
+                  )}
+                  {paymentOptions && !paymentOptions.qpay && p.code === 'WEEKLY' && (
+                    <p className="text-xs text-slate-500">QPay is unavailable. Use Khan Bank transfer below.</p>
+                  )}
                 </div>
               </div>
             ))}
