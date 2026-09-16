@@ -143,18 +143,19 @@ export default function WatchPage() {
                   ) : null}
                 </div>
                 <div className="aspect-video w-full">
-                  <SubtitledStreamPlayer
-                    key={`${source}-${season}-${episode}`}
-                    tmdbId={movie.tmdbId}
-                    isTV={isTV}
-                    season={season}
-                    episode={episode}
-                    title={movie.title}
-                    variant={activeVariant <= maxVariant ? activeVariant : 0}
-                    subtitleUrl={source === 'p3' ? subtitleUrl : null}
-                    subtitleLabel={subtitleLabel}
-                    onKeyLoadError={fallbackOnKeyError}
-                  />
+                   <SubtitledStreamPlayer
+                     key={`${source}-${season}-${episode}`}
+                     tmdbId={movie.tmdbId}
+                     isTV={isTV}
+                     season={season}
+                     episode={episode}
+                     title={movie.title}
+                     mediaType={movie.mediaType || (isTV ? 'tv' : 'movie')}
+                     variant={activeVariant <= maxVariant ? activeVariant : 0}
+                     subtitleUrl={source === 'p3' ? subtitleUrl : null}
+                     subtitleLabel={subtitleLabel}
+                     onKeyLoadError={fallbackOnKeyError}
+                   />
                 </div>
                 {subtitleUrl && source !== 'p3' && (
                   <div className="flex items-center gap-2 border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">

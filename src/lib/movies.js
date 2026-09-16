@@ -64,8 +64,8 @@ const popularFallbackMovies = [
   {
     slug: 'spider-man-brand-new-day',
     title: 'Spider-Man: Brand New Day',
-    year: 2026,
-    rating: 8.6,
+    year: 2025,
+    rating: 7.5,
     genres: ['Action', 'Adventure', 'Sci-Fi'],
     runtime: '2h 18m',
     language: 'English',
@@ -1092,15 +1092,17 @@ const generatedMovies = (fetchedCatalog.movies || [])
     ...movie,
     poster: movie.poster || makePosterUrl(movie.title),
     banner: movie.banner || makeBannerUrl(movie.title),
+    mediaType: movie.mediaType || (movie.episodes && movie.episodes > 1 ? 'tv' : 'movie'),
   }))
 
 const kdramaCatalogMovies = (kdramaCatalog || [])
   .filter((movie) => movie?.slug)
   .map((movie) => ({
     ...movie,
-    poster: kdramaArt[movie.slug]?.poster || makePosterUrl(movie.title),
-    banner: kdramaArt[movie.slug]?.banner || makeBannerUrl(movie.title),
-    tmdbId: kdramaArt[movie.slug]?.tmdbId || null,
+    poster: kdramaArt[movie.slug]?.poster || movie.poster || makePosterUrl(movie.title),
+    banner: kdramaArt[movie.slug]?.banner || movie.banner || makeBannerUrl(movie.title),
+    tmdbId: kdramaArt[movie.slug]?.tmdbId || movie.tmdbId || null,
+    mediaType: kdramaArt[movie.slug]?.media || movie.media || (movie.episodes && movie.episodes > 1 ? 'tv' : 'movie'),
   }))
 
 const westernCatalogMovies = (westernCatalog || [])
@@ -1109,6 +1111,7 @@ const westernCatalogMovies = (westernCatalog || [])
     ...movie,
     poster: movie.poster || makePosterUrl(movie.title),
     banner: movie.banner || makeBannerUrl(movie.title),
+    mediaType: movie.media || (movie.episodes && movie.episodes > 1 ? 'tv' : 'movie'),
   }))
 
 export const movies = [
@@ -1119,6 +1122,7 @@ export const movies = [
       poster: art?.poster || makePosterUrl(movie.title),
       banner: art?.banner || makeBannerUrl(movie.title),
       tmdbId: art?.tmdbId || null,
+      mediaType: art?.media || movie.media || 'movie',
     };
   }),
   ...kdramaCatalogMovies,

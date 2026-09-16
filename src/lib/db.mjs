@@ -322,15 +322,15 @@ export async function getActiveSubscription(userId) {
  * that we deliberately gate in the payment wiring step).
  */
 export async function canWatch(userId, movie, sub = null) {
-  if (!movie) return { allowed: false, reason: 'NO_MOVIE' }
-  if (movie.access === 'FREE') return { allowed: true, reason: 'FREE' }
+  if (!movie) return { allowed: false, code: 'NO_MOVIE', reason: 'NO_MOVIE' }
+  if (movie.access === 'FREE') return { allowed: true, code: 'FREE', reason: 'FREE' }
   const active = sub || (userId ? await getActiveSubscription(userId) : null)
-  if (!active) return { allowed: false, reason: 'NO_ACTIVE_SUBSCRIPTION' }
-  if (active.status !== 'ACTIVE') return { allowed: false, reason: active.status }
+  if (!active) return { allowed: false, code: 'NO_ACTIVE_SUBSCRIPTION', reason: 'NO_ACTIVE_SUBSCRIPTION' }
+  if (active.status !== 'ACTIVE') return { allowed: false, code: active.status, reason: active.status }
   if (new Date(active.expiresAt).getTime() <= Date.now()) {
-    return { allowed: false, reason: 'SUBSCRIPTION_EXPIRED' }
+    return { allowed: false, code: 'SUBSCRIPTION_EXPIRED', reason: 'SUBSCRIPTION_EXPIRED' }
   }
-  return { allowed: true, reason: 'SUBSCRIPTION' }
+  return { allowed: true, code: 'SUBSCRIPTION', reason: 'SUBSCRIPTION' }
 }
 
 // ────────────────────────────────────────────────────────────────────────
