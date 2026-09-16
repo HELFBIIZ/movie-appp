@@ -14,23 +14,34 @@ async function resolveOpenSubtitlesSource({ tmdbId, title, year, type, season, e
   const apiKey = process.env.OPENSUBTITLES_API_KEY
   if (!apiKey || (!tmdbId && !title)) return null
 
-  const native = await osSearch({ tmdbId, lang: 'mn', title, year, type, season, episode })
-  if (native?.length) {
-    const fileId = native[0].fileId
-    if (fileId != null) {
-      const content = await osDownloadContent(fileId)
-      if (content) return { content, language: 'mn', sourceDetail: 'OpenSubtitles (native Mongolian)' }
+  // Without OPENSUBTITLES_USERNAME/PASSWORD the download endpoint rejects us,
+  // but we still try search first — if download fails we return null and the
+  // caller falls through to Subt.is instead of crashing with HTTP 500.
+  try {
+    const native = await osSearch({ tmdbId, lang: 'mn', title, year, type, season, episode })
+    if (native?.length) {
+      const fileId = native[0].fileId
+      if (fileId != null) {
+        try {
+          const content = await osDownloadContent(fileId)
+          if (content) return { content, language: 'mn', sourceDetail: 'OpenSubtitles (native Mongolian)' }
+        } catch {}
+      }
     }
-  }
+  } catch {}
 
-  const english = await osSearch({ tmdbId, lang: 'en', title, year, type, season, episode })
-  if (english?.length) {
-    const fileId = english[0].fileId
-    if (fileId != null) {
-      const content = await osDownloadContent(fileId)
-      if (content) return { content, language: 'en', sourceDetail: 'OpenSubtitles (English → Mongolian)' }
+  try {
+    const english = await osSearch({ tmdbId, lang: 'en', title, year, type, season, episode })
+    if (english?.length) {
+      const fileId = english[0].fileId
+      if (fileId != null) {
+        try {
+          const content = await osDownloadContent(fileId)
+          if (content) return { content, language: 'en', sourceDetail: 'OpenSubtitles (English → Mongolian)' }
+        } catch {}
+      }
     }
-  }
+  } catch {}
 
   return null
 }
