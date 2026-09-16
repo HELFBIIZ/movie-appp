@@ -42,13 +42,11 @@ export default function SubtitledStreamPlayer({
   episode = 1,
   title = '',
   variant = 0,
-  mediaType = null,
   subtitleUrl = null,
   subtitleLabel = 'Subtitles',
   onKeyLoadError = null,
 }) {
   const videoRef = useRef(null)
-  const iframeRef = useRef(null)
   const hlsRef = useRef(null)
   const cuesRef = useRef([])
   const tickRef = useRef(null)
@@ -58,7 +56,6 @@ export default function SubtitledStreamPlayer({
   const [error, setError] = useState(null)
   const [subsState, setSubsState] = useState('none') // none | loading | on | error
   const [cue, setCue] = useState('')
-  const isIframe = stream?.type === 'iframe'
 
   const loadStream = useCallback(
     async (force = false) => {
@@ -66,7 +63,6 @@ export default function SubtitledStreamPlayer({
       setError(null)
       try {
         const params = new URLSearchParams({ tmdbId: String(tmdbId), type: isTV ? 'tv' : 'movie', variant: String(variant) })
-        if (mediaType) params.set('mediaType', mediaType)
         if (isTV) {
           params.set('season', String(season))
           params.set('episode', String(episode))
@@ -114,7 +110,7 @@ export default function SubtitledStreamPlayer({
         const parsed = parseVtt(text)
         cuesRef.current = parsed
         setSubsState(parsed.length ? 'on' : 'error')
-        if (parsed.length && videoRef.current) {
+        if (parsed.length) {
           tickRef.current = setInterval(() => {
             const video = videoRef.current
             if (!video) { setCue(''); return }
@@ -130,7 +126,7 @@ export default function SubtitledStreamPlayer({
 
   // Attach the HLS stream to the <video>.
   useEffect(() => {
-    if (isIframe || !stream || !stream.url || !videoRef.current) return
+    if (!stream || !stream.url || !videoRef.current) return
     const video = videoRef.current
     let disposed = false
 
@@ -173,7 +169,7 @@ export default function SubtitledStreamPlayer({
 
     attach()
     return () => { disposed = true }
-  }, [stream, isIframe])
+  }, [stream])
 
   const cueBar =
     (subsState === 'on' || subsState === 'loading') && subtitleLabel
@@ -182,24 +178,13 @@ export default function SubtitledStreamPlayer({
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-800 bg-black">
-      {isIframe ? (
-        <iframe
-          ref={iframeRef}
-          src={stream?.url ?? ''}
-          title={title}
-          className="h-full w-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope picture-in-picture; web-share"
-          allowFullScreen
-        />
-      ) : (
-        <video
-          ref={videoRef}
-          className="h-full w-full"
-          controls
-          playsInline
-          crossOrigin="anonymous"
-        />
-      )}
+      <video
+        ref={videoRef}
+        className="h-full w-full"
+        controls
+        playsInline
+        crossOrigin="anonymous"
+      />
 
       {/* status chips */}
       <div className="pointer-events-none absolute left-3 top-3 z-10 flex gap-2">

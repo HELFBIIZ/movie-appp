@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy, Shield } from "lucide-react"
+import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy } from "lucide-react"
 import { useTheme } from "@/components/ThemeProvider"
 import NotificationBell from "@/components/NotificationBell"
 
@@ -32,14 +32,6 @@ const genres = [
 export default function Header() {
   const { isDark, toggleTheme } = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [roleCode, setRoleCode] = useState(null)
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((response) => response.ok ? response.json() : {})
-      .then((data) => setRoleCode(data.me?.roleCode ?? null))
-      .catch(() => setRoleCode(null))
-  }, [])
 
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/90 bg-[#faf7f1]/95 border-[#e5dcc7] dark:bg-[#110e0a]/92 dark:border-black/60 supports-[backdrop-filter]:dark:bg-[#110e0a]/80">
@@ -82,17 +74,6 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          {roleCode === "ADMIN" || roleCode === "SUPER_ADMIN" ? (
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 rounded-lg border border-[#d6b456]/40 px-2.5 py-2 text-sm font-semibold text-amber-300 transition-colors hover:bg-[#d6b456]/10"
-              title="Admin dashboard"
-            >
-              <Shield className="h-4 w-4" />
-              <span className="hidden sm:inline">Admin</span>
-            </Link>
-          ) : null}
-
           <NotificationBell />
 
           <button
@@ -133,11 +114,6 @@ export default function Header() {
             <MobileNavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Western</MobileNavLink>
             <MobileNavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Watchlist</MobileNavLink>
             <MobileNavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Тусламж</MobileNavLink>
-            {roleCode === "ADMIN" || roleCode === "SUPER_ADMIN" ? (
-              <Link href="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-amber-300 dark:hover:bg-white/5">
-                <Shield className="h-4 w-4" /> Admin
-              </Link>
-            ) : null}
             <div className="mt-2 pt-2 border-t border-[#e5dcc7] dark:border-black/60">
               <p className="px-3 py-1 text-xs font-medium text-[#8a7540] dark:text-[#cbb277]">Genres</p>
               <div className="grid grid-cols-3 gap-1 px-3">

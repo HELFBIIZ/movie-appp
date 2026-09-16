@@ -5,7 +5,6 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const tmdbId = searchParams.get('tmdbId')
   const type = searchParams.get('type') === 'tv' ? 'tv' : 'movie'
-  const mediaType = searchParams.get('mediaType') || type
   const season = searchParams.get('season') ? Number(searchParams.get('season')) : undefined
   const episode = searchParams.get('episode') ? Number(searchParams.get('episode')) : undefined
   const variant = Number(searchParams.get('variant') || 0)
@@ -16,7 +15,7 @@ export async function GET(request) {
   }
 
   try {
-    const candidates = await resolveStreamCandidates(tmdbId, { type, season, episode, forceRefresh, mediaType })
+    const candidates = await resolveStreamCandidates(tmdbId, { type, season, episode, forceRefresh })
     if (!candidates.length) {
       return NextResponse.json({ error: 'No playable stream found. Try again in a moment.' }, { status: 404 })
     }
@@ -27,7 +26,6 @@ export async function GET(request) {
       label: stream.label,
       quality: stream.quality,
       url: stream.url,
-      type: stream.type || 'hls',
       candidates,
     })
   } catch (err) {

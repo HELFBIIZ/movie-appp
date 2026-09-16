@@ -7,7 +7,6 @@ import {
 } from './subtis.js'
 
 const API = 'https://api.translateapi.ai/api/v1'
-const TRANSLATE_ENDPOINT = `${API}/translate/`
 const TARGET = 'mn'
 const BATCH_SIZE = 100
 const UA = 'VXNTA v1.0'
@@ -45,34 +44,7 @@ function groupByPayload(keys) {
   return groups
 }
 
-async function translateGroupViaAPI(group, apiKey) {
-  if (!apiKey) return null
-  const q = group.join('\n')
-  try {
-    const res = await fetch(TRANSLATE_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ text: q, source_language: 'en', target_language: TARGET }),
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    const translated = data.translated_text
-    if (!translated) return null
-    const parts = translated.split('\n')
-    if (parts.length !== group.length) return null
-    return parts.map((p, i) => {
-      const out = restoreKey(p)
-      return out || group[i]
-    })
-  } catch {
-    return null
-  }
-}
-
-async function translateGroup(group, apiKey = null) {
+async function translateGroup(group) {
   const q = group.join('\n')
   let payload
   try {
@@ -81,7 +53,7 @@ async function translateGroup(group, apiKey = null) {
     if (!res.ok) throw new Error(`Google translate failed (${res.status})`)
     payload = await res.json()
   } catch {
-    return translateGroupViaAPI(group, apiKey)
+    return null
   }
 
   const segments = (payload?.[0] || [])
@@ -89,41 +61,12 @@ async function translateGroup(group, apiKey = null) {
     .join('')
 
   const parts = segments.split('\n')
-  if (parts.length !== group.length) return translateGroupViaAPI(group, apiKey)
+  if (parts.length !== group.length) return null
 
   return parts.map((p, i) => {
     const out = restoreKey(p)
     return out || group[i]
   })
-}
-
-async function googleTranslateLine(text, apiKey = null, target = TARGET, source = 'auto') {
-  const q = encodeURIComponent(text.slice(0, 400))
-  const url = `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=${source}&tl=${target}&dt=t&q=${q}`
-  const res = await fetch(url, { headers: { 'User-Agent': UA } })
-  if (!res.ok) {
-    if (apiKey) {
-      const apiRes = await fetch(TRANSLATE_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({ text, source_language: source === 'auto' ? 'en' : source, target_language: target }),
-      })
-      if (apiRes.ok) {
-        const data = await apiRes.json()
-        const translated = data.translated_text
-        if (translated) return translated
-      }
-    }
-    throw new Error(`Google translate failed (${res.status})`)
-  }
-  const payload = await res.json()
-  const chunks = (payload?.[0] || [])
-    .map((x) => (Array.isArray(x) && typeof x[0] === 'string' ? x[0] : ''))
-    .join('')
-  return chunks
 }
 
 export async function translateLinesToMongolian(apiKey, lines) {
@@ -139,30 +82,17 @@ export async function translateLinesToMongolian(apiKey, lines) {
 
   const uniqueLines = [...dedupeMap.keys()]
   let translatedCount = 0
-  let apiTranslated = 0
   const groups = groupByPayload(uniqueLines)
   let cursor = 0
 
   async function worker() {
     while (cursor < groups.length) {
       const group = groups[cursor++]
-      let outs = await translateGroup(group, apiKey)
+      let outs = await translateGroup(group)
       if (!outs) {
         outs = []
         for (const item of group) {
-          let single
-          try {
-            single = await googleTranslateLine(restoreKey(item), apiKey)
-          } catch {
-            single = null
-          }
-          if (!single && apiKey) {
-            single = await translateGroupViaAPI([item], apiKey)
-            if (single) {
-              single = single[0]
-              apiTranslated++
-            }
-          }
+          const single = await googleTranslateLine(restoreKey(item))
           outs.push(single || item)
         }
       }
@@ -186,10 +116,22 @@ export async function translateLinesToMongolian(apiKey, lines) {
   return {
     translated,
     translatedUnique: translatedCount,
-    googleTranslated: apiTranslated,
+    googleTranslated: 0,
     totalUnique: uniqueLines.length,
     quotaHit: false,
   }
+}
+
+async function googleTranslateLine(text, target = TARGET, source = 'auto') {
+  const q = encodeURIComponent(text.slice(0, 400))
+  const url = `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=${source}&tl=${target}&dt=t&q=${q}`
+  const res = await fetch(url, { headers: { 'User-Agent': UA } })
+  if (!res.ok) throw new Error(`Google translate failed (${res.status})`)
+  const payload = await res.json()
+  const chunks = (payload?.[0] || [])
+    .map((x) => (Array.isArray(x) && typeof x[0] === 'string' ? x[0] : ''))
+    .join('')
+  return chunks
 }
 
 export async function resolveSubtisSource({ title, year, type, season, episode }) {

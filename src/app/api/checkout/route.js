@@ -39,16 +39,11 @@ export async function POST(request) {
   const plan = (await listSubscriptionPlans()).find((p) => p.code === body.planCode)
   if (!plan) return NextResponse.json({ error: { code: 'UNKNOWN_PLAN' } }, { status: 404 })
 
+  const payment = await createPayment({
+    userId: user.id, planId: plan.id, amountMnt: plan.priceMnt, provider: body.provider,
+  })
+
   if (body.provider === 'local_dev') {
-    if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json(
-        { error: { code: 'DEMO_CHECKOUT_DISABLED', message: 'Demo checkout is unavailable in production. Use Khan Bank transfer.' } },
-        { status: 403 },
-      )
-    }
-    const payment = await createPayment({
-      userId: user.id, planId: plan.id, amountMnt: plan.priceMnt, provider: body.provider,
-    })
     const done = await activatePaymentSuccess(payment.txnId)
     if (done.error) return NextResponse.json({ error: done.error }, { status: 500 })
     await logSecurity({ userId: user.id, type: 'payment-verify', detail: `sandbox ${plan.code} (${payment.txnId})`, ip })
@@ -57,10 +52,6 @@ export async function POST(request) {
       payment: done.payment, subscription: done.subscription,
     })
   }
-
-  const payment = await createPayment({
-    userId: user.id, planId: plan.id, amountMnt: plan.priceMnt, provider: body.provider,
-  })
 
   if (body.provider === 'bank') {
     return NextResponse.json({

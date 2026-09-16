@@ -15,7 +15,17 @@ const SERIES_CATEGORIES = new Set(['kdrama', 'western', 'tv', 'series'])
 const PLAYER_TABS = [
   { id: 'p1', label: 'Player 1', variant: 0 },
   { id: 'p2', label: 'Player 2', variant: 1 },
-  { id: 'p3', label: 'Subtitles ✓', variant: 0 },
+  { id: 'p3', label: 'Player 3', variant: 2 },
+  { id: 'p4', label: 'Player 4', variant: 3 },
+  { id: 'p5', label: 'Player 5', variant: 4 },
+  { id: 'p6', label: 'Player 6', variant: 5 },
+  { id: 'p7', label: 'Player 7', variant: 6 },
+  { id: 'p8', label: 'Player 8', variant: 7 },
+  { id: 'p9', label: 'Player 9', variant: 8 },
+  { id: 'p10', label: 'Player 10', variant: 9 },
+  { id: 'p11', label: 'Player 11', variant: 10 },
+  { id: 'p12', label: 'Player 12', variant: 11 },
+  { id: 'p13', label: 'Player 13', variant: 12 },
 ]
 
 export default function WatchPage() {
@@ -30,7 +40,7 @@ export default function WatchPage() {
 
   const [subtitleUrl, setSubtitleUrl] = useState(null)
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian')
-  const [source, setSource] = useState('p3')
+  const [source, setSource] = useState('p1')
 
   const activeVariant = PLAYER_TABS.find((t) => t.id === source)?.variant ?? 0
   const maxVariant = PLAYER_TABS.reduce((m, t) => Math.max(m, t.variant), 0)
@@ -143,34 +153,28 @@ export default function WatchPage() {
                   ) : null}
                 </div>
                 <div className="aspect-video w-full">
-                   <SubtitledStreamPlayer
-                     key={`${source}-${season}-${episode}`}
-                     tmdbId={movie.tmdbId}
-                     isTV={isTV}
-                     season={season}
-                     episode={episode}
-                     title={movie.title}
-                     mediaType={movie.mediaType || (isTV ? 'tv' : 'movie')}
-                     variant={activeVariant <= maxVariant ? activeVariant : 0}
-                     subtitleUrl={source === 'p3' ? subtitleUrl : null}
-                     subtitleLabel={subtitleLabel}
-                     onKeyLoadError={fallbackOnKeyError}
-                   />
+<SubtitledStreamPlayer
+                      key={`${source}-${season}-${episode}`}
+                      tmdbId={movie.tmdbId}
+                      isTV={isTV}
+                      season={season}
+                      episode={episode}
+                      title={movie.title}
+                      mediaType={movie.mediaType || (isTV ? 'tv' : 'movie')}
+                      variant={activeVariant <= maxVariant ? activeVariant : 0}
+                      subtitleUrl={subtitleUrl}
+                      subtitleLabel={subtitleLabel}
+                      onKeyLoadError={fallbackOnKeyError}
+                    />
                 </div>
-                {subtitleUrl && source !== 'p3' && (
-                  <div className="flex items-center gap-2 border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
-                    <span>💡</span>
-                    <span>
-                      Subtitles render on the <b>Subtitles ✓</b> player — switch to it to see “{subtitleLabel}”.
-                    </span>
-                    <button
-                      onClick={() => setSource('p3')}
-                      className="ml-auto rounded-md bg-[#c9a227] px-2.5 py-1 text-xs font-bold text-[#1a150b] hover:brightness-110"
-                    >
-                      Switch
-                    </button>
-                  </div>
-                )}
+{subtitleUrl && (
+   <div className="flex items-center gap-2 border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
+     <span>💡</span>
+     <span>
+       Subtitles enabled: {subtitleLabel}. (Note: subtitles may not be available on iframe-based players.)
+     </span>
+   </div>
+ )}
               </div>
             ) : (
               <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 animate-scale-in">
@@ -191,11 +195,10 @@ export default function WatchPage() {
                 title={movie.title}
                 year={movie.year}
                 slug={movie.slug}
-                onSubtitleChange={(url, label) => {
-                  setSubtitleUrl(url)
-                  if (label) setSubtitleLabel(label)
-                  if (url && source !== 'p3') setSource('p3')
-                }}
+onSubtitleChange={(url, label) => {
+                   setSubtitleUrl(url)
+                   if (label) setSubtitleLabel(label)
+                 }}
               />
             </div>
 
