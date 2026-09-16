@@ -234,6 +234,19 @@ export async function resolveStreamCandidates(
     result = dedupe([...result, ...vidsrcFallbacks(tmdbId, mediaType, season, episode)])
   }
 
+  // Ensure we have at least 2 candidates so Player 1 / Player 2 are always
+  // distinct even when only one direct-HLS source survived validation.
+  if (result.length < 2) {
+    const iframes = vidsrcFallbacks(tmdbId, mediaType, season, episode)
+    const needed = 2 - result.length
+    for (const fb of iframes) {
+      if (result.length >= 2) break
+      if (!result.some((s) => s.url === fb.url)) {
+        result.push(fb)
+      }
+    }
+  }
+
   cache.set(key, { at: Date.now(), candidates: result })
   return result
 }
