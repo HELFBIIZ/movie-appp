@@ -1,0 +1,98 @@
+{
+  "dune-part-two": {
+    "file": "dune-part-two.vtt",
+    "language": "mn",
+    "translated": true,
+    "generated": true,
+    "updatedAt": 1789359779946.958,
+    "cueCount": 2496
+  },
+  "stranger": {
+    "file": "stranger.vtt",
+    "language": "mn",
+    "translated": true,
+    "generated": true,
+    "updatedAt": 1789357526562.0234,
+    "cueCount": 1749
+  },
+  "the-east-palace": {
+    "file": "the-east-palace.vtt",
+    "language": "mn",
+    "translated": true,
+    "generated": true,
+    "updatedAt": 1789356171124.9705,
+    "cueCount": 339
+  },
+  "how-to-train-your-dragon": {
+    "file": "how-to-train-your-dragon.vtt",
+    "partial": false,
+    "translatedLineRatio": 1,
+    "sourceDetail": "",
+    "cueCount": 1,
+    "updatedAt": 1789445239335
+  },
+  "avatar-aang-the-last-airbender": {
+    "file": "avatar-aang-the-last-airbender.vtt",
+    "partial": true,
+    "translatedLineRatio": 0.9610750695088045,
+    "sourceDetail": "",
+    "cueCount": 1131,
+    "updatedAt": 1789363174082
+  },
+  "spider-man-brand-new-day": {
+    "file": "spider-man-brand-new-day.vtt",
+    "partial": true,
+    "translatedLineRatio": 0.012121212121212121,
+    "sourceDetail": "",
+    "cueCount": 1753,
+    "updatedAt": 1789364198628
+  },
+  "chainsaw-man-the-movie-reze-arc": {
+    "file": "chainsaw-man-the-movie-reze-arc.vtt",
+    "partial": true,
+    "translatedLineRatio": 0.9988439306358381,
+    "sourceDetail": "",
+    "cueCount": 908,
+    "updatedAt": 1789366954965
+  },
+  "scream-7": {
+    "file": "scream-7.vtt",
+    "partial": true,
+    "translatedLineRatio": 0.9858299595141701,
+    "sourceDetail": "Subt.is",
+    "cueCount": 1580,
+    "updatedAt": 1789367878968
+  },
+  "coyote-vs-acme": {
+    "file": "coyote-vs-acme.vtt",
+    "partial": false,
+    "translatedLineRatio": 0.9939288811795317,
+    "sourceDetail": "OpenSubtitles (English → Mongolian) (translated)",
+    "cueCount": 1192,
+    "updatedAt": 1789444866154
+  },
+  "once-upon-a-time-in-the-middle-east": {
+    "file": "once-upon-a-time-in-the-middle-east.vtt",
+    "partial": false,
+    "translatedLineRatio": 1,
+    "sourceDetail": "OpenSubtitles (native Mongolian)",
+    "cueCount": 1439,
+    "updatedAt": 1789445334626
+  },
+  "avengers-endgame": {
+    "file": "avengers-endgame.vtt",
+    "partial": false,
+    "translatedLineRatio": 1,
+    "sourceDetail": "OpenSubtitles (native Mongolian)",
+    "cueCount": 13,
+    "updatedAt": 1789445472802
+  },
+  "the-wolf-of-wall-street": {
+    "file": "the-wolf-of-wall-street.vtt",
+    "partial": false,
+    "translatedLineRatio": 1,
+    "sourceDetail": "OpenSubtitles (native Mongolian)",
+    "cueCount": 882,
+    "updatedAt": 1789445506774
+  }
+}

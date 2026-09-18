@@ -1,0 +1,622 @@
+{
+  "spider-man-brand-new-day": [],
+  "dear-santa": [
+    "fuboTV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV"
+  ],
+  "how-to-train-your-dragon": [
+    "Netflix",
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV"
+  ],
+  "alien-romulus": [
+    "Hulu",
+    "Hulu on Disney+",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home"
+  ],
+  "the-matrix": [
+    "YouTube TV",
+    "ViX Premium Amazon Channel",
+    "ViX",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "AppleTV",
+    "Amazon"
+  ],
+  "inception": [
+    "YouTube",
+    "ViX Premium Amazon Channel",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "interstellar": [
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "Prime Video",
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV"
+  ],
+  "pulp-fiction": [
+    "Pluto TV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "Prime Video",
+    "fuboTV",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV",
+    "Spectrum On Demand"
+  ],
+  "fight-club": [
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon",
+    "Google Play"
+  ],
+  "the-dark-knight": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "YouTube TV",
+    "HBO (Via Hulu)",
+    "truTV",
+    "TNT",
+    "TBS",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV"
+  ],
+  "the-godfather": [
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "fuboTV",
+    "DirecTV On Demand",
+    "MGM+",
+    "Philo",
+    "MGM+ (Via Amazon Prime)",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV",
+    "Google Play"
+  ],
+  "shawshank-redemption": [
+    "Philo",
+    "MGM+ (Via Amazon Prime)",
+    "fuboTV",
+    "DirecTV On Demand",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand"
+  ],
+  "forrest-gump": [
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "gladiator": [
+    "Kanopy",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "fuboTV",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "seven": [
+    "Paramount Plus",
+    "fuboTV",
+    "Paramount+ (Via Amazon Prime)",
+    "DirecTV On Demand",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Google Play"
+  ],
+  "the-shining": [
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon"
+  ],
+  "avatar": [
+    "Hulu",
+    "Disney+",
+    "AppleTV",
+    "Amazon",
+    "Fandango at Home"
+  ],
+  "guardians-of-the-galaxy-vol-3": [
+    "Disney+",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV"
+  ],
+  "dune-part-two": [
+    "HBO Max",
+    "YouTube TV",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "TNT",
+    "TBS",
+    "truTV",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV",
+    "Spectrum On Demand"
+  ],
+  "oppenheimer": [
+    "Fandango at Home Free",
+    "Peacock",
+    "YouTube TV",
+    "Peacock Premium",
+    "DirecTV On Demand",
+    "Amazon",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "AppleTV"
+  ],
+  "the-batman": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "TNT",
+    "TBS",
+    "truTV",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "spiderman-across-the-spiderverse": [
+    "Disney+",
+    "FX",
+    "fuboTV",
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "everything-everywhere-all-at-once": [
+    "Hulu",
+    "Hulu on Disney+",
+    "The Roku Channel",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "AppleTV",
+    "Amazon"
+  ],
+  "the-whale": [
+    "The Roku Channel",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand"
+  ],
+  "top-gun-maverick": [
+    "Pluto TV",
+    "fuboTV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "DirecTV On Demand",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand"
+  ],
+  "parasite": [
+    "Kanopy",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home"
+  ],
+  "joker": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "DirecTV On Demand",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon"
+  ],
+  "the-wolf-of-wall-street": [
+    "Hoopla",
+    "Fandango at Home Free",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "Hulu",
+    "AppleTV+",
+    "AppleTV+ Amazon Channel",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon",
+    "Google Play"
+  ],
+  "mad-max-fury-road": [
+    "DirecTV On Demand",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand"
+  ],
+  "blade-runner-2049": [
+    "Paramount+ (Via Amazon Prime)",
+    "fuboTV",
+    "Paramount Plus",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV"
+  ],
+  "whiplash": [
+    "MGM+",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Spectrum On Demand"
+  ],
+  "the-prestige": [
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon"
+  ],
+  "shutter-island": [
+    "Philo",
+    "Paramount+ (Via Amazon Prime)",
+    "Paramount Plus",
+    "fuboTV",
+    "STARZ",
+    "STARZ (Via Amazon Prime)",
+    "STARZ (Via Hulu)",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "AppleTV",
+    "Spectrum On Demand",
+    "Amazon"
+  ],
+  "the-departed": [
+    "YouTube TV",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV",
+    "Google Play"
+  ],
+  "coco": [
+    "Disney+",
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon"
+  ],
+  "spirited-away": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV"
+  ],
+  "the-lion-king": [
+    "Disney+",
+    "AppleTV",
+    "Amazon",
+    "Fandango at Home"
+  ],
+  "goodfellas": [
+    "YouTube TV",
+    "Amazon",
+    "AppleTV",
+    "Spectrum On Demand",
+    "Fandango at Home"
+  ],
+  "sopranos-family-dinner": [
+    "Amazon Freevee",
+    "Fandango at Home Free",
+    "Tubi TV",
+    "Hoopla",
+    "Plex",
+    "Fawesome",
+    "Cineverse",
+    "The Roku Channel",
+    "Pluto TV",
+    "Prime Video",
+    "fuboTV",
+    "DirecTV On Demand",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "the-grand-budapest-hotel": [
+    "The Roku Channel",
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon",
+    "Google Play"
+  ],
+  "eternal-sunshine": [
+    "YouTube",
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon",
+    "Google Play"
+  ],
+  "get-out": [
+    "YouTube TV",
+    "Peacock",
+    "fuboTV",
+    "FX",
+    "Peacock Premium",
+    "DirecTV On Demand",
+    "Fandango at Home",
+    "AppleTV",
+    "Amazon"
+  ],
+  "a-quiet-place": [
+    "fuboTV",
+    "FX",
+    "YouTube TV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "DirecTV On Demand",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home"
+  ],
+  "arrival": [
+    "Hoopla",
+    "Pluto TV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "pride-and-prejudice": [
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV",
+    "Google Play"
+  ],
+  "la-la-land": [
+    "Lionsgate+ (Via Amazon Prime)",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV"
+  ],
+  "rocky": [
+    "Pluto TV",
+    "Netflix",
+    "MGM+",
+    "Philo",
+    "fuboTV",
+    "MGM+ (Via Amazon Prime)",
+    "YouTube TV",
+    "Paramount+ (Via Amazon Prime)",
+    "AMC+ Amazon Channel",
+    "AMC+",
+    "AMC Plus Apple TV Channel",
+    "Paramount Plus",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "jump-street": [
+    "STARZ",
+    "YouTube TV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "fuboTV",
+    "DirecTV On Demand",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon",
+    "Spectrum On Demand",
+    "Google Play"
+  ],
+  "superbad": [
+    "Tubi TV",
+    "YouTube TV",
+    "AppleTV+",
+    "AppleTV+ Amazon Channel",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon",
+    "Spectrum On Demand",
+    "Google Play"
+  ],
+  "mean-girls": [
+    "Pluto TV",
+    "Tubi TV",
+    "YouTube",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "Peacock",
+    "Peacock Premium",
+    "The Roku Channel",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon",
+    "Google Play"
+  ],
+  "the-hangover": [
+    "Paramount+ (Via Amazon Prime)",
+    "Paramount Plus",
+    "fuboTV",
+    "DirecTV On Demand",
+    "YouTube TV",
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV",
+    "Spectrum On Demand",
+    "Google Play"
+  ],
+  "saw": [
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "the-conjuring": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon",
+    "Google Play"
+  ],
+  "jaws": [
+    "YouTube TV",
+    "Netflix",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV",
+    "Google Play"
+  ],
+  "et": [
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home",
+    "Google Play"
+  ],
+  "back-to-the-future": [
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "terminator-2": [
+    "Pluto TV",
+    "fuboTV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "DirecTV On Demand",
+    "AppleTV",
+    "Amazon",
+    "Fandango at Home",
+    "Google Play"
+  ],
+  "alien": [
+    "Netflix",
+    "AppleTV",
+    "Fandango at Home",
+    "Amazon"
+  ],
+  "2001-a-space-odyssey": [
+    "Philo Free",
+    "Max Roku Channel",
+    "MAX (Via Amazon Prime)",
+    "HBO (Via Hulu)",
+    "DirecTV On Demand",
+    "Philo",
+    "Fandango at Home",
+    "AppleTV",
+    "Spectrum On Demand",
+    "Amazon"
+  ],
+  "titanic": [
+    "YouTube",
+    "Hoopla",
+    "Pluto TV",
+    "Paramount Plus",
+    "Paramount+ (Via Amazon Prime)",
+    "YouTube TV",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Amazon",
+    "AppleTV",
+    "Google Play"
+  ],
+  "the-truman-show": [
+    "Pluto TV",
+    "Philo",
+    "fuboTV",
+    "DirecTV On Demand",
+    "MGM+",
+    "MGM+ (Via Amazon Prime)",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "AppleTV",
+    "Amazon",
+    "Google Play"
+  ],
+  "dont-breathe": [
+    "Netflix",
+    "Prime Video",
+    "Amazon",
+    "Fandango at Home",
+    "AppleTV",
+    "Spectrum On Demand",
+    "Google Play"
+  ],
+  "bird-box": [
+    "Netflix"
+  ],
+  "wonder-woman": [
+    "HBO Max",
+    "MAX (Via Amazon Prime)",
+    "YouTube TV",
+    "TNT",
+    "TBS",
+    "truTV",
+    "HBO (Via Hulu)",
+    "Amazon",
+    "AppleTV",
+    "Fandango at Home"
+  ],
+  "black-panther": [
+    "Disney+",
+    "Hulu",
+    "Fandango at Home",
+    "Amazon",
+    "AppleTV",
+    "Google Play"
+  ],
+  "avengers-endgame": [
+    "Disney+",
+    "DirecTV On Demand",
+    "AppleTV",
+    "Amazon",
+    "Google Play",
+    "Fandango at Home"
+  ],
+  "parasite-burning": [
+    "Prime Video"
+  ],
+  "oldboy": [
+    "The Roku Channel",
+    "fuboTV",
+    "Philo",
+    "AppleTV",
+    "Amazon",
+    "Fandango at Home",
+    "Spectrum On Demand",
+    "Google Play"
+  ]
+}
