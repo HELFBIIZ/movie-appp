@@ -14,7 +14,7 @@ export const PLAN_CODES = Object.freeze([
   'XP_PASS_7_DAYS', 'XP_PASS_30_DAYS',
 ])
 
-export const PAYMENT_PROVIDERS = Object.freeze(['qpay', 'hm', 'bank', 'local_dev'])
+export const PAYMENT_PROVIDERS = Object.freeze(['wire', 'qpay', 'hm', 'bank', 'local_dev'])
 
 export const PAYMENT_STATUSES = Object.freeze(['PENDING', 'PROCESSING', 'SUCCESSFUL', 'FAILED', 'CANCELLED', 'REFUNDED'])
 

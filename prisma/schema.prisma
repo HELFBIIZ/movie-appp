@@ -1,21 +1,19 @@
-// Prisma schema — PostgreSQL-ready, runs today on SQLite for live verification.
+// Prisma schema — PostgreSQL
 //
-// ▸ To deploy on PostgreSQL:
-//   1. datasource db { provider = "postgresql" }
-//   2. DATABASE_URL="postgresql://USER:PASS@HOST:5432/DB?sslmode=require"
+// Deploy:
+//   1. DATABASE_URL="postgresql://USER:PASS@HOST:5432/DB?sslmode=require"
+//   2. npx prisma migrate dev --name init
 //   3. npx prisma migrate deploy
 //
-// Enums intentionally omitted from the Prisma layer (SQLite connector disallows
-// them). Every "enum-like" field is a String constrained server-side to a typed
-// constant set (see src/lib/const.js). The same constants validate on PG too —
-// nothing about the domain model changes on swap.
+// Enums intentionally omitted — every "enum-like" field is a String constrained
+// server-side to a typed constant set (see src/lib/const.js).
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -181,26 +179,33 @@ model PaymentMethod {
 }
 
 model Payment {
-  id         String   @id @default(cuid())
-  txnId      String   @unique // merchant txn id from provider
-  userId     String
-  planId     String?
-  amountMnt  Int
-  currency   String   @default("MNT")
-  status     String // PENDING | PROCESSING | SUCCESSFUL | FAILED | CANCELLED | REFUNDED
-  provider   String // qpay | hm | bank | local_dev
-  providerRef String? // provider's own payment ref (verification)
-  createdAt  DateTime @default(now())
-  verifiedAt DateTime?
-  updatedAt  DateTime @updatedAt
-  meta       Json?
+  id              String    @id @default(cuid())
+  internalId      String    @unique @default(cuid()) // our internal payment ID
+  txnId           String    @unique // merchant txn id from provider
+  orderId         String?   // links to Wire order/invoice
+  userId          String
+  planId          String?
+  amountMnt       Int
+  amountUsd       Float?    // Wire may use USD
+  currency        String    @default("MNT")
+  status          String    @default("PENDING") // PENDING | PROCESSING | SUCCESSFUL | FAILED | CANCELLED | REFUNDED | EXPIRED
+  provider        String    // wire | qpay | hm | bank | local_dev
+  providerRef     String?   // Wire payment/invoice ID
+  failureReason   String?
+  createdAt       DateTime  @default(now())
+  verifiedAt      DateTime?
+  paidAt          DateTime?
+  updatedAt       DateTime  @updatedAt
+  meta            Json?
 
-  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan SubscriptionPlan? @relation(fields: [planId], references: [id])
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan           SubscriptionPlan? @relation(fields: [planId], references: [id])
+  webhookEvents  WebhookEvent[]
 
   @@index([userId, status])
   @@index([createdAt])
   @@index([provider, status])
+  @@index([orderId])
 }
 
 // ─────────────────────────── XP SYSTEM ───────────────────────────
@@ -444,4 +449,112 @@ model LearningHint {
   movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
 
   @@index([userId, movieId])
+}
+
+// ─────────────────────────── WIRE PAYMENT / WEBHOOKS ───────────────────────────
+
+model WebhookEvent {
+  id            String   @id @default(cuid())
+  provider      String   // wire | qpay
+  eventId       String   @unique // provider's event ID for idempotency
+  eventType     String   // payment.paid | payment.failed | payment.cancelled | endpoint.verification
+  payload       Json     // raw webhook body
+  signature     String?  // raw signature header
+  processed     Boolean  @default(false)
+  processedAt   DateTime?
+  error         String?  // processing error if any
+  paymentId     String?  // link to Payment if resolved
+  createdAt     DateTime @default(now())
+
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([provider, eventId])
+  @@index([processed])
+  @@index([createdAt])
+}
+
+// ─────────────────────────── VIDEO SOURCES / PROVIDERS ───────────────────────────
+
+model VideoSource {
+  id              String   @id @default(cuid())
+  movieId         String
+  provider        String   // movy | rigel | vidsrc | vidcore | embed
+  sourceType      String   // hls | dash | mp4 | iframe | embed
+  sourceReference String?  // provider-specific source ID or URL pattern
+  sourceUrl       String?  // direct URL if applicable
+  embedUrl        String?  // iframe embed URL
+  supportedPlayers Json?   // ["player1","player3","player7"]
+  quality         String?  // 1080p | 720p | 480p | auto
+  status          String   @default("pending_verification") // authorized | pending_verification | unavailable | disabled | removed
+  priority        Int      @default(0) // higher = preferred
+  capabilities    Json?    // { subtitles: true, quality: true, fullscreen: true }
+  lastCheckedAt   DateTime?
+  lastError       String?
+  errorCount      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId, status])
+  @@index([provider, status])
+  @@index([movieId, priority])
+}
+
+model SubtitleTrack {
+  id          String   @id @default(cuid())
+  movieId     String
+  language    String   // "mn" | "en" | "ko" | etc.
+  languageName String  // "Mongolian" | "English" | "Korean"
+  format      String   @default("vtt") // vtt | srt
+  source      String?  // opensubtitles | custom | ai-translated
+  sourceUrl   String?  // URL to fetch subtitle file
+  filePath    String?  // local path in data/subtitles/
+  isDefault   Boolean  @default(false)
+  status      String   @default("active") // active | inactive | error
+  encoding    String   @default("utf-8")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId, language])
+  @@index([movieId, isDefault])
+}
+
+model SourceHealth {
+  id           String   @id @default(cuid())
+  sourceId     String
+  provider     String
+  status       String   // ok | degraded | error | timeout
+  latencyMs    Int?
+  errorMessage String?
+  checkedAt    DateTime @default(now())
+
+  @@index([sourceId, checkedAt])
+  @@index([provider, status])
+}
+
+// ─────────────────────────── ORDERS (Wire) ───────────────────────────
+
+model Order {
+  id            String   @id @default(cuid())
+  internalId    String   @unique @default(cuid())
+  userId        String
+  planId        String
+  amountMnt     Int
+  amountUsd     Float?
+  currency      String   @default("MNT")
+  status        String   @default("pending") // pending | processing | completed | failed | cancelled | expired
+  wireOrderId   String?  // Wire's order/invoice ID
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  completedAt   DateTime?
+  expiredAt     DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([wireOrderId])
+  @@index([createdAt])
 }

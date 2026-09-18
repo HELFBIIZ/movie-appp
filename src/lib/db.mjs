@@ -788,7 +788,9 @@ export async function listPendingQpay({ maxAgeHours = 48 } = {}) {
        AND datetime(created_at) > datetime('now', ?)`,
     [`-${maxAgeHours} hours`]
   )
-}export async function getUserRoleByUserId(userId) {
+}
+
+export async function getUserRoleByUserId(userId) {
   return qOne(`
     SELECT u.id, r.code AS roleCode FROM users u
     JOIN roles r ON r.id = u.role_id
@@ -797,61 +799,6 @@ export async function listPendingQpay({ maxAgeHours = 48 } = {}) {
 }
 
 export async function listUsers({ search = '', includeDeleted = false } = {}) {
-  const clauses = []
-  const args = []
-  if (!includeDeleted) clauses.push('u.deleted_at IS NULL')
-  const query = String(search || '').trim()
-  if (query) {
-    clauses.push('(LOWER(u.email) LIKE ? OR LOWER(u.username) LIKE ?)')
-    const pattern = `%${query.toLowerCase()}%`
-    args.push(pattern, pattern)
-  }
-  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''
-  return qAll(`
-    WITH active_subscriptions AS (
-      SELECT s.*,
-             ROW_NUMBER() OVER (
-               PARTITION BY s.user_id
-               ORDER BY datetime(s.expires_at) DESC, datetime(s.created_at) DESC, s.id DESC
-             ) AS rn
-      FROM subscriptions s
-      WHERE s.status = 'ACTIVE' AND datetime(s.expires_at) > datetime('now')
-    )
-    SELECT u.id, u.email, u.username, r.code AS roleCode,
-           u.deleted_at AS deletedAt, u.created_at AS createdAt,
-           s.status AS subscriptionStatus, s.expires_at AS subscriptionExpiresAt,
-           p.code AS planCode, p.name AS planName,
-           COUNT(DISTINCT CASE WHEN pay.status = 'SUCCESSFUL'
-             AND pay.provider IN ('bank', 'qpay') THEN pay.id END) AS verifiedPayments,
-           COUNT(DISTINCT CASE WHEN pay.status = 'SUCCESSFUL'
-             AND pay.provider = 'local_dev' THEN pay.id END) AS demoPayments
-    FROM users u
-    JOIN roles r ON r.id = u.role_id
-    LEFT JOIN active_subscriptions s ON s.user_id = u.id AND s.rn = 1
-    LEFT JOIN subscription_plans p ON p.id = s.plan_id
-    LEFT JOIN payments pay ON pay.user_id = u.id
-    ${where}
-    GROUP BY u.id, s.id
-    ORDER BY u.created_at DESC
-  `, args)
-}
-
-export async function getUserRoleByUserId(userId) {
-  return qOne(`
-    SELECT u.id, r.code AS roleCode FROM users u
-    JOIN roles r ON r.id = u.role_id
-    WHERE u.id = ?
-  `, [userId])
-}
-
-export async function getUserRoleByUserId(userId) {
-  return qOne(`
-    SELECT u.id, r.code AS roleCode FROM users u
-    JOIN roles r ON r.id = u.role_id
-    WHERE u.id = ?
-  `, [userId])
-}
-
   const clauses = []
   const args = []
   if (!includeDeleted) clauses.push('u.deleted_at IS NULL')

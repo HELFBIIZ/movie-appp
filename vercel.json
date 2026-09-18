@@ -4,5 +4,13 @@
       "path": "/api/cron/qpay",
       "schedule": "0 0 * * *"
     }
+  ],
+  "headers": [
+    {
+      "source": "/api/webhooks/wire",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" }
+      ]
+    }
   ]
 }

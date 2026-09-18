@@ -1,13 +1,21 @@
-// POST /api/checkout — creates a payment row + (sandbox) instant activation.
+// POST /api/checkout — creates a payment order + Wire payment/invoice.
 //
 // provider:
-//   local_dev  → auto-activate (product demo / end-to-end without a merchant cred)
-//   bank       → PENDING; admin confirms the transfer via /api/webhooks/bank
-//   qpay       → PENDING; creates a QPay invoice when QPAY_* env is configured,
-//                otherwise stays PENDING awaiting a provider webhook. Never fake-approved.
+//   wire        → Creates Wire payment/invoice (server-side only).
+//                 Server calculates amount from plan. Client never sets price.
+//                 Returns invoice URL for user to complete payment.
+//   local_dev   → auto-activate (sandbox demo)
+//   bank        → PENDING; admin confirms via /api/webhooks/bank
+//   qpay        → (legacy) creates QPay invoice when configured
+//
+// Security:
+//   • Payment amount is calculated server-side from plan data
+//   • Client cannot manipulate price
+//   • Wire credentials are server-side only
+//   • Rate limited per user
 //
 // Returns:
-//   200 { ok, payment:{txnId,status,amountMnt,provider}, subscription? }
+//   200 { ok, payment:{txnId,status,amountMnt,provider}, wire?:{paymentId,invoiceUrl} }
 //   401 UNAUTHENTICATED · 429 RATE_LIMITED · 404 UNKNOWN_PLAN · 400 INVALID_INPUT
 import { NextResponse } from 'next/server'
 import {
@@ -15,6 +23,7 @@ import {
   activatePaymentSuccess, logSecurity, setPaymentProviderRef,
 } from '../../../lib/db.mjs'
 import { parseJsonBody, reqStr, oneOf, badInput } from '../../../lib/validate.mjs'
+import { createWirePayment, isWireConfigured } from '../../../lib/wire.mjs'
 import { createQpayInvoice } from '../../../lib/qpay.mjs'
 
 export async function POST(request) {
@@ -33,16 +42,18 @@ export async function POST(request) {
 
   const body = await parseJsonBody(request)
   const planCode = reqStr(body?.planCode, { min: 2, max: 32, pattern: /^[A-Z][A-Z0-9_]*$/ })
-  const provider = oneOf(body?.provider, ['qpay', 'bank', 'local_dev'])
+  const provider = oneOf(body?.provider, ['wire', 'qpay', 'bank', 'local_dev'])
   if (!planCode.ok || !provider.ok) return badInput('planCode + provider required')
 
   const plan = (await listSubscriptionPlans()).find((p) => p.code === body.planCode)
   if (!plan) return NextResponse.json({ error: { code: 'UNKNOWN_PLAN' } }, { status: 404 })
 
+  // Server-side price calculation — client cannot modify this
   const payment = await createPayment({
     userId: user.id, planId: plan.id, amountMnt: plan.priceMnt, provider: body.provider,
   })
 
+  // ── local_dev: instant sandbox activation ──
   if (body.provider === 'local_dev') {
     const done = await activatePaymentSuccess(payment.txnId)
     if (done.error) return NextResponse.json({ error: done.error }, { status: 500 })
@@ -53,6 +64,7 @@ export async function POST(request) {
     })
   }
 
+  // ── bank transfer: pending admin confirmation ──
   if (body.provider === 'bank') {
     return NextResponse.json({
       ok: true, pending: true, payment,
@@ -60,7 +72,45 @@ export async function POST(request) {
     })
   }
 
-  // qpay — create the invoice and stash its id on the PENDING row for reconciliation.
+  // ── Wire payment: create invoice server-side ──
+  if (body.provider === 'wire') {
+    if (!isWireConfigured()) {
+      return NextResponse.json({
+        ok: true, pending: true, payment, wire: null,
+        note: 'Wire gateway not configured — payment stays PENDING until credentials are set.',
+      })
+    }
+
+    const wireResult = await createWirePayment({
+      orderId: payment.txnId,
+      amountMnt: plan.priceMnt,
+      currency: 'MNT',
+      planName: plan.name,
+      description: `VXNTA ${plan.name} subscription`,
+    })
+
+    if (wireResult.error) {
+      return NextResponse.json({
+        ok: true, pending: true, payment, wire: null,
+        note: `Wire payment request failed: ${wireResult.error.message || wireResult.error.status || 'unknown error'}`,
+      })
+    }
+
+    // Store Wire payment ID on our payment row for reconciliation
+    if (wireResult.paymentId) {
+      await setPaymentProviderRef(payment.txnId, wireResult.paymentId)
+    }
+
+    return NextResponse.json({
+      ok: true, pending: true, payment,
+      wire: {
+        paymentId: wireResult.paymentId,
+        invoiceUrl: wireResult.invoiceUrl,
+      },
+    })
+  }
+
+  // ── QPay (legacy fallback) ──
   const invoice = await createQpayInvoice({
     txnId: payment.txnId, amountMnt: plan.priceMnt, description: plan.name,
     callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/webhooks/qpay`,
