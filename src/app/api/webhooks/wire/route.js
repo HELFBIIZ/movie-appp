@@ -80,3 +80,7 @@ export async function POST(request) {
 
   return NextResponse.json({ ok: true, payment: result.payment, subscription: result.subscription })
 }
+
+export async function GET() {
+  return NextResponse.json({ ok: true, endpoint: 'wire' })
+}
