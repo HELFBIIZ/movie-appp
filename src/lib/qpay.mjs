@@ -14,8 +14,12 @@ const env = (key) => process.env[key]?.trim()
 export async function createQpayInvoice({ txnId, amountMnt, description, callbackUrl }) {
   const url = env('QPAY_INVOICE_URL')
   const auth = env('QPAY_INVOICE_AUTH')
-  if (!url || !auth) return null
+  if (!url || !auth) {
+    console.error('[QPay] Missing config: QPAY_INVOICE_URL or QPAY_INVOICE_AUTH not set')
+    return null
+  }
   try {
+    const parsedUrl = new URL(url)
     const res = await fetch(url, {
       method: 'POST',
       cache: 'no-store',
@@ -25,21 +29,27 @@ export async function createQpayInvoice({ txnId, amountMnt, description, callbac
       },
       body: JSON.stringify({
         invoice_description: String(description || 'Movie-App subscription').slice(0, 200),
-        invoice_no: txnId, // echoes back on the callback — our reconciliation key
+        invoice_no: txnId,
         amount: amountMnt,
         callback_url: callbackUrl || null,
       }),
     })
-    if (!res.ok) return { error: { status: res.status, body: (await res.text()).slice(0, 200) } }
+    if (!res.ok) {
+      const body = (await res.text()).slice(0, 300)
+      console.error(`[QPay] HTTP ${res.status}: ${body}`)
+      return { error: { status: res.status, body } }
+    }
     const j = await res.json()
     return {
       invoiceId: j.invoice_id || null,
       shortRef: j.qpay_shortRef || null,
       qrImage: j.qr_image || null,
-      url: j.QR || null,
+      url: j.QR || j.payment_url || null,
     }
   } catch (err) {
-    return { error: { message: String(err?.message || err).slice(0, 200) } }
+    const msg = String(err?.message || err)
+    console.error(`[QPay] fetch failed: ${msg} — URL: ${url}`)
+    return { error: { message: msg.slice(0, 200) } }
   }
 }
 

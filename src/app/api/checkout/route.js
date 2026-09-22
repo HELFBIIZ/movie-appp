@@ -69,13 +69,13 @@ export async function POST(request) {
   if (!invoice) {
     return NextResponse.json({
       ok: true, pending: true, payment, qpay: null,
-      note: 'QPay gateway not configured — payment stays PENDING until a provider webhook.',
+      note: 'QPay gateway not configured — set QPAY_INVOICE_URL and QPAY_INVOICE_AUTH in Vercel env.',
     })
   }
   if (invoice.error) {
     return NextResponse.json({
       ok: true, pending: true, payment, qpay: null,
-      note: `QPay invoice request failed (${invoice.error.status || invoice.error.message}).`,
+      note: `QPay error: ${invoice.error.message || invoice.error.body || `HTTP ${invoice.error.status}`}`,
     })
   }
   return NextResponse.json({ ok: true, pending: true, payment, qpay: invoice })
