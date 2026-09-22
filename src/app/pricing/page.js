@@ -45,6 +45,9 @@ export default function PricingPage() {
       setNotice({ kind: 'ok', text: `VIP active until ${new Date(data.subscription.expiresAt).toLocaleDateString()} · ${data.payment.txnId}` })
       const fresh = await (await fetch('/api/auth/me')).json()
       setMe(fresh.me ?? null)
+    } else if (data.wire?.checkoutUrl) {
+      setNotice({ kind: 'ok', text: 'Төлбөрийн хуудас нээгдлээ — Wire-ээр төлнө уу.' })
+      window.open(data.wire.checkoutUrl, '_blank')
     } else if (data.qpay?.url) {
       setNotice({ kind: 'ok', text: 'Invoice ready — open the QPay link to pay, then it activates automatically.' })
       window.open(data.qpay.url, '_blank')
@@ -162,6 +165,13 @@ export default function PricingPage() {
                     className="rounded-xl bg-gradient-to-r from-[#c9a227] via-[#e7c779] to-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110 shadow-[0_8px_24px_-8px_rgba(214,180,86,0.45)] disabled:opacity-50 disabled:shadow-none"
                   >
                     {busy === `${p.code}:local_dev` ? 'Activating…' : 'Buy with card (demo)'}
+                  </button>
+                  <button
+                    disabled={busy === `${p.code}:wire`}
+                    onClick={() => checkout(p.code, 'wire')}
+                    className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-4 py-2 text-sm font-medium text-emerald-300 transition-all hover:border-emerald-400 hover:bg-emerald-900/40 hover:text-white disabled:opacity-50"
+                  >
+                    {busy === `${p.code}:wire` ? '…' : `Wire-ээр төлөх ${fmt(p.priceMnt)}`}
                   </button>
                   <button
                     disabled={busy === `${p.code}:qpay`}
@@ -311,7 +321,7 @@ export default function PricingPage() {
         </section>
 
         <p className="mt-10 text-xs text-slate-500">
-          Payments MNT (₮). local_dev/* is a sandbox auto-approve; QPay/bank rows require a real gateway or admin confirmation (Khan Bank receipts on the <Link href="/admin/payments" className="text-amber-400 hover:underline">admin review page</Link>).
+          Payments MNT (₮). Wire-ээр төлбөр pay.wire.mn дээрх hosted хуудсаар төлнө; QPay/QR-ээр төлнө; bank буюу Khan Bank шилжүүлэг admin-аар баталгаажуулна (<Link href="/admin/payments" className="text-amber-400 hover:underline">admin review page</Link>).
         </p>
       </div>
       <Footer />

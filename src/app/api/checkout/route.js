@@ -3,8 +3,8 @@
 // provider:
 //   local_dev  → auto-activate (product demo / end-to-end without a merchant cred)
 //   bank       → PENDING; admin confirms the transfer via /api/webhooks/bank
-//   qpay       → PENDING; creates a QPay invoice when QPAY_* env is configured,
-//                otherwise stays PENDING awaiting a provider webhook. Never fake-approved.
+//   qpay       → PENDING; creates a QPay invoice when QPAY_* env is configured
+//   wire       → PENDING; creates a Wire.mn PaymentIntent + checkout session
 //
 // Returns:
 //   200 { ok, payment:{txnId,status,amountMnt,provider}, subscription? }
@@ -16,6 +16,7 @@ import {
 } from '../../../lib/db.mjs'
 import { parseJsonBody, reqStr, oneOf, badInput } from '../../../lib/validate.mjs'
 import { createQpayInvoice } from '../../../lib/qpay.mjs'
+import { createPaymentIntent, createCheckoutSession } from '../../../lib/wire.mjs'
 
 export async function POST(request) {
   const token = request.cookies.get('mn_session')?.value
@@ -33,7 +34,7 @@ export async function POST(request) {
 
   const body = await parseJsonBody(request)
   const planCode = reqStr(body?.planCode, { min: 2, max: 32, pattern: /^[A-Z][A-Z0-9_]*$/ })
-  const provider = oneOf(body?.provider, ['qpay', 'bank', 'local_dev'])
+  const provider = oneOf(body?.provider, ['qpay', 'bank', 'local_dev', 'wire'])
   if (!planCode.ok || !provider.ok) return badInput('planCode + provider required')
 
   const plan = (await listSubscriptionPlans()).find((p) => p.code === body.planCode)
@@ -57,6 +58,47 @@ export async function POST(request) {
     return NextResponse.json({
       ok: true, pending: true, payment,
       note: 'Transfer MNT via bank and the operator confirms via /api/webhooks/bank (admin).',
+    })
+  }
+
+  if (body.provider === 'wire') {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || ''
+    const pi = await createPaymentIntent({
+      amountMnt: plan.priceMnt,
+      description: `VXNTA — ${plan.name}`,
+      reference: payment.txnId,
+      idempotencyKey: `wire-${payment.txnId}`,
+    })
+    if (pi && pi.error) {
+      return NextResponse.json({
+        ok: true, pending: true, payment, wire: null,
+        note: `Wire error: ${pi.error.message || pi.error.body || `HTTP ${pi.error.status}`}`,
+      })
+    }
+    if (!pi || !pi.id) {
+      return NextResponse.json({
+        ok: true, pending: true, payment, wire: null,
+        note: 'Wire gateway not configured — set WIRE_API_BASE and WIRE_SECRET_KEY in Vercel env.',
+      })
+    }
+
+    await setPaymentProviderRef(payment.txnId, pi.id)
+
+    const session = await createCheckoutSession({
+      paymentIntentId: pi.id,
+      successUrl: `${appUrl}/pricing`,
+      idempotencyKey: `sess-${payment.txnId}`,
+    })
+    if (session && session.error) {
+      return NextResponse.json({
+        ok: true, pending: true, payment, wire: { piId: pi.id, checkoutUrl: null },
+        note: `Wire checkout session error: ${session.error.message || session.error.body}`,
+      })
+    }
+
+    return NextResponse.json({
+      ok: true, pending: true, payment,
+      wire: { piId: pi.id, checkoutUrl: session?.url || null },
     })
   }
 
