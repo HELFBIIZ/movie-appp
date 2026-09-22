@@ -23,10 +23,13 @@ import path from 'path'
 import crypto from 'crypto'
 import { createClient } from '@libsql/client'
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'db')
+const REPO_DATA_DIR = path.join(process.cwd(), 'data', 'db')
+// Netlify/AWS Lambda filesystem is read-only except /tmp — keep the writable
+// sqlite file there (ephemeral per cold start; use Turso for persistence).
+const DATA_DIR = process.env.NETLIFY ? '/tmp/vxnta-db' : REPO_DATA_DIR
 const DB_FILE = path.join(DATA_DIR, 'app.db')
-const SCHEMA_FILE = path.join(DATA_DIR, 'schema.sql')
-const SEED_FILE = path.join(DATA_DIR, 'seeds.sql')
+const SCHEMA_FILE = path.join(REPO_DATA_DIR, 'schema.sql')
+const SEED_FILE = path.join(REPO_DATA_DIR, 'seeds.sql')
 const REMOTE_URL = (process.env.TURSO_DATABASE_URL || '').trim()
 const REMOTE_TOKEN = process.env.TURSO_AUTH_TOKEN || ''
 const isRemote = !!REMOTE_URL
