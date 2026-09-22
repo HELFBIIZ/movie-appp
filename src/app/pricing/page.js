@@ -168,7 +168,7 @@ export default function PricingPage() {
                     onClick={() => checkout(p.code, 'qpay')}
                     className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
                   >
-                    {busy === `${p.code}:qpay` ? '…' : 'QPay'} ₮
+                    {busy === `${p.code}:qpay` ? '…' : `QPay-ээр төлөх ${fmt(p.priceMnt)}`}
                   </button>
                 </div>
               </div>
