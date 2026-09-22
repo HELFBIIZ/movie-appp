@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy } from "lucide-react"
+import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy, LogOut, User } from "lucide-react"
 import { useTheme } from "@/components/ThemeProvider"
 import NotificationBell from "@/components/NotificationBell"
 
@@ -31,7 +32,31 @@ const genres = [
 
 export default function Header() {
   const { isDark, toggleTheme } = useTheme()
+  const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.me) {
+          setIsLoggedIn(true)
+          const code = d.me.roleCode
+          if (code === 'ADMIN' || code === 'SUPER_ADMIN') setIsAdmin(true)
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    setIsLoggedIn(false)
+    setIsAdmin(false)
+    router.push('/')
+    router.refresh()
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/90 bg-[#faf7f1]/95 border-[#e5dcc7] dark:bg-[#110e0a]/92 dark:border-black/60 supports-[backdrop-filter]:dark:bg-[#110e0a]/80">
@@ -70,6 +95,7 @@ export default function Header() {
             <NavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />}>Western</NavLink>
             <NavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />}>Watchlist</NavLink>
             <NavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />}>Тусламж</NavLink>
+            {isAdmin && <NavLink href="/admin" icon={<Film className="h-4 w-4" />}>Admin</NavLink>}
           </nav>
         </div>
 
@@ -88,6 +114,30 @@ export default function Header() {
             )}
           </button>
 
+          {isLoggedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-slate-500 dark:text-slate-400">
+                  <User className="h-5 w-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem>
+                  <Link href="/profile" className="flex items-center gap-2 w-full">
+                    <User className="h-4 w-4" /> Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="text-red-400">
+                  <LogOut className="h-4 w-4 mr-2" /> Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/login" className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] hover:bg-[#d6b456] transition-colors">
+              Sign In
+            </Link>
+          )}
+
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
@@ -102,7 +152,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden border-t bg-[#faf7f1] dark:bg-[#0f0c09] dark:border-black/70 animate-fade-in-down">
           <nav className="container px-4 py-3 flex flex-col gap-1">
@@ -114,6 +163,21 @@ export default function Header() {
             <MobileNavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Western</MobileNavLink>
             <MobileNavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Watchlist</MobileNavLink>
             <MobileNavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Тусламж</MobileNavLink>
+            {isAdmin && <MobileNavLink href="/admin" icon={<Film className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Admin</MobileNavLink>}
+            {isLoggedIn ? (
+              <>
+                <MobileNavLink href="/profile" icon={<User className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Profile</MobileNavLink>
+                <button
+                  onClick={() => { handleLogout(); setMobileOpen(false) }}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 transition-colors w-full text-left"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <MobileNavLink href="/login" icon={<LogOut className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Sign In</MobileNavLink>
+            )}
             <div className="mt-2 pt-2 border-t border-[#e5dcc7] dark:border-black/60">
               <p className="px-3 py-1 text-xs font-medium text-[#8a7540] dark:text-[#cbb277]">Genres</p>
               <div className="grid grid-cols-3 gap-1 px-3">

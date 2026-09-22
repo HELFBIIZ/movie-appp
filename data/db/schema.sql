@@ -221,3 +221,58 @@ CREATE TABLE IF NOT EXISTS notifications (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id, read_at, created_at);
+
+-- Movies catalog (used by favorites)
+CREATE TABLE IF NOT EXISTS movies (
+  id    TEXT PRIMARY KEY,
+  slug  TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_movies_slug ON movies(slug);
+
+-- Favorites (server-side watchlist)
+CREATE TABLE IF NOT EXISTS favorites (
+  id         TEXT PRIMARY KEY,
+  user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  movie_id   TEXT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, movie_id)
+);
+CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id, created_at);
+
+-- Video sources (admin-configured per-movie streams)
+CREATE TABLE IF NOT EXISTS video_sources (
+  id          TEXT PRIMARY KEY,
+  slug        TEXT NOT NULL,
+  player      INTEGER NOT NULL,
+  source_type TEXT NOT NULL,
+  url         TEXT NOT NULL,
+  label       TEXT,
+  quality     TEXT,
+  enabled     INTEGER NOT NULL DEFAULT 1,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(slug, player)
+);
+
+-- Subtitle tracks (admin-configured)
+CREATE TABLE IF NOT EXISTS subtitle_tracks (
+  id         TEXT PRIMARY KEY,
+  slug       TEXT NOT NULL,
+  url        TEXT NOT NULL,
+  label      TEXT,
+  lang       TEXT NOT NULL DEFAULT 'mn',
+  is_default INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(slug, lang, url)
+);
+
+-- Webhook event log (idempotent processing)
+CREATE TABLE IF NOT EXISTS webhook_events (
+  id        TEXT PRIMARY KEY,
+  provider  TEXT NOT NULL,
+  type      TEXT,
+  payload   TEXT,
+  processed INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

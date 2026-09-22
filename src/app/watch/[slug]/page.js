@@ -34,6 +34,7 @@ export default function WatchPage() {
 
   const isTV = SERIES_CATEGORIES.has(movie?.category) && (movie?.episodes ?? 0) > 1
   const totalEpisodes = isTV ? movie.episodes : 0
+  const totalSeasons = isTV ? (movie?.seasons || Math.ceil(totalEpisodes / 16) || 1) : 1
   const [season, setSeason] = useState(1)
   const [episode, setEpisode] = useState(1)
   const [gate, setGate] = useState({ status: 'loading' })
@@ -213,7 +214,11 @@ onSubtitleChange={(url, label) => {
                   }}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-white focus:border-[#d6b456] focus:outline-none"
                 >
-                  <option value={1}>1</option>
+                  {Array.from({ length: totalSeasons }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1}
+                    </option>
+                  ))}
                 </select>
 
                 <label className="text-sm text-slate-400">Episode</label>

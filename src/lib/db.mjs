@@ -770,6 +770,79 @@ export async function listAdminUserIds() {
   )
   return (rows || []).map((r) => r.id)
 }
+// ────────────────────────────────────────────────────────────────────────
+// ADMIN USER MANAGEMENT — list, role lookup, revoke, ban/restore.
+// ────────────────────────────────────────────────────────────────────────
+export async function getUserRoleByUserId(userId) {
+  return qOne(
+    `SELECT u.id, u.email, u.username, r.code AS roleCode
+     FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?`, [userId])
+}
+export async function listUsers({ search = '', includeDeleted = false } = {}) {
+  const clauses = [], args = []
+  if (!includeDeleted) clauses.push('u.deleted_at IS NULL')
+  const query = String(search || '').trim()
+  if (query) {
+    clauses.push('(LOWER(u.email) LIKE ? OR LOWER(u.username) LIKE ?)')
+    const pattern = `%${query.toLowerCase()}%`
+    args.push(pattern, pattern)
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''
+  return qAll(`
+    WITH active_subscriptions AS (
+      SELECT s.*, ROW_NUMBER() OVER (PARTITION BY s.user_id ORDER BY datetime(s.expires_at) DESC, s.id DESC) AS rn
+      FROM subscriptions s WHERE s.status = 'ACTIVE' AND datetime(s.expires_at) > datetime('now')
+    ),
+    pending_payments AS (
+      SELECT pay.user_id, pay.txn_id AS pendingTxnId,
+             ROW_NUMBER() OVER (PARTITION BY pay.user_id ORDER BY datetime(pay.created_at) DESC) AS prn
+      FROM payments pay WHERE pay.status IN ('PENDING','PROCESSING') AND pay.provider = 'bank'
+    )
+    SELECT u.id, u.email, u.username, r.code AS roleCode,
+           u.deleted_at AS deletedAt, u.created_at AS createdAt,
+           s.status AS subscriptionStatus, s.expires_at AS subscriptionExpiresAt,
+           p.code AS planCode, p.name AS planName,
+           COUNT(DISTINCT CASE WHEN pay.status='SUCCESSFUL' AND pay.provider IN ('bank','qpay') THEN pay.id END) AS verifiedPayments,
+           COUNT(DISTINCT CASE WHEN pay.status='SUCCESSFUL' AND pay.provider='local_dev' THEN pay.id END) AS demoPayments,
+           pp.pendingTxnId
+    FROM users u
+    JOIN roles r ON r.id = u.role_id
+    LEFT JOIN active_subscriptions s ON s.user_id = u.id AND s.rn = 1
+    LEFT JOIN subscription_plans p ON p.id = s.plan_id
+    LEFT JOIN payments pay ON pay.user_id = u.id
+    LEFT JOIN pending_payments pp ON pp.user_id = u.id AND pp.prn = 1
+    ${where}
+    GROUP BY u.id, s.id, pp.pendingTxnId
+    ORDER BY u.created_at DESC
+  `, args)
+}
+export async function revokeUserSubscriptions({ userId, reviewedBy = null } = {}) {
+  const active = await qAll(
+    `SELECT s.id, p.code AS planCode FROM subscriptions s
+     JOIN subscription_plans p ON p.id = s.plan_id
+     WHERE s.user_id = ? AND s.status = 'ACTIVE' AND p.price_mnt > 0`, [userId])
+  if (!active.length) return { count: 0, subscriptions: [] }
+  const writes = []
+  for (const sub of active) {
+    writes.push({ sql: `UPDATE subscriptions SET status='REVOKED', updated_at=datetime('now') WHERE id=?`, args: [sub.id] })
+    writes.push({ sql: `INSERT INTO security_logs (id,user_id,type,detail,ip,created_at) VALUES (?,?,'subscription-revoke',?,NULL,datetime('now'))`,
+      args: [crypto.randomUUID(), userId, `${sub.planCode} revoked by ${reviewedBy||'admin'}`] })
+  }
+  writes.push({ sql: `INSERT INTO notifications (id,user_id,type,title,body,link,created_at) VALUES (?,?,'info','VIP эрх цуцлагдлаа','Демо төлбөр эсвэл баталгаажаагүй төлбөрөөр идэвхжсэн VIP эрхийг админ цуцаллаа.','/pricing',datetime('now'))`,
+    args: [crypto.randomUUID(), userId] })
+  await batchWrite(writes)
+  return { count: active.length, subscriptions: active }
+}
+export async function setUserDeleted({ userId, deleted, reviewedBy }) {
+  const target = await qOne(`SELECT id, email, username FROM users WHERE id=?`, [userId])
+  if (!target) return { error: { code: 'USER_NOT_FOUND', status: 404 } }
+  if (deleted) await revokeUserSubscriptions({ userId, reviewedBy })
+  await qRun(`UPDATE users SET deleted_at=?, updated_at=datetime('now') WHERE id=?`, [deleted ? new Date().toISOString() : null, userId])
+  if (deleted) await qRun(`DELETE FROM sessions WHERE user_id=?`, [userId])
+  await qRun(`INSERT INTO security_logs (id,user_id,type,detail,ip,created_at) VALUES (?,?,?,NULL,datetime('now'))`,
+    [crypto.randomUUID(), userId, deleted?'user-ban':'user-restore', `${target.email} ${deleted?'banned':'restored'} by ${reviewedBy}`])
+  return { user: { ...target, deleted } }
+}
 /** A user's own still-pending QPay payments that have a live invoice ref. */
 export async function listUserPendingQpay(userId) {
   return qAll(
@@ -788,4 +861,102 @@ export async function listPendingQpay({ maxAgeHours = 48 } = {}) {
        AND datetime(created_at) > datetime('now', ?)`,
     [`-${maxAgeHours} hours`]
   )
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// VIDEO SOURCES — admin-configured per-movie stream URLs.
+// ────────────────────────────────────────────────────────────────────────
+export async function getVideoSources(slug) {
+  return qAll(
+    `SELECT player, source_type AS sourceType, url, label, quality, enabled
+     FROM video_sources WHERE slug = ? ORDER BY player`, [slug])
+}
+export async function upsertVideoSource({ slug, player, sourceType, url, label, quality, enabled }) {
+  await qRun(
+    `INSERT INTO video_sources (id, slug, player, source_type, url, label, quality, enabled, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+     ON CONFLICT(slug, player) DO UPDATE SET
+       source_type=excluded.source_type, url=excluded.url, label=excluded.label,
+       quality=excluded.quality, enabled=excluded.enabled, updated_at=datetime('now')`,
+    [crypto.randomUUID(), slug, player, sourceType, url, label||null, quality||null, enabled?1:0])
+  return getVideoSources(slug)
+}
+export async function deleteVideoSource(slug, player) {
+  await qRun(`DELETE FROM video_sources WHERE slug = ? AND player = ?`, [slug, player])
+  return getVideoSources(slug)
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// SUBTITLE TRACKS — admin-configured subtitle files per movie.
+// ────────────────────────────────────────────────────────────────────────
+export async function getSubtitleTracks(slug) {
+  return qAll(
+    `SELECT url, label, lang, is_default AS isDefault
+     FROM subtitle_tracks WHERE slug = ? ORDER BY is_default DESC, lang`, [slug])
+}
+export async function upsertSubtitleTrack({ slug, url, label, lang, isDefault }) {
+  await qRun(
+    `INSERT INTO subtitle_tracks (id, slug, url, label, lang, is_default, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+     ON CONFLICT(slug, lang, url) DO UPDATE SET label=excluded.label, is_default=excluded.is_default`,
+    [crypto.randomUUID(), slug, url, label||null, lang||'mn', isDefault?1:0])
+  return getSubtitleTracks(slug)
+}
+export async function deleteSubtitleTrack(slug, lang, url) {
+  await qRun(`DELETE FROM subtitle_tracks WHERE slug = ? AND lang = ? AND url = ?`, [slug, lang, url])
+  return getSubtitleTracks(slug)
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// WEBHOOK / PAYMENT EVENT LOGS
+// ────────────────────────────────────────────────────────────────────────
+export async function logPaymentEvent({ txnId, fromStatus, toStatus, provider, detail }) {
+  await qRun(`INSERT INTO security_logs (id, user_id, type, detail, ip, created_at) VALUES (NULL, NULL, 'payment-event', ?, NULL, datetime('now'))`,
+    [JSON.stringify({ txnId, fromStatus, toStatus, provider, detail })])
+}
+export async function logWebhookEvent({ id, provider, type, payload }) {
+  await qRun(`INSERT OR IGNORE INTO webhook_events (id, provider, type, payload, processed) VALUES (?, ?, ?, ?, 1)`,
+    [id, provider, type||null, payload ? JSON.stringify(payload) : null])
+}
+export async function isWebhookEventProcessed(id) {
+  const row = await qOne(`SELECT processed FROM webhook_events WHERE id = ?`, [id])
+  return row?.processed === 1
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// FAVORITES — server-side watchlist sync.
+// ────────────────────────────────────────────────────────────────────────
+export async function listFavorites(userId) {
+  return qAll(`SELECT f.movie_id AS movieId, f.created_at AS createdAt FROM favorites f WHERE f.user_id = ? ORDER BY f.created_at DESC`, [userId])
+}
+export async function toggleFavorite(userId, movieSlug) {
+  const movie = await qOne(`SELECT id FROM movies WHERE slug = ?`, [movieSlug])
+  if (!movie) return { error: { code: 'MOVIE_NOT_FOUND', status: 404 } }
+  const existing = await qOne(`SELECT id FROM favorites WHERE user_id = ? AND movie_id = ?`, [userId, movie.id])
+  if (existing) { await qRun(`DELETE FROM favorites WHERE id = ?`, [existing.id]); return { favorited: false } }
+  await qRun(`INSERT INTO favorites (id, user_id, movie_id, created_at) VALUES (?, ?, ?, datetime('now'))`, [crypto.randomUUID(), userId, movie.id])
+  return { favorited: true }
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// PROFILE — display name, bio, avatar.
+// ────────────────────────────────────────────────────────────────────────
+export async function getProfile(userId) {
+  return qOne(`SELECT avatar_url AS avatarUrl, display_name AS displayName, bio FROM profiles WHERE user_id = ?`, [userId])
+}
+export async function updateProfile(userId, { displayName, bio, avatarUrl }) {
+  const existing = await qOne(`SELECT id FROM profiles WHERE user_id = ?`, [userId])
+  if (existing) {
+    const sets = [], args = []
+    if (displayName !== undefined) { sets.push('display_name = ?'); args.push(displayName) }
+    if (bio !== undefined) { sets.push('bio = ?'); args.push(bio) }
+    if (avatarUrl !== undefined) { sets.push('avatar_url = ?'); args.push(avatarUrl) }
+    if (sets.length === 0) return { ok: true }
+    args.push(userId)
+    await qRun(`UPDATE profiles SET ${sets.join(', ')} WHERE user_id = ?`, args)
+  } else {
+    await qRun(`INSERT INTO profiles (id, user_id, avatar_url, display_name, bio, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))`,
+      [crypto.randomUUID(), userId, avatarUrl||null, displayName||null, bio||null])
+  }
+  return { ok: true }
 }

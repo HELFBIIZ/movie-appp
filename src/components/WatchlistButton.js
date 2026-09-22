@@ -7,24 +7,54 @@ const WATCHLIST_KEY = 'moviez-watchlist'
 export default function WatchlistButton({ movie }) {
   const [isSaved, setIsSaved] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
-    setIsSaved(stored.includes(movie.slug))
-  }, [movie.slug])
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        if (d.me) {
+          setIsLoggedIn(true)
+          fetch('/api/favorites')
+            .then(r => r.json())
+            .then(data => {
+              const favs = data.favorites || []
+              setIsSaved(favs.some(f => f.movieId === movie.slug || f.movieId === movie.id))
+            })
+            .catch(() => {})
+        } else {
+          const stored = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+          setIsSaved(stored.includes(movie.slug))
+        }
+      })
+      .catch(() => {
+        const stored = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+        setIsSaved(stored.includes(movie.slug))
+      })
+  }, [movie.slug, movie.id])
 
-  const toggleWatchlist = useCallback(() => {
+  const toggleWatchlist = useCallback(async () => {
     setIsAnimating(true)
-    const stored = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
-    const next = stored.includes(movie.slug)
-      ? stored.filter((slug) => slug !== movie.slug)
-      : [...stored, movie.slug]
-
-    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(next))
-    setIsSaved(!isSaved)
-    
+    if (isLoggedIn) {
+      try {
+        const res = await fetch('/api/favorites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: movie.slug }),
+        })
+        const data = await res.json()
+        setIsSaved(data.favorited)
+      } catch {}
+    } else {
+      const stored = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+      const next = stored.includes(movie.slug)
+        ? stored.filter((slug) => slug !== movie.slug)
+        : [...stored, movie.slug]
+      localStorage.setItem(WATCHLIST_KEY, JSON.stringify(next))
+      setIsSaved(!isSaved)
+    }
     setTimeout(() => setIsAnimating(false), 600)
-  }, [movie.slug, isSaved])
+  }, [movie.slug, isSaved, isLoggedIn])
 
   return (
     <button

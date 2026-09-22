@@ -32,13 +32,13 @@ export default function AdminUsersPage() {
     return () => clearTimeout(timer)
   }, [load])
 
-  async function act(userId, action) {
+  async function act(userId, action, txnId) {
     setBusy(`${action}:${userId}`)
     setError(null)
     const res = await fetch('/api/admin/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, action }),
+      body: JSON.stringify({ userId, action, txnId }),
     })
     setBusy(null)
     const data = await res.json().catch(() => ({}))
@@ -114,12 +114,17 @@ export default function AdminUsersPage() {
                   <td className="px-4 py-3 text-amber-300">{user.demoPayments ?? 0}</td>
                   <td className="px-4 py-3 text-slate-400">{fmtDate(user.createdAt)}</td>
                   <td className="px-4 py-3">
-<div className="flex justify-end gap-2">
-                      <button disabled={busy === `approve_vip:${user.id}`} title={user.pendingTxnId ? "Approve this user's pending payment" : "No pending payment to approve"} onClick={user.pendingTxnId ? () => act(user.id, 'approve_vip') : undefined} className={`rounded-lg px-3 py-1.5 text-xs font-bold ${user.pendingTxnId ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400' : 'bg-slate-500 text-slate-400'`}>Approve ✓</button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        disabled={busy === `approve_vip:${user.id}`}
+                        title={user.pendingTxnId ? "Approve this user's pending payment" : "No pending payment to approve"}
+                        onClick={user.pendingTxnId ? () => act(user.id, 'approve_vip', user.pendingTxnId) : undefined}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-bold ${user.pendingTxnId ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400' : 'bg-slate-500 text-slate-400'}`}
+                      >Approve ✓</button>
                       {user.subscriptionStatus === 'ACTIVE' && (
                         <button disabled={busy === `revoke_vip:${user.id}`} onClick={() => act(user.id, 'revoke_vip')} className="rounded-lg border border-red-700 px-3 py-1.5 text-xs font-bold text-red-300 hover:bg-red-500/10 disabled:opacity-50">Revoke VIP</button>
                       )}
-                      <button disabled={busy === `${user.deletedAt ? 'restore' : 'ban'}:${user.id}`} onClick={() => act(user.id, user.deletedAt ? 'restore' : 'ban')} className={`rounded-lg px-3 py-1.5 text-xs font-bold disabled:opacity-50 ${user.deletedAt ? 'border border-emerald-700 text-emerald-300 hover:bg-emerald-500/10' : 'border border-slate-600 text-slate-300 hover:bg-white/5'`}>{user.deletedAt ? 'Restore' : 'Ban'}</button>
+                      <button disabled={busy === `${user.deletedAt ? 'restore' : 'ban'}:${user.id}`} onClick={() => act(user.id, user.deletedAt ? 'restore' : 'ban')} className={`rounded-lg px-3 py-1.5 text-xs font-bold disabled:opacity-50 ${user.deletedAt ? 'border border-emerald-700 text-emerald-300 hover:bg-emerald-500/10' : 'border border-slate-600 text-slate-300 hover:bg-white/5'}`}>{user.deletedAt ? 'Restore' : 'Ban'}</button>
                     </div>
                   </td>
                 </tr>

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import {
   requireRole, listUsers, revokeUserSubscriptions, setUserDeleted, getUserRoleByUserId,
+  activatePaymentSuccess,
 } from '../../../../lib/db.mjs'
 import { parseJsonBody, reqStr, oneOf, all, badInput } from '../../../../lib/validate.mjs'
 
@@ -25,7 +26,8 @@ export async function POST(request) {
 
   const body = await parseJsonBody(request)
   const userId = reqStr(body?.userId, { min: 8, max: 64, pattern: /^[a-zA-Z0-9-]+$/ })
-  const action = oneOf(body?.action, ['revoke_vip', 'ban', 'restore'])
+  const action = oneOf(body?.action, ['approve_vip', 'revoke_vip', 'ban', 'restore'])
+  const txnId = body?.txnId ? reqStr(body.txnId, { min: 4, max: 64 }) : null
   const check = all(userId, action)
   if (check.error) return badInput('userId + action required', check.error.field)
 
@@ -36,6 +38,14 @@ export async function POST(request) {
   }
   if (['ADMIN', 'SUPER_ADMIN'].includes(target.roleCode) && user.roleCode !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: { code: 'SUPER_ADMIN_REQUIRED' } }, { status: 403 })
+  }
+
+  if (action.value === 'approve_vip') {
+    const id = txnId?.value || body?.txnId
+    if (!id) return badInput('txnId required for approve_vip', 'txnId')
+    const result = await activatePaymentSuccess(id)
+    if (result.error) return NextResponse.json({ error: result.error }, { status: result.error.status ?? 404 })
+    return NextResponse.json({ ok: true, payment: result.payment, subscription: result.subscription })
   }
 
   if (action.value === 'revoke_vip') {

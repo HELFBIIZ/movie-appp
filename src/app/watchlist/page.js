@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { movies as fallbackMovies } from '@/lib/movies'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -13,18 +13,51 @@ export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const [removingSlug, setRemovingSlug] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
-    const items = fallbackMovies.filter((movie) => saved.includes(movie.slug))
-    setWatchlist(items)
-    setIsLoaded(true)
+  const loadServerFavorites = useCallback(async () => {
+    try {
+      const res = await fetch('/api/favorites')
+      const data = await res.json()
+      if (data.favorites?.length) {
+        const slugs = data.favorites.map(f => f.movieId)
+        setWatchlist(fallbackMovies.filter(m => slugs.includes(m.slug) || slugs.includes(m.id)))
+      }
+    } catch {}
   }, [])
 
-  const removeFromWatchlist = (slug) => {
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        if (d.me) {
+          setIsLoggedIn(true)
+          loadServerFavorites()
+        } else {
+          const saved = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+          setWatchlist(fallbackMovies.filter((movie) => saved.includes(movie.slug)))
+        }
+        setIsLoaded(true)
+      })
+      .catch(() => {
+        const saved = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+        setWatchlist(fallbackMovies.filter((movie) => saved.includes(movie.slug)))
+        setIsLoaded(true)
+      })
+  }, [loadServerFavorites])
+
+  const removeFromWatchlist = async (slug) => {
     setRemovingSlug(slug)
-    const saved = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
-    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(saved.filter((s) => s !== slug)))
+    if (isLoggedIn) {
+      await fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug }),
+      })
+    } else {
+      const saved = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]')
+      localStorage.setItem(WATCHLIST_KEY, JSON.stringify(saved.filter((s) => s !== slug)))
+    }
     setWatchlist((prev) => prev.filter((m) => m.slug !== slug))
     setTimeout(() => setRemovingSlug(null), 300)
   }
