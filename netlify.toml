@@ -3,7 +3,7 @@
   publish = ".next"
 
 [functions]
-  included_files = ["data/db/schema.sql", "data/db/seeds.sql"]
+  included_files = ["data/db/schema.sql", "data/db/seeds.sql", "data/subtitles/**"]
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

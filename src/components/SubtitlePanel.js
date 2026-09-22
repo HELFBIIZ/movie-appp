@@ -182,13 +182,16 @@ export default function SubtitlePanel({
     }
   }, [tmdbId, selectedLang, isTV, season, episode, title, year])
 
-  const downloadSubtitle = useCallback(async (fileId) => {
+  const downloadSubtitle = useCallback(async (sub) => {
+    const isObj = sub && typeof sub === 'object'
+    const fileId = isObj ? sub.fileId : sub
+    const subId = isObj ? sub.subId : null
     setSearching(true)
     try {
       const res = await fetch('/api/subtitles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileId }),
+        body: JSON.stringify(subId && !fileId ? { subId } : { fileId }),
       })
       const data = await res.json()
 
@@ -201,7 +204,7 @@ export default function SubtitlePanel({
       setSubtitlesEnabled(true)
       setSearchResults([])
       setIsMongolian(false)
-      const found = searchResults.find((r) => (r.fileId ?? r.subId) === fileId)
+      const found = typeof sub === 'object' ? sub : searchResults.find((r) => (r.fileId ?? r.subId) === fileId)
       const label = labelFor(found)
       setLoadedLabel(label)
       onSubtitleChange?.(data.link, label)
@@ -472,7 +475,7 @@ export default function SubtitlePanel({
                 {searchResults.map((sub) => (
                   <button
                     key={sub.id}
-                    onClick={() => downloadSubtitle(sub.fileId)}
+                    onClick={() => downloadSubtitle(sub)}
                     disabled={searching}
                     className="flex w-full items-center justify-between gap-3 rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-left text-sm transition-all hover:border-[#d6b456]/50 hover:bg-slate-800 disabled:opacity-50"
                   >

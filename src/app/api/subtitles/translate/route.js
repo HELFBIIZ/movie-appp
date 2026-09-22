@@ -204,12 +204,19 @@ export async function POST(request) {
       sourceDetail,
       cueCount: cues.length,
     }
-    if (durableSlug) saveGenerated(durableSlug, vtt, meta)
+    let translatedUrl = `/api/subtitles/translated/${id}`
+    if (durableSlug) {
+      try {
+        saveGenerated(durableSlug, vtt, meta)
+        translatedUrl = `/api/subtitles/mongolian/${encodeURIComponent(durableSlug)}`
+      } catch (saveErr) {
+        // Read-only serverless FS (Netlify/Vercel) — still serve via ephemeral id.
+        console.error('[translate] saveGenerated failed, using ephemeral:', saveErr?.message)
+      }
+    }
 
     return NextResponse.json({
-      translatedUrl: durableSlug
-        ? `/api/subtitles/mongolian/${encodeURIComponent(durableSlug)}`
-        : `/api/subtitles/translated/${id}`,
+      translatedUrl,
       cueCount: cues.length,
       characterCount: vtt.length,
       sourceDetail,
