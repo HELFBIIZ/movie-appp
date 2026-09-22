@@ -28,8 +28,21 @@ const REPO_DATA_DIR = path.join(process.cwd(), 'data', 'db')
 // sqlite file there (ephemeral per cold start; use Turso for persistence).
 const DATA_DIR = process.env.NETLIFY ? '/tmp/vxnta-db' : REPO_DATA_DIR
 const DB_FILE = path.join(DATA_DIR, 'app.db')
-const SCHEMA_FILE = path.join(REPO_DATA_DIR, 'schema.sql')
-const SEED_FILE = path.join(REPO_DATA_DIR, 'seeds.sql')
+// Schema/seed files may live in different places inside a serverless bundle —
+// probe a few candidate locations.
+const SCHEMA_CANDIDATES = [
+  path.join(REPO_DATA_DIR, 'schema.sql'),
+  path.join(process.cwd(), '.next', 'server', 'data', 'db', 'schema.sql'),
+  '/var/task/data/db/schema.sql',
+]
+const SEED_CANDIDATES = [
+  path.join(REPO_DATA_DIR, 'seeds.sql'),
+  path.join(process.cwd(), '.next', 'server', 'data', 'db', 'seeds.sql'),
+  '/var/task/data/db/seeds.sql',
+]
+const firstExisting = (list) => list.find((p) => { try { return fs.existsSync(p) } catch { return false } }) || null
+const SCHEMA_FILE = firstExisting(SCHEMA_CANDIDATES)
+const SEED_FILE = firstExisting(SEED_CANDIDATES)
 const REMOTE_URL = (process.env.TURSO_DATABASE_URL || '').trim()
 const REMOTE_TOKEN = process.env.TURSO_AUTH_TOKEN || ''
 const isRemote = !!REMOTE_URL
@@ -49,17 +62,17 @@ async function getClient() {
       const url = isRemote ? REMOTE_URL : `file:${DB_FILE}`
       const client = createClient({ url, authToken: isRemote ? REMOTE_TOKEN : undefined })
       if (!isRemote) {
-        if (!fs.existsSync(SCHEMA_FILE)) throw new Error(`Missing schema file: ${SCHEMA_FILE}`)
+        if (!SCHEMA_FILE) throw new Error(`Missing schema file (tried: ${SCHEMA_CANDIDATES.join(', ')})`)
         await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
-        if (fs.existsSync(SEED_FILE)) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
+        if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
       } else {
         // Remote DB is self-healing for a fresh namespace: bootstrap tables +
         // seeds when empty (data itself gets copied by scripts/turso-migrate.mjs).
         const probe = await client.execute(`SELECT name FROM sqlite_master WHERE type='table' AND name='users' LIMIT 1`)
         if (!probe.rows.length) {
-          if (!fs.existsSync(SCHEMA_FILE)) throw new Error(`Missing schema file: ${SCHEMA_FILE}`)
+          if (!SCHEMA_FILE) throw new Error(`Missing schema file (tried: ${SCHEMA_CANDIDATES.join(', ')})`)
           await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
-          if (fs.existsSync(SEED_FILE)) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
+          if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
         }
       }
       await ensureFlexiblePlans(client)

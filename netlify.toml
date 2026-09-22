@@ -2,5 +2,8 @@
   command = "npm run build"
   publish = ".next"
 
+[functions]
+  included_files = ["data/db/schema.sql", "data/db/seeds.sql"]
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
