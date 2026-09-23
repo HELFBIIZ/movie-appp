@@ -116,6 +116,11 @@ async function processOne(movie) {
   const subs = (data.results || []).map((e) => e.subtitle).filter(Boolean)
   if (!subs.length) return { status: 'no-source', detail: 'empty list' }
   // 3. prefer Mongolian, else English / first with preview
+  const entry = pickBestEntry(subs).entry
+  return processEntry(slug, entry)
+}
+
+function pickBestEntry(subs) {
   const scored = subs.map((s) => {
     const g = guessLanguage(s.file_name || s.filename || s.name || '', s.preview || [])
     return { s, lang: g.code }
@@ -124,6 +129,10 @@ async function processOne(movie) {
   const enEntry = scored.find((x) => x.lang === 'eng')
   const withPreview = scored.find((x) => (x.s.preview || []).length)
   const entry = (mnEntry || enEntry || withPreview || scored[0]).s
+  return { entry, isMnHint: !!mnEntry }
+}
+
+async function processEntry(slug, entry, meta = {}) {
   // 4. download
   let content
   try {
@@ -138,11 +147,12 @@ async function processOne(movie) {
   if (!cues.length) return { status: 'error', detail: 'empty cues' }
   // 5. native MN? (filename said so, or content is Cyrillic)
   const sampleText = cues.slice(0, 60).map((c) => c.text).join('\n')
-  if (mnEntry || cyrillicRatio(sampleText) > 0.3) {
+  const g = guessLanguage(entry.file_name || entry.filename || entry.name || '', entry.preview || [])
+  if (g.code === 'mon' || cyrillicRatio(sampleText) > 0.3) {
     const vtt = buildVtt(cues)
     saveGenerated(slug, vtt, {
       source: 'subtis', language: 'mn', generated: true, translated: true,
-      partial: false, cueCount: cues.length, sourceDetail: 'Subt.is (native Mongolian)',
+      partial: false, cueCount: cues.length, sourceDetail: 'Subt.is (native Mongolian)', ...meta,
     })
     return { status: 'native', detail: cues.length + ' cues' }
   }
@@ -160,9 +170,68 @@ async function processOne(movie) {
   saveGenerated(slug, vtt, {
     source: 'subtis', language: 'en', generated: true, translated: true,
     partial: ratio < 0.9, translatedLineRatio: ratio, cueCount: cues.length,
-    sourceDetail: `Subt.is EN → MN (google, ${(ratio * 100).toFixed(0)}%)`,
+    sourceDetail: `Subt.is EN → MN (google, ${(ratio * 100).toFixed(0)}%)`, ...meta,
   })
   return { status: ratio < 0.9 ? 'partial' : 'translated', detail: `${cues.length} cues (${(ratio * 100).toFixed(0)}%)` }
+}
+
+const pad2 = (n) => String(n).padStart(2, '0')
+
+async function processSeries(show, delay) {
+  // search + list once, then process every available S/E pair
+  let candidates = []
+  for (const q of queryVariants(show.title)) {
+    try {
+      candidates = await subtisSearchTitles(q)
+      if (candidates?.length) break
+    } catch { await sleep(800) }
+  }
+  if (!candidates?.length) return [{ status: 'no-source', detail: 'no title match' }]
+  const match = pickTitleMatch(candidates, { title: show.title, year: show.year, type: 'series' })
+  if (!match) return [{ status: 'no-source', detail: 'no title match' }]
+  let data
+  try {
+    data = await subtisListSubtitles(match.slug)
+  } catch (e) {
+    return [{ status: 'no-source', detail: 'list failed' }]
+  }
+  const subs = (data.results || []).map((e) => e.subtitle).filter(Boolean)
+  // group by season/episode
+  const groups = new Map()
+  for (const s of subs) {
+    const se = Number(s.current_season ?? s.season ?? 1)
+    const ep = Number(s.current_episode ?? s.episode ?? 0)
+    if (!ep) continue
+    const key = `${se}x${ep}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(s)
+  }
+  if (!groups.size) return [{ status: 'no-source', detail: 'no episodes listed' }]
+  const manifest = readManifest()
+  const results = []
+  const keys = [...groups.keys()].sort()
+  for (const key of keys) {
+    const [se, ep] = key.split('x').map(Number)
+    const slug = `${show.slug}-S${pad2(se)}E${pad2(ep)}`
+    const existing = manifest[slug]
+    if (existing?.file && existing.translated && !existing.partial) {
+      try {
+        if (fs.existsSync(path.join(DATA_DIR, existing.file))) {
+          results.push({ status: 'done', detail: slug })
+          continue
+        }
+      } catch {}
+    }
+    const { entry } = pickBestEntry(groups.get(key))
+    try {
+      const res = await processEntry(slug, entry, { series: show.slug, season: se, episode: ep })
+      results.push({ ...res, detail: `${slug} ${res.detail || ''}` })
+    } catch (e) {
+      results.push({ status: 'error', detail: `${slug} ${String(e.message || e).slice(0, 80)}` })
+    }
+    await sleep(delay)
+  }
+  return results
 }
 
 async function main() {
@@ -170,10 +239,41 @@ async function main() {
   const get = (k) => args.find((a) => a.startsWith(k + '='))?.split('=').slice(1).join('=')
   const only = (get('--only') || '').split(',').map((s) => s.trim()).filter(Boolean)
   const category = get('--category')
+  const series = get('--series') // kdramas|western|all
   const limit = Number(get('--limit') || 0)
   const delay = Number(get('--delay') || 2000)
   const force = args.includes('--force')
   const all = args.includes('--all')
+
+  if (series) {
+    const kd = readJSON(path.join(ROOT, 'src', 'lib', 'kdramas.json'), [])
+    const w = readJSON(path.join(ROOT, 'src', 'lib', 'western.json'), [])
+    let shows = series === 'kdramas' ? kd : series === 'western' ? w : [...kd, ...w]
+    shows = shows.filter((s) => s?.slug && s?.title)
+      .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    if (only.length) shows = shows.filter((s) => only.includes(s.slug))
+    const todo = limit ? shows.slice(0, limit) : shows
+    console.log(`Series todo: ${todo.length} (force=${force})`)
+    const stats = { native: 0, translated: 0, partial: 0, 'no-source': 0, error: 0, done: 0 }
+    for (let i = 0; i < todo.length; i++) {
+      const s = todo[i]
+      const tag = `[${i + 1}/${todo.length}]`
+      try {
+        const results = await processSeries(s, delay)
+        const done = results.filter((r) => ['native', 'translated', 'partial', 'done'].includes(r.status)).length
+        for (const r of results) stats[r.status] = (stats[r.status] || 0) + 1
+        console.log(`${tag} ${s.slug} eps:${results.length} done:${done} ${results[0]?.status === 'no-source' ? results[0].detail : ''}`)
+      } catch (e) {
+        stats.error++
+        console.log(`${tag} ${s.slug} error ${String(e.message || e).slice(0, 100)}`)
+      }
+      if (i < todo.length - 1) await sleep(delay)
+    }
+    console.log('\n=== SERIES SUMMARY ===')
+    console.log(JSON.stringify(stats, null, 2))
+    console.log('Manifest entries:', Object.keys(readManifest()).length)
+    return
+  }
 
   let movies = loadMovies()
   console.log(`Catalog movies: ${movies.length}`)
