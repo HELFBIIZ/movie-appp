@@ -1,0 +1,347 @@
+{
+  "spider-man-brand-new-day": {
+    "poster": "https://image.tmdb.org/t/p/w500/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg",
+    "tmdbId": "969681"
+  },
+  "dear-santa": {
+    "poster": "https://image.tmdb.org/t/p/w500/fRbDHbGBXg6kwQYr3CRYeKPJW5q.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/yYQDu8yX2zZaCa1hUWD24jq3JRu.jpg",
+    "tmdbId": "1097870"
+  },
+  "how-to-train-your-dragon": {
+    "poster": "https://image.tmdb.org/t/p/w500/53dsJ3oEnBhTBVMigWJ9tkA5bzJ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/8J6UlIFcU7eZfq9iCLbgc8Auklg.jpg",
+    "tmdbId": "1087192"
+  },
+  "alien-romulus": {
+    "poster": "https://image.tmdb.org/t/p/w500/2uSWRTtCG336nuBiG8jOTEUKSy8.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/iYqSQaWDttQIQzsxg9xHyg0bttG.jpg",
+    "tmdbId": "945961"
+  },
+  "the-matrix": {
+    "poster": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/lrtSb1skJayPydZk0OSMAKjBOVe.jpg",
+    "tmdbId": "603"
+  },
+  "inception": {
+    "poster": "https://image.tmdb.org/t/p/w500/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg",
+    "tmdbId": "27205"
+  },
+  "interstellar": {
+    "poster": "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5XNQBqnBwPA9yT0jZ0p3s8bbLh0.jpg",
+    "tmdbId": "157336"
+  },
+  "pulp-fiction": {
+    "poster": "https://image.tmdb.org/t/p/w500/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg",
+    "tmdbId": "680"
+  },
+  "fight-club": {
+    "poster": "https://image.tmdb.org/t/p/w500/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/c6OLXfKAk5BKeR6broC8pYiCquX.jpg",
+    "tmdbId": "550"
+  },
+  "the-dark-knight": {
+    "poster": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/9FE5eD92WfVCiivM9Pq9GVSrlWk.jpg",
+    "tmdbId": "155"
+  },
+  "the-godfather": {
+    "poster": "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/ejdD20cdHNFAYAN2DlqPToXKyzx.jpg",
+    "tmdbId": "238"
+  },
+  "shawshank-redemption": {
+    "poster": "https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/pNjh59JSxChQktamG3LMp9ZoQzp.jpg",
+    "tmdbId": "278"
+  },
+  "forrest-gump": {
+    "poster": "https://image.tmdb.org/t/p/w500/Cw4hIUIAmSYfK9QfaUW5igp9La.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/66Kn4XWhkuPkJxOJyPEx4U2CUfN.jpg",
+    "tmdbId": "13"
+  },
+  "gladiator": {
+    "poster": "https://image.tmdb.org/t/p/w500/wN2xWp1eIwCKOD0BHTcErTBv1Uq.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/jhk6D8pim3yaByu1801kMoxXFaX.jpg",
+    "tmdbId": "98"
+  },
+  "seven": {
+    "poster": "https://image.tmdb.org/t/p/w500/191nKfP0ehp3uIvWqgPbFmI4lv9.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/i5H7zusQGsysGQ8i6P361Vnr0n2.jpg",
+    "tmdbId": "807"
+  },
+  "the-shining": {
+    "poster": "https://image.tmdb.org/t/p/w500/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/AdKA2F1SzYPhSZdEbjH1Zh75UVQ.jpg",
+    "tmdbId": "694"
+  },
+  "avatar": {
+    "poster": "https://image.tmdb.org/t/p/w500/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/vL5LR6WdxWPjLPFRLe133jXWsh5.jpg",
+    "tmdbId": "19995"
+  },
+  "guardians-of-the-galaxy-vol-3": {
+    "poster": "https://image.tmdb.org/t/p/w500/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg",
+    "tmdbId": "447365"
+  },
+  "final-signal": null,
+  "specter-harbor": null,
+  "stormline": null,
+  "atlas-below": null,
+  "aurora-drift": null,
+  "dune-part-two": {
+    "poster": "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/eZ239CUp1d6OryZEBPnO2n87gMG.jpg",
+    "tmdbId": "693134"
+  },
+  "oppenheimer": {
+    "poster": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/neeNHeXjMF5fXoCJRsOmkNGC7q.jpg",
+    "tmdbId": "872585"
+  },
+  "the-batman": {
+    "poster": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/rvtdN5XkWAfGX6xDuPL6yYS2seK.jpg",
+    "tmdbId": "414906"
+  },
+  "spiderman-across-the-spiderverse": {
+    "poster": "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/kVd3a9YeLGkoeR50jGEXM6EqseS.jpg",
+    "tmdbId": "569094"
+  },
+  "everything-everywhere-all-at-once": {
+    "poster": "https://image.tmdb.org/t/p/w500/u68AjlvlutfEIcpmbYpKcdi09ut.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/ss0Os3uWJfQAENILHZUdX8Tt1OC.jpg",
+    "tmdbId": "545611"
+  },
+  "the-whale": {
+    "poster": "https://image.tmdb.org/t/p/w500/jQ0gylJMxWSL490sy0RrPj1Lj7e.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/46FRuCeAn6TrS4F1P4F9zhyCpyo.jpg",
+    "tmdbId": "785084"
+  },
+  "top-gun-maverick": {
+    "poster": "https://image.tmdb.org/t/p/w500/n0YuM4f5lvGAP6MAW2kBIzugXnc.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/AaV1YIdWKnjAIAOe8UUKBFm327v.jpg",
+    "tmdbId": "361743"
+  },
+  "parasite": {
+    "poster": "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/hiKmpZMGZsrkA3cdce8a7Dpos1j.jpg",
+    "tmdbId": "496243"
+  },
+  "joker": {
+    "poster": "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/rlay2M5QYvi6igbGcFjq8jxeusY.jpg",
+    "tmdbId": "475557"
+  },
+  "the-wolf-of-wall-street": {
+    "poster": "https://image.tmdb.org/t/p/w500/kW9LmvYHAaS9iA0tHmZVq8hQYoq.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/7Nwnmyzrtd0FkcRyPqmdzTPppQa.jpg",
+    "tmdbId": "106646"
+  },
+  "mad-max-fury-road": {
+    "poster": "https://image.tmdb.org/t/p/w500/ulcAi4dKpAjHwYGS08vNyx9H6I9.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/uT895WNwm0aIJRtGizcQhrejWUo.jpg",
+    "tmdbId": "76341"
+  },
+  "blade-runner-2049": {
+    "poster": "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/gNdLJU9TxrpGx4dkZidjys3fyy0.jpg",
+    "tmdbId": "335984"
+  },
+  "whiplash": {
+    "poster": "https://image.tmdb.org/t/p/w500/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/fRGxZuo7jJUWQsVg9PREb98Aclp.jpg",
+    "tmdbId": "244786"
+  },
+  "the-prestige": {
+    "poster": "https://image.tmdb.org/t/p/w500/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/z3br1ub7spqGMkxgjgJSdM4DC21.jpg",
+    "tmdbId": "1124"
+  },
+  "shutter-island": {
+    "poster": "https://image.tmdb.org/t/p/w500/nrmXQ0zcZUL8jFLrakWc90IR8z9.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/rbZvGN1A1QyZuoKzhCw8QPmf2q0.jpg",
+    "tmdbId": "11324"
+  },
+  "the-departed": {
+    "poster": "https://image.tmdb.org/t/p/w500/nT97ifVT2J1yMQmeq20Qblg61T.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/6WRrGYalXXveItfpnipYdayFkQB.jpg",
+    "tmdbId": "1422"
+  },
+  "coco": {
+    "poster": "https://image.tmdb.org/t/p/w500/6Ryitt95xrO8KXuqRGm1fUuNwqF.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/g7CHF8gTLGooTbP4GznIGwaqAGL.jpg",
+    "tmdbId": "354912"
+  },
+  "spirited-away": {
+    "poster": "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/dyJvKsNs2KP8qQnAXbRwDjblViy.jpg",
+    "tmdbId": "129"
+  },
+  "the-lion-king": {
+    "poster": "https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/q00H8EqULYSK74lgevMkhmGGLHn.jpg",
+    "tmdbId": "8587"
+  },
+  "goodfellas": {
+    "poster": "https://image.tmdb.org/t/p/w500/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/gILte6Zd7m1YneIr6MVhh30S9pr.jpg",
+    "tmdbId": "769"
+  },
+  "sopranos-family-dinner": {
+    "poster": "https://image.tmdb.org/t/p/w500/5UTo2GqSwN2xUPM56xblerPlPaO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5XiW5vZzxOAGUKqI2loJDFE76ms.jpg",
+    "tmdbId": "964825"
+  },
+  "the-grand-budapest-hotel": {
+    "poster": "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/jK65srQczOKTpW62wPxwwKztGgE.jpg",
+    "tmdbId": "120467"
+  },
+  "eternal-sunshine": {
+    "poster": "https://image.tmdb.org/t/p/w500/5MwkWH9tYHv3mV9OdYTMR5qreIz.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/W1ffLQGHoxfAOq0ZYdPtJlvAdb.jpg",
+    "tmdbId": "38"
+  },
+  "get-out": {
+    "poster": "https://image.tmdb.org/t/p/w500/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/bBQHALHRAaaORlPNXv7fNcRXYdx.jpg",
+    "tmdbId": "419430"
+  },
+  "a-quiet-place": {
+    "poster": "https://image.tmdb.org/t/p/w500/nAU74GmpUk7t5iklEp3bufwDq4n.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nHRUtBwFNnNN70vcQ7lAsjc2T6S.jpg",
+    "tmdbId": "447332"
+  },
+  "arrival": {
+    "poster": "https://image.tmdb.org/t/p/w500/pEzNVQfdzYDzVK0XqxERIw2x2se.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/8MUZz7oPXQftFTslZpRP3CVMOoq.jpg",
+    "tmdbId": "329865"
+  },
+  "pride-and-prejudice": {
+    "poster": "https://image.tmdb.org/t/p/w500/yoWwsLkuY5tMxUqkKMOHAJlImTs.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/dLAgQQfiqDxPZZOoHYoA0RHXVNf.jpg",
+    "tmdbId": "43818"
+  },
+  "la-la-land": {
+    "poster": "https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nlPCdZlHtRNcF6C9hzUH4ebmV1w.jpg",
+    "tmdbId": "313369"
+  },
+  "rocky": {
+    "poster": "https://image.tmdb.org/t/p/w500/xSI0dbKLDETwhiVUy6hGE8KXUln.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/bacOuUnRBoAO1NjMfsAGX2EKRrS.jpg",
+    "tmdbId": "1366"
+  },
+  "jump-street": {
+    "poster": "https://image.tmdb.org/t/p/w500/8v3Sqv9UcIUC4ebmpKWROqPBINZ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/rXrpYOveFl76ivMmyb2612T7Q8w.jpg",
+    "tmdbId": "64688"
+  },
+  "superbad": {
+    "poster": "https://image.tmdb.org/t/p/w500/ek8e8txUyUwd2BNqj6lFEerJfbq.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/coru98UcFBzJIU7bxZguxaePgu0.jpg",
+    "tmdbId": "8363"
+  },
+  "mean-girls": {
+    "poster": "https://image.tmdb.org/t/p/w500/2ZkuQXvVhh45uSvkBej4S7Ix1NJ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nP3y0TkR6XniFs9J53qQkg4Bnnk.jpg",
+    "tmdbId": "10625"
+  },
+  "the-hangover": {
+    "poster": "https://image.tmdb.org/t/p/w500/A0uS9rHR56FeBtpjVki16M5xxSW.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/iuRVt8tFiXDPGgzavhuSa3QHRxD.jpg",
+    "tmdbId": "18785"
+  },
+  "saw": {
+    "poster": "https://image.tmdb.org/t/p/w500/rLNSOudrayDBo1uqXjrhxcjODIC.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/ok4ot3YbfDYZcINXf91JUfq3maB.jpg",
+    "tmdbId": "176"
+  },
+  "the-conjuring": {
+    "poster": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/ecKQlAEG95k62SMGhvX83oEqANK.jpg",
+    "tmdbId": "138843"
+  },
+  "jaws": {
+    "poster": "https://image.tmdb.org/t/p/w500/lxM6kqilAdpdhqUl2biYp5frUxE.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/i1yf91svRHX45l9BXL8rVFzLoPH.jpg",
+    "tmdbId": "578"
+  },
+  "et": {
+    "poster": "https://image.tmdb.org/t/p/w500/an0nD6uq6byfxXCfk6lQBzdL2J1.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/mXLVA0YL6tcXi6SJSuAh9ONXFj5.jpg",
+    "tmdbId": "601"
+  },
+  "back-to-the-future": {
+    "poster": "https://image.tmdb.org/t/p/w500/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5bzPWQ2dFUl2aZKkp7ILJVVkRed.jpg",
+    "tmdbId": "105"
+  },
+  "terminator-2": {
+    "poster": "https://image.tmdb.org/t/p/w500/jFTVD4XoWQTcg7wdyJKa8PEds5q.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/izkMjmhauFx9DjoBQqM5sM5WAwE.jpg",
+    "tmdbId": "280"
+  },
+  "alien": {
+    "poster": "https://image.tmdb.org/t/p/w500/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/AmR3JG1VQVxU8TfAvljUhfSFUOx.jpg",
+    "tmdbId": "348"
+  },
+  "2001-a-space-odyssey": {
+    "poster": "https://image.tmdb.org/t/p/w500/ve72VxNqjGM69Uky4WTo2bK6rfq.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/w5IDXtifKntw0ajv2co7jFlTQDM.jpg",
+    "tmdbId": "62"
+  },
+  "titanic": {
+    "poster": "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/xXCuto8YVp5RFqBJ7yKmVmLOWpF.jpg",
+    "tmdbId": "597"
+  },
+  "the-truman-show": {
+    "poster": "https://image.tmdb.org/t/p/w500/vuza0WqY239yBXOadKlGwJsZJFE.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/rmiG2uwcNoGFmBKMoa1pIcf514L.jpg",
+    "tmdbId": "37165"
+  },
+  "dont-breathe": {
+    "poster": "https://image.tmdb.org/t/p/w500/dSxHyPZ2nipSfvdft4IhQKjk5eZ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/3mIVOqDbYeucnw09TpjgHvSjXfu.jpg",
+    "tmdbId": "300669"
+  },
+  "bird-box": {
+    "poster": "https://image.tmdb.org/t/p/w500/rGfGfgL2pEPCfhIvqHXieXFn7gp.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/pDKFL1zcHzEpmz4MJA5JJnRbJeD.jpg",
+    "tmdbId": "405774"
+  },
+  "wonder-woman": {
+    "poster": "https://image.tmdb.org/t/p/w500/v4ncgZjG2Zu8ZW5al1vIZTsSjqX.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/AaABt75ZzfMGrscUR2seabz4PEX.jpg",
+    "tmdbId": "297762"
+  },
+  "black-panther": {
+    "poster": "https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/b6ZJZHUdMEFECvGiDpJjlfUWela.jpg",
+    "tmdbId": "284054"
+  },
+  "avengers-endgame": {
+    "poster": "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+    "tmdbId": "299534"
+  },
+  "parasite-burning": {
+    "poster": "https://image.tmdb.org/t/p/w500/pdEgV6PckeiVcnComUw8bOirrpC.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/jUhpygB8DxyNv9ACFXTW0gPdaxf.jpg",
+    "tmdbId": "858058"
+  },
+  "oldboy": {
+    "poster": "https://image.tmdb.org/t/p/w500/iX93YdBrZA1EpGbphmjf4ARj1Za.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/yl9waUJoMTp1NnraBn4KWHuUSsx.jpg",
+    "tmdbId": "87516"
+  }
+}
