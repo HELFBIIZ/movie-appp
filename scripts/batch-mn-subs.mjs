@@ -26,6 +26,64 @@ const MANIFEST = path.join(DATA_DIR, 'manifest.json')
 const UA = 'VXNTA v1.0'
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+function loadEnv() {
+  const out = {}
+  try {
+    for (const line of fs.readFileSync(path.join(ROOT, '.env.local'), 'utf8').split('\n')) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+      if (m) out[m[1]] = m[2].replace(/^["']|["']$/g, '').trim()
+    }
+  } catch {}
+  return out
+}
+const ENV = loadEnv()
+const OS_KEY = ENV.OPENSUBTITLES_API_KEY || process.env.OPENSUBTITLES_API_KEY || ''
+const OS_BASE = 'https://api.opensubtitles.com/api/v1'
+
+async function osSearch(params) {  if (!OS_KEY) throw new Error('no OS key')
+  const qs = new URLSearchParams()
+  for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== null && v !== '') qs.set(k, String(v))
+  const res = await fetchTimeout(`${OS_BASE}/subtitles?${qs}`, {
+    headers: { 'Api-Key': OS_KEY, 'User-Agent': 'VXNTA/1.0', Accept: 'application/json' },
+  }, 25000)
+  if (!res.ok) throw new Error(`OS search ${res.status}`)
+  const data = await res.json()
+  return data
+}
+
+let _osToken = null
+async function osLogin() {
+  if (_osToken) return _osToken
+  const user = ENV.OPENSUBTITLES_USERNAME || process.env.OPENSUBTITLES_USERNAME || ''
+  const pass = ENV.OPENSUBTITLES_PASSWORD || process.env.OPENSUBTITLES_PASSWORD || ''
+  if (!user || !pass) throw new Error('OS login needs OPENSUBTITLES_USERNAME/PASSWORD')
+  const res = await fetchTimeout(`${OS_BASE}/login`, {
+    method: 'POST',
+    headers: { 'Api-Key': OS_KEY, 'User-Agent': 'VXNTA/1.0', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: user, password: pass }),
+  }, 25000)
+  if (!res.ok) throw new Error(`OS login ${res.status}`)
+  const data = await res.json()
+  _osToken = data.token
+  return _osToken
+}
+
+async function osDownloadFile(fileId) {
+  const token = await osLogin()
+  const res = await fetchTimeout(`${OS_BASE}/download`, {
+    method: 'POST',
+    headers: { 'Api-Key': OS_KEY, Authorization: `Bearer ${token}`, 'User-Agent': 'VXNTA/1.0', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ file_id: fileId }),
+  }, 25000)
+  if (!res.ok) throw new Error(`OS download ${res.status}`)
+  const data = await res.json()
+  const link = data.link
+  if (!link) throw new Error('OS download: no link')
+  const file = await fetchTimeout(link, { headers: { 'User-Agent': 'VXNTA/1.0' } }, 30000)
+  if (!file.ok) throw new Error(`OS file fetch ${file.status}`)
+  return file.text()
+}
 async function fetchTimeout(url, opts = {}, ms = 25000) {
   return fetch(url, { ...opts, signal: opts.signal || AbortSignal.timeout(ms) })
 }
@@ -55,7 +113,7 @@ function loadMovies() {
   const out = new Map()
   for (const m of list) {
     if (!m?.slug) continue
-    out.set(m.slug, { slug: m.slug, title: m.title, year: m.year, category: m.category })
+    out.set(m.slug, { slug: m.slug, title: m.title, year: m.year, category: m.category, tmdbId: m.tmdbId || null })
   }
   // hardcoded popularFallbackMovies in movies.js
   const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'movies.js'), 'utf8')
@@ -245,8 +303,130 @@ async function main() {
   const force = args.includes('--force')
   const all = args.includes('--all')
 
-  if (series) {
-    const kd = readJSON(path.join(ROOT, 'src', 'lib', 'kdramas.json'), [])
+  if (args.includes('--scan-os')) {
+    if (!OS_KEY) { console.error('OPENSUBTITLES_API_KEY missing'); process.exit(1) }
+    let movies = loadMovies()
+    const manifest = readManifest()
+    movies = movies.filter((m) => {
+      const e = manifest[m.slug]
+      return !(e?.file && e.translated && !e.partial)
+    })
+    if (limit) movies = movies.slice(0, limit)
+    console.log(`OS scan: ${movies.length} movies missing MN subs`)
+    let mn = 0, en = 0, none = 0
+    for (let i = 0; i < movies.length; i++) {
+      const m = movies[i]
+      try {
+        const params = m.tmdbId ? { tmdb_id: m.tmdbId } : { query: m.title, year: m.year }
+        const data = await osSearch({ ...params, languages: 'mn,en' })
+        const rows = data.data || []
+        const hasMn = rows.some((r) => r.attributes?.language === 'mn')
+        const hasEn = rows.some((r) => r.attributes?.language === 'en')
+        if (hasMn) mn++
+        else if (hasEn) en++
+        else none++
+        console.log(`[${i + 1}/${movies.length}] ${m.slug} total:${data.total_count ?? rows.length} mn:${hasMn} en:${hasEn}`)
+      } catch (e) {
+        none++
+        console.log(`[${i + 1}/${movies.length}] ${m.slug} ERR ${e.message}`)
+      }
+      await sleep(delay)
+    }
+    console.log(`\n=== OS COVERAGE === mn:${mn} en-only:${en} none:${none}`)
+    return
+  }
+
+  if (args.includes('--from-os')) {
+    if (!OS_KEY) { console.error('OPENSUBTITLES_API_KEY missing'); process.exit(1) }
+    const onlySlugs = (get('--only') || '').split(',').map((s) => s.trim()).filter(Boolean)
+    let movies = loadMovies()
+    const manifest = readManifest()
+    if (onlySlugs.length) movies = movies.filter((m) => onlySlugs.includes(m.slug))
+    else movies = movies.filter((m) => {
+      const e = manifest[m.slug]
+      if (!e?.file) return true
+      if ((e.cueCount || 0) < 100) return true // stub (trailer etc) — redo with better pick
+      return !(e.translated && !e.partial)
+    })
+    const todo = limit ? movies.slice(0, limit) : movies
+    console.log(`OS batch: ${todo.length}`)
+    const stats = { native: 0, translated: 0, partial: 0, 'no-source': 0, error: 0 }
+    for (let i = 0; i < todo.length; i++) {
+      const m = todo[i]
+      const tag = `[${i + 1}/${todo.length}]`
+      try {
+        const params = m.tmdbId ? { tmdb_id: m.tmdbId } : { query: m.title, year: m.year }
+        const data = await osSearch({ ...params, languages: 'mn,en' })
+        const rows = data.data || []
+        const byDl = (r) => r.attributes?.download_count ?? 0
+        const mnRows = rows.filter((r) => r.attributes?.language === 'mn').sort((a, b) => byDl(b) - byDl(a))
+        const enRows = rows.filter((r) => r.attributes?.language === 'en').sort((a, b) => byDl(b) - byDl(a))
+        const candidates = [...mnRows.slice(0, 3), ...enRows.slice(0, 3)]
+        if (!candidates.length) {
+          stats['no-source']++
+          console.log(`${tag} ${m.slug} no-source (no mn/en files)`)
+          continue
+        }
+        // try up to 3 files; skip trailer-like stubs (<100 cues)
+        let saved = null
+        let lastErr = null
+        for (const row of candidates) {
+          const fileId = row.attributes?.files?.[0]?.file_id
+          if (!fileId) continue
+          try {
+            const content = await osDownloadFile(fileId)
+            const cues = parseCues(content)
+            if (cues.length < 100) { lastErr = `stub (${cues.length} cues)`; continue }
+            const isMn = row.attributes?.language === 'mn'
+            if (isMn) {
+              saveGenerated(m.slug, buildVtt(cues), {
+                source: 'opensubtitles', language: 'mn', generated: true, translated: true,
+                partial: false, cueCount: cues.length, sourceDetail: 'OpenSubtitles (native Mongolian)',
+              })
+              saved = { st: 'native', cues: cues.length }
+            } else {
+              const tr = await translateLinesToMongolian(null, cues.map((c) => c.text))
+              const out = cues.map((c, j) => ({ ...c, text: tr.translated[j] || c.text }))
+              const ratio = tr.totalUnique ? tr.translatedUnique / tr.totalUnique : 1
+              saveGenerated(m.slug, buildVtt(out), {
+                source: 'opensubtitles', language: 'en', generated: true, translated: true,
+                partial: ratio < 0.9, translatedLineRatio: ratio, cueCount: cues.length,
+                sourceDetail: `OpenSubtitles EN → MN (google, ${(ratio * 100).toFixed(0)}%)`,
+              })
+              saved = { st: ratio < 0.9 ? 'partial' : 'translated', cues: cues.length, ratio }
+            }
+            break
+          } catch (e) {
+            lastErr = e.message
+            if (/406/.test(e.message)) break // quota wall — further files will fail too
+            continue
+          }
+        }
+        if (saved) {
+          stats[saved.st]++
+          console.log(`${tag} ${m.slug} ${saved.st} ${saved.cues} cues${saved.ratio !== undefined ? ` (${(saved.ratio * 100).toFixed(0)}%)` : ''}`)
+        } else if (lastErr && /406/.test(lastErr)) {
+          stats.error++
+          console.log(`${tag} ${m.slug} error OS download 406`)
+        } else if (lastErr) {
+          stats.error++
+          console.log(`${tag} ${m.slug} error ${String(lastErr).slice(0, 100)}`)
+        } else {
+          stats['no-source']++
+          console.log(`${tag} ${m.slug} no-source (no files)`)
+        }
+      } catch (e) {
+        stats.error++
+        console.log(`${tag} ${m.slug} error ${String(e.message || e).slice(0, 100)}`)
+      }
+      if (i < todo.length - 1) await sleep(delay)
+    }
+    console.log('\n=== OS BATCH SUMMARY ===')
+    console.log(JSON.stringify(stats, null, 2))
+    return
+  }
+
+  if (series) {    const kd = readJSON(path.join(ROOT, 'src', 'lib', 'kdramas.json'), [])
     const w = readJSON(path.join(ROOT, 'src', 'lib', 'western.json'), [])
     let shows = series === 'kdramas' ? kd : series === 'western' ? w : [...kd, ...w]
     shows = shows.filter((s) => s?.slug && s?.title)
