@@ -571,7 +571,10 @@
     "banner": "https://image.tmdb.org/t/p/w1280/raoz5xNPjFijXtvloEOKwGIfCqV.jpg",
     "tmdbId": "82237"
   },
-  "terius-behind-me": null,
+  "terius-behind-me": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/168/421363.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/168/421363.jpg"
+  },
   "the-hymn-of-death": {
     "poster": "https://image.tmdb.org/t/p/w500/xhi0dblvDPyNZb8jl0HPQEXGhy2.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/lwfvmZZK2KmM0fg785zamw0x0yJ.jpg",
@@ -723,7 +726,10 @@
     "banner": "https://image.tmdb.org/t/p/w1280/jU8Coj7c1P7vzO5mRU7XY4UQhkE.jpg",
     "tmdbId": "73315"
   },
-  "one-more-happy-ending": null,
+  "one-more-happy-ending": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/464/1162385.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/464/1162385.jpg"
+  },
   "kill-me-heal-me": {
     "poster": "https://image.tmdb.org/t/p/w500/1RkBC4VkJ7TS4nSvKMc5QooaUQu.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/3nqI6FimqPqxXPLPKy2kutAjUAS.jpg",
@@ -849,7 +855,10 @@
     "banner": "https://image.tmdb.org/t/p/w1280/2X9nNW4HzHqbPW8WyTzIQHQ2H9k.jpg",
     "tmdbId": "58761"
   },
-  "master-sun": null,
+  "master-sun": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/523/1308451.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/523/1308451.jpg"
+  },
   "gu-family-book": null,
   "good-doctor": {
     "poster": "https://image.tmdb.org/t/p/w500/4pR9FCgtCj8mYFLh7tb2avCwdOy.jpg",
@@ -866,7 +875,10 @@
     "banner": "https://image.tmdb.org/t/p/w1280/d4jEJe18Cjf5raJHVHksvMswB5L.jpg",
     "tmdbId": "58776"
   },
-  "queen-inhyuns-man": null,
+  "queen-inhyuns-man": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/85/214200.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/85/214200.jpg"
+  },
   "rooftop-prince": {
     "poster": "https://image.tmdb.org/t/p/w500/2bHHzWAMPxIVv7e0FgTQDTYd1y5.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/iPrDdmnMJmcAOBpyN4t2CKypbVV.jpg",
@@ -922,13 +934,19 @@
     "banner": "https://image.tmdb.org/t/p/w1280/y3Xl4Q67VPoppDazY63XDvjKwle.jpg",
     "tmdbId": "37636"
   },
-  "dong-yi": null,
+  "dong-yi": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/23/59526.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/23/59526.jpg"
+  },
   "giant": {
     "poster": "https://image.tmdb.org/t/p/w500/5ZNwvE1zAphNaxJebEMxf0LpqFR.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/cOqw2lK1RSsDHZcDscdUL0ioUFB.jpg",
     "tmdbId": "33828"
   },
-  "baker-king-kim-tak-goo": null,
+  "baker-king-kim-tak-goo": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/156/391456.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/156/391456.jpg"
+  },
   "sungkyunkwan-scandal": {
     "poster": "https://image.tmdb.org/t/p/w500/ybx2GDBkbzV2P8NUIj6r3U7ht3A.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/mqLN4yMXldMYcZTVhw06q94XXya.jpg",
@@ -960,14 +978,20 @@
     "banner": "https://image.tmdb.org/t/p/w1280/d5RNBKJzGhzTYxxGCgYtfqm4ZmO.jpg",
     "tmdbId": "38861"
   },
-  "can-you-hear-my-heart": null,
+  "can-you-hear-my-heart": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/52/132308.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/52/132308.jpg"
+  },
   "padam-padam": {
     "poster": "https://image.tmdb.org/t/p/w500/hEihIHrOk6LY96B684UUesZPDZ9.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/rQt7qhPbLMBl1QbvAicl3ET5xc2.jpg",
     "tmdbId": "42290",
     "media": "tv"
   },
-  "three-brothers": null,
+  "three-brothers": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/58/146488.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/58/146488.jpg"
+  },
   "brain": {
     "poster": "https://image.tmdb.org/t/p/w500/uuwhLxkLzQVyB6cMd40MBab1SDc.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/1gMbEc82fQAy4hPs1HKkmWx0K6c.jpg",
@@ -1033,7 +1057,6 @@
     "banner": "https://image.tmdb.org/t/p/w1280/zREcbBw8AqpJTyPsqvMECuThcXc.jpg",
     "tmdbId": "12539"
   },
-  "goong": null,
   "east-of-eden": {
     "poster": "https://image.tmdb.org/t/p/w500/z7fWrBzCwd5DRPvNh1tr7yaQQP8.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/5yOxRuPljFOM8pPK7MoppZtNmEJ.jpg",
@@ -1067,7 +1090,10 @@
     "tmdbId": "18376"
   },
   "glory-of-the-family": null,
-  "ojakgyo-brothers": null,
+  "ojakgyo-brothers": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/53/134571.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/53/134571.jpg"
+  },
   "shut-up-flower-boy-band": {
     "poster": "https://image.tmdb.org/t/p/w500/h4SeOz0OCBE5VxSBCbQN6fGmwMo.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/fH8w6bcXDkikOriYGrvahIr0axV.jpg",
@@ -1280,7 +1306,10 @@
     "banner": "https://image.tmdb.org/t/p/w1280/pngsLRvYWzz2Hjy0Fhz4gcwgQCM.jpg",
     "tmdbId": "81957"
   },
-  "shall-we-kiss-first": null,
+  "shall-we-kiss-first": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/144/362005.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/144/362005.jpg"
+  },
   "kairos": {
     "poster": "https://image.tmdb.org/t/p/w500/cnThovHCzJ2YoKrZ0oBBZfkd26j.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/80z5nrNrDsj0JKyd1nfdyt7hR9k.jpg",
@@ -1409,19 +1438,28 @@
     "banner": "https://image.tmdb.org/t/p/w1280/ryeNUxX1KxS8nc8R7dubBPaqtEr.jpg",
     "tmdbId": "70452"
   },
-  "age-of-youth": null,
+  "age-of-youth": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/124/311907.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/124/311907.jpg"
+  },
   "age-of-youth-2": {
     "poster": "https://image.tmdb.org/t/p/w500/4MdSbKFGAzgFhF407e9fcZreqvm.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/vu5F4wLOBPFWYcBkJ3at2XKJgGa.jpg",
     "tmdbId": "67014"
   },
-  "shopping-king-louie": null,
+  "shopping-king-louie": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/76/190643.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/76/190643.jpg"
+  },
   "cheese-in-the-trap": {
     "poster": "https://image.tmdb.org/t/p/w500/128FRexhKrdPeg9Z0w8C7Hicy0P.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/rGMrRwtcBrB2RGSbSq2Adf3z5K7.jpg",
     "tmdbId": "64548"
   },
-  "i-need-romance-3": null,
+  "i-need-romance-3": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/144/361346.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/144/361346.jpg"
+  },
   "the-greatest-love": {
     "poster": "https://image.tmdb.org/t/p/w500/foIZZlM7H8aB2AlA9xujrCdxDar.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/1WtrLSriz1ACeuNMD30EPPsvkAU.jpg",
@@ -1728,7 +1766,10 @@
     "tmdbId": "136283",
     "media": "tv"
   },
-  "midnight-photo": null,
+  "midnight-photo": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/505/1263272.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/505/1263272.jpg"
+  },
   "uncle-samsik": {
     "poster": "https://image.tmdb.org/t/p/w500/60iLAUnwnejECmOwDcuimUnMAO6.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/pzDY9xhJQZAx1CADITkOUA27GCB.jpg",
@@ -1746,7 +1787,10 @@
     "tmdbId": "224732"
   },
   "my-neighbour-is-a-gangster": null,
-  "family-affairs": null,
+  "family-affairs": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/23/59250.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/23/59250.jpg"
+  },
   "resident-playbook": {
     "poster": "https://image.tmdb.org/t/p/w500/bB5Tu1Rzq6guKsMhV59aszN9c0a.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/A4X2JVnABZeZpMAWcI0eBHvLYAl.jpg",
@@ -1806,7 +1850,10 @@
     "tmdbId": "237311"
   },
   "drama-special-the-colosseum": null,
-  "delusion": null,
+  "delusion": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606567.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606567.jpg"
+  },
   "samyang-geom": null,
   "summer-strike": {
     "poster": "https://image.tmdb.org/t/p/w500/ge4M0QHCfegOETAkjAKZroo82Rr.jpg",
@@ -2249,7 +2296,7 @@
     "media": "tv"
   },
   "love-in-disguise": {
-    "poster": null,
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/641/1603562.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/eELCGuN24A8lcgYhN5DH2qTyaIU.jpg",
     "tmdbId": "303745",
     "media": "tv"
@@ -2547,5 +2594,229 @@
     "banner": "https://image.tmdb.org/t/p/w1280/4TJG9k0u1WZfs9iwhLpHshnryaR.jpg",
     "tmdbId": "128995",
     "media": "tv"
+  },
+  "2-days-and-1-night": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/539/1348017.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/539/1348017.jpg"
+  },
+  "amazing-saturday": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/564/1412040.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/564/1412040.jpg"
+  },
+  "law-of-the-jungle": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/83/208612.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/83/208612.jpg"
+  },
+  "home-alone": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/369/924030.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/369/924030.jpg"
+  },
+  "infinite-challenge": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/18/46328.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/18/46328.jpg"
+  },
+  "running-man": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/18/46329.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/18/46329.jpg"
+  },
+  "weekly-idol": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/53/134442.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/53/134442.jpg"
+  },
+  "my-little-old-boy": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/255/637667.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/255/637667.jpg"
+  },
+  "super-wings": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/40/101240.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/40/101240.jpg"
+  },
+  "weak-hero": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/568/1420042.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/568/1420042.jpg"
+  },
+  "made-in-korea": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/607/1517771.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/607/1517771.jpg"
+  },
+  "tomb-raider-king": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/619/1548836.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/619/1548836.jpg"
+  },
+  "dr-romantic": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/458/1146656.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/458/1146656.jpg"
+  },
+  "taxi-driver": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/600/1500435.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/600/1500435.jpg"
+  },
+  "going-seventeen": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/394/985825.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/394/985825.jpg"
+  },
+  "bernard": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/73/182957.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/73/182957.jpg"
+  },
+  "all-of-us-are-dead": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/394/985544.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/394/985544.jpg"
+  },
+  "run-bts": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/421/1053306.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/421/1053306.jpg"
+  },
+  "my-demon": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/482/1205495.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/482/1205495.jpg"
+  },
+  "love-class": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/471/1179041.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/471/1179041.jpg"
+  },
+  "single-s-inferno": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/609/1523995.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/609/1523995.jpg"
+  },
+  "guardian-the-lonely-and-great-god": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/532/1330901.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/532/1330901.jpg"
+  },
+  "the-manipulated": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/595/1489992.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/595/1489992.jpg"
+  },
+  "the-return-of-superman": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/21/53613.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/21/53613.jpg"
+  },
+  "the-penthouse": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/532/1331130.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/532/1331130.jpg"
+  },
+  "big-mouth": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/560/1401497.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/560/1401497.jpg"
+  },
+  "love-in-the-moonlight": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/76/190752.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/76/190752.jpg"
+  },
+  "yumi-s-cells": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/621/1553740.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/621/1553740.jpg"
+  },
+  "new-journey-to-the-west": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/361/903097.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/361/903097.jpg"
+  },
+  "dear-x": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/600/1500626.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/600/1500626.jpg"
+  },
+  "study-group": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/561/1404396.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/561/1404396.jpg"
+  },
+  "the-prosecutor-s-proposal": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/628/1571281.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/628/1571281.jpg"
+  },
+  "we-got-married": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/19/47681.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/19/47681.jpg"
+  },
+  "twinkling-watermelon": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/543/1359037.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/543/1359037.jpg"
+  },
+  "the-first-responders": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/491/1229480.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/491/1229480.jpg"
+  },
+  "one-high-school-heroes": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/571/1428175.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/571/1428175.jpg"
+  },
+  "dr-brain": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/369/924197.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/369/924197.jpg"
+  },
+  "mercy-for-none": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/567/1419833.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/567/1419833.jpg"
+  },
+  "genie-make-a-wish": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/590/1475241.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/590/1475241.jpg"
+  },
+  "the-good-detective": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/416/1040379.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/416/1040379.jpg"
+  },
+  "good-boy": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/566/1416520.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/566/1416520.jpg"
+  },
+  "full-house-take-2": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/122/305760.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/122/305760.jpg"
+  },
+  "revenge-of-others": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/428/1070285.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/428/1070285.jpg"
+  },
+  "what-s-wrong-with-secretary-kim": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/579/1449676.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/579/1449676.jpg"
+  },
+  "mignon": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/472/1180987.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/472/1180987.jpg"
+  },
+  "d-p": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/481/1202668.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/481/1202668.jpg"
+  },
+  "the-silent-sea": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/378/946511.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/378/946511.jpg"
+  },
+  "god-s-quiz": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/171/428386.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/171/428386.jpg"
+  },
+  "larva": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/85/213241.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/85/213241.jpg"
+  },
+  "the-great-escape": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/340/851563.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/340/851563.jpg"
+  },
+  "culinary-class-wars": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/604/1510951.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/604/1510951.jpg"
+  },
+  "would-you-marry-me": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/591/1479991.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/591/1479991.jpg"
+  },
+  "death-s-game": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/484/1210675.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/484/1210675.jpg"
+  },
+  "dynamite-kiss": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/593/1482842.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/593/1482842.jpg"
+  },
+  "bon-appetit-your-majesty": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/580/1452461.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/580/1452461.jpg"
+  },
+  "the-emperor-owner-of-the-mask": {
+    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/526/1317120.jpg",
+    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/526/1317120.jpg"
   }
 }
