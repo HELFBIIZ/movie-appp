@@ -11910,8 +11910,2384 @@
       "tmdbId": 61791,
       "poster": "https://image.tmdb.org/t/p/w342/oqA45qMyyo1TtrnVEBKxqmTPhbN.jpg",
       "banner": "https://image.tmdb.org/t/p/w1280/6cCF0KMUO2QmrVsQFujkQduREXX.jpg"
+    },
+    {
+      "slug": "don-t-look-up",
+      "title": "Don't Look Up",
+      "year": 2021,
+      "rating": 7.1,
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Adam McKay",
+      "cast": [
+        "Leonardo DiCaprio",
+        "Jennifer Lawrence",
+        "Meryl Streep"
+      ],
+      "plot": "Two low-level astronomers must go on a giant media tour to warn humankind of an approaching comet that will destroy planet Earth.",
+      "category": "popular",
+      "tmdbId": 646380,
+      "poster": "https://images.metahub.space/poster/small/tt11286314/img",
+      "banner": "https://images.metahub.space/background/medium/tt11286314/img"
+    },
+    {
+      "slug": "the-kashmir-files",
+      "title": "The Kashmir Files",
+      "year": 2022,
+      "rating": 8.5,
+      "genres": [
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Vivek Agnihotri",
+      "cast": [
+        "Mithun Chakraborty",
+        "Anupam Kher",
+        "Darshan Kumaar"
+      ],
+      "plot": "A heart-wrenching tale that captures the pain, suffering, and struggle of the Kashmiri Pandit community in 1990 and leads Krishna, a young college student, to set out on a quest to uncover the truth.",
+      "category": "top-rated",
+      "tmdbId": 900783,
+      "poster": "https://images.metahub.space/poster/small/tt10811166/img",
+      "banner": "https://images.metahub.space/background/medium/tt10811166/img"
+    },
+    {
+      "slug": "bullet-train",
+      "title": "Bullet Train",
+      "year": 2022,
+      "rating": 7.3,
+      "genres": [
+        "Action",
+        "Comedy",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "David Leitch",
+      "cast": [
+        "Brad Pitt",
+        "Joey King",
+        "Aaron Taylor-Johnson"
+      ],
+      "plot": "Five assassins aboard a swiftly-moving bullet train find out that their missions have something in common.",
+      "category": "popular",
+      "tmdbId": 718930,
+      "poster": "https://images.metahub.space/poster/small/tt12593682/img",
+      "banner": "https://images.metahub.space/background/medium/tt12593682/img"
+    },
+    {
+      "slug": "glass-onion",
+      "title": "Glass Onion",
+      "year": 2022,
+      "rating": 7.1,
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Rian Johnson",
+      "cast": [
+        "Daniel Craig",
+        "Edward Norton",
+        "Kate Hudson"
+      ],
+      "plot": "Tech billionaire Miles Bron invites his friends for a getaway on his private Greek island. When someone turns up dead, Detective Benoit Blanc is put on the case.",
+      "category": "popular",
+      "tmdbId": 661374,
+      "poster": "https://images.metahub.space/poster/small/tt11564570/img",
+      "banner": "https://images.metahub.space/background/medium/tt11564570/img"
+    },
+    {
+      "slug": "the-menu",
+      "title": "The Menu",
+      "year": 2022,
+      "rating": 7.1,
+      "genres": [
+        "Comedy",
+        "Horror",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Mark Mylod",
+      "cast": [
+        "Ralph Fiennes",
+        "Anya Taylor-Joy",
+        "Nicholas Hoult"
+      ],
+      "plot": "A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.",
+      "category": "popular",
+      "tmdbId": 593643,
+      "poster": "https://images.metahub.space/poster/small/tt9764362/img",
+      "banner": "https://images.metahub.space/background/medium/tt9764362/img"
+    },
+    {
+      "slug": "eternals",
+      "title": "Eternals",
+      "year": 2021,
+      "rating": 6.2,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Chloé Zhao",
+      "cast": [
+        "Gemma Chan",
+        "Richard Madden",
+        "Angelina Jolie"
+      ],
+      "plot": "The saga of the Eternals, a race of immortal beings who lived on Earth and shaped its history and civilizations.",
+      "category": "popular",
+      "tmdbId": 524434,
+      "poster": "https://images.metahub.space/poster/small/tt9032400/img",
+      "banner": "https://images.metahub.space/background/medium/tt9032400/img"
+    },
+    {
+      "slug": "nobody",
+      "title": "Nobody",
+      "year": 2021,
+      "rating": 7.4,
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ilya Naishuller",
+      "cast": [
+        "Bob Odenkirk",
+        "Aleksey Serebryakov",
+        "Connie Nielsen"
+      ],
+      "plot": "A docile family man slowly reveals his true character after his house gets burgled by two petty thieves, which, coincidentally, leads him into a bloody war with a Russian crime boss.",
+      "category": "popular",
+      "tmdbId": 615457,
+      "poster": "https://images.metahub.space/poster/small/tt7888964/img",
+      "banner": "https://images.metahub.space/background/medium/tt7888964/img"
+    },
+    {
+      "slug": "red-notice",
+      "title": "Red Notice",
+      "year": 2021,
+      "rating": 6.3,
+      "genres": [
+        "Action",
+        "Comedy",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Rawson Marshall Thurber",
+      "cast": [
+        "Dwayne Johnson",
+        "Ryan Reynolds",
+        "Gal Gadot"
+      ],
+      "plot": "An Interpol agent successfully tracks down the world's most wanted art thief with help from a rival thief. But nothing is as it seems as a series of double-crosses ensues.",
+      "category": "popular",
+      "tmdbId": 512195,
+      "poster": "https://images.metahub.space/poster/small/tt7991608/img",
+      "banner": "https://images.metahub.space/background/medium/tt7991608/img"
+    },
+    {
+      "slug": "all-quiet-on-the-western-front",
+      "title": "All Quiet on the Western Front",
+      "year": 2022,
+      "rating": 7.8,
+      "genres": [
+        "Drama",
+        "History",
+        "War"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Edward Berger",
+      "cast": [
+        "Felix Kammerer",
+        "Albrecht Schuch",
+        "Aaron Hilmer"
+      ],
+      "plot": "A young German soldier's eagerness to serve his country quickly fades when he witnesses the horrors of combat on the Western Front during World War I.",
+      "category": "popular",
+      "tmdbId": 49046,
+      "poster": "https://images.metahub.space/poster/small/tt1016150/img",
+      "banner": "https://images.metahub.space/background/medium/tt1016150/img"
+    },
+    {
+      "slug": "a-quiet-place-part-ii",
+      "title": "A Quiet Place Part II",
+      "year": 2020,
+      "rating": 7.2,
+      "genres": [
+        "Drama",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "John Krasinski",
+      "cast": [
+        "Emily Blunt",
+        "Millicent Simmonds",
+        "Cillian Murphy"
+      ],
+      "plot": "Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path.",
+      "category": "popular",
+      "tmdbId": 520763,
+      "poster": "https://images.metahub.space/poster/small/tt8332922/img",
+      "banner": "https://images.metahub.space/background/medium/tt8332922/img"
+    },
+    {
+      "slug": "nope",
+      "title": "Nope",
+      "year": 2022,
+      "rating": 6.8,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jordan Peele",
+      "cast": [
+        "Daniel Kaluuya",
+        "Keke Palmer",
+        "Brandon Perea"
+      ],
+      "plot": "The residents of a lonely gulch in inland California bear witness to an uncanny and chilling phenomenon.",
+      "category": "popular",
+      "tmdbId": 762504,
+      "poster": "https://images.metahub.space/poster/small/tt10954984/img",
+      "banner": "https://images.metahub.space/background/medium/tt10954984/img"
+    },
+    {
+      "slug": "wonder-woman-1984",
+      "title": "Wonder Woman 1984",
+      "year": 2020,
+      "rating": 5.3,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Patty Jenkins",
+      "cast": [
+        "Gal Gadot",
+        "Chris Pine",
+        "Kristen Wiig"
+      ],
+      "plot": "Wonder Woman finds herself battling two opponents, Maxwell Lord, a shrewd entrepreneur, and Barbara Minerva, a friend-turned-foe. Meanwhile, she also ends up crossing paths with her love interest.",
+      "category": "popular",
+      "tmdbId": 464052,
+      "poster": "https://images.metahub.space/poster/small/tt7126948/img",
+      "banner": "https://images.metahub.space/background/medium/tt7126948/img"
+    },
+    {
+      "slug": "anora",
+      "title": "Anora",
+      "year": 2024,
+      "rating": 7.4,
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Sean Baker",
+      "cast": [
+        "Mikey Madison",
+        "Paul Weissman",
+        "Lindsey Normington"
+      ],
+      "plot": "A young stripper from Brooklyn meets and impulsively marries the son of a Russian oligarch. Once the news reaches Russia, her fairy tale is threatened as his parents set out for New York to get the marriage annulled.",
+      "category": "popular",
+      "tmdbId": 1064213,
+      "poster": "https://images.metahub.space/poster/small/tt28607951/img",
+      "banner": "https://images.metahub.space/background/medium/tt28607951/img"
+    },
+    {
+      "slug": "uncharted",
+      "title": "Uncharted",
+      "year": 2022,
+      "rating": 6.3,
+      "genres": [
+        "Action",
+        "Adventure"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ruben Fleischer",
+      "cast": [
+        "Tom Holland",
+        "Mark Wahlberg",
+        "Antonio Banderas"
+      ],
+      "plot": "Street-smart Nathan Drake is recruited by seasoned treasure hunter Victor \"Sully\" Sullivan to recover a fortune amassed by Ferdinand Magellan, and lost 500 years ago by the House of Moncada.",
+      "category": "popular",
+      "tmdbId": 335787,
+      "poster": "https://images.metahub.space/poster/small/tt1464335/img",
+      "banner": "https://images.metahub.space/background/medium/tt1464335/img"
+    },
+    {
+      "slug": "the-matrix-resurrections",
+      "title": "The Matrix Resurrections",
+      "year": 2021,
+      "rating": 5.6,
+      "genres": [
+        "Action",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Lana Wachowski",
+      "cast": [
+        "Keanu Reeves",
+        "Carrie-Anne Moss",
+        "Yahya Abdul-Mateen II"
+      ],
+      "plot": "Return to a world of two realities: one, everyday life; the other, what lies behind it. To find out if his reality is a construct, to truly know himself, Mr. Anderson will have to choose to follow the white rabbit once more.",
+      "category": "popular",
+      "tmdbId": 624860,
+      "poster": "https://images.metahub.space/poster/small/tt10838180/img",
+      "banner": "https://images.metahub.space/background/medium/tt10838180/img"
+    },
+    {
+      "slug": "the-northman",
+      "title": "The Northman",
+      "year": 2022,
+      "rating": 7,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Robert Eggers",
+      "cast": [
+        "Alexander Skarsgård",
+        "Nicole Kidman",
+        "Claes Bang"
+      ],
+      "plot": "A young Viking prince is on a quest to avenge his father's murder.",
+      "category": "popular",
+      "tmdbId": 639933,
+      "poster": "https://images.metahub.space/poster/small/tt11138512/img",
+      "banner": "https://images.metahub.space/background/medium/tt11138512/img"
+    },
+    {
+      "slug": "encanto",
+      "title": "Encanto",
+      "year": 2021,
+      "rating": 7.2,
+      "genres": [
+        "Animation",
+        "Comedy",
+        "Family"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jared Bush, Byron Howard, Charise Castro Smith",
+      "cast": [
+        "Stephanie Beatriz",
+        "María Cecilia Botero",
+        "John Leguizamo"
+      ],
+      "plot": "An extraordinary family, the Madrigals, live hidden in the mountains of Colombia, in a magical house called an Encanto. The magic of the Encanto has blessed every child in the family with a unique gift - every child except one, Mi...",
+      "category": "popular",
+      "tmdbId": 568124,
+      "poster": "https://images.metahub.space/poster/small/tt2953050/img",
+      "banner": "https://images.metahub.space/background/medium/tt2953050/img"
+    },
+    {
+      "slug": "cruella",
+      "title": "Cruella",
+      "year": 2021,
+      "rating": 7.3,
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Craig Gillespie",
+      "cast": [
+        "Emma Stone",
+        "Emma Thompson",
+        "Joel Fry"
+      ],
+      "plot": "During the 1970s London punk rock revolution, young grifter Estella transforms herself into the raucous, revenge-bent Cruella de Vil.",
+      "category": "popular",
+      "tmdbId": 337404,
+      "poster": "https://images.metahub.space/poster/small/tt3228774/img",
+      "banner": "https://images.metahub.space/background/medium/tt3228774/img"
+    },
+    {
+      "slug": "the-banshees-of-inisherin",
+      "title": "The Banshees of Inisherin",
+      "year": 2022,
+      "rating": 7.6,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Martin McDonagh",
+      "cast": [
+        "Colin Farrell",
+        "Brendan Gleeson",
+        "Kerry Condon"
+      ],
+      "plot": "Two lifelong friends find themselves at an impasse when one abruptly ends their relationship, with alarming consequences for both of them.",
+      "category": "popular",
+      "tmdbId": 674324,
+      "poster": "https://images.metahub.space/poster/small/tt11813216/img",
+      "banner": "https://images.metahub.space/background/medium/tt11813216/img"
+    },
+    {
+      "slug": "extraction",
+      "title": "Extraction",
+      "year": 2020,
+      "rating": 6.8,
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Sam Hargrave",
+      "cast": [
+        "Chris Hemsworth",
+        "Bryon Lerum",
+        "Ryder Lerum"
+      ],
+      "plot": "Tyler Rake, a fearless black market mercenary, embarks on the most deadly extraction of his career when he's enlisted to rescue the kidnapped son of an imprisoned international crime lord.",
+      "category": "popular",
+      "tmdbId": 545609,
+      "poster": "https://images.metahub.space/poster/small/tt8936646/img",
+      "banner": "https://images.metahub.space/background/medium/tt8936646/img"
+    },
+    {
+      "slug": "the-invisible-man",
+      "title": "The Invisible Man",
+      "year": 2020,
+      "rating": 7.1,
+      "genres": [
+        "Drama",
+        "Horror",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Leigh Whannell",
+      "cast": [
+        "Elisabeth Moss",
+        "Oliver Jackson-Cohen",
+        "Harriet Dyer"
+      ],
+      "plot": "When Cecilia's abusive ex takes his own life and leaves her his fortune, she suspects his death was a hoax. As a series of coincidences turn lethal, Cecilia works to prove that she is being hunted by someone nobody can see.",
+      "category": "popular",
+      "tmdbId": 570670,
+      "poster": "https://images.metahub.space/poster/small/tt1051906/img",
+      "banner": "https://images.metahub.space/background/medium/tt1051906/img"
+    },
+    {
+      "slug": "conclave",
+      "title": "Conclave",
+      "year": 2024,
+      "rating": 7.4,
+      "genres": [
+        "Drama",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Edward Berger",
+      "cast": [
+        "Ralph Fiennes",
+        "Stanley Tucci",
+        "John Lithgow"
+      ],
+      "plot": "When Cardinal Lawrence is tasked with leading the selection of a new Pope, he finds himself in a web of conspiracy and intrigue that could shake the very foundations of the Catholic Church.",
+      "category": "popular",
+      "tmdbId": 974576,
+      "poster": "https://images.metahub.space/poster/small/tt20215234/img",
+      "banner": "https://images.metahub.space/background/medium/tt20215234/img"
+    },
+    {
+      "slug": "birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn",
+      "title": "Birds of Prey and the Fantabulous Emancipation of One Harley Quinn",
+      "year": 2020,
+      "rating": 6.1,
+      "genres": [
+        "Action",
+        "Comedy",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Cathy Yan",
+      "cast": [
+        "Margot Robbie",
+        "Rosie Perez",
+        "Mary Elizabeth Winstead"
+      ],
+      "plot": "After splitting with the Joker, Harley Quinn joins superheroines Black Canary, Huntress, and Renee Montoya to save a young girl from an evil crime lord.",
+      "category": "popular",
+      "tmdbId": 495764,
+      "poster": "https://images.metahub.space/poster/small/tt7713068/img",
+      "banner": "https://images.metahub.space/background/medium/tt7713068/img"
+    },
+    {
+      "slug": "ant-man-and-the-wasp-quantumania",
+      "title": "Ant-Man and the Wasp: Quantumania",
+      "year": 2023,
+      "rating": 6,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Peyton Reed",
+      "cast": [
+        "Paul Rudd",
+        "Evangeline Lilly",
+        "Michael Douglas"
+      ],
+      "plot": "Scott Lang and Hope Van Dyne are dragged into the Quantum Realm, along with Hope's parents and Scott's daughter Cassie. Together they must find a way to escape, but what secrets is Hope's mother hiding? And who is the mysterious K...",
+      "category": "popular",
+      "tmdbId": 640146,
+      "poster": "https://images.metahub.space/poster/small/tt10954600/img",
+      "banner": "https://images.metahub.space/background/medium/tt10954600/img"
+    },
+    {
+      "slug": "the-gray-man",
+      "title": "The Gray Man",
+      "year": 2022,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Anthony Russo, Joe Russo",
+      "cast": [
+        "Ryan Gosling",
+        "Chris Evans",
+        "Ana de Armas"
+      ],
+      "plot": "When the CIA's most skilled operative, whose true identity is known to none, accidentally uncovers dark agency secrets, a psychopathic former colleague puts a bounty on his head, setting off a global manhunt by international assas...",
+      "category": "popular",
+      "tmdbId": 725201,
+      "poster": "https://images.metahub.space/poster/small/tt1649418/img",
+      "banner": "https://images.metahub.space/background/medium/tt1649418/img"
+    },
+    {
+      "slug": "dungeons-and-dragons-honor-among-thieves",
+      "title": "Dungeons & Dragons: Honor Among Thieves",
+      "year": 2023,
+      "rating": 7.2,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "John Francis Daley, Jonathan Goldstein",
+      "cast": [
+        "Chris Pine",
+        "Michelle Rodriguez",
+        "Regé-Jean Page"
+      ],
+      "plot": "A charming thief and a band of unlikely adventurers embark on an epic quest to retrieve a lost relic, but things go dangerously awry when they run afoul of the wrong people.",
+      "category": "popular",
+      "tmdbId": 493529,
+      "poster": "https://images.metahub.space/poster/small/tt2906216/img",
+      "banner": "https://images.metahub.space/background/medium/tt2906216/img"
+    },
+    {
+      "slug": "prey",
+      "title": "Prey",
+      "year": 2022,
+      "rating": 7.1,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Horror"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Dan Trachtenberg",
+      "cast": [
+        "Amber Midthunder",
+        "Dakota Beavers",
+        "Dane DiLiegro"
+      ],
+      "plot": "Naru, a skilled warrior of the Comanche Nation, fights to protect her tribe against one of the first highly-evolved Predators to land on Earth.",
+      "category": "popular",
+      "tmdbId": 766507,
+      "poster": "https://images.metahub.space/poster/small/tt11866324/img",
+      "banner": "https://images.metahub.space/background/medium/tt11866324/img"
+    },
+    {
+      "slug": "nosferatu",
+      "title": "Nosferatu",
+      "year": 2024,
+      "rating": 7.1,
+      "genres": [
+        "Fantasy",
+        "Horror",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Robert Eggers",
+      "cast": [
+        "Lily-Rose Depp",
+        "Nicholas Hoult",
+        "Bill Skarsgård"
+      ],
+      "plot": "A gothic tale of obsession between a haunted young woman and the terrifying vampire infatuated with her, causing untold horror in its wake.",
+      "category": "popular",
+      "tmdbId": 426063,
+      "poster": "https://images.metahub.space/poster/small/tt5040012/img",
+      "banner": "https://images.metahub.space/background/medium/tt5040012/img"
+    },
+    {
+      "slug": "the-holdovers",
+      "title": "The Holdovers",
+      "year": 2023,
+      "rating": 7.9,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Alexander Payne",
+      "cast": [
+        "Paul Giamatti",
+        "Da'Vine Joy Randolph",
+        "Dominic Sessa"
+      ],
+      "plot": "In 1970, a curmudgeonly history teacher at a New England boarding school remains on campus during Christmas break to supervise held over students, and ends up forming an unlikely bond with a brainy but damaged troublemaker.",
+      "category": "popular",
+      "tmdbId": 840430,
+      "poster": "https://images.metahub.space/poster/small/tt14849194/img",
+      "banner": "https://images.metahub.space/background/medium/tt14849194/img"
+    },
+    {
+      "slug": "barbarian",
+      "title": "Barbarian",
+      "year": 2022,
+      "rating": 7,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Zach Cregger",
+      "cast": [
+        "Georgina Campbell",
+        "Bill Skarsgård",
+        "Justin Long"
+      ],
+      "plot": "A woman staying at an Airbnb discovers that the house she has rented is not what it seems.",
+      "category": "popular",
+      "tmdbId": 913290,
+      "poster": "https://images.metahub.space/poster/small/tt15791034/img",
+      "banner": "https://images.metahub.space/background/medium/tt15791034/img"
+    },
+    {
+      "slug": "the-black-phone",
+      "title": "The Black Phone",
+      "year": 2021,
+      "rating": 6.9,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Scott Derrickson",
+      "cast": [
+        "Mason Thames",
+        "Madeleine McGraw",
+        "Ethan Hawke"
+      ],
+      "plot": "After being abducted and locked in a basement, a boy starts receiving calls on a disconnected phone from the killer's previous victims.",
+      "category": "popular",
+      "tmdbId": 756999,
+      "poster": "https://images.metahub.space/poster/small/tt7144666/img",
+      "banner": "https://images.metahub.space/background/medium/tt7144666/img"
+    },
+    {
+      "slug": "saltburn",
+      "title": "Saltburn",
+      "year": 2023,
+      "rating": 7,
+      "genres": [
+        "Drama",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Emerald Fennell",
+      "cast": [
+        "Barry Keoghan",
+        "Jacob Elordi",
+        "Rosamund Pike"
+      ],
+      "plot": "A student at Oxford University finds himself drawn into the world of a charming and aristocratic classmate, who invites him to his eccentric family's sprawling estate for a summer never to be forgotten.",
+      "category": "popular",
+      "tmdbId": 930564,
+      "poster": "https://images.metahub.space/poster/small/tt17351924/img",
+      "banner": "https://images.metahub.space/background/medium/tt17351924/img"
+    },
+    {
+      "slug": "godzilla-vs-kong",
+      "title": "Godzilla vs. Kong",
+      "year": 2021,
+      "rating": 6.3,
+      "genres": [
+        "Action",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Adam Wingard",
+      "cast": [
+        "Alexander Skarsgård",
+        "Millie Bobby Brown",
+        "Rebecca Hall"
+      ],
+      "plot": "The epic next chapter in the cinematic Monsterverse pits two of the greatest icons in motion picture history against each other--the fearsome Godzilla and the mighty Kong--with humanity caught in the balance.",
+      "category": "popular",
+      "tmdbId": 399566,
+      "poster": "https://images.metahub.space/poster/small/tt5034838/img",
+      "banner": "https://images.metahub.space/background/medium/tt5034838/img"
+    },
+    {
+      "slug": "elvis",
+      "title": "Elvis",
+      "year": 2022,
+      "rating": 7.3,
+      "genres": [
+        "Biography",
+        "Drama",
+        "Music"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Baz Luhrmann",
+      "cast": [
+        "Tom Hanks",
+        "Austin Butler",
+        "Olivia DeJonge"
+      ],
+      "plot": "The life of American music icon Elvis Presley, from his childhood to becoming a rock and movie star in the 1950s while maintaining a complex relationship with his manager, Colonel Tom Parker.",
+      "category": "popular",
+      "tmdbId": 614934,
+      "poster": "https://images.metahub.space/poster/small/tt3704428/img",
+      "banner": "https://images.metahub.space/background/medium/tt3704428/img"
+    },
+    {
+      "slug": "mickey-17",
+      "title": "Mickey 17",
+      "year": 2025,
+      "rating": 6.7,
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Bong Joon Ho",
+      "cast": [
+        "Robert Pattinson",
+        "Steven Yeun",
+        "Michael Monroe"
+      ],
+      "plot": "During a human expedition to colonize space, Mickey 17, a so-called \"expendable\" employee, is sent to explore an ice planet.",
+      "category": "popular",
+      "tmdbId": 696506,
+      "poster": "https://images.metahub.space/poster/small/tt12299608/img",
+      "banner": "https://images.metahub.space/background/medium/tt12299608/img"
+    },
+    {
+      "slug": "the-adam-project",
+      "title": "The Adam Project",
+      "year": 2022,
+      "rating": 6.7,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Shawn Levy",
+      "cast": [
+        "Ryan Reynolds",
+        "Walker Scobell",
+        "Mark Ruffalo"
+      ],
+      "plot": "After accidentally crash-landing in 2022, time-traveling fighter pilot Adam Reed teams up with his 12-year-old self for a mission to save the future.",
+      "category": "popular",
+      "tmdbId": 696806,
+      "poster": "https://images.metahub.space/poster/small/tt2463208/img",
+      "banner": "https://images.metahub.space/background/medium/tt2463208/img"
+    },
+    {
+      "slug": "wake-up-dead-man",
+      "title": "Wake Up Dead Man",
+      "year": 2025,
+      "rating": 7.3,
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Rian Johnson",
+      "cast": [
+        "Daniel Craig",
+        "Josh O'Connor",
+        "Glenn Close"
+      ],
+      "plot": "Detective Benoit Blanc teams up with an earnest young priest to investigate a perfectly impossible crime at a small-town church with a dark history.",
+      "category": "popular",
+      "tmdbId": 812583,
+      "poster": "https://images.metahub.space/poster/small/tt14364480/img",
+      "banner": "https://images.metahub.space/background/medium/tt14364480/img"
+    },
+    {
+      "slug": "promising-young-woman",
+      "title": "Promising Young Woman",
+      "year": 2020,
+      "rating": 7.5,
+      "genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Emerald Fennell",
+      "cast": [
+        "Carey Mulligan",
+        "Bo Burnham",
+        "Alison Brie"
+      ],
+      "plot": "An unexpected encounter gives a wickedly smart woman a chance to right the wrongs from the past.",
+      "category": "popular",
+      "tmdbId": 582014,
+      "poster": "https://images.metahub.space/poster/small/tt9620292/img",
+      "banner": "https://images.metahub.space/background/medium/tt9620292/img"
+    },
+    {
+      "slug": "the-tomorrow-war",
+      "title": "The Tomorrow War",
+      "year": 2021,
+      "rating": 6.6,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Chris McKay",
+      "cast": [
+        "Chris Pratt",
+        "Yvonne Strahovski",
+        "J.K. Simmons"
+      ],
+      "plot": "A family man travels to the year 2051 to join a global war against a deadly alien species.",
+      "category": "popular",
+      "tmdbId": 588228,
+      "poster": "https://images.metahub.space/poster/small/tt9777666/img",
+      "banner": "https://images.metahub.space/background/medium/tt9777666/img"
+    },
+    {
+      "slug": "enola-holmes",
+      "title": "Enola Holmes",
+      "year": 2020,
+      "rating": 6.7,
+      "genres": [
+        "Adventure",
+        "Crime",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Harry Bradbeer",
+      "cast": [
+        "Millie Bobby Brown",
+        "Henry Cavill",
+        "Sam Claflin"
+      ],
+      "plot": "When Enola Holmes, Sherlock's sister, discovers her mother is missing, she endeavors to find her, becoming a super-sleuth in her own right as she outwits her famous brother and unravels a dangerous conspiracy.",
+      "category": "popular",
+      "tmdbId": 497582,
+      "poster": "https://images.metahub.space/poster/small/tt7846844/img",
+      "banner": "https://images.metahub.space/background/medium/tt7846844/img"
+    },
+    {
+      "slug": "jurassic-world-dominion",
+      "title": "Jurassic World: Dominion",
+      "year": 2022,
+      "rating": 5.6,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Colin Trevorrow",
+      "cast": [
+        "Chris Pratt",
+        "Bryce Dallas Howard",
+        "Laura Dern"
+      ],
+      "plot": "Four years after the destruction of Isla Nublar, Biosyn operatives attempt to track down Maisie Lockwood, while Dr Ellie Sattler investigates a genetically engineered swarm of giant insects.",
+      "category": "popular",
+      "tmdbId": 507086,
+      "poster": "https://images.metahub.space/poster/small/tt8041270/img",
+      "banner": "https://images.metahub.space/background/medium/tt8041270/img"
+    },
+    {
+      "slug": "the-father",
+      "title": "The Father",
+      "year": 2020,
+      "rating": 8.2,
+      "genres": [
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Florian Zeller",
+      "cast": [
+        "Anthony Hopkins",
+        "Olivia Colman",
+        "Mark Gatiss"
+      ],
+      "plot": "A man refuses all assistance from his daughter as he ages. When he tries to understand what is happening around him, he begins to doubt his loved ones, his own mind and even the fabric of his reality.",
+      "category": "top-rated",
+      "tmdbId": 600354,
+      "poster": "https://images.metahub.space/poster/small/tt10272386/img",
+      "banner": "https://images.metahub.space/background/medium/tt10272386/img"
+    },
+    {
+      "slug": "smile",
+      "title": "Smile",
+      "year": 2022,
+      "rating": 6.5,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Parker Finn",
+      "cast": [
+        "Sosie Bacon",
+        "Jessie T. Usher",
+        "Kyle Gallner"
+      ],
+      "plot": "After witnessing a bizarre, traumatic incident involving a patient, a psychiatrist becomes increasingly convinced she is being threatened by an uncanny entity.",
+      "category": "popular",
+      "tmdbId": 882598,
+      "poster": "https://images.metahub.space/poster/small/tt15474916/img",
+      "banner": "https://images.metahub.space/background/medium/tt15474916/img"
+    },
+    {
+      "slug": "leave-the-world-behind",
+      "title": "Leave the World Behind",
+      "year": 2023,
+      "rating": 6.4,
+      "genres": [
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Sam Esmail",
+      "cast": [
+        "Julia Roberts",
+        "Mahershala Ali",
+        "Ethan Hawke"
+      ],
+      "plot": "A family's getaway to a luxurious rental home takes an ominous turn when a cyberattack knocks out their devices, and two strangers appear at their door.",
+      "category": "popular",
+      "tmdbId": 726209,
+      "poster": "https://images.metahub.space/poster/small/tt12747748/img",
+      "banner": "https://images.metahub.space/background/medium/tt12747748/img"
+    },
+    {
+      "slug": "the-power-of-the-dog",
+      "title": "The Power of the Dog",
+      "year": 2021,
+      "rating": 6.8,
+      "genres": [
+        "Drama",
+        "Western"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jane Campion",
+      "cast": [
+        "Benedict Cumberbatch",
+        "Kirsten Dunst",
+        "Jesse Plemons"
+      ],
+      "plot": "Charismatic rancher Phil Burbank inspires fear and awe in those around him. When his brother brings home a new wife and her son, Phil torments them until he finds himself exposed to the possibility of love.",
+      "category": "popular",
+      "tmdbId": 600583,
+      "poster": "https://images.metahub.space/poster/small/tt10293406/img",
+      "banner": "https://images.metahub.space/background/medium/tt10293406/img"
+    },
+    {
+      "slug": "ghostbusters-afterlife",
+      "title": "Ghostbusters: Afterlife",
+      "year": 2021,
+      "rating": 7,
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jason Reitman",
+      "cast": [
+        "Carrie Coon",
+        "Paul Rudd",
+        "Finn Wolfhard"
+      ],
+      "plot": "When a single mom and her two kids arrive in a small town, they begin to discover their connection to the original Ghostbusters and the secret legacy their grandfather left behind.",
+      "category": "popular",
+      "tmdbId": 425909,
+      "poster": "https://images.metahub.space/poster/small/tt4513678/img",
+      "banner": "https://images.metahub.space/background/medium/tt4513678/img"
+    },
+    {
+      "slug": "heretic",
+      "title": "Heretic",
+      "year": 2024,
+      "rating": 7,
+      "genres": [
+        "Horror",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Scott Beck, Bryan Woods",
+      "cast": [
+        "Hugh Grant",
+        "Sophie Thatcher",
+        "Chloe East"
+      ],
+      "plot": "Two young religious women are drawn into a game of cat-and-mouse in the house of a strange man.",
+      "category": "popular",
+      "tmdbId": 1138194,
+      "poster": "https://images.metahub.space/poster/small/tt28015403/img",
+      "banner": "https://images.metahub.space/background/medium/tt28015403/img"
+    },
+    {
+      "slug": "anatomy-of-a-fall",
+      "title": "Anatomy of a Fall",
+      "year": 2023,
+      "rating": 7.6,
+      "genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Justine Triet",
+      "cast": [
+        "Sandra Hüller",
+        "Swann Arlaud",
+        "Milo Machado-Graner"
+      ],
+      "plot": "A woman is suspected of murder after her husband's death; their half-blind son faces a moral dilemma as the main witness.",
+      "category": "popular",
+      "tmdbId": 915935,
+      "poster": "https://images.metahub.space/poster/small/tt17009710/img",
+      "banner": "https://images.metahub.space/background/medium/tt17009710/img"
+    },
+    {
+      "slug": "indiana-jones-and-the-dial-of-destiny",
+      "title": "Indiana Jones and the Dial of Destiny",
+      "year": 2023,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "James Mangold",
+      "cast": [
+        "Harrison Ford",
+        "Phoebe Waller-Bridge",
+        "Antonio Banderas"
+      ],
+      "plot": "Archaeologist Indiana Jones races against time to retrieve a legendary artifact that can change the course of history.",
+      "category": "popular",
+      "tmdbId": 335977,
+      "poster": "https://images.metahub.space/poster/small/tt1462764/img",
+      "banner": "https://images.metahub.space/background/medium/tt1462764/img"
+    },
+    {
+      "slug": "jai-bhim",
+      "title": "Jai Bhim",
+      "year": 2021,
+      "rating": 8.6,
+      "genres": [
+        "Crime",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "T.J. Gnanavel",
+      "cast": [
+        "Suriya",
+        "Lijo Mol Jose",
+        "Manikandan K."
+      ],
+      "plot": "When a tribal man is arrested for a case of alleged theft, his wife turns to a human-rights lawyer to help bring justice.",
+      "category": "top-rated",
+      "tmdbId": 855400,
+      "poster": "https://images.metahub.space/poster/small/tt15097216/img",
+      "banner": "https://images.metahub.space/background/medium/tt15097216/img"
+    },
+    {
+      "slug": "longlegs",
+      "title": "Longlegs",
+      "year": 2024,
+      "rating": 6.5,
+      "genres": [
+        "Crime",
+        "Horror",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Osgood Perkins",
+      "cast": [
+        "Maika Monroe",
+        "Nicolas Cage",
+        "Blair Underwood"
+      ],
+      "plot": "In pursuit of a serial killer, an FBI agent uncovers a series of occult clues that she must solve to end his terrifying killing spree.",
+      "category": "popular",
+      "tmdbId": 1226578,
+      "poster": "https://images.metahub.space/poster/small/tt23468450/img",
+      "banner": "https://images.metahub.space/background/medium/tt23468450/img"
+    },
+    {
+      "slug": "coda",
+      "title": "CODA",
+      "year": 2021,
+      "rating": 8,
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Music"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Sian Heder",
+      "cast": [
+        "Emilia Jones",
+        "Marlee Matlin",
+        "Troy Kotsur"
+      ],
+      "plot": "When the family's fishing business is threatened, Ruby finds herself torn between pursuing her musical passion and her fear of abandoning her deaf parents.",
+      "category": "top-rated",
+      "tmdbId": 776503,
+      "poster": "https://images.metahub.space/poster/small/tt10366460/img",
+      "banner": "https://images.metahub.space/background/medium/tt10366460/img"
+    },
+    {
+      "slug": "another-round",
+      "title": "Another Round",
+      "year": 2020,
+      "rating": 7.7,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Thomas Vinterberg",
+      "cast": [
+        "Mads Mikkelsen",
+        "Thomas Bo Larsen",
+        "Magnus Millang"
+      ],
+      "plot": "Four high-school teachers consume alcohol on a daily basis to see how it affects their social and professional lives.",
+      "category": "popular",
+      "tmdbId": 580175,
+      "poster": "https://images.metahub.space/poster/small/tt10288566/img",
+      "banner": "https://images.metahub.space/background/medium/tt10288566/img"
+    },
+    {
+      "slug": "jungle-cruise",
+      "title": "Jungle Cruise",
+      "year": 2021,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jaume Collet-Serra",
+      "cast": [
+        "Dwayne Johnson",
+        "Emily Blunt",
+        "Edgar Ramírez"
+      ],
+      "plot": "A small riverboat takes a group of travelers through a jungle filled with dangerous animals.",
+      "category": "popular",
+      "tmdbId": 451048,
+      "poster": "https://images.metahub.space/poster/small/tt0870154/img",
+      "banner": "https://images.metahub.space/background/medium/tt0870154/img"
+    },
+    {
+      "slug": "x",
+      "title": "X",
+      "year": 2022,
+      "rating": 6.5,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ti West",
+      "cast": [
+        "Mia Goth",
+        "Jenna Ortega",
+        "Brittany Snow"
+      ],
+      "plot": "In 1979, a group of young filmmakers set out to make an adult film in a rural Texas farm, but when their reclusive, elderly hosts catch them in the act, the crew find themselves fighting for their lives.",
+      "category": "popular",
+      "tmdbId": 760104,
+      "poster": "https://images.metahub.space/poster/small/tt13560574/img",
+      "banner": "https://images.metahub.space/background/medium/tt13560574/img"
+    },
+    {
+      "slug": "luca",
+      "title": "Luca",
+      "year": 2021,
+      "rating": 7.4,
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Enrico Casarosa",
+      "cast": [
+        "Jacob Tremblay",
+        "Jack Dylan Grazer",
+        "Emma Berman"
+      ],
+      "plot": "On the Italian Riviera, an unlikely but strong friendship grows between a human being and a sea monster disguised as a human.",
+      "category": "popular",
+      "tmdbId": 508943,
+      "poster": "https://images.metahub.space/poster/small/tt12801262/img",
+      "banner": "https://images.metahub.space/background/medium/tt12801262/img"
+    },
+    {
+      "slug": "the-killer",
+      "title": "The Killer",
+      "year": 2023,
+      "rating": 6.7,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "David Fincher",
+      "cast": [
+        "Michael Fassbender",
+        "Tilda Swinton",
+        "Charles Parnell"
+      ],
+      "plot": "Solitary, cold, methodical and unencumbered by scruples or regrets, a killer waits in the shadows, watching for his next target. Yet, the longer he waits, the more he thinks he's losing his mind, if not his cool.",
+      "category": "popular",
+      "tmdbId": 800158,
+      "poster": "https://images.metahub.space/poster/small/tt1136617/img",
+      "banner": "https://images.metahub.space/background/medium/tt1136617/img"
+    },
+    {
+      "slug": "rrr-rise-roar-revolt",
+      "title": "RRR",
+      "year": 2022,
+      "rating": 7.8,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "S.S. Rajamouli",
+      "cast": [
+        "N.T. Rama Rao Jr.",
+        "Ram Charan",
+        "Ajay Devgn"
+      ],
+      "plot": "A fearless warrior on a perilous mission comes face to face with a steely cop serving British forces in this epic saga set in pre-independent India.",
+      "category": "popular",
+      "tmdbId": 579974,
+      "poster": "https://images.metahub.space/poster/small/tt8178634/img",
+      "banner": "https://images.metahub.space/background/medium/tt8178634/img"
+    },
+    {
+      "slug": "talk-to-me",
+      "title": "Talk to Me",
+      "year": 2022,
+      "rating": 7.1,
+      "genres": [
+        "Horror",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Danny Philippou, Michael Philippou",
+      "cast": [
+        "Ari McCarthy",
+        "Hamish Phillips",
+        "Kit Erhart-Bruce"
+      ],
+      "plot": "When a group of friends discover how to conjure spirits using an embalmed hand, they become hooked on the new thrill, until one of them goes too far and unleashes terrifying supernatural forces.",
+      "category": "popular",
+      "tmdbId": 1008042,
+      "poster": "https://images.metahub.space/poster/small/tt10638522/img",
+      "banner": "https://images.metahub.space/background/medium/tt10638522/img"
+    },
+    {
+      "slug": "mortal-kombat",
+      "title": "Mortal Kombat",
+      "year": 2021,
+      "rating": 6.1,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Simon McQuoid",
+      "cast": [
+        "Lewis Tan",
+        "Jessica McNamee",
+        "Josh Lawson"
+      ],
+      "plot": "MMA fighter Cole Young seeks out Earth's greatest champions in order to stand against the enemies of Outworld in a high stakes battle for the universe.",
+      "category": "popular",
+      "tmdbId": 460465,
+      "poster": "https://images.metahub.space/poster/small/tt0293429/img",
+      "banner": "https://images.metahub.space/background/medium/tt0293429/img"
+    },
+    {
+      "slug": "no-hard-feelings",
+      "title": "No Hard Feelings",
+      "year": 2023,
+      "rating": 6.3,
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Gene Stupnitsky",
+      "cast": [
+        "Jennifer Lawrence",
+        "Andrew Barth Feldman",
+        "Laura Benanti"
+      ],
+      "plot": "On the brink of losing her home, Maddie finds an intriguing job listing: helicopter parents looking for someone to bring their introverted 19-year-old son out of his shell before college. She has one summer to make him a man or di...",
+      "category": "popular",
+      "tmdbId": 884605,
+      "poster": "https://images.metahub.space/poster/small/tt15671028/img",
+      "banner": "https://images.metahub.space/background/medium/tt15671028/img"
+    },
+    {
+      "slug": "nomadland",
+      "title": "Nomadland",
+      "year": 2020,
+      "rating": 7.3,
+      "genres": [
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Chloé Zhao",
+      "cast": [
+        "Frances McDormand",
+        "David Strathairn",
+        "Linda May"
+      ],
+      "plot": "A woman in her sixties, after losing everything in the Great Recession, embarks on a journey through the American West, living as a van-dwelling modern-day nomad.",
+      "category": "popular",
+      "tmdbId": 581734,
+      "poster": "https://images.metahub.space/poster/small/tt9770150/img",
+      "banner": "https://images.metahub.space/background/medium/tt9770150/img"
+    },
+    {
+      "slug": "triangle-of-sadness",
+      "title": "Triangle of Sadness",
+      "year": 2022,
+      "rating": 7.2,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ruben Östlund",
+      "cast": [
+        "Thobias Thorwid",
+        "Harris Dickinson",
+        "Charlbi Dean"
+      ],
+      "plot": "A fashion model celebrity couple join an eventful cruise for the super-rich.",
+      "category": "popular",
+      "tmdbId": 497828,
+      "poster": "https://images.metahub.space/poster/small/tt7322224/img",
+      "banner": "https://images.metahub.space/background/medium/tt7322224/img"
+    },
+    {
+      "slug": "palm-springs",
+      "title": "Palm Springs",
+      "year": 2020,
+      "rating": 7.4,
+      "genres": [
+        "Comedy",
+        "Fantasy",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Max Barbakow",
+      "cast": [
+        "Andy Samberg",
+        "Cristin Milioti",
+        "J.K. Simmons"
+      ],
+      "plot": "Nyles and Sarah find themselves stuck in a time loop and living the same day over and over again. They are drawn to each other, but certain revelations threaten their budding romance.",
+      "category": "popular",
+      "tmdbId": 587792,
+      "poster": "https://images.metahub.space/poster/small/tt9484998/img",
+      "banner": "https://images.metahub.space/background/medium/tt9484998/img"
+    },
+    {
+      "slug": "a-man-called-otto",
+      "title": "A Man Called Otto",
+      "year": 2022,
+      "rating": 7.5,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Marc Forster",
+      "cast": [
+        "Tom Hanks",
+        "Mariana Treviño",
+        "Rachel Keller"
+      ],
+      "plot": "Otto is a grump who's given up on life following the loss of his wife and wants to end it all. When a young family moves in nearby, he meets his match in quick-witted Marisol, leading to a friendship that will turn his world around.",
+      "category": "popular",
+      "tmdbId": 937278,
+      "poster": "https://images.metahub.space/poster/small/tt7405458/img",
+      "banner": "https://images.metahub.space/background/medium/tt7405458/img"
+    },
+    {
+      "slug": "death-on-the-nile",
+      "title": "Death on the Nile",
+      "year": 2022,
+      "rating": 6.3,
+      "genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Kenneth Branagh",
+      "cast": [
+        "Tom Bateman",
+        "Annette Bening",
+        "Kenneth Branagh"
+      ],
+      "plot": "While on vacation on the Nile, Hercule Poirot must investigate the murder of a young heiress.",
+      "category": "popular",
+      "tmdbId": 505026,
+      "poster": "https://images.metahub.space/poster/small/tt7657566/img",
+      "banner": "https://images.metahub.space/background/medium/tt7657566/img"
+    },
+    {
+      "slug": "the-old-guard",
+      "title": "The Old Guard",
+      "year": 2020,
+      "rating": 6.7,
+      "genres": [
+        "Action",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Gina Prince-Bythewood",
+      "cast": [
+        "Charlize Theron",
+        "KiKi Layne",
+        "Matthias Schoenaerts"
+      ],
+      "plot": "A covert group of tight-knit mercenaries with an inability to die have fought to protect the world for centuries. But when their abilities are suddenly exposed, they need to eliminate the threat of those who seek to replicate thei...",
+      "category": "popular",
+      "tmdbId": 547016,
+      "poster": "https://images.metahub.space/poster/small/tt7556122/img",
+      "banner": "https://images.metahub.space/background/medium/tt7556122/img"
+    },
+    {
+      "slug": "the-last-duel",
+      "title": "The Last Duel",
+      "year": 2021,
+      "rating": 7.3,
+      "genres": [
+        "Drama",
+        "History",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ridley Scott",
+      "cast": [
+        "Matt Damon",
+        "Adam Driver",
+        "Jodie Comer"
+      ],
+      "plot": "The Knight Jean de Carrouges must settle the dispute over his wife Marguerite by challenging his former friend to a duel to the death.",
+      "category": "popular",
+      "tmdbId": 617653,
+      "poster": "https://images.metahub.space/poster/small/tt4244994/img",
+      "banner": "https://images.metahub.space/background/medium/tt4244994/img"
+    },
+    {
+      "slug": "babylon",
+      "title": "Babylon",
+      "year": 2022,
+      "rating": 7.1,
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Damien Chazelle",
+      "cast": [
+        "Brad Pitt",
+        "Margot Robbie",
+        "Jean Smart"
+      ],
+      "plot": "A tale of outsized ambition and outrageous excess, it traces the rise and fall of multiple characters during an era of unbridled decadence and depravity in early Hollywood.",
+      "category": "popular",
+      "tmdbId": 615777,
+      "poster": "https://images.metahub.space/poster/small/tt10640346/img",
+      "banner": "https://images.metahub.space/background/medium/tt10640346/img"
+    },
+    {
+      "slug": "the-trial-of-the-chicago-7",
+      "title": "The Trial of the Chicago 7",
+      "year": 2020,
+      "rating": 7.7,
+      "genres": [
+        "Drama",
+        "History",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Aaron Sorkin",
+      "cast": [
+        "Eddie Redmayne",
+        "Alex Sharp",
+        "Sacha Baron Cohen"
+      ],
+      "plot": "The story of 7 people on trial stemming from various charges surrounding the uprising at the 1968 Democratic National Convention in Chicago, Illinois.",
+      "category": "popular",
+      "tmdbId": 556984,
+      "poster": "https://images.metahub.space/poster/small/tt1070874/img",
+      "banner": "https://images.metahub.space/background/medium/tt1070874/img"
+    },
+    {
+      "slug": "the-creator",
+      "title": "The Creator",
+      "year": 2023,
+      "rating": 6.7,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Gareth Edwards",
+      "cast": [
+        "John David Washington",
+        "Madeleine Yuna Voyles",
+        "Gemma Chan"
+      ],
+      "plot": "Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the robots' secret weapon to end the conflict, an AI in the form of a child.",
+      "category": "popular",
+      "tmdbId": 670292,
+      "poster": "https://images.metahub.space/poster/small/tt11858890/img",
+      "banner": "https://images.metahub.space/background/medium/tt11858890/img"
+    },
+    {
+      "slug": "army-of-the-dead",
+      "title": "Army of the Dead",
+      "year": 2021,
+      "rating": 5.8,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Zack Snyder",
+      "cast": [
+        "Dave Bautista",
+        "Ella Purnell",
+        "Ana de la Reguera"
+      ],
+      "plot": "Following a zombie outbreak in Las Vegas, a group of mercenaries take the ultimate gamble, venturing into the quarantine zone to pull off the greatest heist ever attempted.",
+      "category": "popular",
+      "tmdbId": 503736,
+      "poster": "https://images.metahub.space/poster/small/tt0993840/img",
+      "banner": "https://images.metahub.space/background/medium/tt0993840/img"
+    },
+    {
+      "slug": "last-night-in-soho",
+      "title": "Last Night in Soho",
+      "year": 2021,
+      "rating": 7,
+      "genres": [
+        "Drama",
+        "Horror",
+        "Mystery"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Edgar Wright",
+      "cast": [
+        "Thomasin McKenzie",
+        "Anya Taylor-Joy",
+        "Matt Smith"
+      ],
+      "plot": "Aspiring fashion designer Eloise is mysteriously able to return to 1960s London, where she encounters dazzling wannabe singer Sandie. But the glamour is not as it seems, and the dreams of the past crack and splinter into something...",
+      "category": "popular",
+      "tmdbId": 576845,
+      "poster": "https://images.metahub.space/poster/small/tt9639470/img",
+      "banner": "https://images.metahub.space/background/medium/tt9639470/img"
+    },
+    {
+      "slug": "twisters",
+      "title": "Twisters",
+      "year": 2024,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Lee Isaac Chung",
+      "cast": [
+        "Daisy Edgar-Jones",
+        "Glen Powell",
+        "Anthony Ramos"
+      ],
+      "plot": "Kate Carter, a retired tornado-chaser and meteorologist, is persuaded to return to Oklahoma to work with a new team and new technologies.",
+      "category": "popular",
+      "tmdbId": 718821,
+      "poster": "https://images.metahub.space/poster/small/tt12584954/img",
+      "banner": "https://images.metahub.space/background/medium/tt12584954/img"
+    },
+    {
+      "slug": "bad-boys-for-life",
+      "title": "Bad Boys for Life",
+      "year": 2020,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Comedy",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Adil El Arbi, Bilall Fallah",
+      "cast": [
+        "Will Smith",
+        "Martin Lawrence",
+        "Vanessa Hudgens"
+      ],
+      "plot": "Miami detectives Mike Lowrey and Marcus Burnett must face off against a mother-and-son pair of drug lords who wreak vengeful havoc on their city.",
+      "category": "popular",
+      "tmdbId": 38700,
+      "poster": "https://images.metahub.space/poster/small/tt1502397/img",
+      "banner": "https://images.metahub.space/background/medium/tt1502397/img"
+    },
+    {
+      "slug": "carry-on",
+      "title": "Carry-On",
+      "year": 2024,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jaume Collet-Serra",
+      "cast": [
+        "Taron Egerton",
+        "Jason Bateman",
+        "Sofia Carson"
+      ],
+      "plot": "A mysterious traveler blackmails a young TSA agent into letting a dangerous package slip through security and onto a Christmas Eve flight.",
+      "category": "popular",
+      "tmdbId": 1005331,
+      "poster": "https://images.metahub.space/poster/small/tt21382296/img",
+      "banner": "https://images.metahub.space/background/medium/tt21382296/img"
+    },
+    {
+      "slug": "air",
+      "title": "Air",
+      "year": 2023,
+      "rating": 7.4,
+      "genres": [
+        "Drama",
+        "Sport"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ben Affleck",
+      "cast": [
+        "Matt Damon",
+        "Jason Bateman",
+        "Ben Affleck"
+      ],
+      "plot": "The history of the game-changing partnership between a then undiscovered Michael Jordan and Nike's fledgling basketball division which revolutionized the world of sports and culture with the Air Jordan brand.",
+      "category": "popular",
+      "tmdbId": 964980,
+      "poster": "https://images.metahub.space/poster/small/tt16419074/img",
+      "banner": "https://images.metahub.space/background/medium/tt16419074/img"
+    },
+    {
+      "slug": "the-king-s-man",
+      "title": "The King's Man",
+      "year": 2021,
+      "rating": 6.3,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Matthew Vaughn",
+      "cast": [
+        "Ralph Fiennes",
+        "Gemma Arterton",
+        "Rhys Ifans"
+      ],
+      "plot": "In the early years of the 20th century, the Kingsman agency is formed to stand against a cabal plotting a war to wipe out millions of people.",
+      "category": "popular",
+      "tmdbId": 476669,
+      "poster": "https://images.metahub.space/poster/small/tt6856242/img",
+      "banner": "https://images.metahub.space/background/medium/tt6856242/img"
+    },
+    {
+      "slug": "wonka",
+      "title": "Wonka",
+      "year": 2023,
+      "rating": 6.9,
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Family"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Paul King",
+      "cast": [
+        "Timothée Chalamet",
+        "Gustave Die",
+        "Murray McArthur"
+      ],
+      "plot": "With dreams of opening a shop in a city renowned for its chocolate, a young and poor Willy Wonka discovers that the industry is run by a cartel of greedy chocolatiers.",
+      "category": "popular",
+      "tmdbId": 787699,
+      "poster": "https://images.metahub.space/poster/small/tt6166392/img",
+      "banner": "https://images.metahub.space/background/medium/tt6166392/img"
+    },
+    {
+      "slug": "sonic-the-hedgehog",
+      "title": "Sonic the Hedgehog",
+      "year": 2020,
+      "rating": 6.5,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jeff Fowler",
+      "cast": [
+        "Ben Schwartz",
+        "James Marsden",
+        "Jim Carrey"
+      ],
+      "plot": "Taking refuge on Earth, when Sonic uses his incredible speed and accidentally knock out the power in part of the United States, he catches the attention of Dr. Robotnik and must stop him from using his unique power for world domin...",
+      "category": "popular",
+      "tmdbId": 454626,
+      "poster": "https://images.metahub.space/poster/small/tt3794354/img",
+      "banner": "https://images.metahub.space/background/medium/tt3794354/img"
+    },
+    {
+      "slug": "fantastic-beasts-the-secrets-of-dumbledore",
+      "title": "Fantastic Beasts: The Secrets of Dumbledore",
+      "year": 2022,
+      "rating": 6.2,
+      "genres": [
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "David Yates",
+      "cast": [
+        "Eddie Redmayne",
+        "Jude Law",
+        "Ezra Miller"
+      ],
+      "plot": "Albus Dumbledore knows that Gellert Grindelwald is moving to take control of the wizarding world. Unable to stop him alone, he asks Newt Scamander to lead an intrepid team on a dangerous mission.",
+      "category": "popular",
+      "tmdbId": 338953,
+      "poster": "https://images.metahub.space/poster/small/tt4123432/img",
+      "banner": "https://images.metahub.space/background/medium/tt4123432/img"
+    },
+    {
+      "slug": "king-richard",
+      "title": "King Richard",
+      "year": 2021,
+      "rating": 7.5,
+      "genres": [
+        "Biography",
+        "Drama",
+        "Sport"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Reinaldo Marcus Green",
+      "cast": [
+        "Will Smith",
+        "Aunjanue Ellis-Taylor",
+        "Jon Bernthal"
+      ],
+      "plot": "A look at how tennis superstars Venus and Serena Williams became who they are after the coaching from their father Richard.",
+      "category": "popular",
+      "tmdbId": 614917,
+      "poster": "https://images.metahub.space/poster/small/tt9620288/img",
+      "banner": "https://images.metahub.space/background/medium/tt9620288/img"
+    },
+    {
+      "slug": "the-zone-of-interest",
+      "title": "The Zone of Interest",
+      "year": 2023,
+      "rating": 7.3,
+      "genres": [
+        "Drama",
+        "History",
+        "War"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Jonathan Glazer",
+      "cast": [
+        "Christian Friedel",
+        "Sandra Hüller",
+        "Johann Karthaus"
+      ],
+      "plot": "The commandant of Auschwitz and his wife strive to build a dream life for their family in a house next to the camp.",
+      "category": "popular",
+      "tmdbId": 467244,
+      "poster": "https://images.metahub.space/poster/small/tt7160372/img",
+      "banner": "https://images.metahub.space/background/medium/tt7160372/img"
+    },
+    {
+      "slug": "scream",
+      "title": "Scream",
+      "year": 2022,
+      "rating": 6.3,
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Matt Bettinelli-Olpin, Tyler Gillett",
+      "cast": [
+        "Neve Campbell",
+        "Courteney Cox",
+        "David Arquette"
+      ],
+      "plot": "25 years after the original Woodsboro killings, a new Ghostface begins targeting teens connected to the town's dark past, drawing the final 3 survivors of the first attack back once more.",
+      "category": "popular",
+      "tmdbId": 646385,
+      "poster": "https://images.metahub.space/poster/small/tt11245972/img",
+      "banner": "https://images.metahub.space/background/medium/tt11245972/img"
+    },
+    {
+      "slug": "companion",
+      "title": "Companion",
+      "year": 2025,
+      "rating": 6.9,
+      "genres": [
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Drew Hancock",
+      "cast": [
+        "Sophie Thatcher",
+        "Jack Quaid",
+        "Lukas Gage"
+      ],
+      "plot": "A weekend getaway with friends at a remote cabin turns into chaos after it's revealed that one of the guests is not what they seem.",
+      "category": "popular",
+      "tmdbId": 1084199,
+      "poster": "https://images.metahub.space/poster/small/tt26584495/img",
+      "banner": "https://images.metahub.space/background/medium/tt26584495/img"
+    },
+    {
+      "slug": "napoleon",
+      "title": "Napoleon",
+      "year": 2023,
+      "rating": 6.3,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Biography"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Ridley Scott",
+      "cast": [
+        "Joaquin Phoenix",
+        "Vanessa Kirby",
+        "Tahar Rahim"
+      ],
+      "plot": "An epic that details the chequered rise and fall of French Emperor Napoleon Bonaparte and his relentless journey to power through the prism of his addictive, volatile relationship with his wife, Josephine.",
+      "category": "popular",
+      "tmdbId": 753342,
+      "poster": "https://images.metahub.space/poster/small/tt13287846/img",
+      "banner": "https://images.metahub.space/background/medium/tt13287846/img"
+    },
+    {
+      "slug": "the-hunger-games-the-ballad-of-songbirds-and-snakes",
+      "title": "The Hunger Games: The Ballad of Songbirds & Snakes",
+      "year": 2023,
+      "rating": 6.6,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Francis Lawrence",
+      "cast": [
+        "Rachel Zegler",
+        "Tom Blyth",
+        "Viola Davis"
+      ],
+      "plot": "Coriolanus Snow mentors and develops feelings for the female District 12 tribute during the 10th Hunger Games.",
+      "category": "popular",
+      "tmdbId": 695721,
+      "poster": "https://images.metahub.space/poster/small/tt10545296/img",
+      "banner": "https://images.metahub.space/background/medium/tt10545296/img"
+    },
+    {
+      "slug": "raya-and-the-last-dragon",
+      "title": "Raya and the Last Dragon",
+      "year": 2021,
+      "rating": 7.3,
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Don Hall, Carlos López Estrada, Paul Briggs",
+      "cast": [
+        "Kelly Marie Tran",
+        "Awkwafina",
+        "Gemma Chan"
+      ],
+      "plot": "In a realm known as Kumandra, a re-imagined Earth inhabited by an ancient civilization, a warrior named Raya is determined to find the last dragon.",
+      "category": "popular",
+      "tmdbId": 508441,
+      "poster": "https://images.metahub.space/poster/small/tt5109280/img",
+      "banner": "https://images.metahub.space/background/medium/tt5109280/img"
+    },
+    {
+      "slug": "onward",
+      "title": "Onward",
+      "year": 2020,
+      "rating": 7.3,
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Dan Scanlon",
+      "cast": [
+        "Tom Holland",
+        "Chris Pratt",
+        "Julia Louis-Dreyfus"
+      ],
+      "plot": "Teenage elf brothers Ian and Barley embark on a magical quest to spend one more day with their late father. Like any good adventure, their journey is filled with cryptic maps, impossible obstacles and unimaginable discoveries.",
+      "category": "popular",
+      "tmdbId": 508439,
+      "poster": "https://images.metahub.space/poster/small/tt7146812/img",
+      "banner": "https://images.metahub.space/background/medium/tt7146812/img"
+    },
+    {
+      "slug": "joker-folie-a-deux",
+      "title": "Joker: Folie à Deux",
+      "year": 2024,
+      "rating": 5.2,
+      "genres": [
+        "Drama",
+        "Musical",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Todd Phillips",
+      "cast": [
+        "Joaquin Phoenix",
+        "Lady Gaga",
+        "Brendan Gleeson"
+      ],
+      "plot": "Struggling with his dual identity, failed comedian Arthur Fleck meets the love of his life, Harley Quinn, while incarcerated at Arkham State Hospital.",
+      "category": "popular",
+      "tmdbId": 889737,
+      "poster": "https://images.metahub.space/poster/small/tt11315808/img",
+      "banner": "https://images.metahub.space/background/medium/tt11315808/img"
+    },
+    {
+      "slug": "old",
+      "title": "Old",
+      "year": 2021,
+      "rating": 5.8,
+      "genres": [
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "M. Night Shyamalan",
+      "cast": [
+        "Gael García Bernal",
+        "Vicky Krieps",
+        "Rufus Sewell"
+      ],
+      "plot": "A vacationing family discovers that the secluded beach where they're relaxing for a few hours is somehow causing them to age rapidly, reducing their entire lives into a single day.",
+      "category": "popular",
+      "tmdbId": 631843,
+      "poster": "https://images.metahub.space/poster/small/tt10954652/img",
+      "banner": "https://images.metahub.space/background/medium/tt10954652/img"
+    },
+    {
+      "slug": "m3gan",
+      "title": "M3GAN",
+      "year": 2022,
+      "rating": 6.3,
+      "genres": [
+        "Horror",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Gerard Johnstone",
+      "cast": [
+        "Allison Williams",
+        "Violet McGraw",
+        "Ronny Chieng"
+      ],
+      "plot": "When robotics engineer Gemma becomes the guardian of her orphaned niece, Cady, she thinks her new invention, a robotic AI, will be a good companion. However, M3GAN begins to behave in unexpected and shocking ways.",
+      "category": "popular",
+      "tmdbId": 536554,
+      "poster": "https://images.metahub.space/poster/small/tt8760708/img",
+      "banner": "https://images.metahub.space/background/medium/tt8760708/img"
+    },
+    {
+      "slug": "challengers",
+      "title": "Challengers",
+      "year": 2024,
+      "rating": 7,
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Luca Guadagnino",
+      "cast": [
+        "Mike Faist",
+        "Josh O'Connor",
+        "Zendaya"
+      ],
+      "plot": "Tashi, a former tennis prodigy turned coach, transformed her husband into a champion. But to overcome a recent losing streak and redeem himself, he'll need to face off against his former best friend and Tashi's ex-boyfriend.",
+      "category": "popular",
+      "tmdbId": 937287,
+      "poster": "https://images.metahub.space/poster/small/tt16426418/img",
+      "banner": "https://images.metahub.space/background/medium/tt16426418/img"
+    },
+    {
+      "slug": "nightmare-alley",
+      "title": "Nightmare Alley",
+      "year": 2021,
+      "rating": 7,
+      "genres": [
+        "Crime",
+        "Drama",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Guillermo del Toro",
+      "cast": [
+        "Bradley Cooper",
+        "Cate Blanchett",
+        "Toni Collette"
+      ],
+      "plot": "A grifter working his way up from low-ranking carnival worker to lauded psychic medium matches wits with a psychologist bent on exposing him.",
+      "category": "popular",
+      "tmdbId": 597208,
+      "poster": "https://images.metahub.space/poster/small/tt7740496/img",
+      "banner": "https://images.metahub.space/background/medium/tt7740496/img"
+    },
+    {
+      "slug": "f9-the-fast-saga",
+      "title": "F9: The Fast Saga",
+      "year": 2021,
+      "rating": 5.2,
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Justin Lin",
+      "cast": [
+        "Vin Diesel",
+        "Michelle Rodriguez",
+        "Jordana Brewster"
+      ],
+      "plot": "Dom and the crew must take on an international terrorist who turns out to be Dom and Mia's estranged brother.",
+      "category": "popular",
+      "tmdbId": 385128,
+      "poster": "https://images.metahub.space/poster/small/tt5433138/img",
+      "banner": "https://images.metahub.space/background/medium/tt5433138/img"
+    },
+    {
+      "slug": "a-quiet-place-day-one",
+      "title": "A Quiet Place: Day One",
+      "year": 2024,
+      "rating": 6.2,
+      "genres": [
+        "Drama",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Michael Sarnoski",
+      "cast": [
+        "Lupita Nyong&apos;o",
+        "Joseph Quinn",
+        "Alex Wolff"
+      ],
+      "plot": "A young woman named Sam finds herself trapped in New York City during the early stages of an invasion by alien creatures with ultra-sensitive hearing.",
+      "category": "popular",
+      "tmdbId": 762441,
+      "poster": "https://images.metahub.space/poster/small/tt13433802/img",
+      "banner": "https://images.metahub.space/background/medium/tt13433802/img"
+    },
+    {
+      "slug": "radhe",
+      "title": "Radhe",
+      "year": 2021,
+      "rating": 1.8,
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Prabhu Deva",
+      "cast": [
+        "Salman Khan",
+        "Disha Patani",
+        "Randeep Hooda"
+      ],
+      "plot": "An honest cop is determined to bring down a corrupt drug mafia, who targets youth to drive towards drug addiction.",
+      "category": "popular",
+      "tmdbId": 679844,
+      "poster": "https://images.metahub.space/poster/small/tt10888594/img",
+      "banner": "https://images.metahub.space/background/medium/tt10888594/img"
+    },
+    {
+      "slug": "the-unbearable-weight-of-massive-talent",
+      "title": "The Unbearable Weight of Massive Talent",
+      "year": 2022,
+      "rating": 7,
+      "genres": [
+        "Action",
+        "Comedy",
+        "Crime"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Tom Gormican",
+      "cast": [
+        "Nicolas Cage",
+        "Pedro Pascal",
+        "Tiffany Haddish"
+      ],
+      "plot": "Movie star Nick Cage must channel his iconic screen characters when he finds himself caught in-between a dangerous super-fan and a CIA agent.",
+      "category": "popular",
+      "tmdbId": 648579,
+      "poster": "https://images.metahub.space/poster/small/tt11291274/img",
+      "banner": "https://images.metahub.space/background/medium/tt11291274/img"
+    },
+    {
+      "slug": "laal-singh-chaddha",
+      "title": "Laal Singh Chaddha",
+      "year": 2022,
+      "rating": 5.6,
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Advait Chandan",
+      "cast": [
+        "Sharik Khan Jr.",
+        "Aamir Khan",
+        "Ahmad Ibn Umar"
+      ],
+      "plot": "The story of Laal Singh Chaddha, a simple man whose extraordinary journey will fill you with love, warmth and happiness.",
+      "category": "popular",
+      "tmdbId": 601635,
+      "poster": "https://images.metahub.space/poster/small/tt10028196/img",
+      "banner": "https://images.metahub.space/background/medium/tt10028196/img"
+    },
+    {
+      "slug": "don-t-worry-darling",
+      "title": "Don't Worry Darling",
+      "year": 2022,
+      "rating": 6.3,
+      "genres": [
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtime": "NaNh NaNm",
+      "language": "English",
+      "director": "Olivia Wilde",
+      "cast": [
+        "Florence Pugh",
+        "Harry Styles",
+        "Chris Pine"
+      ],
+      "plot": "While her husband leaves home every day to work in a top secret facility, a young 1950s housewife begins to question her life when she notices strange behavior from the other wives in the neighborhood.",
+      "category": "popular",
+      "tmdbId": 619730,
+      "poster": "https://images.metahub.space/poster/small/tt10731256/img",
+      "banner": "https://images.metahub.space/background/medium/tt10731256/img"
     }
   ],
   "generated": "2026-09-15",
-  "count": 575
+  "count": 675
 }
