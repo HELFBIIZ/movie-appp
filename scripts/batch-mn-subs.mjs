@@ -301,6 +301,12 @@ async function main() {
   const limit = Number(get('--limit') || 0)
   const delay = Number(get('--delay') || 2000)
   const force = args.includes('--force')
+  const retryPartials = args.includes('--retry-partials')
+  const hasFile = (slug) => {
+    const e = readManifest()[slug]
+    if (!e?.file) return false
+    try { return fs.existsSync(path.join(DATA_DIR, e.file)) } catch { return false }
+  }
   const all = args.includes('--all')
 
   if (args.includes('--scan-os')) {
@@ -346,6 +352,7 @@ async function main() {
       const e = manifest[m.slug]
       if (!e?.file) return true
       if ((e.cueCount || 0) < 100) return true // stub (trailer etc) — redo with better pick
+      if (e.partial && !retryPartials && !force) return false // retried via --retry-partials
       return !(e.translated && !e.partial)
     })
     const todo = limit ? movies.slice(0, limit) : movies
@@ -470,7 +477,10 @@ async function main() {
       if (!e) return true
       if (e.file) {
         try {
-          if (fs.existsSync(path.join(DATA_DIR, e.file)) && e.translated && !e.partial) return false
+          if (fs.existsSync(path.join(DATA_DIR, e.file))) {
+            if (e.translated && !e.partial) return false
+            if (e.partial && !retryPartials) return false // retried via --retry-partials
+          }
         } catch {}
       }
       if (e.source === 'none' && e.generated) return false // checked before, no source

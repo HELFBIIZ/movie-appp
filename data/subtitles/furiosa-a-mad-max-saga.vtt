@@ -2,7 +2,7 @@ WEBVTT
 
 1
 00:00:00.000 --> 00:00:20.103
-<b>Subtis</b> - <i>@subt_is</i>-ийн хадмал орчуулга нь https://subtis.io вэб дээр нэвтэрнэ.
+<b>Subtis</b> - <i>@subt_is</i>-ийн хадмал орчуулга нь https://subtis.io вэб сайтад нэвтэрнэ.
 2
 00:00:20.103 --> 00:00:21.822
 <i>- Triple cero, ¿cuál es su emergencia?
@@ -633,7 +633,7 @@ Puedes abrazarlo si quieres.
 Дама y caballeros, arranquen los motores.
 200
 00:27:28.774 --> 00:27:32.319
-Пикадилло де лагартияй салчича де сангре гуман.
+Пикадилло де лагартияй салчича де сангре гумана.
 201
 00:28:15.320 --> 00:28:16.905
 Сайн байна уу?
@@ -710,7 +710,7 @@ Tener muchas cosas, buenas cosas.
 Una inmensa cantidad de agua dulce.
 224
 00:30:41.175 --> 00:30:42.342
-Маш их верде.
+Та их верде.
 225
 00:30:43.010 --> 00:30:47.222
 Montañas de "crosechas", vegetales y agua.
@@ -1323,7 +1323,7 @@ para sobrevivir al dolor
 que se le presente.
 417
 00:51:06.733 --> 00:51:09.987
-Сайн байна уу. Ямар сайндаа.
+Сайн байна уу. Энэ юу вэ.
 418
 00:51:14.658 --> 00:51:18.787
 Aumentaré tu envío de agua.
@@ -1372,7 +1372,7 @@ Protegeré Ciudad Gasolina contra todo.
 ТУ. Ё. Носотрос.
 432
 00:52:48.293 --> 00:52:52.506
-Энэ нь "Эль Гран Дементус" гэсэн нэртэй диригиран.
+Энэ нь "Эль Гран Дементус" нэртэй хэсэг юм.
 433
 00:52:53.048 --> 00:52:55.384
 Амадо соберано де Мотоландиа.
@@ -1604,7 +1604,7 @@ La pieza más preciada del Yermo.
 Үхэшгүй мөнх!
 507
 01:02:20.824 --> 01:02:23.210
-Хамгаалалтын артефактогийн бүтээн байгуулалт.
+Хамгаалагчийн артефактогийн бүтээн байгуулалт.
 508
 01:02:23.410 --> 01:02:25.963
 Ло ламаремос "Ла Маза де Пуас".
@@ -1658,7 +1658,7 @@ más fuerte... llega más lejos.
 Холбоо барих!
 524
 01:05:41.275 --> 01:05:42.568
-Түү, би!
+Түү!
 525
 01:05:55.414 --> 01:05:57.958
 Contacto a la derecha.
@@ -2182,7 +2182,7 @@ Ustedes irán en el petrolero.
 Тийм үү?
 689
 01:32:00.812 --> 01:32:02.197
-Асуудал байна уу?
+Асуудалтай байна уу?
 690
 01:32:02.397 --> 01:32:03.857
 Tú manejarás el V8.
@@ -2277,7 +2277,7 @@ tomaremos las motos
 sobre las dunas hasta el final.
 719
 01:41:19.246 --> 01:41:20.664
-Хагас финал.
+Хасаа финал.
 720
 01:41:41.685 --> 01:41:43.612
 Ла экскавадора. Usemos la excavadora.
@@ -2452,7 +2452,7 @@ Ciudad Gasolina-д ч мөн адил.
 Creo que la hará explotar.
 775
 01:53:25.264 --> 01:53:26.523
-Digas tonterías байхгүй.
+Digas tonterias байхгүй.
 776
 01:53:26.723 --> 01:53:27.724
 Мира.
@@ -2528,7 +2528,7 @@ Quedarnos aquí y dejar que Dementus
 juegue con nuestra mente.
 799
 01:54:22.154 --> 01:54:24.748
-La del tonto... ir y encontrarnos
+Ла дел тонто... ir y encontrarnos
 con un enemigo үл үзэгдэгч...
 800
 01:54:24.948 --> 01:54:26.583
@@ -2888,7 +2888,7 @@ el momento exacto de la ejecución.
 Энэ нь маш хэцүү байдаг.
 912
 02:12:00.462 --> 02:12:03.557
-Энэ нь миний тархинд өөрчлөлт оруулахгүй байх болно.
+Энэ нь миний тархинд өөрчлөлт оруулахгүй байх болно...
 913
 02:12:03.757 --> 02:12:05.843
 que no escucharé el sonido de la pistola.
@@ -2936,7 +2936,8 @@ y tu grandiosa mamita.
 Эступида.
 926
 02:12:37.666 --> 02:12:40.335
-Жамаs тэнцвэрт байдал нь sufrimiento.
+Jamás equilibrarás la balanza
+de sufrimiento.
 927
 02:12:43.755 --> 02:12:47.009
 - Devuélvemelos.
@@ -3049,7 +3050,7 @@ en formas más apropiadas.</i>
 y mutilaciones ingeniosas.</i>
 959
 02:16:21.515 --> 02:16:26.979
-<i>Гэхдээ намайг Фуриоса гэж асуув.</i>
+<i>Нэгэнт намайг Фуриоса гэж асуув.</i>
 960
 02:16:28.814 --> 02:16:34.318
 <i>En lo profundo de la Ciudadela,
@@ -3073,14 +3074,15 @@ Sus nutrientes también.</i>
 pero no es para nosotros.</i>
 966
 02:17:09.021 --> 02:17:12.658
-<i>Тодос desapareceremos
+<i>Todos desapareceremos
 de la Tierra a nuestra manera.</i>
 967
 02:17:12.858 --> 02:17:14.401
 <i>Y tal vez, después...</i>
 968
 02:17:15.485 --> 02:17:18.947
-<i>алгуна вида эвдэрсэн мэс засал.</i>
+<i>adornarlo-ийн алгуна vida incorrupta
+surgirá.</i>
 969
 02:17:18.947 --> 02:17:24.000
 Дэд тайлбар: SubDivX

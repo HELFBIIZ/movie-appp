@@ -6,10 +6,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8884073672806068,
+    "translatedLineRatio": 0.8878656554712893,
     "cueCount": 1881,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790184254056
+    "updatedAt": 1790517307340
   },
   "dune-part-two": {
     "file": "dune-part-two.vtt",
@@ -42,10 +42,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7601626016260162,
+    "translatedLineRatio": 0.7609756097560976,
     "cueCount": 1299,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184189872
+    "updatedAt": 1790517214927
   },
   "avatar-aang-the-last-airbender": {
     "file": "avatar-aang-the-last-airbender.vtt",
@@ -80,7 +80,7 @@
     "translatedLineRatio": 0.8287425149700599,
     "cueCount": 870,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790071495002
+    "updatedAt": 1790508331864
   },
   "scream-7": {
     "file": "scream-7.vtt",
@@ -92,7 +92,7 @@
     "translatedLineRatio": 0.7854251012145749,
     "cueCount": 1580,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070371775
+    "updatedAt": 1790507156800
   },
   "coyote-vs-acme": {
     "file": "coyote-vs-acme.vtt",
@@ -116,7 +116,7 @@
     "translatedLineRatio": 0.8617553433378808,
     "cueCount": 2247,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790070474734
+    "updatedAt": 1790507291434
   },
   "avengers-endgame": {
     "file": "avengers-endgame.vtt",
@@ -136,10 +136,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.800257317465423,
+    "translatedLineRatio": 0.7986490833065294,
     "cueCount": 3205,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790078817657
+    "updatedAt": 1790508535572
   },
   "mutiny": {
     "file": "mutiny.vtt",
@@ -172,10 +172,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7432605905006419,
+    "translatedLineRatio": 0.8562259306803595,
     "cueCount": 1628,
-    "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790069386789
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790506760202
   },
   "minions-and-monsters": {
     "file": "minions-and-monsters.vtt",
@@ -199,7 +199,7 @@
     "translatedLineRatio": 0.8341194968553459,
     "cueCount": 1348,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790069426693
+    "updatedAt": 1790506774021
   },
   "ghost-in-the-cell": {
     "file": "ghost-in-the-cell.vtt",
@@ -339,10 +339,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8234316576651434,
+    "translatedLineRatio": 0.8221852928957208,
     "cueCount": 2490,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790069632263
+    "updatedAt": 1790506802819
   },
   "supergirl": {
     "file": "supergirl.vtt",
@@ -538,10 +538,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.713663581927055,
+    "translatedLineRatio": 0.7272727272727273,
     "cueCount": 2087,
-    "sourceDetail": "Subt.is EN → MN (google, 71%)",
-    "updatedAt": 1790069882116
+    "sourceDetail": "Subt.is EN → MN (google, 73%)",
+    "updatedAt": 1790506818816
   },
   "insidious-out-of-the-further": {
     "file": "insidious-out-of-the-further.vtt",
@@ -597,10 +597,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8087431693989071,
+    "translatedLineRatio": 0.8024980483996877,
     "cueCount": 1436,
-    "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790069954791
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790506838142
   },
   "hoppers": {
     "file": "hoppers.vtt",
@@ -655,10 +655,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7234363225320272,
+    "translatedLineRatio": 0.7211755840241145,
     "cueCount": 1526,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790070040901
+    "updatedAt": 1790506866001
   },
   "the-invite": {
     "file": "the-invite.vtt",
@@ -694,7 +694,7 @@
     "translatedLineRatio": 0.8055555555555556,
     "cueCount": 938,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790070105821
+    "updatedAt": 1790506886037
   },
   "the-wrecking-crew": {
     "file": "the-wrecking-crew.vtt",
@@ -706,7 +706,7 @@
     "translatedLineRatio": 0.8353253652058433,
     "cueCount": 1576,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790070129245
+    "updatedAt": 1790506903898
   },
   "goat": {
     "file": "goat.vtt",
@@ -715,10 +715,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8013620885357549,
+    "translatedLineRatio": 0.800794551645857,
     "cueCount": 1833,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790070144072
+    "updatedAt": 1790506918258
   },
   "the-devil-s-mouth": {
     "file": "the-devil-s-mouth.vtt",
@@ -727,10 +727,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8675298804780877,
+    "translatedLineRatio": 0.8685258964143426,
     "cueCount": 1117,
     "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790070151815
+    "updatedAt": 1790506929376
   },
   "crime-101": {
     "file": "crime-101.vtt",
@@ -742,7 +742,7 @@
     "translatedLineRatio": 0.7997892518440464,
     "cueCount": 1039,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790070169440
+    "updatedAt": 1790506951484
   },
   "citizen-vigilante": {
     "file": "citizen-vigilante.vtt",
@@ -754,7 +754,7 @@
     "translatedLineRatio": 0.8536121673003803,
     "cueCount": 1619,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790070188620
+    "updatedAt": 1790506968498
   },
   "greenland-2-migration": {
     "file": "greenland-2-migration.vtt",
@@ -763,10 +763,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8207754206291149,
+    "translatedLineRatio": 0.8200438917337235,
     "cueCount": 1501,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070202638
+    "updatedAt": 1790506980792
   },
   "the-drama": {
     "file": "the-drama.vtt",
@@ -775,10 +775,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7434008594229589,
+    "translatedLineRatio": 0.7427869858809085,
     "cueCount": 1788,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790070219490
+    "updatedAt": 1790506994886
   },
   "lee-cronin-s-the-mummy": {
     "file": "lee-cronin-s-the-mummy.vtt",
@@ -790,7 +790,7 @@
     "translatedLineRatio": 0.7915567282321899,
     "cueCount": 826,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070231434
+    "updatedAt": 1790507005299
   },
   "hope": {
     "file": "hope.vtt",
@@ -802,7 +802,7 @@
     "translatedLineRatio": 0.7451612903225806,
     "cueCount": 1660,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790070255126
+    "updatedAt": 1790507029429
   },
   "yellow-eyes": {
     "file": "yellow-eyes.vtt",
@@ -814,7 +814,7 @@
     "translatedLineRatio": 0.8240740740740741,
     "cueCount": 324,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070273963
+    "updatedAt": 1790507052606
   },
   "yellow-mirror": {
     "file": "yellow-mirror.vtt",
@@ -826,7 +826,7 @@
     "translatedLineRatio": 0.8240740740740741,
     "cueCount": 324,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070285229
+    "updatedAt": 1790507060389
   },
   "by-any-means": {
     "file": "by-any-means.vtt",
@@ -835,10 +835,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7972190034762456,
+    "translatedLineRatio": 0.7977983777520278,
     "cueCount": 1910,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790070303706
+    "updatedAt": 1790507080716
   },
   "all-that-we-never-were": {
     "file": "all-that-we-never-were.vtt",
@@ -847,10 +847,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7870619946091644,
-    "cueCount": 846,
-    "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070319220
+    "translatedLineRatio": 0.8164642375168691,
+    "cueCount": 844,
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790507103914
   },
   "apex": {
     "file": "apex.vtt",
@@ -862,7 +862,7 @@
     "translatedLineRatio": 0.7909270216962525,
     "cueCount": 560,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070330000
+    "updatedAt": 1790507114452
   },
   "ready-or-not-2-here-i-come": {
     "file": "ready-or-not-2-here-i-come.vtt",
@@ -874,7 +874,7 @@
     "translatedLineRatio": 0.8245033112582781,
     "cueCount": 1289,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070342717
+    "updatedAt": 1790507127242
   },
   "hokum": {
     "file": "hokum.vtt",
@@ -886,7 +886,7 @@
     "translatedLineRatio": 0.7869318181818182,
     "cueCount": 769,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070352019
+    "updatedAt": 1790507138973
   },
   "back-to-the-90s": {
     "file": "back-to-the-90s.vtt",
@@ -895,10 +895,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8197034911525586,
+    "translatedLineRatio": 0.8211382113821138,
     "cueCount": 2178,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070394860
+    "updatedAt": 1790507190375
   },
   "revenge": {
     "file": "revenge.vtt",
@@ -907,10 +907,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7016622922134733,
+    "translatedLineRatio": 0.7025371828521435,
     "cueCount": 1181,
     "sourceDetail": "Subt.is EN → MN (google, 70%)",
-    "updatedAt": 1790070413359
+    "updatedAt": 1790507210866
   },
   "tom-clancy-s-jack-ryan-ghost-war": {
     "file": "tom-clancy-s-jack-ryan-ghost-war.vtt",
@@ -922,7 +922,7 @@
     "translatedLineRatio": 0.7748776508972267,
     "cueCount": 1235,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790070427341
+    "updatedAt": 1790507225730
   },
   "black-box": {
     "file": "black-box.vtt",
@@ -934,7 +934,7 @@
     "translatedLineRatio": 0.8569767441860465,
     "cueCount": 915,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790070437176
+    "updatedAt": 1790507237287
   },
   "one-night-only": {
     "file": "one-night-only.vtt",
@@ -943,10 +943,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.75,
+    "translatedLineRatio": 0.7639344262295082,
     "cueCount": 1263,
-    "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790070450518
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790507258403
   },
   "paw-patrol-the-dino-movie": {
     "file": "paw-patrol-the-dino-movie.vtt",
@@ -958,7 +958,7 @@
     "translatedLineRatio": 0.8208588957055215,
     "cueCount": 849,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790070485998
+    "updatedAt": 1790507309779
   },
   "the-bay": {
     "file": "the-bay.vtt",
@@ -967,10 +967,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8642857142857143,
+    "translatedLineRatio": 0.8630952380952381,
     "cueCount": 941,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790070499251
+    "updatedAt": 1790507322223
   },
   "send-help": {
     "file": "send-help.vtt",
@@ -979,10 +979,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7814748201438849,
+    "translatedLineRatio": 0.7796762589928058,
     "cueCount": 1252,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790070512148
+    "updatedAt": 1790507336096
   },
   "dc": {
     "file": "dc.vtt",
@@ -991,10 +991,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7789799072642968,
+    "translatedLineRatio": 0.7774343122102009,
     "cueCount": 651,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790070525294
+    "updatedAt": 1790507348196
   },
   "the-isolate-thief": {
     "file": "the-isolate-thief.vtt",
@@ -1006,7 +1006,7 @@
     "translatedLineRatio": 0.8395196506550219,
     "cueCount": 980,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790070537507
+    "updatedAt": 1790507365914
   },
   "the-rip": {
     "file": "the-rip.vtt",
@@ -1015,10 +1015,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8053977272727273,
+    "translatedLineRatio": 0.8046875,
     "cueCount": 1468,
-    "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790070552967
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790507389278
   },
   "28-years-later-the-bone-temple": {
     "file": "28-years-later-the-bone-temple.vtt",
@@ -1027,10 +1027,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7194174757281553,
+    "translatedLineRatio": 0.7184466019417476,
     "cueCount": 1119,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790070565417
+    "updatedAt": 1790507401501
   },
   "the-wrong-girls": {
     "file": "the-wrong-girls.vtt",
@@ -1039,10 +1039,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8565891472868217,
+    "translatedLineRatio": 0.8546511627906976,
     "cueCount": 1623,
-    "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790070582874
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790507427606
   },
   "la-familia-beneton-2": {
     "file": "la-familia-beneton-2.vtt",
@@ -1051,10 +1051,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7383419689119171,
+    "translatedLineRatio": 0.7599309153713298,
     "cueCount": 1290,
-    "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790070597045
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790507444537
   },
   "dear-santa": {
     "file": "dear-santa.vtt",
@@ -1063,10 +1063,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.859608745684695,
+    "translatedLineRatio": 0.8590333716915995,
     "cueCount": 1825,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790070617407
+    "updatedAt": 1790507469670
   },
   "final-signal": {
     "file": "final-signal.vtt",
@@ -1075,10 +1075,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8070175438596491,
+    "translatedLineRatio": 0.8377192982456141,
     "cueCount": 722,
-    "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790070630544
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790507485892
   },
   "atlas-below": {
     "file": "atlas-below.vtt",
@@ -1087,10 +1087,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7857142857142857,
+    "translatedLineRatio": 0.783359497645212,
     "cueCount": 1333,
-    "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790070652775
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790507514730
   },
   "aurora-drift": {
     "file": "aurora-drift.vtt",
@@ -1099,10 +1099,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8408389882788402,
+    "translatedLineRatio": 0.8402220851326342,
     "cueCount": 1708,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790070665790
+    "updatedAt": 1790507530228
   },
   "obsession": {
     "file": "obsession.vtt",
@@ -1403,10 +1403,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7426564495530013,
+    "translatedLineRatio": 0.7407407407407407,
     "cueCount": 1734,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790071233759
+    "updatedAt": 1790508003270
   },
   "coco": {
     "file": "coco.vtt",
@@ -1415,10 +1415,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7954996690933157,
+    "translatedLineRatio": 0.7961614824619457,
     "cueCount": 1646,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790071245618
+    "updatedAt": 1790508018163
   },
   "the-lord-of-the-rings-the-fellowship-of-the-ring": {
     "file": "the-lord-of-the-rings-the-fellowship-of-the-ring.vtt",
@@ -1427,10 +1427,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7944544906570223,
+    "translatedLineRatio": 0.7938517179023508,
     "cueCount": 1737,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790071262930
+    "updatedAt": 1790508046029
   },
   "pulp-fiction": {
     "file": "pulp-fiction.vtt",
@@ -1439,10 +1439,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8540866703236424,
+    "translatedLineRatio": 0.8529895776193088,
     "cueCount": 1864,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790071278363
+    "updatedAt": 1790508060850
   },
   "seven": {
     "file": "seven.vtt",
@@ -1454,7 +1454,7 @@
     "translatedLineRatio": 0.765625,
     "cueCount": 601,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790071295640
+    "updatedAt": 1790508077806
   },
   "parasite": {
     "file": "parasite.vtt",
@@ -1463,10 +1463,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8317399617590823,
+    "translatedLineRatio": 0.8304652644996813,
     "cueCount": 1666,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790071313693
+    "updatedAt": 1790508100056
   },
   "joker": {
     "file": "joker.vtt",
@@ -1475,10 +1475,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7097203728362184,
+    "translatedLineRatio": 0.7490013315579228,
     "cueCount": 1659,
-    "sourceDetail": "Subt.is EN → MN (google, 71%)",
-    "updatedAt": 1790071326076
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790508181693
   },
   "whiplash": {
     "file": "whiplash.vtt",
@@ -1487,10 +1487,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8483516483516483,
+    "translatedLineRatio": 0.8461538461538461,
     "cueCount": 997,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790071338763
+    "updatedAt": 1790508199835
   },
   "big-hero-6": {
     "file": "big-hero-6.vtt",
@@ -1499,10 +1499,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8487603305785124,
+    "translatedLineRatio": 0.8471074380165289,
     "cueCount": 1221,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790071353357
+    "updatedAt": 1790508216657
   },
   "the-green-mile": {
     "file": "the-green-mile.vtt",
@@ -1511,10 +1511,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8207754206291149,
+    "translatedLineRatio": 0.8200438917337235,
     "cueCount": 1501,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790071366015
+    "updatedAt": 1790508230752
   },
   "gladiator": {
     "file": "gladiator.vtt",
@@ -1523,10 +1523,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7434701492537313,
+    "translatedLineRatio": 0.7490671641791045,
     "cueCount": 1154,
-    "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790071388747
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790508244511
   },
   "the-terminator": {
     "file": "the-terminator.vtt",
@@ -1538,7 +1538,7 @@
     "translatedLineRatio": 0.8734177215189873,
     "cueCount": 562,
     "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790071397845
+    "updatedAt": 1790508257027
   },
   "terminator-2-judgment-day": {
     "file": "terminator-2-judgment-day.vtt",
@@ -1547,10 +1547,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8752260397830018,
+    "translatedLineRatio": 0.8734177215189873,
     "cueCount": 562,
-    "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790071409718
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790508265224
   },
   "the-departed": {
     "file": "the-departed.vtt",
@@ -1559,10 +1559,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8219756999471738,
+    "translatedLineRatio": 0.8214474379292129,
     "cueCount": 1968,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790071422730
+    "updatedAt": 1790508280156
   },
   "finding-nemo": {
     "file": "finding-nemo.vtt",
@@ -1583,10 +1583,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8343653250773994,
+    "translatedLineRatio": 0.8351393188854489,
     "cueCount": 1322,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790071466808
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790508305424
   },
   "alien": {
     "file": "alien.vtt",
@@ -1598,7 +1598,7 @@
     "translatedLineRatio": 0.8547557840616966,
     "cueCount": 822,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790071479541
+    "updatedAt": 1790508317172
   },
   "logan": {
     "file": "logan.vtt",
@@ -1607,10 +1607,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8964992389649924,
+    "translatedLineRatio": 0.895738203957382,
     "cueCount": 1425,
     "sourceDetail": "Subt.is EN → MN (google, 90%)",
-    "updatedAt": 1790071510964
+    "updatedAt": 1790508345428
   },
   "the-lord-of-the-rings-the-two-towers": {
     "file": "the-lord-of-the-rings-the-two-towers.vtt",
@@ -1619,10 +1619,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7730093071354706,
+    "translatedLineRatio": 0.7714581178903827,
     "cueCount": 2031,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790071533274
+    "updatedAt": 1790508364732
   },
   "jaws": {
     "file": "jaws.vtt",
@@ -1631,10 +1631,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8397699260476582,
+    "translatedLineRatio": 0.8849630238290879,
     "cueCount": 1255,
-    "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790078739873
+    "sourceDetail": "Subt.is EN → MN (google, 88%)",
+    "updatedAt": 1790508450652
   },
   "the-dark-knight-rises": {
     "file": "the-dark-knight-rises.vtt",
@@ -1643,10 +1643,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8272980501392758,
+    "translatedLineRatio": 0.8479108635097493,
     "cueCount": 1821,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790078754010
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790508469657
   },
   "blade-runner-2049": {
     "file": "blade-runner-2049.vtt",
@@ -1655,10 +1655,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.6989247311827957,
+    "translatedLineRatio": 0.8104838709677419,
     "cueCount": 818,
-    "sourceDetail": "Subt.is EN → MN (google, 70%)",
-    "updatedAt": 1790078765885
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790508485589
   },
   "back-to-the-future": {
     "file": "back-to-the-future.vtt",
@@ -1670,7 +1670,7 @@
     "translatedLineRatio": 0.8686949559647719,
     "cueCount": 1309,
     "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790078781248
+    "updatedAt": 1790508503203
   },
   "thor-ragnarok": {
     "file": "thor-ragnarok.vtt",
@@ -1682,7 +1682,7 @@
     "translatedLineRatio": 0.8084526244035446,
     "cueCount": 1560,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790078795583
+    "updatedAt": 1790508516472
   },
   "mad-max-fury-road": {
     "file": "mad-max-fury-road.vtt",
@@ -1691,10 +1691,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7397769516728625,
+    "translatedLineRatio": 0.8203221809169765,
     "cueCount": 872,
-    "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790078830381
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790508548586
   },
   "12-angry-men": {
     "file": "12-angry-men.vtt",
@@ -1703,10 +1703,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8871080139372822,
+    "translatedLineRatio": 0.886411149825784,
     "cueCount": 1445,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790078850130
+    "updatedAt": 1790508570411
   },
   "gone-girl": {
     "file": "gone-girl.vtt",
@@ -1715,10 +1715,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8086614173228347,
+    "translatedLineRatio": 0.8078740157480315,
     "cueCount": 1362,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790078870393
+    "updatedAt": 1790508589623
   },
   "ratatouille": {
     "file": "ratatouille.vtt",
@@ -1742,7 +1742,7 @@
     "translatedLineRatio": 0.8442346594740391,
     "cueCount": 1507,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790078919999
+    "updatedAt": 1790508621394
   },
   "kill-bill-the-whole-bloody-affair": {
     "file": "kill-bill-the-whole-bloody-affair.vtt",
@@ -1754,7 +1754,7 @@
     "translatedLineRatio": 0.760043431053203,
     "cueCount": 978,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790078946604
+    "updatedAt": 1790508633734
   },
   "toy-story-2": {
     "file": "toy-story-2.vtt",
@@ -1763,10 +1763,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8682170542635659,
+    "translatedLineRatio": 0.8943798449612403,
     "cueCount": 1080,
-    "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790078960441
+    "sourceDetail": "Subt.is EN → MN (google, 89%)",
+    "updatedAt": 1790508651623
   },
   "die-hard": {
     "file": "die-hard.vtt",
@@ -1775,10 +1775,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8637379002233805,
+    "translatedLineRatio": 0.8629932985852569,
     "cueCount": 1369,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790078975555
+    "updatedAt": 1790508665623
   },
   "once-upon-a-time-in-america": {
     "file": "once-upon-a-time-in-america.vtt",
@@ -1787,10 +1787,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7887517146776406,
+    "translatedLineRatio": 0.8079561042524005,
     "cueCount": 751,
-    "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790079000630
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790508682786
   },
   "green-book": {
     "file": "green-book.vtt",
@@ -1802,7 +1802,7 @@
     "translatedLineRatio": 0.8200438917337235,
     "cueCount": 1501,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790079013615
+    "updatedAt": 1790508691454
   },
   "batman-begins": {
     "file": "batman-begins.vtt",
@@ -1811,10 +1811,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8153846153846154,
+    "translatedLineRatio": 0.756043956043956,
     "cueCount": 1931,
-    "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790079044270
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790508716753
   },
   "saving-private-ryan": {
     "file": "saving-private-ryan.vtt",
@@ -1823,10 +1823,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8644428672817601,
+    "translatedLineRatio": 0.8630234208658624,
     "cueCount": 1451,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790079059416
+    "updatedAt": 1790508730183
   },
   "good-will-hunting": {
     "file": "good-will-hunting.vtt",
@@ -1847,10 +1847,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8558421851289834,
+    "translatedLineRatio": 0.855083459787557,
     "cueCount": 1367,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790079093417
+    "updatedAt": 1790508747844
   },
   "your-name": {
     "file": "your-name.vtt",
@@ -1859,10 +1859,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8465553235908142,
+    "translatedLineRatio": 0.8455114822546973,
     "cueCount": 1025,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790079113806
+    "updatedAt": 1790508771016
   },
   "the-good-the-bad-and-the-ugly": {
     "file": "the-good-the-bad-and-the-ugly.vtt",
@@ -1871,10 +1871,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7581261950286807,
+    "translatedLineRatio": 0.7571701720841301,
     "cueCount": 1075,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790079138466
+    "updatedAt": 1790508793811
   },
   "knives-out": {
     "file": "knives-out.vtt",
@@ -1895,10 +1895,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8354531001589826,
+    "translatedLineRatio": 0.834658187599364,
     "cueCount": 1285,
-    "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790079171490
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790508816702
   },
   "arrival": {
     "file": "arrival.vtt",
@@ -1907,10 +1907,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8643911439114391,
+    "translatedLineRatio": 0.8699261992619927,
     "cueCount": 1136,
-    "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790079185314
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790508829758
   },
   "v-for-vendetta": {
     "file": "v-for-vendetta.vtt",
@@ -1919,10 +1919,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8091993185689949,
+    "translatedLineRatio": 0.807495741056218,
     "cueCount": 1218,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790079210596
+    "updatedAt": 1790508856362
   },
   "aladdin": {
     "file": "aladdin.vtt",
@@ -1931,10 +1931,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7613019891500904,
+    "translatedLineRatio": 0.7603978300180831,
     "cueCount": 1127,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790079225890
+    "updatedAt": 1790508886978
   },
   "taxi-driver": {
     "file": "taxi-driver.vtt",
@@ -1943,10 +1943,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8440766550522648,
+    "translatedLineRatio": 0.8432055749128919,
     "cueCount": 1186,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790079237024
+    "updatedAt": 1790508908207
   },
   "goodfellas": {
     "file": "goodfellas.vtt",
@@ -1955,10 +1955,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7947962690230731,
+    "translatedLineRatio": 0.8016691212567502,
     "cueCount": 2082,
-    "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790079252294
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790508933581
   },
   "dead-poets-society": {
     "file": "dead-poets-society.vtt",
@@ -1967,10 +1967,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.705765407554672,
+    "translatedLineRatio": 0.7833001988071571,
     "cueCount": 561,
-    "sourceDetail": "Subt.is EN → MN (google, 71%)",
-    "updatedAt": 1790079267245
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790508946531
   },
   "apocalypse-now": {
     "file": "apocalypse-now.vtt",
@@ -1982,7 +1982,7 @@
     "translatedLineRatio": 0.8851187590887057,
     "cueCount": 2107,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790079283118
+    "updatedAt": 1790508963114
   },
   "puss-in-boots-the-last-wish": {
     "file": "puss-in-boots-the-last-wish.vtt",
@@ -1991,10 +1991,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8541374474053296,
+    "translatedLineRatio": 0.85273492286115,
     "cueCount": 1515,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790079294388
+    "updatedAt": 1790508979042
   },
   "the-pianist": {
     "file": "the-pianist.vtt",
@@ -2006,7 +2006,7 @@
     "translatedLineRatio": 0.8445121951219512,
     "cueCount": 1042,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790079304336
+    "updatedAt": 1790508992092
   },
   "pride-and-prejudice": {
     "file": "pride-and-prejudice.vtt",
@@ -2018,7 +2018,7 @@
     "translatedLineRatio": 0.8445344129554656,
     "cueCount": 1264,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790079318631
+    "updatedAt": 1790509008564
   },
   "blade-runner": {
     "file": "blade-runner.vtt",
@@ -2027,10 +2027,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8145161290322581,
+    "translatedLineRatio": 0.8104838709677419,
     "cueCount": 818,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790079327273
+    "updatedAt": 1790509019608
   },
   "django-unchained": {
     "file": "django-unchained.vtt",
@@ -2039,10 +2039,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8388625592417062,
+    "translatedLineRatio": 0.8383359662980516,
     "cueCount": 1966,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790079351107
+    "updatedAt": 1790509054219
   },
   "life-is-beautiful": {
     "file": "life-is-beautiful.vtt",
@@ -2051,10 +2051,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8086838534599728,
+    "translatedLineRatio": 0.8073270013568521,
     "cueCount": 783,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790079375420
+    "updatedAt": 1790509086566
   },
   "heat": {
     "file": "heat.vtt",
@@ -2063,10 +2063,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8099585062240664,
+    "translatedLineRatio": 0.8091286307053942,
     "cueCount": 1256,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790079388280
+    "updatedAt": 1790509101580
   },
   "aliens": {
     "file": "aliens.vtt",
@@ -2075,10 +2075,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8873015873015873,
+    "translatedLineRatio": 0.8857142857142857,
     "cueCount": 1293,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790079402378
+    "updatedAt": 1790509118065
   },
   "catch-me-if-you-can": {
     "file": "catch-me-if-you-can.vtt",
@@ -2087,10 +2087,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8147921760391198,
+    "translatedLineRatio": 0.8135696821515892,
     "cueCount": 1700,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790079423936
+    "updatedAt": 1790509139982
   },
   "snatch": {
     "file": "snatch.vtt",
@@ -2099,10 +2099,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8011111111111111,
+    "translatedLineRatio": 0.8111111111111111,
     "cueCount": 1079,
-    "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790079434772
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790509151090
   },
   "memento": {
     "file": "memento.vtt",
@@ -2111,10 +2111,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8639676113360324,
+    "translatedLineRatio": 0.8623481781376519,
     "cueCount": 1284,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790079448481
+    "updatedAt": 1790509162924
   },
   "spiderman-across-the-spiderverse": {
     "file": "spiderman-across-the-spiderverse.vtt",
@@ -2126,7 +2126,7 @@
     "translatedLineRatio": 0.7957362419434805,
     "cueCount": 2108,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790079470360
+    "updatedAt": 1790509241836
   },
   "the-grand-budapest-hotel": {
     "file": "the-grand-budapest-hotel.vtt",
@@ -2135,10 +2135,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8487603305785124,
+    "translatedLineRatio": 0.8471074380165289,
     "cueCount": 1221,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790079484486
+    "updatedAt": 1790509255468
   },
   "eternal-sunshine": {
     "file": "eternal-sunshine.vtt",
@@ -2147,10 +2147,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8285094066570188,
+    "translatedLineRatio": 0.8248914616497829,
     "cueCount": 1438,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790079496865
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790509275662
   },
   "terminator-2": {
     "file": "terminator-2.vtt",
@@ -2159,10 +2159,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8752260397830018,
+    "translatedLineRatio": 0.8734177215189873,
     "cueCount": 562,
-    "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790079517601
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790509293790
   },
   "war-of-the-worlds": {
     "file": "war-of-the-worlds.vtt",
@@ -2183,10 +2183,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8122956180510137,
+    "translatedLineRatio": 0.8116415958142577,
     "cueCount": 1634,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790183604023
+    "updatedAt": 1790516688740
   },
   "the-novices": {
     "file": "the-novices.vtt",
@@ -2232,7 +2232,7 @@
     "translatedLineRatio": 0.8235294117647058,
     "cueCount": 1729,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790183649925
+    "updatedAt": 1790516705818
   },
   "lola-s-secret": {
     "file": "lola-s-secret.vtt",
@@ -2241,10 +2241,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7683557394002068,
+    "translatedLineRatio": 0.7673216132368149,
     "cueCount": 1004,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790183657389
+    "updatedAt": 1790516717141
   },
   "prison-on-fire": {
     "file": "prison-on-fire.vtt",
@@ -2510,10 +2510,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7843583902809416,
+    "translatedLineRatio": 0.782839787395596,
     "cueCount": 1395,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790183863665
+    "updatedAt": 1790516732454
   },
   "one-battle-after-another": {
     "file": "one-battle-after-another.vtt",
@@ -2525,7 +2525,7 @@
     "translatedLineRatio": 0.7890204520990313,
     "cueCount": 1962,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790183870179
+    "updatedAt": 1790516746832
   },
   "spider-man-far-from-home": {
     "file": "spider-man-far-from-home.vtt",
@@ -2534,10 +2534,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8662640207075065,
+    "translatedLineRatio": 0.8645383951682485,
     "cueCount": 1191,
-    "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790183879113
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790516762638
   },
   "superman": {
     "file": "superman.vtt",
@@ -2546,10 +2546,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7812080536912752,
+    "translatedLineRatio": 0.7791946308724832,
     "cueCount": 1562,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790183885886
+    "updatedAt": 1790516773633
   },
   "insidious-the-red-door": {
     "file": "insidious-the-red-door.vtt",
@@ -2558,10 +2558,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7796420581655481,
+    "translatedLineRatio": 0.7785234899328859,
     "cueCount": 931,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790183891929
+    "updatedAt": 1790516784632
   },
   "captain-america-civil-war": {
     "file": "captain-america-civil-war.vtt",
@@ -2570,10 +2570,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8311688311688312,
+    "translatedLineRatio": 0.827922077922078,
     "cueCount": 336,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790183900304
+    "updatedAt": 1790516796073
   },
   "harry-potter-and-the-deathly-hallows-part-1": {
     "file": "harry-potter-and-the-deathly-hallows-part-1.vtt",
@@ -2582,10 +2582,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8476297968397292,
+    "translatedLineRatio": 0.8465011286681715,
     "cueCount": 935,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790183906436
+    "updatedAt": 1790516805280
   },
   "rita": {
     "file": "rita.vtt",
@@ -2597,7 +2597,7 @@
     "translatedLineRatio": 0.8356973995271868,
     "cueCount": 880,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790183921296
+    "updatedAt": 1790516822749
   },
   "graphic-desires": {
     "file": "graphic-desires.vtt",
@@ -2606,10 +2606,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8969072164948454,
+    "translatedLineRatio": 0.8957617411225659,
     "cueCount": 891,
     "sourceDetail": "Subt.is EN → MN (google, 90%)",
-    "updatedAt": 1790183927487
+    "updatedAt": 1790516832762
   },
   "the-housemaid": {
     "file": "the-housemaid.vtt",
@@ -2618,10 +2618,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.766729205753596,
+    "translatedLineRatio": 0.7679799874921827,
     "cueCount": 1751,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790183933745
+    "updatedAt": 1790516844466
   },
   "thunderbolts": {
     "file": "thunderbolts.vtt",
@@ -2630,10 +2630,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8122956180510137,
+    "translatedLineRatio": 0.8116415958142577,
     "cueCount": 1634,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790183940506
+    "updatedAt": 1790516859356
   },
   "mission-impossible-the-final-reckoning": {
     "file": "mission-impossible-the-final-reckoning.vtt",
@@ -2642,10 +2642,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7199751088985687,
+    "translatedLineRatio": 0.7193528313627878,
     "cueCount": 1679,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790183947382
+    "updatedAt": 1790516871757
   },
   "fall": {
     "file": "fall.vtt",
@@ -2654,10 +2654,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7978560490045942,
+    "translatedLineRatio": 0.7986217457886677,
     "cueCount": 1360,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790183954177
+    "updatedAt": 1790516884053
   },
   "jungle": {
     "file": "jungle.vtt",
@@ -2666,10 +2666,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8553281580804517,
+    "translatedLineRatio": 0.8532110091743119,
     "cueCount": 1512,
-    "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790183966975
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790516899604
   },
   "the-conjuring": {
     "file": "the-conjuring.vtt",
@@ -2678,10 +2678,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8968968968968969,
+    "translatedLineRatio": 0.8988988988988988,
     "cueCount": 1106,
     "sourceDetail": "Subt.is EN → MN (google, 90%)",
-    "updatedAt": 1790183986942
+    "updatedAt": 1790516925641
   },
   "fury": {
     "file": "fury.vtt",
@@ -2690,10 +2690,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8203221809169765,
+    "translatedLineRatio": 0.8215613382899628,
     "cueCount": 872,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790183995076
+    "updatedAt": 1790516936556
   },
   "iron-man-2": {
     "file": "iron-man-2.vtt",
@@ -2702,10 +2702,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7798594847775175,
+    "translatedLineRatio": 0.7782982045277127,
     "cueCount": 1297,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184001435
+    "updatedAt": 1790516947305
   },
   "the-devil-wears-prada": {
     "file": "the-devil-wears-prada.vtt",
@@ -2714,10 +2714,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8279751833051325,
+    "translatedLineRatio": 0.8268471517202481,
     "cueCount": 1861,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184007968
+    "updatedAt": 1790516958372
   },
   "insidious-the-last-key": {
     "file": "insidious-the-last-key.vtt",
@@ -2726,10 +2726,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7796420581655481,
+    "translatedLineRatio": 0.7785234899328859,
     "cueCount": 931,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184016805
+    "updatedAt": 1790516972039
   },
   "sinners": {
     "file": "sinners.vtt",
@@ -2738,10 +2738,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7212336892052195,
+    "translatedLineRatio": 0.7206405693950177,
     "cueCount": 1856,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790184023901
+    "updatedAt": 1790516986107
   },
   "now-you-see-me-now-you-don-t": {
     "file": "now-you-see-me-now-you-don-t.vtt",
@@ -2750,10 +2750,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8289070480081716,
+    "translatedLineRatio": 0.8283963227783453,
     "cueCount": 2017,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184030574
+    "updatedAt": 1790517000032
   },
   "frozen-ii": {
     "file": "frozen-ii.vtt",
@@ -2762,10 +2762,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8253205128205128,
+    "translatedLineRatio": 0.8213141025641025,
     "cueCount": 1298,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184038848
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790517011325
   },
   "kpop-demon-hunters": {
     "file": "kpop-demon-hunters.vtt",
@@ -2777,7 +2777,7 @@
     "translatedLineRatio": 0.7610208816705336,
     "cueCount": 1449,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184047026
+    "updatedAt": 1790517019969
   },
   "venom-the-last-dance": {
     "file": "venom-the-last-dance.vtt",
@@ -2786,10 +2786,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8146341463414634,
+    "translatedLineRatio": 0.8136585365853658,
     "cueCount": 1127,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184054818
+    "updatedAt": 1790517028095
   },
   "the-amazing-spider-man-2": {
     "file": "the-amazing-spider-man-2.vtt",
@@ -2798,10 +2798,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.807909604519774,
+    "translatedLineRatio": 0.8072033898305084,
     "cueCount": 1507,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184062950
+    "updatedAt": 1790517038392
   },
   "my-fault": {
     "file": "my-fault.vtt",
@@ -2810,10 +2810,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8236641221374046,
+    "translatedLineRatio": 0.8213740458015267,
     "cueCount": 1409,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184070839
+    "updatedAt": 1790517049409
   },
   "ice-age-collision-course": {
     "file": "ice-age-collision-course.vtt",
@@ -2825,7 +2825,7 @@
     "translatedLineRatio": 0.8456928838951311,
     "cueCount": 1394,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184089098
+    "updatedAt": 1790517070906
   },
   "school-on-fire": {
     "file": "school-on-fire.vtt",
@@ -2834,10 +2834,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7162818955042527,
+    "translatedLineRatio": 0.715674362089915,
     "cueCount": 1671,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790184098756
+    "updatedAt": 1790517087990
   },
   "country-hooker": {
     "file": "country-hooker.vtt",
@@ -2849,7 +2849,7 @@
     "translatedLineRatio": 0.8221258134490239,
     "cueCount": 954,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184106367
+    "updatedAt": 1790517102243
   },
   "avatar-the-way-of-water": {
     "file": "avatar-the-way-of-water.vtt",
@@ -2858,10 +2858,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7803138373751783,
+    "translatedLineRatio": 0.7798383262006657,
     "cueCount": 2412,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184114365
+    "updatedAt": 1790517116670
   },
   "f1-the-movie": {
     "file": "f1-the-movie.vtt",
@@ -2870,10 +2870,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8134586838198912,
+    "translatedLineRatio": 0.8119742701632855,
     "cueCount": 2090,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184122767
+    "updatedAt": 1790517134826
   },
   "the-gorge": {
     "file": "the-gorge.vtt",
@@ -2882,10 +2882,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.744535519125683,
+    "translatedLineRatio": 0.7431693989071039,
     "cueCount": 763,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790184130408
+    "updatedAt": 1790517142842
   },
   "inside-out-2": {
     "file": "inside-out-2.vtt",
@@ -2897,7 +2897,7 @@
     "translatedLineRatio": 0.8218465539661899,
     "cueCount": 1641,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184140009
+    "updatedAt": 1790517158300
   },
   "insidious-chapter-3": {
     "file": "insidious-chapter-3.vtt",
@@ -2906,10 +2906,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7796420581655481,
+    "translatedLineRatio": 0.7785234899328859,
     "cueCount": 931,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184148961
+    "updatedAt": 1790517169817
   },
   "the-super-mario-bros-movie": {
     "file": "the-super-mario-bros-movie.vtt",
@@ -2921,7 +2921,7 @@
     "translatedLineRatio": 0.8276299112801014,
     "cueCount": 835,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184163056
+    "updatedAt": 1790517184974
   },
   "doctor-strange-in-the-multiverse-of-madness": {
     "file": "doctor-strange-in-the-multiverse-of-madness.vtt",
@@ -2930,10 +2930,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.759493670886076,
+    "translatedLineRatio": 0.7586497890295358,
     "cueCount": 1269,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184171847
+    "updatedAt": 1790517194372
   },
   "a-minecraft-movie": {
     "file": "a-minecraft-movie.vtt",
@@ -2942,10 +2942,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7954209748892171,
+    "translatedLineRatio": 0.7939438700147711,
     "cueCount": 1439,
-    "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184181663
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790517204934
   },
   "troy": {
     "file": "troy.vtt",
@@ -2954,10 +2954,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7967667436489607,
+    "translatedLineRatio": 0.7959969207082371,
     "cueCount": 1373,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184196357
+    "updatedAt": 1790517225474
   },
   "predator-badlands": {
     "file": "predator-badlands.vtt",
@@ -2969,7 +2969,7 @@
     "translatedLineRatio": 0.8292682926829268,
     "cueCount": 422,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184209234
+    "updatedAt": 1790517239534
   },
   "fast-x": {
     "file": "fast-x.vtt",
@@ -2978,10 +2978,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7659289067739772,
+    "translatedLineRatio": 0.7645875251509054,
     "cueCount": 1553,
-    "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790184215524
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790517249466
   },
   "weapons": {
     "file": "weapons.vtt",
@@ -2990,10 +2990,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.800376647834275,
+    "translatedLineRatio": 0.8013182674199624,
     "cueCount": 1211,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184221483
+    "updatedAt": 1790517258277
   },
   "the-substance": {
     "file": "the-substance.vtt",
@@ -3002,10 +3002,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7744458930899609,
+    "translatedLineRatio": 0.771838331160365,
     "cueCount": 859,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790184229596
+    "updatedAt": 1790517267200
   },
   "deadpool-2": {
     "file": "deadpool-2.vtt",
@@ -3014,10 +3014,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.776850306065665,
+    "translatedLineRatio": 0.7807456872565387,
     "cueCount": 1867,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184238731
+    "updatedAt": 1790517282751
   },
   "despicable-me": {
     "file": "despicable-me.vtt",
@@ -3026,10 +3026,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8663366336633663,
+    "translatedLineRatio": 0.8646864686468647,
     "cueCount": 1293,
-    "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790184245247
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790517292492
   },
   "ballerina": {
     "file": "ballerina.vtt",
@@ -3038,10 +3038,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7524875621890548,
+    "translatedLineRatio": 0.75,
     "cueCount": 829,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790184259967
+    "updatedAt": 1790517318477
   },
   "doctor-strange": {
     "file": "doctor-strange.vtt",
@@ -3050,10 +3050,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.759493670886076,
+    "translatedLineRatio": 0.7586497890295358,
     "cueCount": 1269,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184266076
+    "updatedAt": 1790517326141
   },
   "ice-age": {
     "file": "ice-age.vtt",
@@ -3065,7 +3065,7 @@
     "translatedLineRatio": 0.7936145952109465,
     "cueCount": 902,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790184272137
+    "updatedAt": 1790517339667
   },
   "harry-potter-and-the-order-of-the-phoenix": {
     "file": "harry-potter-and-the-order-of-the-phoenix.vtt",
@@ -3074,10 +3074,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8476297968397292,
+    "translatedLineRatio": 0.8465011286681715,
     "cueCount": 935,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184279451
+    "updatedAt": 1790517350399
   },
   "harry-potter-and-the-half-blood-prince": {
     "file": "harry-potter-and-the-half-blood-prince.vtt",
@@ -3086,10 +3086,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8476297968397292,
+    "translatedLineRatio": 0.8465011286681715,
     "cueCount": 935,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184286552
+    "updatedAt": 1790517362450
   },
   "the-chronicles-of-narnia-the-lion-the-witch-and-the-wardrobe": {
     "file": "the-chronicles-of-narnia-the-lion-the-witch-and-the-wardrobe.vtt",
@@ -3101,7 +3101,7 @@
     "translatedLineRatio": 0.7832422586520947,
     "cueCount": 1201,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184302103
+    "updatedAt": 1790517383540
   },
   "white-chicks": {
     "file": "white-chicks.vtt",
@@ -3110,10 +3110,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.6607892527287993,
+    "translatedLineRatio": 0.6599496221662469,
     "cueCount": 1294,
     "sourceDetail": "Subt.is EN → MN (google, 66%)",
-    "updatedAt": 1790184309404
+    "updatedAt": 1790517397744
   },
   "john-wick-chapter-4": {
     "file": "john-wick-chapter-4.vtt",
@@ -3122,10 +3122,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.758288770053476,
+    "translatedLineRatio": 0.7572192513368984,
     "cueCount": 984,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184315534
+    "updatedAt": 1790517406754
   },
   "black-panther-wakanda-forever": {
     "file": "black-panther-wakanda-forever.vtt",
@@ -3137,7 +3137,7 @@
     "translatedLineRatio": 0.8526100307062436,
     "cueCount": 1047,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184325198
+    "updatedAt": 1790517422287
   },
   "red-one": {
     "file": "red-one.vtt",
@@ -3146,10 +3146,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7750333778371161,
+    "translatedLineRatio": 0.7736982643524699,
     "cueCount": 1593,
-    "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184334362
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790517433459
   },
   "the-brutalist": {
     "file": "the-brutalist.vtt",
@@ -3158,10 +3158,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.784375,
+    "translatedLineRatio": 0.7834821428571429,
     "cueCount": 2400,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184340943
+    "updatedAt": 1790517446757
   },
   "man-of-steel": {
     "file": "man-of-steel.vtt",
@@ -3170,10 +3170,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7592307692307693,
+    "translatedLineRatio": 0.7584615384615384,
     "cueCount": 1350,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184347194
+    "updatedAt": 1790517456375
   },
   "guardians-of-the-galaxy-vol-2": {
     "file": "guardians-of-the-galaxy-vol-2.vtt",
@@ -3182,10 +3182,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7426564495530013,
+    "translatedLineRatio": 0.7413793103448276,
     "cueCount": 1734,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790184354109
+    "updatedAt": 1790517466636
   },
   "frozen": {
     "file": "frozen.vtt",
@@ -3194,10 +3194,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7390728476821192,
+    "translatedLineRatio": 0.7384105960264901,
     "cueCount": 1689,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790184360257
+    "updatedAt": 1790517476190
   },
   "dawn-of-the-planet-of-the-apes": {
     "file": "dawn-of-the-planet-of-the-apes.vtt",
@@ -3206,10 +3206,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7742520398912058,
+    "translatedLineRatio": 0.7706255666364461,
     "cueCount": 1152,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790184368872
+    "updatedAt": 1790517489299
   },
   "insidious-chapter-2": {
     "file": "insidious-chapter-2.vtt",
@@ -3218,10 +3218,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7796420581655481,
+    "translatedLineRatio": 0.7785234899328859,
     "cueCount": 931,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184384278
+    "updatedAt": 1790517506728
   },
   "enemy-at-the-gates": {
     "file": "enemy-at-the-gates.vtt",
@@ -3233,7 +3233,7 @@
     "translatedLineRatio": 0.880781089414183,
     "cueCount": 1014,
     "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790184399364
+    "updatedAt": 1790517526505
   },
   "killers-of-the-flower-moon": {
     "file": "killers-of-the-flower-moon.vtt",
@@ -3242,10 +3242,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.828042328042328,
+    "translatedLineRatio": 0.8271604938271605,
     "cueCount": 2418,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184406724
+    "updatedAt": 1790517540932
   },
   "iron-man-3": {
     "file": "iron-man-3.vtt",
@@ -3254,10 +3254,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7798594847775175,
+    "translatedLineRatio": 0.7782982045277127,
     "cueCount": 1297,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184412847
+    "updatedAt": 1790517550279
   },
   "moana-2": {
     "file": "moana-2.vtt",
@@ -3266,10 +3266,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7049319727891157,
+    "translatedLineRatio": 0.7023809523809523,
     "cueCount": 1311,
     "sourceDetail": "Subt.is EN → MN (google, 70%)",
-    "updatedAt": 1790184418714
+    "updatedAt": 1790517561048
   },
   "aquaman-and-the-lost-kingdom": {
     "file": "aquaman-and-the-lost-kingdom.vtt",
@@ -3278,10 +3278,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7440476190476191,
+    "translatedLineRatio": 0.7410714285714286,
     "cueCount": 1033,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790184425795
+    "updatedAt": 1790517570257
   },
   "ted-2": {
     "file": "ted-2.vtt",
@@ -3293,7 +3293,7 @@
     "translatedLineRatio": 0.8084632516703786,
     "cueCount": 484,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184438703
+    "updatedAt": 1790517588668
   },
   "harry-potter-and-the-goblet-of-fire": {
     "file": "harry-potter-and-the-goblet-of-fire.vtt",
@@ -3302,10 +3302,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8476297968397292,
+    "translatedLineRatio": 0.8465011286681715,
     "cueCount": 935,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184451844
+    "updatedAt": 1790517609019
   },
   "elemental": {
     "file": "elemental.vtt",
@@ -3314,10 +3314,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.740484429065744,
+    "translatedLineRatio": 0.7387543252595156,
     "cueCount": 1270,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790184458380
+    "updatedAt": 1790517624047
   },
   "everything-everywhere-all-at-once": {
     "file": "everything-everywhere-all-at-once.vtt",
@@ -3326,10 +3326,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7553956834532374,
+    "translatedLineRatio": 0.7535971223021583,
     "cueCount": 1210,
-    "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184467077
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790517638861
   },
   "thor-love-and-thunder": {
     "file": "thor-love-and-thunder.vtt",
@@ -3338,10 +3338,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7601307189542483,
+    "translatedLineRatio": 0.7588235294117647,
     "cueCount": 1615,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184473394
+    "updatedAt": 1790517652544
   },
   "toy-story-4": {
     "file": "toy-story-4.vtt",
@@ -3350,10 +3350,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8386308068459658,
+    "translatedLineRatio": 0.83679706601467,
     "cueCount": 1725,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790184479642
+    "updatedAt": 1790517665302
   },
   "the-conjuring-last-rites": {
     "file": "the-conjuring-last-rites.vtt",
@@ -3362,10 +3362,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7964338781575037,
+    "translatedLineRatio": 0.7956909361069836,
     "cueCount": 1541,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184486092
+    "updatedAt": 1790517678645
   },
   "the-maze-runner": {
     "file": "the-maze-runner.vtt",
@@ -3374,10 +3374,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7539203860072377,
+    "translatedLineRatio": 0.752714113389626,
     "cueCount": 915,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790184495262
+    "updatedAt": 1790517694304
   },
   "get-out": {
     "file": "get-out.vtt",
@@ -3398,10 +3398,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8367791077257889,
+    "translatedLineRatio": 0.8356909684439608,
     "cueCount": 945,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790184502323
+    "updatedAt": 1790517707666
   },
   "mean-girls": {
     "file": "mean-girls.vtt",
@@ -3410,10 +3410,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8099216710182767,
+    "translatedLineRatio": 0.8093994778067886,
     "cueCount": 2053,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184513969
+    "updatedAt": 1790517725572
   },
   "home-alone-2-lost-in-new-york": {
     "file": "home-alone-2-lost-in-new-york.vtt",
@@ -3422,10 +3422,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8256611165523996,
+    "translatedLineRatio": 0.8246816846229187,
     "cueCount": 1098,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184522476
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790517738547
   },
   "real-steel": {
     "file": "real-steel.vtt",
@@ -3434,10 +3434,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8194756554307117,
+    "translatedLineRatio": 0.8179775280898877,
     "cueCount": 1415,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184529913
+    "updatedAt": 1790517752970
   },
   "protector": {
     "file": "protector.vtt",
@@ -3449,7 +3449,7 @@
     "translatedLineRatio": 0.8143712574850299,
     "cueCount": 1041,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184535923
+    "updatedAt": 1790517764305
   },
   "zero-woman": {
     "file": "zero-woman.vtt",
@@ -3458,10 +3458,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8092783505154639,
+    "translatedLineRatio": 0.8079896907216495,
     "cueCount": 794,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184556037
+    "updatedAt": 1790517789078
   },
   "once-upon-a-time-in-hollywood": {
     "file": "once-upon-a-time-in-hollywood.vtt",
@@ -3470,10 +3470,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8158054711246201,
+    "translatedLineRatio": 0.8133738601823708,
     "cueCount": 1732,
-    "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184562676
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790517803469
   },
   "black-widow": {
     "file": "black-widow.vtt",
@@ -3482,10 +3482,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8569767441860465,
+    "translatedLineRatio": 0.8558139534883721,
     "cueCount": 915,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790184570278
+    "updatedAt": 1790517817160
   },
   "black-adam": {
     "file": "black-adam.vtt",
@@ -3497,7 +3497,7 @@
     "translatedLineRatio": 0.8526100307062436,
     "cueCount": 1047,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184578321
+    "updatedAt": 1790517826463
   },
   "meg-2-the-trench": {
     "file": "meg-2-the-trench.vtt",
@@ -3506,10 +3506,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8084239130434783,
+    "translatedLineRatio": 0.8070652173913043,
     "cueCount": 1538,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184584562
+    "updatedAt": 1790517838093
   },
   "28-years-later": {
     "file": "28-years-later.vtt",
@@ -3518,10 +3518,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7981340118744699,
+    "translatedLineRatio": 0.7972858354537744,
     "cueCount": 1284,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184590889
+    "updatedAt": 1790517849092
   },
   "the-hobbit-an-unexpected-journey": {
     "file": "the-hobbit-an-unexpected-journey.vtt",
@@ -3530,10 +3530,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8481166464155528,
+    "translatedLineRatio": 0.8469015795868773,
     "cueCount": 1731,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184597225
+    "updatedAt": 1790517862796
   },
   "world-war-z": {
     "file": "world-war-z.vtt",
@@ -3542,10 +3542,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8655953250547845,
+    "translatedLineRatio": 0.8663257852447042,
     "cueCount": 1369,
     "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790184612155
+    "updatedAt": 1790517882189
   },
   "a-quiet-place": {
     "file": "a-quiet-place.vtt",
@@ -3554,10 +3554,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7181208053691275,
+    "translatedLineRatio": 0.7114093959731543,
     "cueCount": 158,
-    "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790184621924
+    "sourceDetail": "Subt.is EN → MN (google, 71%)",
+    "updatedAt": 1790517895899
   },
   "train-to-busan": {
     "file": "train-to-busan.vtt",
@@ -3566,10 +3566,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7939464493597206,
+    "translatedLineRatio": 0.7916181606519208,
     "cueCount": 932,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790184630414
+    "updatedAt": 1790517914291
   },
   "thor": {
     "file": "thor.vtt",
@@ -3578,10 +3578,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.809134287661895,
+    "translatedLineRatio": 0.8084526244035446,
     "cueCount": 1560,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184636552
+    "updatedAt": 1790517924235
   },
   "the-mummy": {
     "file": "the-mummy.vtt",
@@ -3590,10 +3590,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8591859185918592,
+    "translatedLineRatio": 0.858085808580858,
     "cueCount": 929,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790184653663
+    "updatedAt": 1790517944809
   },
   "scream-vi": {
     "file": "scream-vi.vtt",
@@ -3602,10 +3602,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7957198443579766,
+    "translatedLineRatio": 0.7963683527885862,
     "cueCount": 1635,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184667799
+    "updatedAt": 1790517962850
   },
   "snow-white": {
     "file": "snow-white.vtt",
@@ -3614,10 +3614,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.6607892527287993,
+    "translatedLineRatio": 0.6599496221662469,
     "cueCount": 1294,
     "sourceDetail": "Subt.is EN → MN (google, 66%)",
-    "updatedAt": 1790184673702
+    "updatedAt": 1790517970835
   },
   "good-luck-have-fun-don-t-die": {
     "file": "good-luck-have-fun-don-t-die.vtt",
@@ -3629,7 +3629,7 @@
     "translatedLineRatio": 0.7863167760074976,
     "cueCount": 1123,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790184682141
+    "updatedAt": 1790517986141
   },
   "wrath-of-man": {
     "file": "wrath-of-man.vtt",
@@ -3638,10 +3638,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7973102785782901,
+    "translatedLineRatio": 0.7953890489913544,
     "cueCount": 1099,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184691839
+    "updatedAt": 1790517999140
   },
   "final-destination-bloodlines": {
     "file": "final-destination-bloodlines.vtt",
@@ -3650,10 +3650,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8783679753656659,
+    "translatedLineRatio": 0.876058506543495,
     "cueCount": 1390,
     "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790184698160
+    "updatedAt": 1790518009494
   },
   "road-house": {
     "file": "road-house.vtt",
@@ -3662,10 +3662,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7716186252771619,
+    "translatedLineRatio": 0.770140428677014,
     "cueCount": 1465,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790184704150
+    "updatedAt": 1790518019923
   },
   "the-revenant": {
     "file": "the-revenant.vtt",
@@ -3674,10 +3674,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8366093366093366,
+    "translatedLineRatio": 0.8353808353808354,
     "cueCount": 844,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790184709893
+    "updatedAt": 1790518031792
   },
   "black-panther": {
     "file": "black-panther.vtt",
@@ -3686,10 +3686,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7817109144542773,
+    "translatedLineRatio": 0.7809734513274337,
     "cueCount": 1455,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184715922
+    "updatedAt": 1790518043413
   },
   "the-hobbit-the-battle-of-the-five-armies": {
     "file": "the-hobbit-the-battle-of-the-five-armies.vtt",
@@ -3698,10 +3698,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7993874425727412,
+    "translatedLineRatio": 0.7986217457886677,
     "cueCount": 1365,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184722858
+    "updatedAt": 1790518054767
   },
   "beauty-and-the-beast": {
     "file": "beauty-and-the-beast.vtt",
@@ -3710,10 +3710,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8117263843648208,
+    "translatedLineRatio": 0.8110749185667753,
     "cueCount": 1627,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184733171
+    "updatedAt": 1790518071878
   },
   "zodiac": {
     "file": "zodiac.vtt",
@@ -3725,7 +3725,7 @@
     "translatedLineRatio": 0.8557046979865772,
     "cueCount": 942,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790184740230
+    "updatedAt": 1790518082031
   },
   "kung-fu-panda": {
     "file": "kung-fu-panda.vtt",
@@ -3734,10 +3734,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7830188679245284,
+    "translatedLineRatio": 0.7822327044025157,
     "cueCount": 1358,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790184746638
+    "updatedAt": 1790518101941
   },
   "despicable-me-4": {
     "file": "despicable-me-4.vtt",
@@ -3746,10 +3746,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8663366336633663,
+    "translatedLineRatio": 0.8646864686468647,
     "cueCount": 1293,
-    "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790184753021
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790518111392
   },
   "grown-ups": {
     "file": "grown-ups.vtt",
@@ -3758,10 +3758,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7211238293444329,
+    "translatedLineRatio": 0.7200832466181062,
     "cueCount": 988,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790184762157
+    "updatedAt": 1790518122845
   },
   "mission-impossible": {
     "file": "mission-impossible.vtt",
@@ -3770,10 +3770,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.823076923076923,
+    "translatedLineRatio": 0.8208791208791208,
     "cueCount": 937,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184770365
+    "updatedAt": 1790518137488
   },
   "snow-white-and-the-seven-dwarfs": {
     "file": "snow-white-and-the-seven-dwarfs.vtt",
@@ -3782,10 +3782,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.6607892527287993,
+    "translatedLineRatio": 0.6599496221662469,
     "cueCount": 1294,
     "sourceDetail": "Subt.is EN → MN (google, 66%)",
-    "updatedAt": 1790184781015
+    "updatedAt": 1790518147642
   },
   "the-flash": {
     "file": "the-flash.vtt",
@@ -3794,10 +3794,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7480748074807481,
+    "translatedLineRatio": 0.7464246424642464,
     "cueCount": 1929,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790184790674
+    "updatedAt": 1790518162461
   },
   "free-guy": {
     "file": "free-guy.vtt",
@@ -3806,10 +3806,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8016967126193001,
+    "translatedLineRatio": 0.7985153764581124,
     "cueCount": 1084,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790184811329
+    "updatedAt": 1790518184644
   },
   "tuner": {
     "file": "tuner.vtt",
@@ -3818,10 +3818,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8567049808429119,
+    "translatedLineRatio": 0.8544061302681992,
     "cueCount": 1354,
-    "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790184821093
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790518195398
   },
   "john-wick-chapter-3-parabellum": {
     "file": "john-wick-chapter-3-parabellum.vtt",
@@ -3830,10 +3830,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8290155440414507,
+    "translatedLineRatio": 0.8277202072538861,
     "cueCount": 811,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184829048
+    "updatedAt": 1790518205402
   },
   "venom-let-there-be-carnage": {
     "file": "venom-let-there-be-carnage.vtt",
@@ -3842,10 +3842,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8146341463414634,
+    "translatedLineRatio": 0.8136585365853658,
     "cueCount": 1127,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184840166
+    "updatedAt": 1790518220356
   },
   "the-conjuring-the-devil-made-me-do-it": {
     "file": "the-conjuring-the-devil-made-me-do-it.vtt",
@@ -3854,10 +3854,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7912578055307761,
+    "translatedLineRatio": 0.7894736842105263,
     "cueCount": 1226,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790184849715
+    "updatedAt": 1790518231952
   },
   "the-fall-guy": {
     "file": "the-fall-guy.vtt",
@@ -3866,10 +3866,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8330878743249878,
+    "translatedLineRatio": 0.8321060382916053,
     "cueCount": 2106,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184861962
+    "updatedAt": 1790518243705
   },
   "maleficent-mistress-of-evil": {
     "file": "maleficent-mistress-of-evil.vtt",
@@ -3878,10 +3878,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7165271966527197,
+    "translatedLineRatio": 0.7144351464435147,
     "cueCount": 1014,
-    "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790184869823
+    "sourceDetail": "Subt.is EN → MN (google, 71%)",
+    "updatedAt": 1790518253614
   },
   "thor-the-dark-world": {
     "file": "thor-the-dark-world.vtt",
@@ -3890,10 +3890,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.809134287661895,
+    "translatedLineRatio": 0.8084526244035446,
     "cueCount": 1560,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790184882873
+    "updatedAt": 1790518266921
   },
   "john-wick-chapter-2": {
     "file": "john-wick-chapter-2.vtt",
@@ -3902,10 +3902,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8183098591549296,
+    "translatedLineRatio": 0.8154929577464789,
     "cueCount": 751,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184892249
+    "updatedAt": 1790518276392
   },
   "sonic-the-hedgehog-3": {
     "file": "sonic-the-hedgehog-3.vtt",
@@ -3917,7 +3917,7 @@
     "translatedLineRatio": 0.8179190751445087,
     "cueCount": 1411,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184902208
+    "updatedAt": 1790518289491
   },
   "xxx-return-of-xander-cage": {
     "file": "xxx-return-of-xander-cage.vtt",
@@ -3926,10 +3926,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8536082474226804,
+    "translatedLineRatio": 0.8525773195876288,
     "cueCount": 992,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184911634
+    "updatedAt": 1790518300236
   },
   "eyes-wide-shut": {
     "file": "eyes-wide-shut.vtt",
@@ -3938,10 +3938,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8462809917355372,
+    "translatedLineRatio": 0.8471074380165289,
     "cueCount": 1221,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790184922626
+    "updatedAt": 1790518313105
   },
   "black-hawk-down": {
     "file": "black-hawk-down.vtt",
@@ -3950,10 +3950,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8569767441860465,
+    "translatedLineRatio": 0.8558139534883721,
     "cueCount": 915,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790184932513
+    "updatedAt": 1790518323114
   },
   "after-we-fell": {
     "file": "after-we-fell.vtt",
@@ -3962,10 +3962,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7553956834532374,
+    "translatedLineRatio": 0.7535971223021583,
     "cueCount": 1210,
-    "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790184947475
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790518338638
   },
   "frankenstein": {
     "file": "frankenstein.vtt",
@@ -3974,10 +3974,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.768377253814147,
+    "translatedLineRatio": 0.7676837725381415,
     "cueCount": 1529,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790184963622
+    "updatedAt": 1790518358732
   },
   "barbie": {
     "file": "barbie.vtt",
@@ -3986,10 +3986,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8203991130820399,
+    "translatedLineRatio": 0.8181818181818182,
     "cueCount": 954,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790184971974
+    "updatedAt": 1790518369192
   },
   "captain-marvel": {
     "file": "captain-marvel.vtt",
@@ -3998,10 +3998,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8311688311688312,
+    "translatedLineRatio": 0.827922077922078,
     "cueCount": 336,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790184984479
+    "updatedAt": 1790518382327
   },
   "the-gentlemen": {
     "file": "the-gentlemen.vtt",
@@ -4010,10 +4010,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8363636363636363,
+    "translatedLineRatio": 0.8357771260997068,
     "cueCount": 1761,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790184994095
+    "updatedAt": 1790518394812
   },
   "alien-romulus": {
     "file": "alien-romulus.vtt",
@@ -4025,7 +4025,7 @@
     "translatedLineRatio": 0.7816836262719704,
     "cueCount": 1209,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790185002486
+    "updatedAt": 1790518407005
   },
   "star-wars-episode-viii-the-last-jedi": {
     "file": "star-wars-episode-viii-the-last-jedi.vtt",
@@ -4034,10 +4034,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7952196382428941,
+    "translatedLineRatio": 0.7945736434108527,
     "cueCount": 1621,
-    "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185013093
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790518424375
   },
   "nightcrawler": {
     "file": "nightcrawler.vtt",
@@ -4046,10 +4046,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8505821474773609,
+    "translatedLineRatio": 0.8499353169469599,
     "cueCount": 1584,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185024678
+    "updatedAt": 1790518438890
   },
   "aquaman": {
     "file": "aquaman.vtt",
@@ -4058,10 +4058,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8425414364640884,
+    "translatedLineRatio": 0.8416206261510129,
     "cueCount": 1109,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185033892
+    "updatedAt": 1790518451871
   },
   "ant-man": {
     "file": "ant-man.vtt",
@@ -4073,7 +4073,7 @@
     "translatedLineRatio": 0.7456201822004205,
     "cueCount": 1538,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185044127
+    "updatedAt": 1790518462488
   },
   "a-working-man": {
     "file": "a-working-man.vtt",
@@ -4085,7 +4085,7 @@
     "translatedLineRatio": 0.7814345991561181,
     "cueCount": 1253,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790185052163
+    "updatedAt": 1790518473684
   },
   "the-equalizer": {
     "file": "the-equalizer.vtt",
@@ -4097,7 +4097,7 @@
     "translatedLineRatio": 0.7935779816513762,
     "cueCount": 919,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790185060287
+    "updatedAt": 1790518485102
   },
   "the-conjuring-2": {
     "file": "the-conjuring-2.vtt",
@@ -4109,7 +4109,7 @@
     "translatedLineRatio": 0.7985948477751756,
     "cueCount": 1406,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185069662
+    "updatedAt": 1790518497945
   },
   "fifty-shades-of-grey": {
     "file": "fifty-shades-of-grey.vtt",
@@ -4118,10 +4118,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8175675675675675,
+    "translatedLineRatio": 0.8158783783783784,
     "cueCount": 1281,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185080720
+    "updatedAt": 1790518511741
   },
   "ice-age-continental-drift": {
     "file": "ice-age-continental-drift.vtt",
@@ -4130,10 +4130,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8338249754178958,
+    "translatedLineRatio": 0.8328416912487709,
     "cueCount": 1114,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185097715
+    "updatedAt": 1790518533407
   },
   "28-days-later": {
     "file": "28-days-later.vtt",
@@ -4142,10 +4142,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7518948964123294,
+    "translatedLineRatio": 0.751389590702375,
     "cueCount": 2095,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185120348
+    "updatedAt": 1790518557763
   },
   "fuze": {
     "file": "fuze.vtt",
@@ -4154,10 +4154,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8898467432950191,
+    "translatedLineRatio": 0.8879310344827587,
     "cueCount": 1132,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790185129816
+    "updatedAt": 1790518566941
   },
   "total-recall": {
     "file": "total-recall.vtt",
@@ -4166,10 +4166,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8533026113671275,
+    "translatedLineRatio": 0.8525345622119815,
     "cueCount": 1359,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185140584
+    "updatedAt": 1790518581087
   },
   "primate": {
     "file": "primate.vtt",
@@ -4178,10 +4178,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.84185303514377,
+    "translatedLineRatio": 0.8402555910543131,
     "cueCount": 725,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185147718
+    "updatedAt": 1790518590323
   },
   "dune": {
     "file": "dune.vtt",
@@ -4193,7 +4193,7 @@
     "translatedLineRatio": 0.7048,
     "cueCount": 1328,
     "sourceDetail": "Subt.is EN → MN (google, 70%)",
-    "updatedAt": 1790185155852
+    "updatedAt": 1790518602430
   },
   "the-family-plan-2": {
     "file": "the-family-plan-2.vtt",
@@ -4202,10 +4202,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8334405144694533,
+    "translatedLineRatio": 0.8315112540192926,
     "cueCount": 1621,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185165264
+    "updatedAt": 1790518613503
   },
   "the-spongebob-movie-search-for-squarepants": {
     "file": "the-spongebob-movie-search-for-squarepants.vtt",
@@ -4214,10 +4214,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8090277777777778,
+    "translatedLineRatio": 0.8081597222222222,
     "cueCount": 1212,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185173778
+    "updatedAt": 1790518623174
   },
   "bugonia": {
     "file": "bugonia.vtt",
@@ -4226,10 +4226,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7791842475386779,
+    "translatedLineRatio": 0.7784810126582279,
     "cueCount": 1502,
     "sourceDetail": "Subt.is EN → MN (google, 78%)",
-    "updatedAt": 1790185183425
+    "updatedAt": 1790518635088
   },
   "poor-things": {
     "file": "poor-things.vtt",
@@ -4238,10 +4238,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7388743455497382,
+    "translatedLineRatio": 0.7382198952879581,
     "cueCount": 1640,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790185192798
+    "updatedAt": 1790518647939
   },
   "mission-impossible-dead-reckoning-part-one": {
     "file": "mission-impossible-dead-reckoning-part-one.vtt",
@@ -4250,10 +4250,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7715565509518477,
+    "translatedLineRatio": 0.7704367301231803,
     "cueCount": 1857,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790185202738
+    "updatedAt": 1790518661800
   },
   "the-covenant": {
     "file": "the-covenant.vtt",
@@ -4262,10 +4262,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.758340113913751,
+    "translatedLineRatio": 0.7575264442636289,
     "cueCount": 1347,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790185210211
+    "updatedAt": 1790518674674
   },
   "the-running-man": {
     "file": "the-running-man.vtt",
@@ -4274,10 +4274,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8359809372517871,
+    "translatedLineRatio": 0.835583796664019,
     "cueCount": 2697,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185222123
+    "updatedAt": 1790518695777
   },
   "evil-dead-rise": {
     "file": "evil-dead-rise.vtt",
@@ -4286,10 +4286,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8694214876033057,
+    "translatedLineRatio": 0.8710743801652893,
     "cueCount": 650,
     "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790185229163
+    "updatedAt": 1790518707068
   },
   "normal": {
     "file": "normal.vtt",
@@ -4298,10 +4298,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8221552373775434,
+    "translatedLineRatio": 0.8214016578749058,
     "cueCount": 1378,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185250794
+    "updatedAt": 1790518734060
   },
   "nobody-2": {
     "file": "nobody-2.vtt",
@@ -4310,10 +4310,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7456953642384105,
+    "translatedLineRatio": 0.743046357615894,
     "cueCount": 801,
-    "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185259087
+    "sourceDetail": "Subt.is EN → MN (google, 74%)",
+    "updatedAt": 1790518741382
   },
   "the-beekeeper": {
     "file": "the-beekeeper.vtt",
@@ -4322,10 +4322,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.823170731707317,
+    "translatedLineRatio": 0.8218157181571816,
     "cueCount": 1514,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185268124
+    "updatedAt": 1790518752424
   },
   "ready-player-one": {
     "file": "ready-player-one.vtt",
@@ -4337,7 +4337,7 @@
     "translatedLineRatio": 0.8245033112582781,
     "cueCount": 1289,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185277766
+    "updatedAt": 1790518768368
   },
   "justice-league": {
     "file": "justice-league.vtt",
@@ -4346,10 +4346,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7950138504155124,
+    "translatedLineRatio": 0.7936288088642659,
     "cueCount": 731,
-    "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185286680
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790518781094
   },
   "fantastic-beasts-and-where-to-find-them": {
     "file": "fantastic-beasts-and-where-to-find-them.vtt",
@@ -4361,7 +4361,7 @@
     "translatedLineRatio": 0.8165374677002584,
     "cueCount": 1234,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185297327
+    "updatedAt": 1790518794556
   },
   "batman-v-superman-dawn-of-justice": {
     "file": "batman-v-superman-dawn-of-justice.vtt",
@@ -4370,10 +4370,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7399741267787839,
+    "translatedLineRatio": 0.741267787839586,
     "cueCount": 787,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790185307823
+    "updatedAt": 1790518809411
   },
   "mission-impossible-fallout": {
     "file": "mission-impossible-fallout.vtt",
@@ -4382,10 +4382,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8356269113149847,
+    "translatedLineRatio": 0.8340978593272171,
     "cueCount": 1366,
-    "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185318710
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790518820334
   },
   "black-swan": {
     "file": "black-swan.vtt",
@@ -4394,10 +4394,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7983091787439613,
+    "translatedLineRatio": 0.7971014492753623,
     "cueCount": 892,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185332350
+    "updatedAt": 1790518836061
   },
   "the-good-dinosaur": {
     "file": "the-good-dinosaur.vtt",
@@ -4409,7 +4409,7 @@
     "translatedLineRatio": 0.7863167760074976,
     "cueCount": 1123,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790185359673
+    "updatedAt": 1790518869686
   },
   "over-the-hedge": {
     "file": "over-the-hedge.vtt",
@@ -4418,10 +4418,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7676282051282052,
+    "translatedLineRatio": 0.7660256410256411,
     "cueCount": 678,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790185369150
+    "updatedAt": 1790518881070
   },
   "top-gun": {
     "file": "top-gun.vtt",
@@ -4430,10 +4430,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.813362381989833,
+    "translatedLineRatio": 0.8126361655773421,
     "cueCount": 1435,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185377531
+    "updatedAt": 1790518894458
   },
   "grown-ups-2": {
     "file": "grown-ups-2.vtt",
@@ -4442,10 +4442,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7211238293444329,
+    "translatedLineRatio": 0.7200832466181062,
     "cueCount": 988,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790185407779
+    "updatedAt": 1790518926383
   },
   "tell-me-softly": {
     "file": "tell-me-softly.vtt",
@@ -4454,10 +4454,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8328625235404896,
+    "translatedLineRatio": 0.832391713747646,
     "cueCount": 2142,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185432926
+    "updatedAt": 1790518959036
   },
   "ferrari": {
     "file": "ferrari.vtt",
@@ -4466,10 +4466,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8066604995374653,
+    "translatedLineRatio": 0.8057354301572618,
     "cueCount": 1138,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185442789
+    "updatedAt": 1790518972123
   },
   "crawl": {
     "file": "crawl.vtt",
@@ -4478,10 +4478,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8505821474773609,
+    "translatedLineRatio": 0.8499353169469599,
     "cueCount": 1584,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185453998
+    "updatedAt": 1790518983215
   },
   "dark-angel": {
     "file": "dark-angel.vtt",
@@ -4490,10 +4490,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8115942028985508,
+    "translatedLineRatio": 0.8106280193236715,
     "cueCount": 1123,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185463843
+    "updatedAt": 1790518999743
   },
   "alone": {
     "file": "alone.vtt",
@@ -4502,10 +4502,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8139097744360902,
+    "translatedLineRatio": 0.8120300751879699,
     "cueCount": 571,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185473586
+    "updatedAt": 1790519008765
   },
   "wicked-for-good": {
     "file": "wicked-for-good.vtt",
@@ -4514,10 +4514,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7567964731814842,
+    "translatedLineRatio": 0.7575312270389419,
     "cueCount": 1487,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790185502020
+    "updatedAt": 1790519037063
   },
   "pressure": {
     "file": "pressure.vtt",
@@ -4526,10 +4526,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8133102852203976,
+    "translatedLineRatio": 0.8124459809853068,
     "cueCount": 1227,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185511643
+    "updatedAt": 1790519047579
   },
   "seven-snipers": {
     "file": "seven-snipers.vtt",
@@ -4538,10 +4538,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7621527777777778,
+    "translatedLineRatio": 0.765625,
     "cueCount": 601,
-    "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790185518655
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790519056795
   },
   "passenger": {
     "file": "passenger.vtt",
@@ -4550,10 +4550,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8251001335113485,
+    "translatedLineRatio": 0.822429906542056,
     "cueCount": 863,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185526009
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790519068165
   },
   "the-hunger-games-mockingjay-part-1": {
     "file": "the-hunger-games-mockingjay-part-1.vtt",
@@ -4562,10 +4562,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.795668549905838,
+    "translatedLineRatio": 0.7951977401129944,
     "cueCount": 2274,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185546961
+    "updatedAt": 1790519092612
   },
   "the-cat-in-the-hat": {
     "file": "the-cat-in-the-hat.vtt",
@@ -4574,10 +4574,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8602442333785617,
+    "translatedLineRatio": 0.858887381275441,
     "cueCount": 1762,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790185567904
+    "updatedAt": 1790519117177
   },
   "farewell-my-concubine": {
     "file": "farewell-my-concubine.vtt",
@@ -4586,10 +4586,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8482293423271501,
+    "translatedLineRatio": 0.8473861720067454,
     "cueCount": 1250,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185581197
+    "updatedAt": 1790519130070
   },
   "descendants-wicked-wonderland": {
     "file": "descendants-wicked-wonderland.vtt",
@@ -4598,10 +4598,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7479614529280949,
+    "translatedLineRatio": 0.7457375833951075,
     "cueCount": 1527,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185596899
+    "updatedAt": 1790519157075
   },
   "kingdom-of-heaven": {
     "file": "kingdom-of-heaven.vtt",
@@ -4610,10 +4610,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8371335504885994,
+    "translatedLineRatio": 0.8379478827361564,
     "cueCount": 1323,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185608858
+    "updatedAt": 1790519173455
   },
   "queen-of-spades-the-dark-rite": {
     "file": "queen-of-spades-the-dark-rite.vtt",
@@ -4625,7 +4625,7 @@
     "translatedLineRatio": 0.7441485068603713,
     "cueCount": 1246,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790185634319
+    "updatedAt": 1790519203219
   },
   "the-handmaiden": {
     "file": "the-handmaiden.vtt",
@@ -4634,10 +4634,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7489433643279797,
+    "translatedLineRatio": 0.7506339814032121,
     "cueCount": 1270,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185648721
+    "updatedAt": 1790519220602
   },
   "all-the-invisible-children": {
     "file": "all-the-invisible-children.vtt",
@@ -4646,10 +4646,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8302425106990015,
+    "translatedLineRatio": 0.8288159771754636,
     "cueCount": 743,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185660603
+    "updatedAt": 1790519242565
   },
   "the-hateful-eight": {
     "file": "the-hateful-eight.vtt",
@@ -4658,10 +4658,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8266978922716628,
+    "translatedLineRatio": 0.8252927400468384,
     "cueCount": 2231,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185692627
+    "updatedAt": 1790519260112
   },
   "migration": {
     "file": "migration.vtt",
@@ -4670,10 +4670,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8600556070435589,
+    "translatedLineRatio": 0.8572752548656163,
     "cueCount": 1158,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790185700849
+    "updatedAt": 1790519268034
   },
   "hotel-desire": {
     "file": "hotel-desire.vtt",
@@ -4682,10 +4682,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8790322580645161,
+    "translatedLineRatio": 0.876008064516129,
     "cueCount": 1134,
     "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790185710955
+    "updatedAt": 1790519280670
   },
   "princess-mononoke": {
     "file": "princess-mononoke.vtt",
@@ -4694,10 +4694,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8471872376154492,
+    "translatedLineRatio": 0.8480268681780017,
     "cueCount": 1211,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185726219
+    "updatedAt": 1790519296550
   },
   "furiosa-a-mad-max-saga": {
     "file": "furiosa-a-mad-max-saga.vtt",
@@ -4709,7 +4709,7 @@
     "translatedLineRatio": 0.767416934619507,
     "cueCount": 968,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790185746859
+    "updatedAt": 1790519318747
   },
   "wicked": {
     "file": "wicked.vtt",
@@ -4718,10 +4718,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.6953961456102784,
+    "translatedLineRatio": 0.6948608137044968,
     "cueCount": 2020,
-    "sourceDetail": "Subt.is EN → MN (google, 70%)",
-    "updatedAt": 1790185756126
+    "sourceDetail": "Subt.is EN → MN (google, 69%)",
+    "updatedAt": 1790519330576
   },
   "from-straight-a-s-to-xxx": {
     "file": "from-straight-a-s-to-xxx.vtt",
@@ -4730,10 +4730,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8409090909090909,
+    "translatedLineRatio": 0.8397727272727272,
     "cueCount": 927,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790185766854
+    "updatedAt": 1790519344113
   },
   "gladiator-ii": {
     "file": "gladiator-ii.vtt",
@@ -4745,7 +4745,7 @@
     "translatedLineRatio": 0.7481343283582089,
     "cueCount": 1154,
     "sourceDetail": "Subt.is EN → MN (google, 75%)",
-    "updatedAt": 1790185775311
+    "updatedAt": 1790519354194
   },
   "no-time-to-die": {
     "file": "no-time-to-die.vtt",
@@ -4754,10 +4754,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7678684376976597,
+    "translatedLineRatio": 0.7666034155597723,
     "cueCount": 1694,
     "sourceDetail": "Subt.is EN → MN (google, 77%)",
-    "updatedAt": 1790185784558
+    "updatedAt": 1790519367694
   },
   "hamlet": {
     "file": "hamlet.vtt",
@@ -4769,7 +4769,7 @@
     "translatedLineRatio": 0.8619572261827608,
     "cueCount": 1595,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790185793893
+    "updatedAt": 1790519377159
   },
   "beast": {
     "file": "beast.vtt",
@@ -4781,7 +4781,7 @@
     "translatedLineRatio": 0.8040089086859689,
     "cueCount": 496,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185800864
+    "updatedAt": 1790519385837
   },
   "our-fault": {
     "file": "our-fault.vtt",
@@ -4793,7 +4793,7 @@
     "translatedLineRatio": 0.8087431693989071,
     "cueCount": 1436,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185810410
+    "updatedAt": 1790519400021
   },
   "turning-red": {
     "file": "turning-red.vtt",
@@ -4802,10 +4802,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.712778429073857,
+    "translatedLineRatio": 0.7139507620164126,
     "cueCount": 856,
     "sourceDetail": "Subt.is EN → MN (google, 71%)",
-    "updatedAt": 1790185833541
+    "updatedAt": 1790519421845
   },
   "city-of-god": {
     "file": "city-of-god.vtt",
@@ -4817,7 +4817,7 @@
     "translatedLineRatio": 0.8524295140971806,
     "cueCount": 1710,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185843258
+    "updatedAt": 1790519432682
   },
   "in-the-realm-of-the-senses": {
     "file": "in-the-realm-of-the-senses.vtt",
@@ -4826,10 +4826,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8874458874458875,
+    "translatedLineRatio": 0.886964886964887,
     "cueCount": 2125,
     "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790185861039
+    "updatedAt": 1790519482845
   },
   "la-la-land": {
     "file": "la-la-land.vtt",
@@ -4838,10 +4838,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8840970350404312,
+    "translatedLineRatio": 0.8831985624438454,
     "cueCount": 1175,
     "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790185873621
+    "updatedAt": 1790519496031
   },
   "saw": {
     "file": "saw.vtt",
@@ -4850,10 +4850,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8454011741682974,
+    "translatedLineRatio": 0.8434442270058709,
     "cueCount": 1099,
-    "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185881556
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790519504780
   },
   "the-nightmare-before-christmas": {
     "file": "the-nightmare-before-christmas.vtt",
@@ -4862,10 +4862,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8199780461031834,
+    "translatedLineRatio": 0.8194291986827662,
     "cueCount": 1910,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185893336
+    "updatedAt": 1790519516333
   },
   "the-hunger-games-catching-fire": {
     "file": "the-hunger-games-catching-fire.vtt",
@@ -4874,10 +4874,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7961393596986818,
+    "translatedLineRatio": 0.7951977401129944,
     "cueCount": 2274,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185906585
+    "updatedAt": 1790519530958
   },
   "taken": {
     "file": "taken.vtt",
@@ -4889,7 +4889,7 @@
     "translatedLineRatio": 0.818639798488665,
     "cueCount": 1263,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185914482
+    "updatedAt": 1790519538861
   },
   "amelie": {
     "file": "amelie.vtt",
@@ -4898,10 +4898,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8632326820603907,
+    "translatedLineRatio": 0.866785079928952,
     "cueCount": 1159,
-    "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790185923294
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790519546061
   },
   "the-mortuary-assistant": {
     "file": "the-mortuary-assistant.vtt",
@@ -4910,10 +4910,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7987321711568938,
+    "translatedLineRatio": 0.7971473851030111,
     "cueCount": 695,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790185931354
+    "updatedAt": 1790519554779
   },
   "transformers-one": {
     "file": "transformers-one.vtt",
@@ -4922,10 +4922,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8861842105263158,
+    "translatedLineRatio": 0.8848684210526315,
     "cueCount": 1559,
-    "sourceDetail": "Subt.is EN → MN (google, 89%)",
-    "updatedAt": 1790185941044
+    "sourceDetail": "Subt.is EN → MN (google, 88%)",
+    "updatedAt": 1790519563719
   },
   "fifty-shades-freed": {
     "file": "fifty-shades-freed.vtt",
@@ -4934,10 +4934,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.816722972972973,
+    "translatedLineRatio": 0.8158783783783784,
     "cueCount": 1281,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790185954999
+    "updatedAt": 1790519578418
   },
   "halloween": {
     "file": "halloween.vtt",
@@ -4946,10 +4946,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8541165142031777,
+    "translatedLineRatio": 0.8531535869041887,
     "cueCount": 2137,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790185966394
+    "updatedAt": 1790519589448
   },
   "predator": {
     "file": "predator.vtt",
@@ -4961,7 +4961,7 @@
     "translatedLineRatio": 0.8292682926829268,
     "cueCount": 422,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790185973138
+    "updatedAt": 1790519596932
   },
   "kingdom-of-the-planet-of-the-apes": {
     "file": "kingdom-of-the-planet-of-the-apes.vtt",
@@ -4973,7 +4973,7 @@
     "translatedLineRatio": 0.7284533648170012,
     "cueCount": 951,
     "sourceDetail": "Subt.is EN → MN (google, 73%)",
-    "updatedAt": 1790185981157
+    "updatedAt": 1790519604619
   },
   "charlie-and-the-chocolate-factory": {
     "file": "charlie-and-the-chocolate-factory.vtt",
@@ -4985,7 +4985,7 @@
     "translatedLineRatio": 0.8101659751037344,
     "cueCount": 983,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790185992008
+    "updatedAt": 1790519617391
   },
   "kingsman-the-secret-service": {
     "file": "kingsman-the-secret-service.vtt",
@@ -4994,10 +4994,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.863754889178618,
+    "translatedLineRatio": 0.863102998696219,
     "cueCount": 1598,
     "sourceDetail": "Subt.is EN → MN (google, 86%)",
-    "updatedAt": 1790186001430
+    "updatedAt": 1790519626937
   },
   "your-fault": {
     "file": "your-fault.vtt",
@@ -5006,10 +5006,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8337707786526685,
+    "translatedLineRatio": 0.8328958880139983,
     "cueCount": 1214,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186011046
+    "updatedAt": 1790519635392
   },
   "infernal-affairs": {
     "file": "infernal-affairs.vtt",
@@ -5018,10 +5018,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8260019550342131,
+    "translatedLineRatio": 0.8250244379276638,
     "cueCount": 1098,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186020596
+    "updatedAt": 1790519644381
   },
   "the-legacy": {
     "file": "the-legacy.vtt",
@@ -5030,10 +5030,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.806782334384858,
+    "translatedLineRatio": 0.805993690851735,
     "cueCount": 1276,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186030595
+    "updatedAt": 1790519655962
   },
   "terminator-genisys": {
     "file": "terminator-genisys.vtt",
@@ -5042,10 +5042,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8770343580470162,
+    "translatedLineRatio": 0.8734177215189873,
     "cueCount": 562,
-    "sourceDetail": "Subt.is EN → MN (google, 88%)",
-    "updatedAt": 1790186040053
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790519666446
   },
   "alice-in-wonderland": {
     "file": "alice-in-wonderland.vtt",
@@ -5054,10 +5054,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7965970610982211,
+    "translatedLineRatio": 0.7958236658932715,
     "cueCount": 1378,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790186050626
+    "updatedAt": 1790519677728
   },
   "call-me-by-your-name": {
     "file": "call-me-by-your-name.vtt",
@@ -5066,10 +5066,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8465553235908142,
+    "translatedLineRatio": 0.8455114822546973,
     "cueCount": 1025,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790186063448
+    "updatedAt": 1790519690122
   },
   "casino-royale": {
     "file": "casino-royale.vtt",
@@ -5078,10 +5078,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8066132264529058,
+    "translatedLineRatio": 0.8036072144288577,
     "cueCount": 1065,
-    "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186071522
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790519698448
   },
   "elio": {
     "file": "elio.vtt",
@@ -5090,10 +5090,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.818105616093881,
+    "translatedLineRatio": 0.8172673931265717,
     "cueCount": 1286,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790186080021
+    "updatedAt": 1790519708397
   },
   "eternal-sunshine-of-the-spotless-mind": {
     "file": "eternal-sunshine-of-the-spotless-mind.vtt",
@@ -5102,10 +5102,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8270622286541245,
+    "translatedLineRatio": 0.8248914616497829,
     "cueCount": 1438,
-    "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186089051
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790519717918
   },
   "godzilla-minus-one": {
     "file": "godzilla-minus-one.vtt",
@@ -5114,10 +5114,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8020434227330779,
+    "translatedLineRatio": 0.7994891443167306,
     "cueCount": 809,
     "sourceDetail": "Subt.is EN → MN (google, 80%)",
-    "updatedAt": 1790186097754
+    "updatedAt": 1790519730821
   },
   "psycho": {
     "file": "psycho.vtt",
@@ -5129,7 +5129,7 @@
     "translatedLineRatio": 0.849566055930569,
     "cueCount": 1054,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790186109920
+    "updatedAt": 1790519747425
   },
   "my-neighbor-totoro": {
     "file": "my-neighbor-totoro.vtt",
@@ -5141,7 +5141,7 @@
     "translatedLineRatio": 0.794228356336261,
     "cueCount": 1687,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790186122256
+    "updatedAt": 1790519758428
   },
   "smile-2": {
     "file": "smile-2.vtt",
@@ -5150,10 +5150,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8474025974025974,
+    "translatedLineRatio": 0.8449675324675324,
     "cueCount": 1337,
-    "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790186131781
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790519765659
   },
   "the-passenger": {
     "file": "the-passenger.vtt",
@@ -5162,10 +5162,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8534031413612565,
+    "translatedLineRatio": 0.8525305410122164,
     "cueCount": 1218,
     "sourceDetail": "Subt.is EN → MN (google, 85%)",
-    "updatedAt": 1790186145511
+    "updatedAt": 1790519778477
   },
   "hercules": {
     "file": "hercules.vtt",
@@ -5174,10 +5174,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8119233498935415,
+    "translatedLineRatio": 0.8105039034776437,
     "cueCount": 1463,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186158844
+    "updatedAt": 1790519786506
   },
   "the-bad-guys": {
     "file": "the-bad-guys.vtt",
@@ -5186,10 +5186,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8118313404657017,
+    "translatedLineRatio": 0.8200125865324103,
     "cueCount": 1641,
-    "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186174000
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790519797099
   },
   "hotel-transylvania": {
     "file": "hotel-transylvania.vtt",
@@ -5201,7 +5201,7 @@
     "translatedLineRatio": 0.8379828326180258,
     "cueCount": 1028,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790186185037
+    "updatedAt": 1790519806303
   },
   "high-strung": {
     "file": "high-strung.vtt",
@@ -5210,10 +5210,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8375586854460094,
+    "translatedLineRatio": 0.8356807511737089,
     "cueCount": 1125,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790186203395
+    "updatedAt": 1790519823183
   },
   "return-to-silent-hill": {
     "file": "return-to-silent-hill.vtt",
@@ -5225,7 +5225,7 @@
     "translatedLineRatio": 0.7579365079365079,
     "cueCount": 830,
     "sourceDetail": "Subt.is EN → MN (google, 76%)",
-    "updatedAt": 1790186221921
+    "updatedAt": 1790519840336
   },
   "sing-2": {
     "file": "sing-2.vtt",
@@ -5234,10 +5234,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.7234891676168758,
+    "translatedLineRatio": 0.7212086659064995,
     "cueCount": 1946,
     "sourceDetail": "Subt.is EN → MN (google, 72%)",
-    "updatedAt": 1790186235106
+    "updatedAt": 1790519850613
   },
   "heads-of-state": {
     "file": "heads-of-state.vtt",
@@ -5246,10 +5246,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.786908077994429,
+    "translatedLineRatio": 0.7855153203342619,
     "cueCount": 1502,
     "sourceDetail": "Subt.is EN → MN (google, 79%)",
-    "updatedAt": 1790186251847
+    "updatedAt": 1790519863981
   },
   "one-flew-over-the-cuckoo-s-nest": {
     "file": "one-flew-over-the-cuckoo-s-nest.vtt",
@@ -5261,7 +5261,7 @@
     "translatedLineRatio": 0.739413680781759,
     "cueCount": 657,
     "sourceDetail": "Subt.is EN → MN (google, 74%)",
-    "updatedAt": 1790186264408
+    "updatedAt": 1790519883044
   },
   "the-blind-side": {
     "file": "the-blind-side.vtt",
@@ -5273,7 +5273,7 @@
     "translatedLineRatio": 0.8075601374570447,
     "cueCount": 908,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186277911
+    "updatedAt": 1790519894536
   },
   "civil-war": {
     "file": "civil-war.vtt",
@@ -5282,10 +5282,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8672768878718535,
+    "translatedLineRatio": 0.8638443935926774,
     "cueCount": 929,
-    "sourceDetail": "Subt.is EN → MN (google, 87%)",
-    "updatedAt": 1790186289096
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790519902090
   },
   "the-little-mermaid": {
     "file": "the-little-mermaid.vtt",
@@ -5294,10 +5294,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.71,
+    "translatedLineRatio": 0.7082352941176471,
     "cueCount": 1851,
     "sourceDetail": "Subt.is EN → MN (google, 71%)",
-    "updatedAt": 1790186312909
+    "updatedAt": 1790519920641
   },
   "the-passion-of-the-christ": {
     "file": "the-passion-of-the-christ.vtt",
@@ -5309,7 +5309,7 @@
     "translatedLineRatio": 0.8164251207729468,
     "cueCount": 209,
     "sourceDetail": "Subt.is EN → MN (google, 82%)",
-    "updatedAt": 1790186332392
+    "updatedAt": 1790519936566
   },
   "now-you-see-me": {
     "file": "now-you-see-me.vtt",
@@ -5318,10 +5318,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8289070480081716,
+    "translatedLineRatio": 0.8283963227783453,
     "cueCount": 2017,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186341248
+    "updatedAt": 1790519945846
   },
   "transformers-rise-of-the-beasts": {
     "file": "transformers-rise-of-the-beasts.vtt",
@@ -5330,10 +5330,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8389121338912134,
+    "translatedLineRatio": 0.8382147838214784,
     "cueCount": 1510,
     "sourceDetail": "Subt.is EN → MN (google, 84%)",
-    "updatedAt": 1790186353305
+    "updatedAt": 1790519956989
   },
   "ice-age-dawn-of-the-dinosaurs": {
     "file": "ice-age-dawn-of-the-dinosaurs.vtt",
@@ -5342,10 +5342,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8338249754178958,
+    "translatedLineRatio": 0.8328416912487709,
     "cueCount": 1114,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186363384
+    "updatedAt": 1790519973854
   },
   "venom": {
     "file": "venom.vtt",
@@ -5354,10 +5354,10 @@
     "generated": true,
     "translated": true,
     "partial": true,
-    "translatedLineRatio": 0.8146341463414634,
+    "translatedLineRatio": 0.8136585365853658,
     "cueCount": 1127,
     "sourceDetail": "Subt.is EN → MN (google, 81%)",
-    "updatedAt": 1790186370546
+    "updatedAt": 1790519983002
   },
   "rise-of-the-planet-of-the-apes": {
     "file": "rise-of-the-planet-of-the-apes.vtt",
@@ -5369,7 +5369,7 @@
     "translatedLineRatio": 0.8275488069414316,
     "cueCount": 964,
     "sourceDetail": "Subt.is EN → MN (google, 83%)",
-    "updatedAt": 1790186384587
+    "updatedAt": 1790519993799
   },
   "the-whale": {
     "file": "the-whale.vtt",
@@ -5761,5 +5761,1013 @@
     "cueCount": 1166,
     "sourceDetail": "OpenSubtitles EN → MN (google, 100%)",
     "updatedAt": 1790192482734
+  },
+  "harry-potter-and-the-prisoner-of-azkaban": {
+    "file": "harry-potter-and-the-prisoner-of-azkaban.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8465011286681715,
+    "cueCount": 935,
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790508387309
+  },
+  "inside-out": {
+    "file": "inside-out.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": false,
+    "translatedLineRatio": 0.9528535980148883,
+    "cueCount": 1251,
+    "sourceDetail": "Subt.is EN → MN (google, 95%)",
+    "updatedAt": 1790508415115
+  },
+  "kill-bill-vol-1": {
+    "file": "kill-bill-vol-1.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.760043431053203,
+    "cueCount": 978,
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790508436200
+  },
+  "the-father": {
+    "file": "the-father.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8631484794275492,
+    "cueCount": 1235,
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790509182083
+  },
+  "jai-bhim": {
+    "file": "jai-bhim.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7949070887818307,
+    "cueCount": 1485,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790509200334
+  },
+  "coda": {
+    "file": "coda.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.85553772070626,
+    "cueCount": 1273,
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790509216555
+  },
+  "don-t-look-up": {
+    "file": "don-t-look-up.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.809227579056506,
+    "cueCount": 1993,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790520004213
+  },
+  "bullet-train": {
+    "file": "bullet-train.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7342281879194631,
+    "cueCount": 805,
+    "sourceDetail": "Subt.is EN → MN (google, 73%)",
+    "updatedAt": 1790520013323
+  },
+  "nobody": {
+    "file": "nobody.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.743046357615894,
+    "cueCount": 801,
+    "sourceDetail": "Subt.is EN → MN (google, 74%)",
+    "updatedAt": 1790520035263
+  },
+  "red-notice": {
+    "file": "red-notice.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8931643277501131,
+    "cueCount": 2326,
+    "sourceDetail": "Subt.is EN → MN (google, 89%)",
+    "updatedAt": 1790520046783
+  },
+  "all-quiet-on-the-western-front": {
+    "file": "all-quiet-on-the-western-front.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8106060606060606,
+    "cueCount": 833,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790520064210
+  },
+  "a-quiet-place-part-ii": {
+    "file": "a-quiet-place-part-ii.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7114093959731543,
+    "cueCount": 158,
+    "sourceDetail": "Subt.is EN → MN (google, 71%)",
+    "updatedAt": 1790520071371
+  },
+  "wonder-woman-1984": {
+    "file": "wonder-woman-1984.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8222910216718267,
+    "cueCount": 1729,
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790520085100
+  },
+  "anora": {
+    "file": "anora.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8455361360415683,
+    "cueCount": 2283,
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790520095380
+  },
+  "the-matrix-resurrections": {
+    "file": "the-matrix-resurrections.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.837730870712401,
+    "cueCount": 1579,
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790520111568
+  },
+  "the-northman": {
+    "file": "the-northman.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7869249394673123,
+    "cueCount": 861,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520121531
+  },
+  "encanto": {
+    "file": "encanto.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8011049723756906,
+    "cueCount": 577,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790520129920
+  },
+  "extraction": {
+    "file": "extraction.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7872611464968153,
+    "cueCount": 833,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520152165
+  },
+  "the-invisible-man": {
+    "file": "the-invisible-man.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.750906892382104,
+    "cueCount": 892,
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790520160540
+  },
+  "conclave": {
+    "file": "conclave.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7987117552334944,
+    "cueCount": 1294,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790520172724
+  },
+  "birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn": {
+    "file": "birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7470634299138607,
+    "cueCount": 1304,
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790520187404
+  },
+  "ant-man-and-the-wasp-quantumania": {
+    "file": "ant-man-and-the-wasp-quantumania.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7456201822004205,
+    "cueCount": 1538,
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790520195948
+  },
+  "the-gray-man": {
+    "file": "the-gray-man.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.78,
+    "cueCount": 915,
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790520207811
+  },
+  "dungeons-and-dragons-honor-among-thieves": {
+    "file": "dungeons-and-dragons-honor-among-thieves.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7943495400788436,
+    "cueCount": 1575,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520216358
+  },
+  "prey": {
+    "file": "prey.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8095238095238095,
+    "cueCount": 374,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790520223944
+  },
+  "nosferatu": {
+    "file": "nosferatu.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.769568397951719,
+    "cueCount": 1416,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790520231032
+  },
+  "the-holdovers": {
+    "file": "the-holdovers.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.843558282208589,
+    "cueCount": 1664,
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790520237965
+  },
+  "barbarian": {
+    "file": "barbarian.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.826868495742668,
+    "cueCount": 1192,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790520247091
+  },
+  "the-black-phone": {
+    "file": "the-black-phone.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7856450048496605,
+    "cueCount": 1144,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520254098
+  },
+  "saltburn": {
+    "file": "saltburn.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7856640899508082,
+    "cueCount": 1527,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520263533
+  },
+  "godzilla-vs-kong": {
+    "file": "godzilla-vs-kong.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7994891443167306,
+    "cueCount": 809,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790520273108
+  },
+  "elvis": {
+    "file": "elvis.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7149355572403336,
+    "cueCount": 1589,
+    "sourceDetail": "Subt.is EN → MN (google, 71%)",
+    "updatedAt": 1790520822309
+  },
+  "mickey-17": {
+    "file": "mickey-17.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7895613548028872,
+    "cueCount": 1904,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520847032
+  },
+  "the-adam-project": {
+    "file": "the-adam-project.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.6938136256851997,
+    "cueCount": 1363,
+    "sourceDetail": "Subt.is EN → MN (google, 69%)",
+    "updatedAt": 1790520869417
+  },
+  "wake-up-dead-man": {
+    "file": "wake-up-dead-man.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7892196299275945,
+    "cueCount": 1326,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790520887748
+  },
+  "promising-young-woman": {
+    "file": "promising-young-woman.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": false,
+    "translatedLineRatio": 0.9155099577549789,
+    "cueCount": 1813,
+    "sourceDetail": "Subt.is EN → MN (google, 92%)",
+    "updatedAt": 1790520905093
+  },
+  "jurassic-world-dominion": {
+    "file": "jurassic-world-dominion.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8278481012658228,
+    "cueCount": 1695,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790520969010
+  },
+  "smile": {
+    "file": "smile.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8449675324675324,
+    "cueCount": 1337,
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790520982008
+  },
+  "leave-the-world-behind": {
+    "file": "leave-the-world-behind.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8037318590186593,
+    "cueCount": 1491,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790521002413
+  },
+  "the-power-of-the-dog": {
+    "file": "the-power-of-the-dog.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.790519877675841,
+    "cueCount": 1308,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790521024660
+  },
+  "ghostbusters-afterlife": {
+    "file": "ghostbusters-afterlife.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8213141025641025,
+    "cueCount": 1298,
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790521038906
+  },
+  "heretic": {
+    "file": "heretic.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8039538714991763,
+    "cueCount": 1257,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790521053868
+  },
+  "indiana-jones-and-the-dial-of-destiny": {
+    "file": "indiana-jones-and-the-dial-of-destiny.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7757875231624459,
+    "cueCount": 1748,
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790521087707
+  },
+  "longlegs": {
+    "file": "longlegs.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7738927738927739,
+    "cueCount": 918,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790521127201
+  },
+  "another-round": {
+    "file": "another-round.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7762656505171476,
+    "cueCount": 1901,
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790521156552
+  },
+  "jungle-cruise": {
+    "file": "jungle-cruise.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8532110091743119,
+    "cueCount": 1512,
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790521172700
+  },
+  "the-killer": {
+    "file": "the-killer.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7327478042659975,
+    "cueCount": 835,
+    "sourceDetail": "Subt.is EN → MN (google, 73%)",
+    "updatedAt": 1790521194388
+  },
+  "talk-to-me": {
+    "file": "talk-to-me.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8274111675126904,
+    "cueCount": 1095,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790521215703
+  },
+  "mortal-kombat": {
+    "file": "mortal-kombat.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8415458937198068,
+    "cueCount": 1065,
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790521251155
+  },
+  "no-hard-feelings": {
+    "file": "no-hard-feelings.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8112244897959183,
+    "cueCount": 1691,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790521282144
+  },
+  "nomadland": {
+    "file": "nomadland.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7653457653457654,
+    "cueCount": 1344,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790521301217
+  },
+  "palm-springs": {
+    "file": "palm-springs.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8148951554591468,
+    "cueCount": 1490,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790521329563
+  },
+  "a-man-called-otto": {
+    "file": "a-man-called-otto.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8077939233817701,
+    "cueCount": 1628,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790521347989
+  },
+  "death-on-the-nile": {
+    "file": "death-on-the-nile.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8354755784061697,
+    "cueCount": 815,
+    "sourceDetail": "Subt.is EN → MN (google, 84%)",
+    "updatedAt": 1790521368040
+  },
+  "the-old-guard": {
+    "file": "the-old-guard.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.727390180878553,
+    "cueCount": 812,
+    "sourceDetail": "Subt.is EN → MN (google, 73%)",
+    "updatedAt": 1790521386708
+  },
+  "the-last-duel": {
+    "file": "the-last-duel.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.788785046728972,
+    "cueCount": 586,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790521408628
+  },
+  "babylon": {
+    "file": "babylon.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8910468972051161,
+    "cueCount": 2233,
+    "sourceDetail": "Subt.is EN → MN (google, 89%)",
+    "updatedAt": 1790521433121
+  },
+  "the-trial-of-the-chicago-7": {
+    "file": "the-trial-of-the-chicago-7.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8483483483483484,
+    "cueCount": 680,
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790521455647
+  },
+  "the-creator": {
+    "file": "the-creator.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7632999228989977,
+    "cueCount": 1418,
+    "sourceDetail": "Subt.is EN → MN (google, 76%)",
+    "updatedAt": 1790521471489
+  },
+  "last-night-in-soho": {
+    "file": "last-night-in-soho.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.788785046728972,
+    "cueCount": 586,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790521491572
+  },
+  "twisters": {
+    "file": "twisters.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.798636926889715,
+    "cueCount": 1749,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790521514203
+  },
+  "bad-boys-for-life": {
+    "file": "bad-boys-for-life.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8605150214592274,
+    "cueCount": 1490,
+    "sourceDetail": "Subt.is EN → MN (google, 86%)",
+    "updatedAt": 1790521539301
+  },
+  "carry-on": {
+    "file": "carry-on.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7850140056022409,
+    "cueCount": 1478,
+    "sourceDetail": "Subt.is EN → MN (google, 79%)",
+    "updatedAt": 1790521560430
+  },
+  "air": {
+    "file": "air.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7846309403437816,
+    "cueCount": 1065,
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790521578460
+  },
+  "the-king-s-man": {
+    "file": "the-king-s-man.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7729430379746836,
+    "cueCount": 1325,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790521595561
+  },
+  "wonka": {
+    "file": "wonka.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7192622950819673,
+    "cueCount": 2107,
+    "sourceDetail": "Subt.is EN → MN (google, 72%)",
+    "updatedAt": 1790521626246
+  },
+  "sonic-the-hedgehog": {
+    "file": "sonic-the-hedgehog.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7979397781299524,
+    "cueCount": 1304,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790521650340
+  },
+  "fantastic-beasts-the-secrets-of-dumbledore": {
+    "file": "fantastic-beasts-the-secrets-of-dumbledore.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8165374677002584,
+    "cueCount": 1234,
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790521660659
+  },
+  "king-richard": {
+    "file": "king-richard.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7729430379746836,
+    "cueCount": 1325,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790521675701
+  },
+  "the-zone-of-interest": {
+    "file": "the-zone-of-interest.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7476255088195387,
+    "cueCount": 754,
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790521693026
+  },
+  "scream": {
+    "file": "scream.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.874914089347079,
+    "cueCount": 1549,
+    "sourceDetail": "Subt.is EN → MN (google, 87%)",
+    "updatedAt": 1790521713535
+  },
+  "companion": {
+    "file": "companion.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8118049615055604,
+    "cueCount": 1295,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790521730487
+  },
+  "napoleon": {
+    "file": "napoleon.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8260869565217391,
+    "cueCount": 1280,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790521745635
+  },
+  "the-hunger-games-the-ballad-of-songbirds-and-snakes": {
+    "file": "the-hunger-games-the-ballad-of-songbirds-and-snakes.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7961393596986818,
+    "cueCount": 2274,
+    "sourceDetail": "Subt.is EN → MN (google, 80%)",
+    "updatedAt": 1790521761472
+  },
+  "raya-and-the-last-dragon": {
+    "file": "raya-and-the-last-dragon.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8252611585944919,
+    "cueCount": 1099,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790521779451
+  },
+  "onward": {
+    "file": "onward.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8149606299212598,
+    "cueCount": 1389,
+    "sourceDetail": "Subt.is EN → MN (google, 81%)",
+    "updatedAt": 1790521799042
+  },
+  "joker-folie-a-deux": {
+    "file": "joker-folie-a-deux.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.711051930758988,
+    "cueCount": 1659,
+    "sourceDetail": "Subt.is EN → MN (google, 71%)",
+    "updatedAt": 1790521811772
+  },
+  "old": {
+    "file": "old.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8507183010618363,
+    "cueCount": 1671,
+    "sourceDetail": "Subt.is EN → MN (google, 85%)",
+    "updatedAt": 1790521832062
+  },
+  "m3gan": {
+    "file": "m3gan.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.826271186440678,
+    "cueCount": 1234,
+    "sourceDetail": "Subt.is EN → MN (google, 83%)",
+    "updatedAt": 1790521856291
+  },
+  "challengers": {
+    "file": "challengers.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7657587548638133,
+    "cueCount": 1387,
+    "sourceDetail": "Subt.is EN → MN (google, 77%)",
+    "updatedAt": 1790521872688
+  },
+  "nightmare-alley": {
+    "file": "nightmare-alley.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8205268935236004,
+    "cueCount": 1910,
+    "sourceDetail": "Subt.is EN → MN (google, 82%)",
+    "updatedAt": 1790521886702
+  },
+  "a-quiet-place-day-one": {
+    "file": "a-quiet-place-day-one.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7818181818181819,
+    "cueCount": 302,
+    "sourceDetail": "Subt.is EN → MN (google, 78%)",
+    "updatedAt": 1790521908361
+  },
+  "the-unbearable-weight-of-massive-talent": {
+    "file": "the-unbearable-weight-of-massive-talent.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.8802721088435375,
+    "cueCount": 1541,
+    "sourceDetail": "Subt.is EN → MN (google, 88%)",
+    "updatedAt": 1790521929629
+  },
+  "don-t-worry-darling": {
+    "file": "don-t-worry-darling.vtt",
+    "source": "subtis",
+    "language": "en",
+    "generated": true,
+    "translated": true,
+    "partial": true,
+    "translatedLineRatio": 0.7543859649122807,
+    "cueCount": 529,
+    "sourceDetail": "Subt.is EN → MN (google, 75%)",
+    "updatedAt": 1790521948915
   }
 }
