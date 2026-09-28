@@ -67,20 +67,23 @@ function firstMediaUrl(masterText, base) {
   return null
 }
 
-// Deep validation: master must be clean AND its first media playlist must be
-// clean (no EXT-X-KEY, no dlproxy). Catches AES-at-media-level sources that
-// pass a master-only check but die in the player.
+// Deep validation: drop a candidate ONLY on positive evidence it cannot play
+// (fetched manifest contains EXT-X-KEY). Network failures / unparsable
+// responses keep the candidate (benefit of the doubt) — the player auto-skips
+// anything that still fails at play time, and tabs always match the list.
 async function deepPlain(url) {
-  if (!url || url.includes('api.dlproxy.com')) return null
-  const master = await plainManifest(url)
-  if (!master) return null
+  if (!url) return null
+  const master = await fetchText(url)
+  if (!master) return true // inconclusive (network) — keep, player auto-skips if dead
+  if (!master.includes('#EXTM3U')) return null
+  if (master.includes('#EXT-X-KEY')) return null
   const mediaUrl = firstMediaUrl(master, url)
-  if (!mediaUrl) return master // already a media playlist and clean
+  if (!mediaUrl) return true // already a media playlist and clean
   const media = await fetchText(mediaUrl)
-  if (!media || !media.includes('#EXTM3U')) return null
+  if (!media) return true // inconclusive — keep
+  if (!media.includes('#EXTM3U')) return null
   if (media.includes('#EXT-X-KEY')) return null
-  if (media.includes('api.dlproxy.com')) return null
-  return master
+  return true
 }
 
 // Dedupes by URL, keeps the highest-quality candidates first.
