@@ -66,14 +66,12 @@ async function getClient() {
         await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
         if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
       } else {
-        // Remote DB is self-healing for a fresh namespace: bootstrap tables +
-        // seeds when empty (data itself gets copied by scripts/turso-migrate.mjs).
-        const probe = await client.execute(`SELECT name FROM sqlite_master WHERE type='table' AND name='users' LIMIT 1`)
-        if (!probe.rows.length) {
-          if (!SCHEMA_FILE) throw new Error(`Missing schema file (tried: ${SCHEMA_CANDIDATES.join(', ')})`)
-          await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
-          if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
-        }
+        // Remote schema is fully idempotent (IF NOT EXISTS / OR IGNORE), so
+        // re-apply on every boot: this heals tables added after the DB was
+        // first created (e.g. favorites, webhook_events).
+        if (!SCHEMA_FILE) throw new Error('Missing schema file for remote bootstrap')
+        await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
+        if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
       }
       await ensureFlexiblePlans(client)
       _client = client
