@@ -678,8 +678,14 @@ export async function redeemReward({ userId, code, ip = null }) {
   const reward = await getRewardByCode(code)
   if (!reward) return { error: { code: 'UNKNOWN_REWARD' } }
   if (!reward.isActive) return { error: { code: 'REWARD_INACTIVE' } }
-  const already = await qOne('SELECT id FROM user_rewards WHERE user_id = ? AND reward_id = ?', [userId, reward.id])
-  if (already) return { error: { code: 'REWARD_OWNED' } }
+  // VIP passes (feature + days) are consumable: each purchase spends XP again
+  // and stacks VIP time, so ownership never blocks re-buy. Cosmetics stay
+  // one-time.
+  const isVipPass = reward.type === 'feature' && (reward.days || 0) > 0
+  if (!isVipPass) {
+    const already = await qOne('SELECT id FROM user_rewards WHERE user_id = ? AND reward_id = ?', [userId, reward.id])
+    if (already) return { error: { code: 'REWARD_OWNED' } }
+  }
   const balance = (await qOne('SELECT xp FROM xp_accounts WHERE user_id = ?', [userId]))?.xp ?? 0
   if (balance < reward.xpPrice) {
     return { error: { code: 'XP_INSUFFICIENT', balance, needed: reward.xpPrice } }
@@ -701,8 +707,12 @@ export async function redeemReward({ userId, code, ip = null }) {
       args: [crypto.randomUUID(), userId, reward.id, reward.xpPrice],
     },
     {
-      sql: `INSERT INTO user_rewards (id, user_id, reward_id, purchased_at, activated)
-            VALUES (?, ?, ?, datetime('now'), 0)`,
+      sql: isVipPass
+        ? `INSERT INTO user_rewards (id, user_id, reward_id, purchased_at, activated)
+           VALUES (?, ?, ?, datetime('now'), 0)
+           ON CONFLICT(user_id, reward_id) DO UPDATE SET purchased_at = datetime('now'), activated = 0`
+        : `INSERT INTO user_rewards (id, user_id, reward_id, purchased_at, activated)
+           VALUES (?, ?, ?, datetime('now'), 0)`,
       args: [crypto.randomUUID(), userId, reward.id],
     },
     {

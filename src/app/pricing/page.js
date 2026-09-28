@@ -297,21 +297,24 @@ export default function PricingPage() {
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {rewards.map((r) => {
               const owned = myRewards.some((m) => m.code === r.code)
-              const tooPoor = me && !owned && me.xp < r.xpPrice
+              // VIP passes are consumable — re-buyable after expiry; cosmetics stay one-time.
+              const reusable = r.type === 'feature' && (r.days || 0) > 0
+              const locked = owned && !reusable
+              const tooPoor = me && !locked && me.xp < r.xpPrice
               return (
-                <div key={r.code} className={`rounded-2xl border p-5 ${owned ? 'border-emerald-700 bg-emerald-950/30' : 'border-slate-800 bg-slate-900'}`}>
+                <div key={r.code} className={`rounded-2xl border p-5 ${owned && !reusable ? 'border-emerald-700 bg-emerald-950/30' : 'border-slate-800 bg-slate-900'}`}>
                   <div className="text-xs uppercase tracking-wider text-amber-300">{r.type}</div>
                   <div className="mt-1 font-semibold">{r.name}</div>
                   <div className="mt-1 text-sm text-slate-400">{r.description}</div>
-                  {r.days > 0 && <div className="mt-1 text-sm text-gold-soft">VIP +{r.days} days</div>}
+                  {r.days > 0 && <div className="mt-1 text-sm text-gold-soft">VIP +{r.days} days{owned ? ' · дахин авч сунгаж болно' : ''}</div>}
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-amber-300 font-semibold">◆ {r.xpPrice} XP</span>
                     <button
-                      disabled={busy === `redeem:${r.code}` || owned || tooPoor}
+                      disabled={busy === `redeem:${r.code}` || locked || tooPoor}
                       onClick={() => redeem(r.code)}
-                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all disabled:opacity-40 ${owned ? 'bg-emerald-700 text-white' : 'bg-amber-400 text-slate-900 hover:bg-amber-300'}`}
+                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all disabled:opacity-40 ${locked ? 'bg-emerald-700 text-white' : 'bg-amber-400 text-slate-900 hover:bg-amber-300'}`}
                     >
-                      {owned ? 'Owned ✓' : 'Redeem'}
+                      {locked ? 'Owned ✓' : owned ? 'Сунгах' : 'Redeem'}
                     </button>
                   </div>
                 </div>

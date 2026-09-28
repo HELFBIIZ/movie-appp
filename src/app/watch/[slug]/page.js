@@ -42,9 +42,24 @@ export default function WatchPage() {
   const [subtitleUrl, setSubtitleUrl] = useState(null)
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian')
   const [source, setSource] = useState('p1')
+  const [playerCount, setPlayerCount] = useState(1)
 
-  const activeVariant = PLAYER_TABS.find((t) => t.id === source)?.variant ?? 0
-  const maxVariant = PLAYER_TABS.reduce((m, t) => Math.max(m, t.variant), 0)
+  // Only tabs with a real validated candidate are shown — dead players removed.
+  const visibleTabs = PLAYER_TABS.slice(0, Math.max(1, Math.min(playerCount, PLAYER_TABS.length)))
+  const activeVariant = visibleTabs.find((t) => t.id === source)?.variant ?? 0
+  const maxVariant = visibleTabs.reduce((m, t) => Math.max(m, t.variant), 0)
+
+  const handleStreamInfo = useCallback((info) => {
+    if (info && Number.isFinite(info.total) && info.total > 0) {
+      setPlayerCount((prev) => (prev === info.total ? prev : info.total))
+    }
+  }, [])
+
+  // If the available player list shrinks (or title/episode changes), fall back
+  // to the first working player instead of a stale tab.
+  useEffect(() => {
+    if (!visibleTabs.some((t) => t.id === source)) setSource('p1')
+  }, [visibleTabs, source])
 
   // If the active stream is AES-locked (keyLoadError) or otherwise unusable,
   // auto-jump to the next distinct variant instead of showing a blank screen.
@@ -134,7 +149,7 @@ export default function WatchPage() {
               <div className="overflow-hidden rounded-2xl border border-slate-800 bg-black shadow-lg transition-all hover:shadow-xl animate-scale-in">
                 <div className="flex items-center gap-1 border-b border-slate-800 bg-slate-900/60 px-4 py-2.5 animate-fade-in-down">
                   <span className="mr-2 text-xs uppercase tracking-wider text-slate-500">Player</span>
-                  {PLAYER_TABS.map((tab) => (
+                  {visibleTabs.map((tab) => (
                     <button
                       key={tab.id}
                       type="button"
@@ -166,6 +181,7 @@ export default function WatchPage() {
                       subtitleUrl={subtitleUrl}
                       subtitleLabel={subtitleLabel}
                       onKeyLoadError={fallbackOnKeyError}
+                      onStreamInfo={handleStreamInfo}
                     />
                 </div>
 {subtitleUrl && (

@@ -32,13 +32,55 @@ function qualityRank(q) {
 // requires a signed browser proof, so hls.js is always cut at keyLoadError on
 // them. Skip those regardless of which provider handed them over.
 async function plainManifest(url) {
-  const r = await fetch(url, { headers: { 'User-Agent': UA } })
-  if (!r.ok) return null
-  const text = await r.text()
-  if (!text.includes('#EXTM3U')) return null
+  const text = await fetchText(url)
+  if (!text || !text.includes('#EXTM3U')) return null
   if (text.includes('#EXT-X-KEY')) return null
   if (text.includes('api.dlproxy.com')) return null
   return text
+}
+
+async function fetchText(url, ms = 9000) {
+  try {
+    const r = await fetch(url, {
+      headers: { 'User-Agent': UA },
+      signal: AbortSignal.timeout(ms),
+    })
+    if (!r.ok) return null
+    return await r.text()
+  } catch {
+    return null
+  }
+}
+
+function firstMediaUrl(masterText, base) {
+  const lines = masterText.split('\n').map((l) => l.trim()).filter(Boolean)
+  // media playlist itself (has segments, no nested playlists)
+  if (lines.some((l) => l.startsWith('#EXTINF'))) return null
+  for (const l of lines) {
+    if (l.startsWith('#') || l.includes('api.dlproxy.com')) continue
+    if (/\.m3u8(\?|$)/i.test(l) || !l.startsWith('#')) {
+      try {
+        return new URL(l, base).toString()
+      } catch {}
+    }
+  }
+  return null
+}
+
+// Deep validation: master must be clean AND its first media playlist must be
+// clean (no EXT-X-KEY, no dlproxy). Catches AES-at-media-level sources that
+// pass a master-only check but die in the player.
+async function deepPlain(url) {
+  if (!url || url.includes('api.dlproxy.com')) return null
+  const master = await plainManifest(url)
+  if (!master) return null
+  const mediaUrl = firstMediaUrl(master, url)
+  if (!mediaUrl) return master // already a media playlist and clean
+  const media = await fetchText(mediaUrl)
+  if (!media || !media.includes('#EXTM3U')) return null
+  if (media.includes('#EXT-X-KEY')) return null
+  if (media.includes('api.dlproxy.com')) return null
+  return master
 }
 
 // Dedupes by URL, keeps the highest-quality candidates first.
@@ -53,15 +95,21 @@ function dedupe(sources) {
   return out.sort((a, b) => qualityRank(b.quality) - qualityRank(a.quality))
 }
 
-// Validates a list of candidate sources and returns only the PLAIN HLS ones.
-async function validatePlain(sources) {
+// Validates a list of candidate sources and returns only the PLAIN HLS ones
+// (deep check: master + first media playlist). Concurrency-capped.
+async function validatePlain(sources, concurrency = 4) {
   const valid = []
-  for (const s of sources) {
-    if (!s?.url) continue
-    try {
-      if (await plainManifest(s.url)) valid.push(s)
-    } catch {}
+  let next = 0
+  async function worker() {
+    while (next < sources.length) {
+      const s = sources[next++]
+      if (!s?.url) continue
+      try {
+        if (await deepPlain(s.url)) valid.push(s)
+      } catch {}
+    }
   }
+  await Promise.all(Array.from({ length: Math.min(concurrency, sources.length) }, worker))
   return dedupe(valid)
 }
 
@@ -124,12 +172,13 @@ export async function resolveStreamCandidates(
   } catch {}
 
   // Fallback: Rigel (movish.to -> api.dlproxy.com). Usually AES-128 encrypted
-  // (key endpoint demands a browser proof) so it often won't play — but it is a
-  // real distinct backup for titles movy has nothing for, and the player shows
-  // an actionable error + retry instead of a blank iframe.
+  // so most get filtered by deep validation — only genuinely plain ones pass.
   try {
     const rigel = await rigelSources(tmdbId, { type, season, episode })
-    candidates.push(...rigel)
+    const validRigel = await validatePlain(
+      rigel.map((s) => ({ provider: 'rigel', label: s.label || 'Rigel', quality: s.quality, url: s.url }))
+    )
+    candidates.push(...validRigel)
   } catch {}
 
   const result = dedupe(candidates)

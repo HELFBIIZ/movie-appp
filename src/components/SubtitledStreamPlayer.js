@@ -45,6 +45,7 @@ export default function SubtitledStreamPlayer({
   subtitleUrl = null,
   subtitleLabel = 'Subtitles',
   onKeyLoadError = null,
+  onStreamInfo = null,
 }) {
   const videoRef = useRef(null)
   const hlsRef = useRef(null)
@@ -72,6 +73,10 @@ export default function SubtitledStreamPlayer({
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || `Stream failed (${res.status})`)
         setStream(data)
+        onStreamInfo?.({
+          total: Array.isArray(data.candidates) ? data.candidates.length : 1,
+          provider: data.provider, quality: data.quality,
+        })
       } catch (err) {
         setError(err.message || 'Failed to load stream')
       } finally {
