@@ -956,11 +956,14 @@ export async function listFavorites(userId) {
   return qAll(`SELECT f.movie_id AS movieId, f.created_at AS createdAt FROM favorites f WHERE f.user_id = ? ORDER BY f.created_at DESC`, [userId])
 }
 export async function toggleFavorite(userId, movieSlug) {
-  const movie = await qOne(`SELECT id FROM movies WHERE slug = ?`, [movieSlug])
-  if (!movie) return { error: { code: 'MOVIE_NOT_FOUND', status: 404 } }
-  const existing = await qOne(`SELECT id FROM favorites WHERE user_id = ? AND movie_id = ?`, [userId, movie.id])
+  // movie_id stores the catalog slug directly — the catalog lives in JSON
+  // files, not the (legacy, unpopulated) movies table.
+  if (!movieSlug || typeof movieSlug !== 'string' || movieSlug.length > 160) {
+    return { error: { code: 'INVALID_INPUT', status: 400 } }
+  }
+  const existing = await qOne(`SELECT id FROM favorites WHERE user_id = ? AND movie_id = ?`, [userId, movieSlug])
   if (existing) { await qRun(`DELETE FROM favorites WHERE id = ?`, [existing.id]); return { favorited: false } }
-  await qRun(`INSERT INTO favorites (id, user_id, movie_id, created_at) VALUES (?, ?, ?, datetime('now'))`, [crypto.randomUUID(), userId, movie.id])
+  await qRun(`INSERT INTO favorites (id, user_id, movie_id, created_at) VALUES (?, ?, ?, datetime('now'))`, [crypto.randomUUID(), userId, movieSlug])
   return { favorited: true }
 }
 
