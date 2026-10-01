@@ -1,6 +1,6 @@
-# Movie Z
+# VXNTA
 
-A public movie browsing app built with Next.js. It includes a homepage hero, searchable movie carousels, genre pages, a watchlist, and trailer/watch screens.
+VXNTA is a movie discovery site built with Next.js. It includes a homepage hero, searchable movie carousels, genre pages, a watchlist, and trailer/watch screens.
 
 ## Features
 
@@ -9,8 +9,9 @@ A public movie browsing app built with Next.js. It includes a homepage hero, sea
 - Filter by genre
 - Multi-page movie details
 - Watchlist using localStorage
+- User reviews & ratings
 - Trailer embed pages
-- TMDB-ready API layer with local fallback data
+- TMDB-ready API layer with a large local fallback catalog (70+ films)
 
 ## Local development
 
@@ -36,7 +37,7 @@ TMDB_API_KEY=your_tmdb_read_access_token_here
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-If no key is present, the app falls back to the locally bundled movie catalog.
+If no key is present, the app falls back to the bundled movie catalog.
 
 ## GitHub setup
 

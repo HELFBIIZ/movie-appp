@@ -1,0 +1,447 @@
+// Prisma schema — PostgreSQL-ready, runs today on SQLite for live verification.
+//
+// ▸ To deploy on PostgreSQL:
+//   1. datasource db { provider = "postgresql" }
+//   2. DATABASE_URL="postgresql://USER:PASS@HOST:5432/DB?sslmode=require"
+//   3. npx prisma migrate deploy
+//
+// Enums intentionally omitted from the Prisma layer (SQLite connector disallows
+// them). Every "enum-like" field is a String constrained server-side to a typed
+// constant set (see src/lib/const.js). The same constants validate on PG too —
+// nothing about the domain model changes on swap.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── AUTH / USERS ───────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String // bcrypt hash only — never plaintext
+  role      RoleType @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? // soft delete — never hard-delete users
+
+  profile        Profile?
+  subscription   Subscription?
+  paymentMethods PaymentMethod[]
+  payments       Payment[]
+  xp             XpAccount?
+  xpTransactions XpTransaction[]
+  achievements   UserAchievement[]
+  favorites      Favorite[]
+  watchHistory   WatchHistory[]
+  notifications  Notification[]
+  loginStreak    LoginStreak?
+  xpHistory      XpRedemption[]
+  rewards        UserReward[]
+  adminLogs      AdminLog[]
+  securityLogs   SecurityLog[]
+  teacherHints   LearningHint[]
+}
+
+// RoleType handled as constant; stored as String.
+// Valid: USER | MODERATOR | ADMIN | SUPER_ADMIN
+model RoleType {
+  id   String @id
+  name String @unique
+  user User[]
+
+  @@map("role_types")
+}
+
+model Profile {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  avatarUrl     String?
+  displayName   String?
+  bio           String?
+  theme         String? // cosmetic theme id (XP reward)
+  badgeId       String? // cosmetic badge id (XP reward)
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─────────────────────────── MOVIES / CATALOG ───────────────────────────
+
+model Movie {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  title        String
+  description  String?
+  posterUrl    String?
+  bannerUrl    String?
+  tmdbId       String? // external id used by embed players
+  category     String?
+  genre        String?
+  year         String?
+  runtime      Int?
+  rating       String? // "8.5/10" — string to match existing catalog
+  cast         Json? // flexible: main cast/crew
+  director     String?
+  language     String?
+  country      String?
+  status       String    @default("published") // draft | published | archived
+  isFeatured   Boolean  @default(false)
+  isNew        Boolean  @default(false)
+  newUntil     DateTime? // NEW badge window (admin-configurable duration)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  favorites       Favorite[]
+  watchHistory    WatchHistory[]
+  sourceBadges    MovieSourceBadge[]
+  recommendations Recommendation[] // movies this one is similar to
+  featuredIn      FeaturedMovie[]
+  syncLogs        MovieSyncLog[]
+
+  @@index([category, status])
+  @@index([year])
+  @@index([isFeatured])
+  @@index([title])
+}
+
+model MovieSourceBadge {
+  id      String @id @default(cuid())
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  label   String // e.g. "TMDB", "Subt.is"
+  source  String
+  active  Boolean @default(true)
+  updatedAt DateTime @updatedAt
+
+  @@unique([movieId, source])
+  @@index([movieId])
+}
+
+// ─────────────────────────── SUBSCRIPTIONS ───────────────────────────
+
+model SubscriptionPlan {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  durationDays Int
+  priceMnt    Int
+  isActive    Boolean       @default(true)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  subscriptions Subscription[]
+  payments      Payment[] // optional link: payments may reference a plan
+
+  @@map("subscription_plans")
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  userId      String
+  planId      String
+  status      String   // ACTIVE | EXPIRED | PENDING | CANCELLED | SUSPENDED
+  startAt     DateTime
+  expiresAt   DateTime
+  autoRenew   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cancelledAt DateTime? // if CANCELLED, when
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan SubscriptionPlan @relation(fields: [planId], references: [id])
+
+  @@index([userId, status])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────── PAYMENTS ───────────────────────────
+
+model PaymentMethod {
+  id         String   @id @default(cuid())
+  userId     String
+  provider   String   // qpay | hm | bank | other
+  token      String   // provider-side token; NEVER store PAN/secret here
+  last4      String?
+  brand      String?
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Payment {
+  id         String   @id @default(cuid())
+  txnId      String   @unique // merchant txn id from provider
+  userId     String
+  planId     String?
+  amountMnt  Int
+  currency   String   @default("MNT")
+  status     String // PENDING | PROCESSING | SUCCESSFUL | FAILED | CANCELLED | REFUNDED
+  provider   String // qpay | hm | bank | local_dev
+  providerRef String? // provider's own payment ref (verification)
+  createdAt  DateTime @default(now())
+  verifiedAt DateTime?
+  updatedAt  DateTime @updatedAt
+  meta       Json?
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan SubscriptionPlan? @relation(fields: [planId], references: [id])
+
+  @@index([userId, status])
+  @@index([createdAt])
+  @@index([provider, status])
+}
+
+// ─────────────────────────── XP SYSTEM ───────────────────────────
+
+model XpAccount {
+  id      String @id @default(cuid())
+  userId  String @unique
+  xp      Int    @default(0)
+  level   Int    @default(1)
+  streakDays Int @default(0)
+  lastStreakDate DateTime?
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([level])
+}
+
+model XpTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  activity  String // SIGNUP | DAILY_LOGIN | WATCH | RATING | REVIEW | CHALLENGE | ACHIEVEMENT | SUBSCRIPTION | ADMIN_ADJUST
+  amount    Int // can be negative for admin adjustments
+  reason    String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────── REWARDS / SHOP ───────────────────────────
+
+model Reward {
+  id        String  @id @default(cuid())
+  type      String // badge | theme | title | cosmetic | feature
+  name      String
+  description String?
+  xpPrice   Int
+  assetUrl  String? // image/file for cosmetic
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  redemptions UserReward[]
+}
+
+model UserReward {
+  id        String   @id @default(cuid())
+  userId    String
+  rewardId  String
+  purchasedAt DateTime @default(now())
+  activated Boolean  @default(false)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reward Reward @relation(fields: [rewardId], references: [id])
+
+  @@unique([userId, rewardId])
+  @@index([userId])
+}
+
+model XpRedemption {
+  id        String   @id @default(cuid())
+  userId    String
+  rewardId  String
+  xpSpent   Int
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reward Reward @relation(fields: [rewardId], references: [id])
+
+  @@index([userId])
+}
+
+// ─────────────────────────── ACHIEVEMENTS ───────────────────────────
+
+model Achievement {
+  id          String         @id @default(cuid())
+  code        String         @unique // first-login | 7-day-streak | xp-5000 | watched-10 ...
+  title       String
+  description String?
+  xpReward    Int
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+
+  earned UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+// ─────────────────────────── LOGIN STREAKS ───────────────────────────
+
+model LoginStreak {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  currentStreak Int      @default(0)
+  bestStreak    Int      @default(0)
+  lastLoginDate DateTime?
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────── FAVORITES / HISTORY / NOTIFICATIONS ───────────────────────────
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+  @@index([userId, createdAt])
+}
+
+model WatchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  progress  Float    @default(0) // 0..1
+  watchedAt DateTime @default(now())
+  completed Boolean  @default(false)
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([userId, watchedAt])
+  @@index([movieId])
+  @@unique([userId, movieId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String // new-movie | sub-expiring | sub-expired | payment-success | achievement | xp-reward
+  title     String
+  body      String?
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+}
+
+// ─────────────────────────── RECOMMENDATIONS ───────────────────────────
+
+model Recommendation {
+  id       String @id @default(cuid())
+  movieId  String
+  relatedId String // the movie being recommended to
+  score    Float  @default(0)
+  reason   String? // because-you-watched | similar | trending
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([movieId, relatedId])
+  @@index([relatedId, score])
+}
+
+// ─────────────────────────── ADMIN / FEATURED ───────────────────────────
+
+model FeaturedMovie {
+  id        String   @id @default(cuid())
+  movieId   String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([movieId])
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  adminId   String // the admin user id
+  action    String
+  target    String?
+  diff      Json?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, createdAt])
+}
+
+model SecurityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  type      String // login-success | login-failed | password-reset | payment-verify | suspicious
+  detail    String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([type])
+}
+
+// ─────────────────────────── SYNC / CATALOG MAINTENANCE ───────────────────────────
+
+model MovieSyncLog {
+  id          String   @id @default(cuid())
+  kind        String   // manual | scheduled
+  startedAt   DateTime @default(now())
+  finishedAt  DateTime?
+  moviesFound Int      @default(0)
+  moviesAdded Int      @default(0)
+  moviesUpdated Int    @default(0)
+  moviesError Int      @default(0)
+  errors      Json?
+  status      String   @default("running") // running | ok | failed
+  movieId     String? // when syncing a single title
+  createdAt   DateTime @default(now())
+  movie       Movie?   @relation(fields: [movieId], references: [id], onDelete: SetNull)
+
+  @@index([kind, createdAt])
+}
+
+model LearningHint {
+  id      String @id @default(cuid())
+  movieId String
+  userId  String
+  via     String // watched-mongolian-15s | paused-15s | qz
+  text    String?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([userId, movieId])
+}
