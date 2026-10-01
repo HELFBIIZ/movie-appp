@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getDb } from '../../../lib/db.mjs'
-import { getUserBySessionToken } from '../../../lib/db.mjs'
+import { getDb, getUserBySessionToken } from '../../../../lib/db.mjs'
 
 export async function GET(request) {
   const trace = []
