@@ -54,7 +54,7 @@ const securityHeaders = [
       "worker-src 'self' blob:",
       // Player iframes. Several providers (multiembed, embedmaster) immediately
       // redirect to a separate player origin, so those must be allowlisted too.
-      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://api.codespecters.com https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
+      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
       "frame-ancestors 'none'",
       "object-src 'none'",
       "base-uri 'self'",

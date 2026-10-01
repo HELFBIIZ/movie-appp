@@ -35,17 +35,6 @@ function superEmbedUrl(movie, isTV, season, episode) {
     : `https://multiembed.mov/?video_id=${movie.tmdbId}&tmdb=1`
 }
 
-function nexStreamUrl(movie, isTV, season, episode) {
-  // NexStream keys are domain-locked; the shared DEMO key resolves no sources,
-  // so the tab is hidden until a real NEXT_PUBLIC_NEXSTREAM_KEY is configured.
-  const key = process.env.NEXT_PUBLIC_NEXSTREAM_KEY
-  if (!key || !movie?.tmdbId) return null
-  const path = isTV
-    ? `/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
-    : `/embed/movie/${movie.tmdbId}`
-  return `https://api.codespecters.com${path}?apikey=${encodeURIComponent(key)}`
-}
-
 function embedMasterUrl(movie, isTV, season, episode, subSlug) {
   if (!movie?.tmdbId) return null
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
@@ -85,16 +74,15 @@ export default function WatchPage() {
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug
-  // Six players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3), NexStream (4),
-  // EmbedMaster (5, MN track), Embed API Stream (6).
+  // Five players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3),
+  // EmbedMaster (4, MN track), Embed API Stream (5).
   const visibleTabs = movie?.tmdbId
     ? [
         { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
         { id: 'cine', label: 'Player 2 · CineSrc', url: cinesrcUrl(movie, isTV, season, episode) },
         { id: 'superembed', label: 'Player 3 · SuperEmbed', url: superEmbedUrl(movie, isTV, season, episode) },
-        { id: 'nexstream', label: 'Player 4 · NexStream', url: nexStreamUrl(movie, isTV, season, episode) },
-        { id: 'embedmaster', label: 'Player 5 · EmbedMaster', url: embedMasterUrl(movie, isTV, season, episode, subSlug) },
-        { id: 'embedapi', label: 'Player 6 · Embed API', url: embedApiStreamUrl(movie, isTV, season, episode) },
+        { id: 'embedmaster', label: 'Player 4 · EmbedMaster', url: embedMasterUrl(movie, isTV, season, episode, subSlug) },
+        { id: 'embedapi', label: 'Player 5 · Embed API', url: embedApiStreamUrl(movie, isTV, season, episode) },
       ].filter((t) => t.url)
     : []
   const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null
