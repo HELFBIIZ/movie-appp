@@ -44,6 +44,20 @@ function nexStreamUrl(movie, isTV, season, episode) {
   return `https://api.codespecters.com${path}?apikey=${encodeURIComponent(key)}`
 }
 
+function embedMasterUrl(movie, isTV, season, episode, subSlug) {
+  if (!movie?.tmdbId) return null
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
+  const base = isTV
+    ? `https://embedmaster.link/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
+    : `https://embedmaster.link/movie/${movie.tmdbId}`
+  const subUrl = subSlug && origin ? `${origin}/api/subtitles/mongolian/${encodeURIComponent(subSlug)}` : null
+  const params = ['skin=onyx', 'welcome_page=off']
+  if (subUrl) {
+    params.push(`sub_url[]=${encodeURIComponent(subUrl)}`, `sub_label[]=${encodeURIComponent('Mongolian')}`)
+  }
+  return `${base}?${params.join('&')}`
+}
+
 export default function WatchPage() {
   const { slug } = useParams()
   const movie = getMovieBySlug(slug)
@@ -62,13 +76,15 @@ export default function WatchPage() {
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug
-  // Four players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3), NexStream (4).
+  // Five players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3),
+  // NexStream (4), EmbedMaster (5, MN track).
   const visibleTabs = movie?.tmdbId
     ? [
         { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
         { id: 'cine', label: 'Player 2 · CineSrc', url: cinesrcUrl(movie, isTV, season, episode) },
         { id: 'superembed', label: 'Player 3 · SuperEmbed', url: superEmbedUrl(movie, isTV, season, episode) },
         { id: 'nexstream', label: 'Player 4 · NexStream', url: nexStreamUrl(movie, isTV, season, episode) },
+        { id: 'embedmaster', label: 'Player 5 · EmbedMaster', url: embedMasterUrl(movie, isTV, season, episode, subSlug) },
       ].filter((t) => t.url)
     : []
   const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null
@@ -183,7 +199,7 @@ export default function WatchPage() {
   className="h-full w-full"
   frameBorder="0"
   allowFullScreen
-  allow="autoplay; fullscreen; picture-in-picture"
+  allow="autoplay *; fullscreen *; picture-in-picture *; encrypted-media *; clipboard-write *"
   referrerPolicy="no-referrer"
   title={`${movie.title} player`}
 />
