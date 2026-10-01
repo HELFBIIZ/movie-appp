@@ -36,8 +36,10 @@ function superEmbedUrl(movie, isTV, season, episode) {
 }
 
 function nexStreamUrl(movie, isTV, season, episode) {
-  if (!movie?.tmdbId) return null
-  const key = process.env.NEXT_PUBLIC_NEXSTREAM_KEY || 'DEMO_36c184a6'
+  // NexStream keys are domain-locked; the shared DEMO key resolves no sources,
+  // so the tab is hidden until a real NEXT_PUBLIC_NEXSTREAM_KEY is configured.
+  const key = process.env.NEXT_PUBLIC_NEXSTREAM_KEY
+  if (!key || !movie?.tmdbId) return null
   const path = isTV
     ? `/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
     : `/embed/movie/${movie.tmdbId}`

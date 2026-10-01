@@ -52,7 +52,9 @@ const securityHeaders = [
       // Next RSC/dev requires inline scripts; player + trailer frames stay allowlisted.
       scriptSrc,
       "worker-src 'self' blob:",
-      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://api.codespecters.com https://embedmaster.link https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
+      // Player iframes. Several providers (multiembed, embedmaster) immediately
+      // redirect to a separate player origin, so those must be allowlisted too.
+      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://api.codespecters.com https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
       "frame-ancestors 'none'",
       "object-src 'none'",
       "base-uri 'self'",
