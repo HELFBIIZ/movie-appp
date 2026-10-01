@@ -2,36 +2,13 @@
 
 import Link from 'next/link'
 import { notFound, useParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getMovieBySlug } from '@/lib/movies'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SubtitlePanel from '@/components/SubtitlePanel'
-import SubtitledStreamPlayer from '@/components/SubtitledStreamPlayer'
 
 const SERIES_CATEGORIES = new Set(['kdrama', 'western', 'tv', 'series'])
-
-// Player tabs -> index into the validated stream candidate list.
-const HLS_TABS = [
-  { id: 'p1', label: 'Player 3', variant: 0 },
-  { id: 'p2', label: 'Player 4', variant: 1 },
-  { id: 'p3', label: 'Player 5', variant: 2 },
-  { id: 'p4', label: 'Player 6', variant: 3 },
-  { id: 'p5', label: 'Player 7', variant: 4 },
-  { id: 'p6', label: 'Player 8', variant: 5 },
-  { id: 'p7', label: 'Player 9', variant: 6 },
-  { id: 'p8', label: 'Player 10', variant: 7 },
-  { id: 'p9', label: 'Player 11', variant: 8 },
-  { id: 'p10', label: 'Player 12', variant: 9 },
-  { id: 'p11', label: 'Player 13', variant: 10 },
-  { id: 'p12', label: 'Player 14', variant: 11 },
-  { id: 'p13', label: 'Player 15', variant: 12 },
-]
-
-const IFRAME_TABS = [
-  { id: 'vidsrc', label: 'Player 1 · VidSrc' },
-  { id: 'cine', label: 'Player 2 · CineSrc' },
-]
 
 function vidsrcUrl(movie, isTV, season, episode, subSlug) {
   if (!movie?.tmdbId) return null
@@ -62,49 +39,27 @@ export default function WatchPage() {
   const [episode, setEpisode] = useState(1)
   const [gate, setGate] = useState({ status: 'loading' })
 
-  const [subtitleUrl, setSubtitleUrl] = useState(null)
-  const [subtitleLabel, setSubtitleLabel] = useState('Mongolian')
+  const [, setSubtitleUrl] = useState(null)
+  const [, setSubtitleLabel] = useState('Mongolian')
   const [source, setSource] = useState('vidsrc')
-  const [playerCount, setPlayerCount] = useState(1)
 
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug
-  const embedSources = movie?.tmdbId
+  // Only two players: VidSrc (Player 1, with Mongolian track) + CineSrc (Player 2).
+  const visibleTabs = movie?.tmdbId
     ? [
         { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
         { id: 'cine', label: 'Player 2 · CineSrc', url: cinesrcUrl(movie, isTV, season, episode) },
       ].filter((t) => t.url)
     : []
-  // Only tabs with a real validated candidate are shown — dead players removed.
-  const hlsTabs = HLS_TABS.slice(0, Math.max(1, Math.min(playerCount, HLS_TABS.length)))
-  const visibleTabs = [...embedSources, ...hlsTabs]
-  const activeVariant = hlsTabs.find((t) => t.id === source)?.variant ?? 0
-  const maxVariant = hlsTabs.reduce((m, t) => Math.max(m, t.variant), 0)
-  const activeEmbed = embedSources.find((t) => t.id === source)?.url || null
-
-  const handleStreamInfo = useCallback((info) => {
-    if (info && Number.isFinite(info.total) && info.total > 0) {
-      setPlayerCount((prev) => (prev === info.total ? prev : info.total))
-    }
-  }, [])
+  const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null
 
   // If the available player list shrinks (or title/episode changes), fall back
   // to the first player instead of a stale tab.
   useEffect(() => {
     if (!visibleTabs.some((t) => t.id === source)) setSource('vidsrc')
   }, [visibleTabs, source])
-
-  // If the active stream is AES-locked (keyLoadError) or otherwise unusable,
-  // auto-jump to the next distinct variant instead of showing a blank screen.
-  const fallbackOnKeyError = useCallback(() => {
-    setSource((prev) => {
-      const idx = hlsTabs.findIndex((t) => t.id === prev)
-      if (idx === -1) return hlsTabs[0]?.id ?? prev
-      const next = hlsTabs[idx + 1]
-      return next ? next.id : prev
-    })
-  }, [hlsTabs])
 
   useEffect(() => {
     let cancelled = false
@@ -204,7 +159,6 @@ export default function WatchPage() {
                   ) : null}
                 </div>
                 <div className="aspect-video w-full">
-{activeEmbed ? (
 <iframe
   key={`${source}-${season}-${episode}`}
   src={activeEmbed}
@@ -214,33 +168,8 @@ export default function WatchPage() {
   allow="autoplay; fullscreen; picture-in-picture"
   title={`${movie.title} player`}
 />
-) : (
-<SubtitledStreamPlayer
-                      key={`${source}-${season}-${episode}`}
-                      tmdbId={movie.tmdbId}
-                      isTV={isTV}
-                      season={season}
-                      episode={episode}
-                      title={movie.title}
-                      mediaType={movie.mediaType || (isTV ? 'tv' : 'movie')}
-                      variant={activeVariant <= maxVariant ? activeVariant : 0}
-                      subtitleUrl={subtitleUrl}
-                      subtitleLabel={subtitleLabel}
-                      onKeyLoadError={fallbackOnKeyError}
-                      onStreamInfo={handleStreamInfo}
-                      isLastVariant={hlsTabs[hlsTabs.length - 1]?.id === source}
-                    />
-)}
                 </div>
-{subtitleUrl && !activeEmbed && (
-   <div className="flex items-center gap-2 border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
-     <span>💡</span>
-     <span>
-       Subtitles enabled: {subtitleLabel}. (Note: subtitles may not be available on iframe-based players.)
-     </span>
-   </div>
-)}
-{activeEmbed && source === 'vidsrc' && (
+{source === 'vidsrc' && (
    <div className="flex items-center gap-2 border-t border-slate-800 bg-emerald-500/10 px-4 py-2 text-xs text-emerald-300">
      <span>💡</span>
      <span>
