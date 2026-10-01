@@ -52,7 +52,7 @@ const securityHeaders = [
       // Next RSC/dev requires inline scripts; player + trailer frames stay allowlisted.
       scriptSrc,
       "worker-src 'self' blob:",
-      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
+      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://api.codespecters.com https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
       "frame-ancestors 'none'",
       "object-src 'none'",
       "base-uri 'self'",
