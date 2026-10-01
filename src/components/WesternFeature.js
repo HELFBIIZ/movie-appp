@@ -4,7 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Play, Mountain, Star, Layers3 } from 'lucide-react'
 
-export default function WesternFeature({ movies }) {
+export default function WesternFeature({
+  movies,
+  eyebrow = 'Western Spotlight',
+  title = 'Western',
+  viewAllHref = '/movies?category=western',
+  viewAllLabel = 'Explore Western Series',
+  stripTitle = 'More from the frontier',
+}) {
   if (!movies || !movies.length) return null
 
   const withArt = movies.filter(
@@ -44,7 +51,7 @@ export default function WesternFeature({ movies }) {
         <div className="animate-fade-in-down">
           <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-amber-400">
             <Mountain className="h-4 w-4" />
-            <span>Western Spotlight</span>
+            <span>{eyebrow}</span>
           </div>
           <h2 className="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
             {featured.title}
@@ -84,10 +91,10 @@ export default function WesternFeature({ movies }) {
               Watch Now
             </Link>
             <Link
-              href="/movies?category=western"
+              href={viewAllHref}
               className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-all hover:border-amber-400/50 hover:bg-white/10"
             >
-              Explore Western Series
+              {viewAllLabel}
             </Link>
           </div>
         </div>
@@ -96,10 +103,10 @@ export default function WesternFeature({ movies }) {
         <div className="animate-fade-in-up delay-150">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-400">
-              More from the frontier
+              {stripTitle}
             </p>
             <Link
-              href="/movies?category=western"
+              href={viewAllHref}
               className="text-xs font-semibold text-slate-300 transition-colors hover:text-amber-300"
             >
               View all →

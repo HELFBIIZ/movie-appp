@@ -1133,6 +1133,9 @@ export const topRatedMovies = movies.filter((movie) => movie.category === 'top-r
 export const kdramaMovies = movies.filter((movie) => movie.category === 'kdrama');
 export const popularMovies = movies.filter((movie) => movie.category === 'popular');
 export const westernMovies = movies.filter((movie) => movie.category === 'western');
+export const kdramas2026 = kdramaMovies
+  .filter((movie) => movie.year === 2026 && movie.poster && movie.banner)
+  .sort((a, b) => (b.rating || 0) - (a.rating || 0));
 
 export function getMovieBySlug(slug) {
   return movies.find((movie) => movie.slug === slug);
