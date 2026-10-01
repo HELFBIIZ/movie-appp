@@ -66,12 +66,20 @@ async function getClient() {
         await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
         if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
       } else {
-        // Remote schema is fully idempotent (IF NOT EXISTS / OR IGNORE), so
-        // re-apply on every boot: this heals tables added after the DB was
-        // first created (e.g. favorites, webhook_events).
-        if (!SCHEMA_FILE) throw new Error('Missing schema file for remote bootstrap')
-        await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
-        if (SEED_FILE) await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
+        // Remote heal: one cheap probe per cold start. Full schema/seeds run
+        // only when tables are actually missing (schema + seeds are idempotent).
+        const have = new Set(
+          (await client.execute(`SELECT name FROM sqlite_master WHERE type='table'`)).rows.map((r) => r.name)
+        )
+        const needTables = ['users', 'favorites', 'movies', 'webhook_events', 'video_sources', 'subtitle_tracks', 'subscriptions', 'payments']
+        const missing = needTables.filter((t) => !have.has(t))
+        if (missing.length) {
+          if (!SCHEMA_FILE) throw new Error('Missing schema file for remote bootstrap')
+          await client.executeMultiple(fs.readFileSync(SCHEMA_FILE, 'utf8'))
+        }
+        if (!have.has('users') && SEED_FILE) {
+          await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'))
+        }
       }
       await ensureFlexiblePlans(client)
       _client = client

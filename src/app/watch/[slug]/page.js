@@ -182,6 +182,7 @@ export default function WatchPage() {
                       subtitleLabel={subtitleLabel}
                       onKeyLoadError={fallbackOnKeyError}
                       onStreamInfo={handleStreamInfo}
+                      isLastVariant={visibleTabs[visibleTabs.length - 1]?.id === source}
                     />
                 </div>
 {subtitleUrl && (

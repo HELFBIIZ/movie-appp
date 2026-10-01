@@ -46,6 +46,7 @@ export default function SubtitledStreamPlayer({
   subtitleLabel = 'Subtitles',
   onKeyLoadError = null,
   onStreamInfo = null,
+  isLastVariant = false,
 }) {
   const videoRef = useRef(null)
   const hlsRef = useRef(null)
@@ -152,17 +153,22 @@ export default function SubtitledStreamPlayer({
         hls.on(Hls.Events.ERROR, (_, data) => {
           if (!data || !data.fatal) return
           const isKeyError = data.details === 'keyLoadError' || data.details === 'keyError'
-          if (isKeyError && typeof onKeyLoadError === 'function') {
-            setError('🔐 Энэ эх сурвалж шифрлэгдсэн тул тоглуулж чадахгүй байна. Одоо нөөц плеер рүү шилжиж байна…')
-            try { hls.destroy() } catch {}
-            setTimeout(() => onKeyLoadError(), 1200)
-            return
+          const canAdvance = !isLastVariant && typeof onKeyLoadError === 'function'
+          if (isKeyError) {
+            setError(
+              canAdvance
+                ? '🔐 Энэ эх сурвалж шифрлэгдсэн тул тоглуулж чадахгүй байна. Одоо нөөц плеер рүү шилжиж байна…'
+                : '🔐 Бүх эх сурвалж шифрлэгдсэн эсвэл ажиллахгүй байна. Дараа дахин оролдоно уу.'
+            )
+          } else {
+            setError(
+              canAdvance
+                ? `⚠️ Stream ачаалсангүй (${data.details || 'manifest error'}) — нөөц плеер рүү шилжиж байна…`
+                : `⚠️ Stream ачаалсангүй (${data.details || 'manifest error'}). Дахин оролдоно уу.`
+            )
           }
-          setError(
-            isKeyError
-              ? '🔐 Шифрлэгдсэн видео (key error) — дээрээс Player 1 эсвэл Player 2-ийг сонгоно уу.'
-              : data.details || 'Stream error'
-          )
+          try { hls.destroy() } catch {}
+          if (canAdvance) setTimeout(() => onKeyLoadError(), 1200)
         })
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = stream.url
