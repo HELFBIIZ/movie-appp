@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,19 @@ export default function Hero() {
   const [activeMovie, setActiveMovie] = useState(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const featured = movies.filter((m) => m.category === 'top-rated' || m.category === 'popular').slice(0, 5)
+  const featured = useMemo(() => {
+    const pool = movies.filter((m) => m.banner && m.category !== 'upcoming')
+    const upcoming = movies
+      .filter((m) => m.banner && m.category === 'upcoming')
+      .sort((a, b) => (b.year || 0) - (a.year || 0) || (b.rating || 0) - (a.rating || 0))
+    const starred = [...pool.filter((m) => m.category === 'top-rated' || m.category === 'popular')]
+    const merged = [...starred]
+    for (const m of upcoming) {
+      if (merged.length >= 5) break
+      if (!merged.some((x) => x.slug === m.slug)) merged.push(m)
+    }
+    return (merged.length ? merged : movies.filter((m) => m.banner)).slice(0, 5)
+  }, [])
 
   useEffect(() => {
     setActiveMovie(featured[0])
