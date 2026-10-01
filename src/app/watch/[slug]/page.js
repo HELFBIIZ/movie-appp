@@ -58,6 +58,13 @@ function embedMasterUrl(movie, isTV, season, episode, subSlug) {
   return `${base}?${params.join('&')}`
 }
 
+function embedApiStreamUrl(movie, isTV, season, episode) {
+  if (!movie?.tmdbId) return null
+  return isTV
+    ? `https://watch.embed-api.stream/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
+    : `https://watch.embed-api.stream/embed/movie/${movie.tmdbId}`
+}
+
 export default function WatchPage() {
   const { slug } = useParams()
   const movie = getMovieBySlug(slug)
@@ -76,8 +83,8 @@ export default function WatchPage() {
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug
-  // Five players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3),
-  // NexStream (4), EmbedMaster (5, MN track).
+  // Six players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3), NexStream (4),
+  // EmbedMaster (5, MN track), Embed API Stream (6).
   const visibleTabs = movie?.tmdbId
     ? [
         { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
@@ -85,6 +92,7 @@ export default function WatchPage() {
         { id: 'superembed', label: 'Player 3 · SuperEmbed', url: superEmbedUrl(movie, isTV, season, episode) },
         { id: 'nexstream', label: 'Player 4 · NexStream', url: nexStreamUrl(movie, isTV, season, episode) },
         { id: 'embedmaster', label: 'Player 5 · EmbedMaster', url: embedMasterUrl(movie, isTV, season, episode, subSlug) },
+        { id: 'embedapi', label: 'Player 6 · Embed API', url: embedApiStreamUrl(movie, isTV, season, episode) },
       ].filter((t) => t.url)
     : []
   const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null
