@@ -12,21 +12,44 @@ import SubtitledStreamPlayer from '@/components/SubtitledStreamPlayer'
 const SERIES_CATEGORIES = new Set(['kdrama', 'western', 'tv', 'series'])
 
 // Player tabs -> index into the validated stream candidate list.
-const PLAYER_TABS = [
-  { id: 'p1', label: 'Player 1', variant: 0 },
-  { id: 'p2', label: 'Player 2', variant: 1 },
-  { id: 'p3', label: 'Player 3', variant: 2 },
-  { id: 'p4', label: 'Player 4', variant: 3 },
-  { id: 'p5', label: 'Player 5', variant: 4 },
-  { id: 'p6', label: 'Player 6', variant: 5 },
-  { id: 'p7', label: 'Player 7', variant: 6 },
-  { id: 'p8', label: 'Player 8', variant: 7 },
-  { id: 'p9', label: 'Player 9', variant: 8 },
-  { id: 'p10', label: 'Player 10', variant: 9 },
-  { id: 'p11', label: 'Player 11', variant: 10 },
-  { id: 'p12', label: 'Player 12', variant: 11 },
-  { id: 'p13', label: 'Player 13', variant: 12 },
+const HLS_TABS = [
+  { id: 'p1', label: 'Player 3', variant: 0 },
+  { id: 'p2', label: 'Player 4', variant: 1 },
+  { id: 'p3', label: 'Player 5', variant: 2 },
+  { id: 'p4', label: 'Player 6', variant: 3 },
+  { id: 'p5', label: 'Player 7', variant: 4 },
+  { id: 'p6', label: 'Player 8', variant: 5 },
+  { id: 'p7', label: 'Player 9', variant: 6 },
+  { id: 'p8', label: 'Player 10', variant: 7 },
+  { id: 'p9', label: 'Player 11', variant: 8 },
+  { id: 'p10', label: 'Player 12', variant: 9 },
+  { id: 'p11', label: 'Player 13', variant: 10 },
+  { id: 'p12', label: 'Player 14', variant: 11 },
+  { id: 'p13', label: 'Player 15', variant: 12 },
 ]
+
+const IFRAME_TABS = [
+  { id: 'vidsrc', label: 'Player 1 · VidSrc' },
+  { id: 'cine', label: 'Player 2 · CineSrc' },
+]
+
+function vidsrcUrl(movie, isTV, season, episode, subSlug) {
+  if (!movie?.tmdbId) return null
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
+  const subUrl = subSlug && origin ? `${origin}/api/subtitles/mongolian/${encodeURIComponent(subSlug)}` : null
+  const base = isTV
+    ? `https://vidsrcme.ru/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
+    : `https://vidsrcme.ru/embed/movie/${movie.tmdbId}`
+  if (!subUrl) return base
+  return `${base}?sub_url=${encodeURIComponent(subUrl)}&sub_label=${encodeURIComponent('Mongolian')}&sub_lang=mn`
+}
+
+function cinesrcUrl(movie, isTV, season, episode) {
+  if (!movie?.tmdbId) return null
+  return isTV
+    ? `https://cinesrc.st/embed/tv/${movie.tmdbId}?s=${season || 1}&e=${episode || 1}`
+    : `https://cinesrc.st/embed/movie/${movie.tmdbId}`
+}
 
 export default function WatchPage() {
   const { slug } = useParams()
@@ -41,13 +64,24 @@ export default function WatchPage() {
 
   const [subtitleUrl, setSubtitleUrl] = useState(null)
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian')
-  const [source, setSource] = useState('p1')
+  const [source, setSource] = useState('vidsrc')
   const [playerCount, setPlayerCount] = useState(1)
 
+  const subSlug = isTV
+    ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
+    : slug
+  const embedSources = movie?.tmdbId
+    ? [
+        { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
+        { id: 'cine', label: 'Player 2 · CineSrc', url: cinesrcUrl(movie, isTV, season, episode) },
+      ].filter((t) => t.url)
+    : []
   // Only tabs with a real validated candidate are shown — dead players removed.
-  const visibleTabs = PLAYER_TABS.slice(0, Math.max(1, Math.min(playerCount, PLAYER_TABS.length)))
-  const activeVariant = visibleTabs.find((t) => t.id === source)?.variant ?? 0
-  const maxVariant = visibleTabs.reduce((m, t) => Math.max(m, t.variant), 0)
+  const hlsTabs = HLS_TABS.slice(0, Math.max(1, Math.min(playerCount, HLS_TABS.length)))
+  const visibleTabs = [...embedSources, ...hlsTabs]
+  const activeVariant = hlsTabs.find((t) => t.id === source)?.variant ?? 0
+  const maxVariant = hlsTabs.reduce((m, t) => Math.max(m, t.variant), 0)
+  const activeEmbed = embedSources.find((t) => t.id === source)?.url || null
 
   const handleStreamInfo = useCallback((info) => {
     if (info && Number.isFinite(info.total) && info.total > 0) {
@@ -56,20 +90,21 @@ export default function WatchPage() {
   }, [])
 
   // If the available player list shrinks (or title/episode changes), fall back
-  // to the first working player instead of a stale tab.
+  // to the first player instead of a stale tab.
   useEffect(() => {
-    if (!visibleTabs.some((t) => t.id === source)) setSource('p1')
+    if (!visibleTabs.some((t) => t.id === source)) setSource('vidsrc')
   }, [visibleTabs, source])
 
   // If the active stream is AES-locked (keyLoadError) or otherwise unusable,
   // auto-jump to the next distinct variant instead of showing a blank screen.
   const fallbackOnKeyError = useCallback(() => {
     setSource((prev) => {
-      const idx = PLAYER_TABS.findIndex((t) => t.id === prev)
-      const next = PLAYER_TABS[idx + 1]
+      const idx = hlsTabs.findIndex((t) => t.id === prev)
+      if (idx === -1) return hlsTabs[0]?.id ?? prev
+      const next = hlsTabs[idx + 1]
       return next ? next.id : prev
     })
-  }, [])
+  }, [hlsTabs])
 
   useEffect(() => {
     let cancelled = false
@@ -169,6 +204,17 @@ export default function WatchPage() {
                   ) : null}
                 </div>
                 <div className="aspect-video w-full">
+{activeEmbed ? (
+<iframe
+  key={`${source}-${season}-${episode}`}
+  src={activeEmbed}
+  className="h-full w-full"
+  frameBorder="0"
+  allowFullScreen
+  allow="autoplay; fullscreen; picture-in-picture"
+  title={`${movie.title} player`}
+/>
+) : (
 <SubtitledStreamPlayer
                       key={`${source}-${season}-${episode}`}
                       tmdbId={movie.tmdbId}
@@ -182,17 +228,26 @@ export default function WatchPage() {
                       subtitleLabel={subtitleLabel}
                       onKeyLoadError={fallbackOnKeyError}
                       onStreamInfo={handleStreamInfo}
-                      isLastVariant={visibleTabs[visibleTabs.length - 1]?.id === source}
+                      isLastVariant={hlsTabs[hlsTabs.length - 1]?.id === source}
                     />
+)}
                 </div>
-{subtitleUrl && (
+{subtitleUrl && !activeEmbed && (
    <div className="flex items-center gap-2 border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
      <span>💡</span>
      <span>
        Subtitles enabled: {subtitleLabel}. (Note: subtitles may not be available on iframe-based players.)
      </span>
    </div>
- )}
+)}
+{activeEmbed && source === 'vidsrc' && (
+   <div className="flex items-center gap-2 border-t border-slate-800 bg-emerald-500/10 px-4 py-2 text-xs text-emerald-300">
+     <span>💡</span>
+     <span>
+       Монгол хадмал тоглуулагч дотор CC товчоор сонгогдоно (Mongolian track суулгасан).
+     </span>
+   </div>
+)}
               </div>
             ) : (
               <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 animate-scale-in">
