@@ -166,6 +166,8 @@ export default function WatchPage() {
   frameBorder="0"
   allowFullScreen
   allow="autoplay; fullscreen; picture-in-picture"
+  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
+  referrerPolicy="no-referrer"
   title={`${movie.title} player`}
 />
                 </div>
