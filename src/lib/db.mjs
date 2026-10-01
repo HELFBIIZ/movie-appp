@@ -963,12 +963,13 @@ export async function listFavorites(userId) {
 }
 export async function toggleFavorite(userId, movieSlug) {
   // movie_id stores the catalog slug directly — the catalog lives in JSON
-  // files, not the (legacy, unpopulated) movies table.
+  // files, not the DB. Keep a mirror row in movies so the FK stays valid.
   if (!movieSlug || typeof movieSlug !== 'string' || movieSlug.length > 160) {
     return { error: { code: 'INVALID_INPUT', status: 400 } }
   }
   const existing = await qOne(`SELECT id FROM favorites WHERE user_id = ? AND movie_id = ?`, [userId, movieSlug])
   if (existing) { await qRun(`DELETE FROM favorites WHERE id = ?`, [existing.id]); return { favorited: false } }
+  await qRun(`INSERT OR IGNORE INTO movies (id, slug, title) VALUES (?, ?, ?)`, [movieSlug, movieSlug, movieSlug])
   await qRun(`INSERT INTO favorites (id, user_id, movie_id, created_at) VALUES (?, ?, ?, datetime('now'))`, [crypto.randomUUID(), userId, movieSlug])
   return { favorited: true }
 }
