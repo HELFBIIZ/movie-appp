@@ -28,6 +28,13 @@ function cinesrcUrl(movie, isTV, season, episode) {
     : `https://cinesrc.st/embed/movie/${movie.tmdbId}`
 }
 
+function superEmbedUrl(movie, isTV, season, episode) {
+  if (!movie?.tmdbId) return null
+  return isTV
+    ? `https://multiembed.mov/?video_id=${movie.tmdbId}&tmdb=1&s=${season || 1}&e=${episode || 1}`
+    : `https://multiembed.mov/?video_id=${movie.tmdbId}&tmdb=1`
+}
+
 export default function WatchPage() {
   const { slug } = useParams()
   const movie = getMovieBySlug(slug)
@@ -46,11 +53,12 @@ export default function WatchPage() {
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug
-  // Only two players: VidSrc (Player 1, with Mongolian track) + CineSrc (Player 2).
+  // Three players: VidSrc (1, Mongolian track) + CineSrc (2) + SuperEmbed (3).
   const visibleTabs = movie?.tmdbId
     ? [
         { id: 'vidsrc', label: 'Player 1 · VidSrc', url: vidsrcUrl(movie, isTV, season, episode, subSlug) },
         { id: 'cine', label: 'Player 2 · CineSrc', url: cinesrcUrl(movie, isTV, season, episode) },
+        { id: 'superembed', label: 'Player 3 · SuperEmbed', url: superEmbedUrl(movie, isTV, season, episode) },
       ].filter((t) => t.url)
     : []
   const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null
