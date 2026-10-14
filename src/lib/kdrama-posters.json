@@ -41,7 +41,7 @@
   },
   "connection": {
     "poster": "https://image.tmdb.org/t/p/w500/2dsw8j5jNOaoq0nFEKLh0PSPEcT.jpg",
-    "banner": null,
+    "banner": "https://images.metahub.space/background/medium/tt30422566/img",
     "tmdbId": "32378"
   },
   "the-atypical-family": {
@@ -720,15 +720,20 @@
     "banner": "https://image.tmdb.org/t/p/w1280/jagS23izp1oU48fbKxJFI8KGVv5.jpg",
     "tmdbId": "67391"
   },
-  "dear-fair-lady-gong-shim": null,
+  "dear-fair-lady-gong-shim": {
+    "poster": "https://images.metahub.space/poster/small/tt5705896/img",
+    "banner": "https://images.metahub.space/background/medium/tt5705896/img",
+    "tmdbId": null
+  },
   "monster": {
     "poster": "https://image.tmdb.org/t/p/w500/2JZrlh8kSnZFUzf6MVXbZoOZZBw.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/jU8Coj7c1P7vzO5mRU7XY4UQhkE.jpg",
     "tmdbId": "73315"
   },
   "one-more-happy-ending": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/464/1162385.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/464/1162385.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt5445338/img",
+    "banner": "https://images.metahub.space/background/medium/tt5445338/img",
+    "tmdbId": null
   },
   "kill-me-heal-me": {
     "poster": "https://image.tmdb.org/t/p/w500/1RkBC4VkJ7TS4nSvKMc5QooaUQu.jpg",
@@ -782,7 +787,7 @@
   },
   "pinocchio": {
     "poster": "https://image.tmdb.org/t/p/w500/qVPaDWgsMaDzZtDzEIt7zl1tL8O.jpg",
-    "banner": null,
+    "banner": "https://images.metahub.space/background/medium/tt4201628/img",
     "tmdbId": "91395"
   },
   "healer": {
@@ -856,10 +861,15 @@
     "tmdbId": "58761"
   },
   "master-sun": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/523/1308451.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/523/1308451.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt3184674/img",
+    "banner": "https://images.metahub.space/background/medium/tt3184674/img",
+    "tmdbId": null
   },
-  "gu-family-book": null,
+  "gu-family-book": {
+    "poster": "https://images.metahub.space/poster/small/tt2816734/img",
+    "banner": "https://images.metahub.space/background/medium/tt2816734/img",
+    "tmdbId": null
+  },
   "good-doctor": {
     "poster": "https://image.tmdb.org/t/p/w500/4pR9FCgtCj8mYFLh7tb2avCwdOy.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/uH24pUgaB9NWJYQxFrCqTCblHGe.jpg",
@@ -876,8 +886,9 @@
     "tmdbId": "58776"
   },
   "queen-inhyuns-man": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/85/214200.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/85/214200.jpg"
+    "poster": "https://live.metahub.space/poster/small/tt2185220/img",
+    "banner": "https://live.metahub.space/background/medium/tt2185220/img",
+    "tmdbId": null
   },
   "rooftop-prince": {
     "poster": "https://image.tmdb.org/t/p/w500/2bHHzWAMPxIVv7e0FgTQDTYd1y5.jpg",
@@ -935,8 +946,9 @@
     "tmdbId": "37636"
   },
   "dong-yi": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/23/59526.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/23/59526.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt1666209/img",
+    "banner": "https://images.metahub.space/background/medium/tt1666209/img",
+    "tmdbId": null
   },
   "giant": {
     "poster": "https://image.tmdb.org/t/p/w500/5ZNwvE1zAphNaxJebEMxf0LpqFR.jpg",
@@ -944,8 +956,9 @@
     "tmdbId": "33828"
   },
   "baker-king-kim-tak-goo": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/156/391456.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/156/391456.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt1821771/img",
+    "banner": "https://images.metahub.space/background/medium/tt1821771/img",
+    "tmdbId": null
   },
   "sungkyunkwan-scandal": {
     "poster": "https://image.tmdb.org/t/p/w500/ybx2GDBkbzV2P8NUIj6r3U7ht3A.jpg",
@@ -979,8 +992,9 @@
     "tmdbId": "38861"
   },
   "can-you-hear-my-heart": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/52/132308.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/52/132308.jpg"
+    "poster": "https://live.metahub.space/poster/small/tt3375852/img",
+    "banner": "https://live.metahub.space/background/medium/tt3375852/img",
+    "tmdbId": null
   },
   "padam-padam": {
     "poster": "https://image.tmdb.org/t/p/w500/hEihIHrOk6LY96B684UUesZPDZ9.jpg",
@@ -989,8 +1003,9 @@
     "media": "tv"
   },
   "three-brothers": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/58/146488.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/58/146488.jpg"
+    "poster": "https://m.media-amazon.com/images/M/MV5BOWMyNDM1OTItODZhNS00OGUxLTgwMzItMDdkY2MyYzJhZDcxXkEyXkFqcGc@._V1_500.jpg",
+    "banner": "https://images.metahub.space/background/medium/tt41512562/img",
+    "tmdbId": null
   },
   "brain": {
     "poster": "https://image.tmdb.org/t/p/w500/uuwhLxkLzQVyB6cMd40MBab1SDc.jpg",
@@ -1029,7 +1044,7 @@
   },
   "full-house": {
     "poster": "https://image.tmdb.org/t/p/w500/9V5lJ1z3sEsrEJXXFN8pzlMRd7D.jpg",
-    "banner": null,
+    "banner": "https://images.metahub.space/background/medium/tt0464625/img",
     "tmdbId": "224572"
   },
   "my-lovely-sam-soon": {
@@ -1077,22 +1092,35 @@
     "banner": "https://image.tmdb.org/t/p/w1280/nASQIwb5BeAaJpLrsqMu8qFVCgl.jpg",
     "tmdbId": "18493"
   },
-  "the-world-that-they-live-in": null,
+  "the-world-that-they-live-in": {
+    "poster": "https://live.metahub.space/poster/small/tt3246872/img",
+    "banner": "https://live.metahub.space/background/medium/tt3246872/img",
+    "tmdbId": null
+  },
   "love-story-in-harvard": {
     "poster": "https://image.tmdb.org/t/p/w500/1uSHvwIZOomASbqquvMV9QD6WY8.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/tRtap77bBxOunlOxgTZnvhZAza6.jpg",
     "tmdbId": "4744"
   },
-  "daljas-spring": null,
+  "daljas-spring": {
+    "poster": "https://images.metahub.space/poster/small/tt2690738/img",
+    "banner": "https://images.metahub.space/background/medium/tt2690738/img",
+    "tmdbId": null
+  },
   "golden-bride": {
     "poster": "https://image.tmdb.org/t/p/w500/yVtMOotArgquedM1FWkYjwTj9bl.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/hiizJWZdnYggLTPnWeLdW3XqvEX.jpg",
     "tmdbId": "18376"
   },
-  "glory-of-the-family": null,
+  "glory-of-the-family": {
+    "poster": "https://images.metahub.space/poster/small/tt38598502/img",
+    "banner": "https://images.metahub.space/background/medium/tt38598502/img",
+    "tmdbId": null
+  },
   "ojakgyo-brothers": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/53/134571.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/53/134571.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt3211152/img",
+    "banner": "https://images.metahub.space/background/medium/tt3211152/img",
+    "tmdbId": null
   },
   "shut-up-flower-boy-band": {
     "poster": "https://image.tmdb.org/t/p/w500/h4SeOz0OCBE5VxSBCbQN6fGmwMo.jpg",
@@ -1275,7 +1303,11 @@
     "banner": "https://image.tmdb.org/t/p/w1280/tESyWvpMZczQCYL6dWuKoqdGrpi.jpg",
     "tmdbId": "78163"
   },
-  "the-graduation-trip": null,
+  "the-graduation-trip": {
+    "poster": "https://images.metahub.space/poster/small/tt6337878/img",
+    "banner": "https://images.metahub.space/background/medium/tt6337878/img",
+    "tmdbId": null
+  },
   "love-ft-marriage-and-divorce-2": {
     "poster": "https://image.tmdb.org/t/p/w500/bb82u4HyI8I469TGw2B7d1oM49.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/hkwceBwHOkog5GeDvB1tErKa3Jt.jpg",
@@ -1307,8 +1339,9 @@
     "tmdbId": "81957"
   },
   "shall-we-kiss-first": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/144/362005.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/144/362005.jpg"
+    "poster": "https://live.metahub.space/poster/small/tt7897044/img",
+    "banner": "https://live.metahub.space/background/medium/tt7897044/img",
+    "tmdbId": null
   },
   "kairos": {
     "poster": "https://image.tmdb.org/t/p/w500/cnThovHCzJ2YoKrZ0oBBZfkd26j.jpg",
@@ -1316,7 +1349,11 @@
     "tmdbId": "112119",
     "media": "tv"
   },
-  "secret-butcher": null,
+  "secret-butcher": {
+    "poster": "https://images.metahub.space/poster/small/tt0075579/img",
+    "banner": "https://images.metahub.space/background/medium/tt0075579/img",
+    "tmdbId": null
+  },
   "a-man-in-a-veil": {
     "poster": "https://image.tmdb.org/t/p/w500/hV8r6J7pM9tKEODT6iB0lUcXacH.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/7kuKIfV4Z64AUSm6sOmvnlNNfX9.jpg",
@@ -1439,8 +1476,9 @@
     "tmdbId": "70452"
   },
   "age-of-youth": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/124/311907.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/124/311907.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt5858892/img",
+    "banner": "https://images.metahub.space/background/medium/tt5858892/img",
+    "tmdbId": null
   },
   "age-of-youth-2": {
     "poster": "https://image.tmdb.org/t/p/w500/4MdSbKFGAzgFhF407e9fcZreqvm.jpg",
@@ -1448,8 +1486,9 @@
     "tmdbId": "67014"
   },
   "shopping-king-louie": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/76/190643.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/76/190643.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt5994306/img",
+    "banner": "https://images.metahub.space/background/medium/tt5994306/img",
+    "tmdbId": null
   },
   "cheese-in-the-trap": {
     "poster": "https://image.tmdb.org/t/p/w500/128FRexhKrdPeg9Z0w8C7Hicy0P.jpg",
@@ -1457,8 +1496,9 @@
     "tmdbId": "64548"
   },
   "i-need-romance-3": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/144/361346.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/144/361346.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt9060294/img",
+    "banner": "https://images.metahub.space/background/medium/tt9060294/img",
+    "tmdbId": null
   },
   "the-greatest-love": {
     "poster": "https://image.tmdb.org/t/p/w500/foIZZlM7H8aB2AlA9xujrCdxDar.jpg",
@@ -1510,7 +1550,11 @@
     "banner": "https://image.tmdb.org/t/p/w1280/ekIDxbj14TO5RlRgMq15wAC4oXb.jpg",
     "tmdbId": "40536"
   },
-  "volcanic-island": null,
+  "volcanic-island": {
+    "poster": "https://images.metahub.space/poster/small/tt1708523/img",
+    "banner": "https://images.metahub.space/background/medium/tt1708523/img",
+    "tmdbId": null
+  },
   "will-it-snow-for-christmas-2": {
     "poster": "https://image.tmdb.org/t/p/w500/1GsZxUpLwjhplebj3KGTXGUiukp.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/zdAAFMt3nY8QhuRccwZbRgnUICA.jpg",
@@ -1707,7 +1751,11 @@
     "banner": "https://image.tmdb.org/t/p/w1280/47fLewzHRpL4vbcaHqQUZhOVF5C.jpg",
     "tmdbId": "246748"
   },
-  "the-day-we-were-star": null,
+  "the-day-we-were-star": {
+    "poster": "https://images.metahub.space/poster/small/tt12305588/img",
+    "banner": "https://images.metahub.space/background/medium/tt12305588/img",
+    "tmdbId": null
+  },
   "money-heist-korea": {
     "poster": "https://image.tmdb.org/t/p/w500/mbsRGqJtdKcVbjQxkrfzKCAkYoU.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/lcTuggU70y6pt6x13Rv1Ffjs93K.jpg",
@@ -1719,7 +1767,11 @@
     "banner": "https://image.tmdb.org/t/p/w1280/5b7VwobdAhp7NFCxxcEXSQNmaNe.jpg",
     "tmdbId": "217088"
   },
-  "sword-of-vengeance": null,
+  "sword-of-vengeance": {
+    "poster": "https://images.metahub.space/poster/small/tt33132245/img",
+    "banner": "https://images.metahub.space/background/medium/tt33132245/img",
+    "tmdbId": null
+  },
   "call-it-love": {
     "poster": "https://image.tmdb.org/t/p/w500/m7xiLb8mLyHHgThJICIPCsSq1qR.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/6Yi0rIMX6jdst39Wk0jaUzrIxuZ.jpg",
@@ -1767,15 +1819,20 @@
     "media": "tv"
   },
   "midnight-photo": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/505/1263272.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/505/1263272.jpg"
+    "poster": "https://live.metahub.space/poster/small/tt31261522/img",
+    "banner": "https://live.metahub.space/background/medium/tt31261522/img",
+    "tmdbId": null
   },
   "uncle-samsik": {
     "poster": "https://image.tmdb.org/t/p/w500/60iLAUnwnejECmOwDcuimUnMAO6.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/pzDY9xhJQZAx1CADITkOUA27GCB.jpg",
     "tmdbId": "209173"
   },
-  "begins-high-youth": null,
+  "begins-high-youth": {
+    "poster": "https://images.metahub.space/poster/small/tt22091076/img",
+    "banner": "https://images.metahub.space/background/medium/tt22091076/img",
+    "tmdbId": null
+  },
   "high-cookie": {
     "poster": "https://image.tmdb.org/t/p/w500/maXlHKlAkXc7PoYHvfE035sBUMQ.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/wJUofdoKLU6UG1zk0P3hJVatQZv.jpg",
@@ -1788,8 +1845,9 @@
   },
   "my-neighbour-is-a-gangster": null,
   "family-affairs": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/23/59250.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/23/59250.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt0183068/img",
+    "banner": "https://images.metahub.space/background/medium/tt0183068/img",
+    "tmdbId": null
   },
   "resident-playbook": {
     "poster": "https://image.tmdb.org/t/p/w500/bB5Tu1Rzq6guKsMhV59aszN9c0a.jpg",
@@ -1801,7 +1859,11 @@
     "banner": "https://image.tmdb.org/t/p/w1280/6LejXIyewCE6AEjDpNzRd898lL1.jpg",
     "tmdbId": "301701"
   },
-  "that-year-we-turned-25": null,
+  "that-year-we-turned-25": {
+    "poster": "https://images.metahub.space/poster/small/tt14544732/img",
+    "banner": "https://images.metahub.space/background/medium/tt14544732/img",
+    "tmdbId": null
+  },
   "lie-after-lie": {
     "poster": "https://image.tmdb.org/t/p/w500/RfWfTECbvLLLNWaAyTFIGNYAOM.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/sFtuQvgshxvahqrN9chxEyFyTF7.jpg",
@@ -1849,10 +1911,15 @@
     "banner": "https://image.tmdb.org/t/p/w1280/1h5xqxNDURXmXXesak9x665TGBJ.jpg",
     "tmdbId": "237311"
   },
-  "drama-special-the-colosseum": null,
+  "drama-special-the-colosseum": {
+    "poster": "https://images.metahub.space/poster/small/tt31961684/img",
+    "banner": "https://images.metahub.space/background/medium/tt31961684/img",
+    "tmdbId": null
+  },
   "delusion": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606567.jpg",
-    "banner": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606567.jpg"
+    "poster": "https://images.metahub.space/poster/small/tt22817632/img",
+    "banner": "https://images.metahub.space/background/medium/tt22817632/img",
+    "tmdbId": null
   },
   "samyang-geom": null,
   "summer-strike": {
@@ -2249,7 +2316,7 @@
   },
   "final-table": {
     "poster": "https://image.tmdb.org/t/p/w500/yNafNPWYUPEljFlaf7zScmunUTG.jpg",
-    "banner": null,
+    "banner": "https://images.metahub.space/background/medium/tt7619858/img",
     "tmdbId": "316702",
     "media": "tv"
   },
@@ -2291,12 +2358,12 @@
   },
   "king-mun-mu": {
     "poster": "https://image.tmdb.org/t/p/w500/juMhcFFdwMUdMZYqvrMmaGDFntK.jpg",
-    "banner": null,
+    "banner": "https://images.metahub.space/background/medium/tt42152429/img",
     "tmdbId": "301354",
     "media": "tv"
   },
   "love-in-disguise": {
-    "poster": "https://static.tvmaze.com/uploads/images/original_untouched/641/1603562.jpg",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNWY3ZjliZTUtYjc5Yy00YTEzLWE2NDQtMWUxNGU1NDgyMjRiXkEyXkFqcGc@._V1_500.jpg",
     "banner": "https://image.tmdb.org/t/p/w1280/eELCGuN24A8lcgYhN5DH2qTyaIU.jpg",
     "tmdbId": "303745",
     "media": "tv"
@@ -3118,5 +3185,10 @@
     "poster": "https://static.tvmaze.com/uploads/images/original_untouched/501/1254205.jpg",
     "banner": "https://static.tvmaze.com/uploads/images/original_untouched/501/1254205.jpg",
     "tmdbId": 4258
+  },
+  "goong": {
+    "poster": "https://m.media-amazon.com/images/M/MV5BODQ3ZTBhMDctNzhmNS00MzEzLTk4MGEtNGMxNzI0MjE4NzAxXkEyXkFqcGc@._V1_500.jpg",
+    "banner": "https://images.metahub.space/background/medium/tt24853188/img",
+    "tmdbId": null
   }
 }

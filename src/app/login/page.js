@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ClerkOAuth from '@/components/ClerkOAuth'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -135,6 +136,15 @@ export default function LoginPage() {
             {busy ? '…' : mode === 'signin' ? 'Sign in' : 'Create account & sign in'}
           </button>
         </form>
+
+        {/* OAuth sits outside the form: Clerk runs its own session and we
+            bridge it server-side, so it must never ride this password submit. */}
+        <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-500">
+          <span className="h-px flex-1 bg-slate-800" />
+          or
+          <span className="h-px flex-1 bg-slate-800" />
+        </div>
+        <ClerkOAuth className="mt-4" />
 
         <p className="mt-4 text-center text-xs text-slate-500">
           <Link href="/" className="hover:text-amber-500 dark:hover:text-amber-200">← Back to home</Link>

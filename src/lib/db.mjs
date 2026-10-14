@@ -71,7 +71,12 @@ async function getClient() {
         const have = new Set(
           (await client.execute(`SELECT name FROM sqlite_master WHERE type='table'`)).rows.map((r) => r.name)
         )
-        const needTables = ['users', 'favorites', 'movies', 'webhook_events', 'video_sources', 'subtitle_tracks', 'subscriptions', 'payments']
+        // external_identities rides along with this probe list on purpose: it
+        // was added after the DB was first bootstrapped, so it never exists on
+        // an already-provisioned Turso. Listing it here means the first cold
+        // start after a deploy runs the idempotent schema and creates it,
+        // instead of OAuth failing with "no such table" forever.
+        const needTables = ['users', 'favorites', 'movies', 'webhook_events', 'video_sources', 'subtitle_tracks', 'subscriptions', 'payments', 'external_identities']
         const missing = needTables.filter((t) => !have.has(t))
         if (missing.length) {
           if (!SCHEMA_FILE) throw new Error('Missing schema file for remote bootstrap')
@@ -223,6 +228,91 @@ export async function createUser({ email, username, password }) {
     [userId]
   )
   return { user, xp: { gained: 50, level: 1, status: 'ok' } }
+}
+
+/**
+ * Resolve a provider identity (Clerk OAuth: Google/Apple) to our own user id.
+ *
+ * The local `users` row remains the single source of truth - subscriptions,
+ * XP, roles and favorites all keep pointing at it - so this only does three
+ * things: match an existing link, attach the link to an already-known email,
+ * or provision a brand new user with the same signup XP grant as the
+ * password flow.
+ *
+ * password_hash gets a sentinel (never a scrypt hash) because the column is
+ * NOT NULL and OAuth users have no password: verifySecret() rejects it.
+ */
+export async function resolveExternalUser({ provider, externalId, email, displayName }) {
+  if (!provider || !externalId) return { error: 'MISSING_IDENTITY' }
+  const normEmail = email ? String(email).trim().toLowerCase() : null
+
+  const existing = await qOne(
+    'SELECT user_id AS userId FROM external_identities WHERE provider = ? AND external_id = ?',
+    [provider, externalId]
+  )
+  if (existing) return { userId: existing.userId, created: false }
+
+  if (normEmail) {
+    const byEmail = await qOne(
+      'SELECT id, username FROM users WHERE LOWER(email) = ?',
+      [normEmail]
+    )
+    if (byEmail) {
+      await qRun(
+        'INSERT OR IGNORE INTO external_identities (provider, external_id, user_id, email) VALUES (?, ?, ?, ?)',
+        [provider, externalId, byEmail.id, normEmail]
+      )
+      return { userId: byEmail.id, created: false }
+    }
+  }
+
+  const base = (normEmail?.split('@')[0] || 'viewer')
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^A-Za-z0-9_-]+/g, '')
+    .slice(0, 16) || 'viewer'
+  const taken = await qAll(
+    'SELECT username FROM users WHERE username = ? OR username LIKE ?',
+    [base, `${base}_%`]
+  )
+  const suffix = Math.max(0, taken.length)
+  const username = suffix ? `${base}_${suffix}` : base
+  const userId = crypto.randomUUID()
+  const safeEmail = normEmail ?? `${userId}@oauth.local`
+  const label = displayName || base
+
+  await batchWrite([
+    {
+      sql: `INSERT INTO users (id, email, username, password_hash, role_id, created_at, updated_at)
+            VALUES (?, ?, ?, ?, (SELECT id FROM roles WHERE code='USER'), datetime('now'), datetime('now'))`,
+      args: [userId, safeEmail, username, 'clerk$'],
+    },
+    {
+      sql: `INSERT INTO profiles (id, user_id, avatar_url, display_name, created_at)
+            VALUES (?, ?, NULL, ?, datetime('now'))`,
+      args: [crypto.randomUUID(), userId, label],
+    },
+    {
+      sql: `INSERT OR IGNORE INTO xp_accounts (id, user_id, xp, level, streak_days)
+            VALUES (?, ?, ?, 1, 0)`,
+      args: [userId, userId, 50],
+    },
+    {
+      sql: `INSERT INTO xp_transactions (id, user_id, activity, amount, reason, created_at)
+            VALUES (?, ?, 'SIGNUP', 50, 'Account created', datetime('now'))`,
+      args: [crypto.randomUUID(), userId],
+    },
+    {
+      sql: `INSERT OR IGNORE INTO login_streaks (id, user_id, current, best, last_login_date)
+            VALUES (?, ?, 0, 0, NULL)`,
+      args: [userId, userId],
+    },
+    {
+      sql: `INSERT OR IGNORE INTO external_identities (provider, external_id, user_id, email)
+            VALUES (?, ?, ?, ?)`,
+      args: [provider, externalId, userId, safeEmail],
+    },
+  ])
+  return { userId, created: true }
 }
 /** Fetch a user by email/username with their current XP + streak (for login). */
 export async function findUserForLogin(identifier) {

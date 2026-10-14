@@ -276,3 +276,17 @@ CREATE TABLE IF NOT EXISTS webhook_events (
   processed INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- External identity providers (Clerk OAuth: Google / Apple).
+-- The local users row stays the source of truth for subscriptions, XP,
+-- roles and favorites; this table only maps a provider id -> our user id.
+CREATE TABLE IF NOT EXISTS external_identities (
+  provider    TEXT NOT NULL,            -- 'clerk'
+  external_id TEXT NOT NULL,            -- user_xxx
+  user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  email       TEXT,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (provider, external_id)
+);
+CREATE INDEX IF NOT EXISTS idx_ext_identity_user ON external_identities(user_id);
+

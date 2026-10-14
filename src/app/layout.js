@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import HelpButton from "@/components/HelpButton";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,6 +13,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// OAuth (Google/Apple) only works once both Clerk keys exist. Guarding here
+// means the site keeps running - password login included - if they are absent
+// on an environment that has not been configured yet.
+const clerkEnabled = Boolean(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY
+);
 
 export const metadata = {
   title: "Vxnta — Discover Movies & Trailers",
@@ -28,7 +36,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col bg-[#faf7f1] dark:bg-transparent text-stone-900 dark:text-[#e9e2d3]">
         <div aria-hidden="true" className="aurora" />
         <ThemeProvider>
-          {children}
+          {clerkEnabled ? <ClerkProvider>{children}</ClerkProvider> : children}
         </ThemeProvider>
         <HelpButton />
       </body>

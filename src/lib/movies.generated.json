@@ -14286,8 +14286,283 @@
       "tmdbId": 619730,
       "poster": "https://images.metahub.space/poster/small/tt10731256/img",
       "banner": "https://images.metahub.space/background/medium/tt10731256/img"
+    },
+    {
+      "slug": "resident-evil",
+      "title": "Resident Evil",
+      "year": 2002,
+      "rating": 6.6,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 40m",
+      "language": "English",
+      "director": "Paul W.S. Anderson",
+      "cast": [
+        "Milla Jovovich",
+        "Michelle Rodriguez",
+        "Ryan McCluskey"
+      ],
+      "plot": "A special military unit fights a powerful, out-of-control supercomputer and hundreds of scientists who have mutated into flesh-eating creatures after a laboratory accident.",
+      "trailerYouTubeId": "HhBAIDHvRTc",
+      "category": "popular",
+      "tmdbId": 1576,
+      "poster": "https://images.metahub.space/poster/small/tt0120804/img",
+      "banner": "https://images.metahub.space/background/medium/tt0120804/img"
+    },
+    {
+      "slug": "resident-evil-apocalypse",
+      "title": "Resident Evil: Apocalypse",
+      "year": 2004,
+      "rating": 6.1,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 34m",
+      "language": "English",
+      "director": "Alexander Witt",
+      "cast": [
+        "Milla Jovovich",
+        "Sienna Guillory",
+        "Eric Mabius"
+      ],
+      "plot": "Alice wakes up in the Raccoon City hospital after the area has been overrun by zombies, and must now make it out of the city before a nuclear bomb is dropped.",
+      "trailerYouTubeId": "PkutbYENBis",
+      "category": "popular",
+      "tmdbId": 1577,
+      "poster": "https://images.metahub.space/poster/small/tt0318627/img",
+      "banner": "https://images.metahub.space/background/medium/tt0318627/img"
+    },
+    {
+      "slug": "resident-evil-extinction",
+      "title": "Resident Evil: Extinction",
+      "year": 2007,
+      "rating": 6.2,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 34m",
+      "language": "English",
+      "director": "Russell Mulcahy",
+      "cast": [
+        "Milla Jovovich",
+        "Ali Larter",
+        "Oded Fehr"
+      ],
+      "plot": "Survivors of the Raccoon City catastrophe travel across the Nevada desert, hoping to make it to Alaska. Alice joins the caravan and their fight against the evil Umbrella Corp.",
+      "trailerYouTubeId": "eDMjVARsCOk",
+      "category": "popular",
+      "tmdbId": 7737,
+      "poster": "https://images.metahub.space/poster/small/tt0432021/img",
+      "banner": "https://images.metahub.space/background/medium/tt0432021/img"
+    },
+    {
+      "slug": "resident-evil-degeneration",
+      "title": "Resident Evil: Degeneration",
+      "year": 2008,
+      "rating": 6.4,
+      "genres": [
+        "Animation",
+        "Action",
+        "Horror"
+      ],
+      "runtime": "1h 37m",
+      "language": "English",
+      "director": "Makoto Kamiya",
+      "cast": [
+        "Paul Mercier",
+        "Alyson Court",
+        "Laura Bailey"
+      ],
+      "plot": "Leon S. Kennedy and Claire Redfield must battle a rogue warrior seeking revenge after unleashing the deadly G-Virus, whilst a mutated monster goes on a rampage.",
+      "trailerYouTubeId": "bbfIAiCwfwc",
+      "category": "popular",
+      "tmdbId": 13648,
+      "poster": "https://images.metahub.space/poster/small/tt1174954/img",
+      "banner": "https://images.metahub.space/background/medium/tt1174954/img"
+    },
+    {
+      "slug": "resident-evil-afterlife",
+      "title": "Resident Evil: Afterlife",
+      "year": 2010,
+      "rating": 5.8,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 37m",
+      "language": "English",
+      "director": "Paul W.S. Anderson",
+      "cast": [
+        "Milla Jovovich",
+        "Ali Larter",
+        "Wentworth Miller"
+      ],
+      "plot": "Alice and her friends keep her promise to see Umbrella in Japan. After that, she continues her search for Arcadia, which leads her to LA, where she finds a small group of survivors trapped in a prison.",
+      "trailerYouTubeId": "SRRN6MvCdeg",
+      "category": "popular",
+      "tmdbId": 35791,
+      "poster": "https://images.metahub.space/poster/small/tt1220634/img",
+      "banner": "https://images.metahub.space/background/medium/tt1220634/img"
+    },
+    {
+      "slug": "resident-evil-damnation",
+      "title": "Resident Evil: Damnation",
+      "year": 2012,
+      "rating": 6.4,
+      "genres": [
+        "Animation",
+        "Action",
+        "Horror"
+      ],
+      "runtime": "1h 40m",
+      "language": "English",
+      "director": "Makoto Kamiya",
+      "cast": [
+        "Matthew Mercer",
+        "Dave Wittenberg",
+        "Wendee Lee"
+      ],
+      "plot": "Special Agent Leon S.Kennedy goes against his superior's orders and works to destroy a series of biological weapons being used in a war zone in Europe.",
+      "trailerYouTubeId": "FmUR6f39dg4",
+      "category": "popular",
+      "tmdbId": 133121,
+      "poster": "https://images.metahub.space/poster/small/tt1753496/img",
+      "banner": "https://images.metahub.space/background/medium/tt1753496/img"
+    },
+    {
+      "slug": "resident-evil-retribution",
+      "title": "Resident Evil: Retribution",
+      "year": 2012,
+      "rating": 5.3,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 35m",
+      "language": "English",
+      "director": "Paul W.S. Anderson",
+      "cast": [
+        "Milla Jovovich",
+        "Sienna Guillory",
+        "Michelle Rodriguez"
+      ],
+      "plot": "Alice fights alongside a resistance movement to regain her freedom from an Umbrella Corporation testing facility.",
+      "trailerYouTubeId": "hoyMT-7wEqs",
+      "category": "popular",
+      "tmdbId": 71679,
+      "poster": "https://images.metahub.space/poster/small/tt1855325/img",
+      "banner": "https://images.metahub.space/background/medium/tt1855325/img"
+    },
+    {
+      "slug": "resident-evil-vendetta",
+      "title": "Resident Evil: Vendetta",
+      "year": 2017,
+      "rating": 6.2,
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "runtime": "1h 37m",
+      "language": "English",
+      "director": "Takanori Tsujimoto",
+      "cast": [
+        "Rebecca Chambers",
+        "Kevin Dorman",
+        "Matthew Mercer"
+      ],
+      "plot": "Chris Redfield enlists the help of Leon S. Kennedy and Rebecca Chambers to stop a death merchant from spreading a deadly virus in New York.",
+      "trailerYouTubeId": "B1PJGWC5ThY",
+      "category": "popular",
+      "tmdbId": 400136,
+      "poster": "https://images.metahub.space/poster/small/tt5776208/img",
+      "banner": "https://images.metahub.space/background/medium/tt5776208/img"
+    },
+    {
+      "slug": "resident-evil-the-final-chapter",
+      "title": "Resident Evil: The Final Chapter",
+      "year": 2017,
+      "rating": 5.5,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 47m",
+      "language": "English",
+      "director": "Paul W.S. Anderson",
+      "cast": [
+        "Milla Jovovich",
+        "Iain Glen",
+        "Ali Larter"
+      ],
+      "plot": "Alice returns to where the nightmare began: The Hive in Raccoon City, where the Umbrella Corporation is gathering its forces for a final strike against the only remaining survivors of the apocalypse.",
+      "trailerYouTubeId": "79Sd4GtOXuI",
+      "category": "popular",
+      "tmdbId": 173897,
+      "poster": "https://images.metahub.space/poster/small/tt2592614/img",
+      "banner": "https://images.metahub.space/background/medium/tt2592614/img"
+    },
+    {
+      "slug": "resident-evil-welcome-to-raccoon-city",
+      "title": "Resident Evil: Welcome to Raccoon City",
+      "year": 2021,
+      "rating": 5.2,
+      "genres": [
+        "Action",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtime": "1h 47m",
+      "language": "English",
+      "director": "Johannes Roberts",
+      "cast": [
+        "Kaya Scodelario",
+        "Robbie Amell",
+        "Hannah John-Kamen"
+      ],
+      "plot": "Set in 1998, this origin story explores the secrets of the mysterious Spencer Mansion and the ill-fated Raccoon City.",
+      "trailerYouTubeId": "4q6UGCyHZCI",
+      "category": "popular",
+      "tmdbId": 460458,
+      "poster": "https://images.metahub.space/poster/small/tt6920084/img",
+      "banner": "https://images.metahub.space/background/medium/tt6920084/img"
+    },
+    {
+      "slug": "resident-evil-death-island",
+      "title": "Resident Evil: Death Island",
+      "year": 2023,
+      "rating": 5.7,
+      "genres": [
+        "Animation",
+        "Action",
+        "Horror"
+      ],
+      "runtime": "1h 31m",
+      "language": "English",
+      "director": "Eiichirô Hasumi",
+      "cast": [
+        "Matthew Mercer",
+        "Nicole Tompkins",
+        "Kevin Dorman"
+      ],
+      "plot": "A t-virus outbreak in San Francisco leads to Alcatraz Island, where a new evil has taken residence.",
+      "trailerYouTubeId": "L-vkuA8oqMY",
+      "category": "popular",
+      "tmdbId": 1083862,
+      "poster": "https://images.metahub.space/poster/small/tt26674627/img",
+      "banner": "https://images.metahub.space/background/medium/tt26674627/img"
     }
   ],
   "generated": "2026-09-15",
-  "count": 675
+  "count": 686
 }

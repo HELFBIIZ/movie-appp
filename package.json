@@ -13,6 +13,7 @@
     "qpay:watch": "node scripts/qpay-watcher.mjs"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.12",
     "@libsql/client": "^0.18.0",
     "hls.js": "^1.7.3",
     "lucide-react": "^1.37.0",
