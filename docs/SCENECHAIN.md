@@ -1,7 +1,19 @@
 # VXNTA × SceneChain — багшид үзүүлэх тэмдэглэл
 
+Энэ ажлыг AI-ийн тусламжтай хөгжүүлсэн. Зорилго нь архитектур, логик, хязгаар,
+шалгалт болон live demo-г ойлгож тайлбарлах юм.
 
-хязгаар болон шалгалтыг ойлгож тайлбарлах юм.
+## Баталгаажсан release
+
+- Live watch page: **https://movie-appp-ivory.vercel.app/watch/inception** → Learning Mode.
+- Deploy хийсэн application commit: [52c241e](https://github.com/HELFBIIZ/movie-appp/commit/52c241e517db51aec044038bc67e4e5a20e0faff).
+- Node 22 CI: [бүх check амжилттай](https://github.com/HELFBIIZ/movie-appp/actions/runs/44582187630).
+- Production deployment: `dpl_2mTMTtKUDVM85YxJw5VdqVhUMp8o`, existing `vdzv/movie-appp` project.
+- Public production alias дээр **7/7 browser smoke test** давсан: guest gate, native login form,
+  local media + safe VTT, corrupt storage, sync/seek/save/quiz/SRS/refresh, normal iframe player,
+  390 px mobile layout болон storage quota failure.
+- Түр unique deployment URL нь Vercel Authentication хамгаалалттай; багшид дээрх
+  public production alias-ийг үзүүлнэ. Deployment Protection/DNS/Clerk settings өөрчлөөгүй.
 
 ## Яг хаана ажиллах вэ?
 
@@ -11,8 +23,7 @@
 - SceneChain branch: `feat/scenechain-watch`.
 - Үндсэн route: `/watch/[slug]`; үзүүлэх жишээ: `/watch/inception`.
 - Vercel existing project: `vdzv/movie-appp`, root directory `.`.
-- Existing production alias: `https://movie-appp-ivory.vercel.app`.
-  Энэ alias-ийн шинэ хувилбарын deployment/smoke үр дүнг эцсийн тайлангаас шалгана.
+- Existing production alias: `https://movie-appp-ivory.vercel.app`; шинэ release дээр public smoke баталгаажсан.
 
 `scenechain-demo/`, өөр repo, өөр Next.js app үүсгээгүй.
 Каталог → movie details → watch навигаци хэвээр. Normal горим үндсэн таван
@@ -201,7 +212,7 @@ Component нэртэй файлууд `src/components/learning/` дотор, lib
 
 Локал баталгаажуулалт: lint, strict TypeScript, Prettier, Webpack production build
 амжилттай. Шинэ unit test 10/10 (Node 22 болон 24), өмнөх subtitle regression-тэй
-нийлээд 25/25, browser smoke 6/6 давсан. 390 px mobile overflow болон cached
+нийлээд 25/25; эцсийн Node 22 CI болон public production browser smoke тус бүр 7/7 давсан. 390 px mobile overflow болон cached
 metadata-аас үүсэх seek readiness алдааг browser тестээр олж зассан.
 
 ```text
