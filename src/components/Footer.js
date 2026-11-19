@@ -28,7 +28,7 @@ export default function Footer() {
           <p className="text-gray-600 dark:text-gray-400">Watch movies legally: support your local cinema</p>
         </div>
 
-        <div className="flex gap-4 text-sm">
+        <div className="flex max-w-full flex-wrap justify-center gap-4 text-sm md:justify-end">
           <a href="#" className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Facebook</a>
           <a href="#" className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Instagram</a>
           <a href="#" className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Twitter</a>

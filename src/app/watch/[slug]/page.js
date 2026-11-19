@@ -3,10 +3,17 @@
 import Link from 'next/link'
 import { notFound, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { getMovieBySlug } from '@/lib/movies'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SubtitlePanel from '@/components/SubtitlePanel'
+import LearningModeToggle from '@/components/learning/LearningModeToggle'
+
+const LearningDock = dynamic(() => import('@/components/learning/LearningDock'), {
+  ssr: false,
+  loading: () => <p className="py-6 text-slate-400" role="status">SceneChain ачаалж байна…</p>,
+})
 
 const SERIES_CATEGORIES = new Set(['kdrama', 'western', 'tv', 'series'])
 
@@ -70,6 +77,9 @@ export default function WatchPage() {
   const [, setSubtitleUrl] = useState(null)
   const [, setSubtitleLabel] = useState('Mongolian')
   const [source, setSource] = useState('vidsrc')
+  const [learning, setLearning] = useState(false)
+  const [learningSource, setLearningSource] = useState('sample')
+  const showMoviePlayer = !learning || learningSource === 'movie'
 
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
@@ -135,13 +145,15 @@ export default function WatchPage() {
           </div>
         </div>
 
-        {gate.status === 'loading' && (
+        <LearningModeToggle enabled={learning} onChange={setLearning} />
+
+        {showMoviePlayer && gate.status === 'loading' && (
           <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 animate-scale-in">
             <p className="animate-pulse text-slate-400">Checking your access…</p>
           </div>
         )}
 
-        {gate.status === 'blocked' && (
+        {showMoviePlayer && gate.status === 'blocked' && (
           <div className="flex aspect-video w-full flex-col items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 px-6 text-center animate-scale-in">
             <p className="text-2xl">🔒</p>
             <h2 className="mt-2 text-xl font-semibold">This title needs VIP</h2>
@@ -167,9 +179,9 @@ export default function WatchPage() {
 
         {gate.status === 'allowed' && (
           <>
-            {movie.tmdbId ? (
+            {showMoviePlayer && (movie.tmdbId ? (
               <div className="overflow-hidden rounded-2xl border border-slate-800 bg-black shadow-lg transition-all hover:shadow-xl animate-scale-in">
-                <div className="flex items-center gap-1 border-b border-slate-800 bg-slate-900/60 px-4 py-2.5 animate-fade-in-down">
+                <div className="flex flex-wrap items-center gap-1 border-b border-slate-800 bg-slate-900/60 px-4 py-2.5 animate-fade-in-down">
                   <span className="mr-2 text-xs uppercase tracking-wider text-slate-500">Player</span>
                   {visibleTabs.map((tab) => (
                     <button
@@ -219,9 +231,9 @@ export default function WatchPage() {
                     : 'No source available for this title yet.'}
                 </p>
               </div>
-            )}
+            ))}
 
-            <div className="mt-4">
+            {showMoviePlayer && <div className="mt-4">
               <SubtitlePanel
                 tmdbId={movie.tmdbId}
                 isTV={isTV}
@@ -235,7 +247,7 @@ onSubtitleChange={(url, label) => {
                    if (label) setSubtitleLabel(label)
                  }}
               />
-            </div>
+            </div>}
 
             {isTV && totalEpisodes > 1 && (
               <div className="mt-6 flex flex-wrap items-center gap-3 animate-fade-in-up delay-100">
@@ -276,6 +288,7 @@ onSubtitleChange={(url, label) => {
             </div>
           </>
         )}
+        {learning && <LearningDock key={slug} movieId={slug} movieTitle={movie.title} source={learningSource} onSource={setLearningSource} />}
       </div>
 
       <Footer />
