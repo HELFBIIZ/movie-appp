@@ -73,8 +73,10 @@ export function useLearningController(movieId: string, source: LearningSource) {
       savedAt,
     };
     const item: LearningItem = { ...data, id: itemId(data) };
-    if (update((current) => addItem(current, item)))
+    if (update((current) => addItem(current, item))) {
+      setNow(savedAt);
       setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} browser-local хадгалагдлаа.`);
+    }
   }
   function review(id: string, remembered: boolean) {
     const timestamp = Date.now();

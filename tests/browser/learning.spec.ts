@@ -103,6 +103,14 @@ test('normal watch gate remains intact and sample works inside the same route', 
   await expect(page.getByRole('region', { name: 'Word explanation' })).toContainText('тасалбар');
   await page.getByRole('button', { name: 'Save Word', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved Word', exact: true })).toBeDisabled();
+  await expect(
+    page
+      .getByLabel('Learning progress')
+      .getByText('Давтах карт', { exact: true })
+      .locator('..')
+      .locator('p')
+      .first(),
+  ).toHaveText('1');
   await page.screenshot({ path: 'test-results/scenechain-desktop.png', fullPage: true });
   await page.getByRole('button', { name: 'Save Sentence 00:07', exact: true }).click();
   await page.getByRole('button', { name: 'Word Quiz', exact: true }).click();

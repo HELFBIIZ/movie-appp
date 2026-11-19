@@ -10,7 +10,13 @@ import { useClerk, useUser } from '@clerk/nextjs'
 // /api/auth/clerk to mint our own `mn_session` cookie. After that the whole
 // app (VIP gate, XP, favorites, admin) works exactly as it does for the
 // password flow - nothing downstream knows this button was ever pressed.
-export default function ClerkOAuth({ className = '', label = 'Continue with' }) {
+export default function ClerkOAuth(props) {
+  // A keyless build has no ClerkProvider. Gate the component before its hooks mount.
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return null
+  return <EnabledClerkOAuth {...props} />
+}
+
+function EnabledClerkOAuth({ className = '', label = 'Continue with' }) {
   const enabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY)
   const router = useRouter()
   const { openSignIn, loaded } = useClerk()

@@ -1,6 +1,6 @@
 # VXNTA × SceneChain — багшид үзүүлэх тэмдэглэл
 
-Энэ ажлыг AI-ийн тусламжтай хөгжүүлсэн. Зорилго нь кодын архитектур, урсгал,
+
 хязгаар болон шалгалтыг ойлгож тайлбарлах юм.
 
 ## Яг хаана ажиллах вэ?
@@ -114,6 +114,7 @@ SRS зөв/буруу тоо, шат, дараагийн давтлагын time
 | --- | --- |
 | `src/app/watch/[slug]/page.js` | Existing watch page-д toggle болон lazy-loaded dock холбосон. Movie gate болон provider URL-уудыг хадгалсан. |
 | `src/components/Footer.js` | Existing social/help/admin холбоосууд жижиг дэлгэцэд 7 px overflow үүсгэж байсныг wrap хийсэн. URL болон footer агуулга өөрчлөгдөөгүй. |
+| `src/components/ClerkOAuth.js` | Clerk key байхгүй CI build-д provider-гүй hook дуудаж /login prerender унаж байсныг гадна component guard-аар зассан. Нэвтрэлтийн хүсэлт, Clerk settings, session bridge өөрчлөгдөөгүй. |
 | `LearningModeToggle.tsx` | Keyboard-оор ашиглах боломжтой Normal/Learning сонголт. |
 | `LearningDock.tsx` | Source сонголт, video, тайлбар, сургалтын panel-уудын responsive байрлал. |
 | `LearningPanels.tsx` | Transcript, Saved & Review, Word Quiz, Scene Quiz panel солих. |
