@@ -47,3 +47,7 @@ next-env.d.ts
 /fill.log
 /fill.err
 /sync.log
+
+# SceneChain local browser evidence
+/test-results/
+/playwright-report/

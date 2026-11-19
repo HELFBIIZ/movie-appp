@@ -4,13 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "cron": "node scripts/scheduler.mjs",
     "cron:once": "node scripts/scheduler.mjs --once",
     "backfill": "node scripts/backfill-media.mjs",
     "trailers": "node scripts/backfill-trailers.mjs",
-    "qpay:watch": "node scripts/qpay-watcher.mjs"
+    "qpay:watch": "node scripts/qpay-watcher.mjs",
+    "lint": "eslint src/components/learning src/lib/learning",
+    "typecheck": "tsc --noEmit",
+    "test:learning": "node --experimental-strip-types --test tests/learning.test.mjs",
+    "test:browser": "playwright test",
+    "format:check": "prettier --check src/components/learning src/lib/learning tests/learning.test.mjs tests/browser playwright.config.ts tsconfig.json eslint.config.mjs scripts/create-learning-sample.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.12",
@@ -20,16 +25,25 @@
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
   },
   "optionalDependencies": {
     "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.16.0",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
     "nodemon": "^3.1.14",
-    "tailwindcss": "^4"
+    "prettier": "^3.10.1",
+    "tailwindcss": "^4",
+    "typescript": "^6.0.3"
   }
 }
