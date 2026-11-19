@@ -115,6 +115,7 @@ SRS зөв/буруу тоо, шат, дараагийн давтлагын time
 | `src/app/watch/[slug]/page.js` | Existing watch page-д toggle болон lazy-loaded dock холбосон. Movie gate болон provider URL-уудыг хадгалсан. |
 | `src/components/Footer.js` | Existing social/help/admin холбоосууд жижиг дэлгэцэд 7 px overflow үүсгэж байсныг wrap хийсэн. URL болон footer агуулга өөрчлөгдөөгүй. |
 | `src/components/ClerkOAuth.js` | Clerk key байхгүй CI build-д provider-гүй hook дуудаж /login prerender унаж байсныг гадна component guard-аар зассан. Нэвтрэлтийн хүсэлт, Clerk settings, session bridge өөрчлөгдөөгүй. |
+| `src/proxy.ts` | Clerk key байхгүй үед login request/prefetch-ийг унагаахгүйгээр native password flow-д хүргэнэ. Clerk key-тэй үед existing middleware хэвээр; OAuth bridge өөрийн auth шалгалтаа хадгална. |
 | `LearningModeToggle.tsx` | Keyboard-оор ашиглах боломжтой Normal/Learning сонголт. |
 | `LearningDock.tsx` | Source сонголт, video, тайлбар, сургалтын panel-уудын responsive байрлал. |
 | `LearningPanels.tsx` | Transcript, Saved & Review, Word Quiz, Scene Quiz panel солих. |
@@ -125,7 +126,7 @@ SRS зөв/буруу тоо, шат, дараагийн давтлагын time
 | `WordPanel.tsx` | Сонгосон үгийн утга, тухайн өгүүлбэрийн контекст, жишээ, дүрэм, Save Word. |
 | `VocabularyPanel.tsx` | Картууд, due date, зөв/буруу, reveal/review болон устгах үйлдэл. |
 | `QuizPanel.tsx` | Сонголт, зөв/буруу feedback, оноо; storage амжилттай үед хариултыг хүлээн авна. |
-| `useLearningController.ts` | Video цаг, cue, сонголт, хадгалалт, quiz/SRS-ийн UI orchestration. Cached metadata event-ээс өмнө ready төлөвийг reset хийж seek-ийн дарааллын алдаанаас хамгаална. |
+| `useLearningController.ts` | Video цаг, cue, сонголт, хадгалалт, quiz/SRS-ийн UI orchestration. Ready төлөвийг media key-тэй холбож cached metadata event-ийн дараа reset хийхгүй; шинэ картын due тоог шууд шинэчилнэ. |
 | `useLearningStorage.ts` | Storage унших/бичих, cross-tab шинэчлэлт, амжилтгүй хадгалалтын UI. |
 | `useLesson.ts` | Зөвхөн хоёр тогтмол same-origin VTT татна; local object URL-ийн lifecycle. |
 | `src/lib/learning/types.ts` | Cue, үг, хадгалсан карт, progress, question-ийн TypeScript бүтэц. |

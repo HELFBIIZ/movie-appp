@@ -32,6 +32,7 @@ export default function LearningVideo({
         onTimeUpdate={(event) => onTime(event.currentTarget.currentTime)}
         onSeeked={(event) => onTime(event.currentTarget.currentTime)}
         onLoadedMetadata={onReady}
+        onCanPlay={onReady}
         onError={() => setError(true)}
       >
         {sample && (

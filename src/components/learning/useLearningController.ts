@@ -17,13 +17,16 @@ export const tabs = [
 export function useLearningController(movieId: string, source: LearningSource) {
   const [tab, setTab] = useState<(typeof tabs)[number]['id']>('transcript');
   const [time, setTime] = useState(0);
-  const [ready, setReady] = useState(false);
+  const [readyMedia, setReadyMedia] = useState('');
   const [now, setNow] = useState(() => Date.now());
   const [message, setMessage] = useState('');
   const [selection, setSelection] = useState<{ note: WordNote; cue: AlignedCue } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { progress, storageError, update } = useLearningStorage();
   const lesson = useLesson(source);
+  const mediaKey = `${lesson.mediaId}:${lesson.videoUrl}`;
+  const ready = readyMedia === mediaKey;
+  const setReady = () => setReadyMedia(mediaKey);
   useEffect(() => {
     const tick = () => setNow(Date.now());
     const timer = setInterval(tick, 30_000);
@@ -33,10 +36,9 @@ export function useLearningController(movieId: string, source: LearningSource) {
       document.removeEventListener('visibilitychange', tick);
     };
   }, []);
-  // Reset before a cached video's metadata event enables seeking.
+  // Readiness belongs to a media key; never reset it after a native event.
   useLayoutEffect(() => {
     setTime(0);
-    setReady(false);
     setSelection(null);
     setMessage('');
   }, [lesson.mediaId]);

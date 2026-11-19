@@ -86,7 +86,7 @@ export default function LearningDock({ movieId, movieTitle, source, onSource }: 
                   videoRef={videoRef}
                   active={active}
                   onTime={setTime}
-                  onReady={() => setReady(true)}
+                  onReady={setReady}
                   sample={source === 'sample'}
                 />
               )}

@@ -16,6 +16,14 @@ test('real watch access endpoint still rejects an unauthenticated viewer', async
   expect((await response.json()).error.code).toBe('UNAUTHENTICATED');
 });
 
+test('native password login page renders without creating an account or session', async ({
+  request,
+}) => {
+  const response = await request.get('/login');
+  expect(response.status()).toBe(200);
+  expect(await response.text()).toContain('Email or username');
+});
+
 test('local video and VTT stay in the browser and untrusted captions are plain text', async ({
   page,
 }) => {
