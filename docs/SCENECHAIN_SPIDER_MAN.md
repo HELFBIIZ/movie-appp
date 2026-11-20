@@ -5,6 +5,24 @@
 repo-д байсан MN VTT дээр movie-specific холболт нэмсэн. Эрх, киноны агуулга,
 орчуулгын зөв байдал болон бодит киноны timeline-ийг баталгаажуулсан гэж нэрлэхгүй.
 
+## Deploy болон шалгалтын бодит дүн
+
+- Live: **https://movie-appp-ivory.vercel.app/watch/spider-man-brand-new-day**.
+- Application commit: [e88da23](https://github.com/HELFBIIZ/movie-appp/commit/e88da23261f0910551d45790801a59d159acef4e).
+- [Node 22 CI — бүх шат амжилттай](https://github.com/HELFBIIZ/movie-appp/actions/runs/44650912377):
+  lint, TypeScript, format, 17 unit test, production build, 9 browser test.
+- Local unit + өмнөх subtitle regression: **32/32**.
+- Vercel existing project `vdzv/movie-appp`, deployment `dpl_6ZNgeotkF1ScbiJ4NF7C6vnBe31q`.
+- Public production дээр **mock-гүй Spider-Man guest test 1/1** болон live audit давсан.
+  Title зөв; access **401 UNAUTHENTICATED**; movie iframe/video 0; sampleOffered false;
+  guest notice true; 390 px viewport/scrollWidth хоёулаа 390.
+- `moviePlaybackVerified: false`, `filmIdentityVerified: false`,
+  `subtitlesVerifiedAgainstFilm: false`. Энэ deploy нь integration wiring;
+  authorized real-film playthrough баталгаажсан release гэж нэрлэхгүй.
+- API origin/window/schema, seek acknowledgment, English panel/file import,
+  word notes, quiz, persistence нь unit + тусдаа тодорхой тэмдэглэсэн protocol fixture-ээр
+  шалгагдсан. Fixture-ийг actual film/video/таймстампын нотолгоо гэж тооцоогүй.
+
 ## Аудит
 
 - Repository: `HELFBIIZ/movie-appp`; эхэлсэн commit `e52c4a2`.
