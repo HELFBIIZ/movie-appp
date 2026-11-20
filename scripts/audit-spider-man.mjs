@@ -19,6 +19,10 @@ const report = {
 fs.mkdirSync('test-results', { recursive: true });
 try {
   const page = await browser.newPage();
+  // This audit measures the guest movie route; assessment onboarding has separate browser tests.
+  await page.addInitScript(() =>
+    sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
+  );
   await page.goto(`${base}/watch/spider-man-brand-new-day`, {
     waitUntil: 'domcontentloaded',
     timeout: 60000,

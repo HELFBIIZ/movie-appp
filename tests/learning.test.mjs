@@ -25,6 +25,119 @@ import {
 import { isCorrect, vocabularyQuestions } from '../src/lib/learning/quiz.ts';
 import { htmlVideoAdapter, iframeProviders } from '../src/lib/learning/player-adapter/index.ts';
 import { contextQuestion, sampleLines } from '../src/lib/learning/sample.ts';
+import {
+  assessPlacement,
+  decodePlacement,
+  persistPlacement,
+  placementQuestions,
+  placementBands,
+  PLACEMENT_KEY,
+} from '../src/lib/learning/placement.ts';
+
+const placementAnswers = (right) =>
+  Object.fromEntries(
+    placementQuestions.map((question, index) => [
+      question.id,
+      right(index) ? question.answer : null,
+    ]),
+  );
+test('placement uses eight unique original questions and reports actual skill totals', () => {
+  assert.equal(new Set(placementQuestions.map((q) => q.id)).size, 8);
+  for (const q of placementQuestions) {
+    assert.ok(q.choices.includes(q.answer));
+    assert.equal(new Set(q.choices).size, q.choices.length);
+  }
+  const result = assessPlacement(
+    placementAnswers(() => true),
+    1000,
+  );
+  assert.equal(result.correct, 8);
+  assert.equal(result.band, 'intermediate');
+  assert.deepEqual(result.skills, {
+    vocabulary: { correct: 2, total: 2 },
+    grammar: { correct: 3, total: 3 },
+    reading: { correct: 3, total: 3 },
+  });
+  assert.equal(placementBands[result.band].words, 8);
+  assert.equal(placementBands[result.band].showTranslations, false);
+});
+test('placement recommendations are conservative and skipped answers never earn points', () => {
+  assert.equal(
+    assessPlacement(
+      placementAnswers(() => false),
+      1000,
+    ).band,
+    'beginner',
+  );
+  assert.equal(
+    assessPlacement(
+      placementAnswers(() => false),
+      1000,
+    ).correct,
+    0,
+  );
+  assert.equal(
+    assessPlacement(
+      placementAnswers((i) => i < 4),
+      1000,
+    ).band,
+    'foundation',
+  );
+  assert.equal(
+    assessPlacement(
+      placementAnswers((i) => i >= 4),
+      1000,
+    ).band,
+    'beginner',
+  );
+  assert.equal(
+    assessPlacement(
+      placementAnswers((i) => i !== 3),
+      1000,
+    ).band,
+    'intermediate',
+  );
+  assert.equal(
+    assessPlacement(
+      placementAnswers((i) => i !== 0),
+      1000,
+    ).band,
+    'foundation',
+  );
+});
+test('placement rejects missing, extra, forged and malformed responses', () => {
+  const answers = placementAnswers(() => true);
+  assert.throws(() => assessPlacement({}, 1000));
+  assert.throws(() => assessPlacement({ ...answers, extra: null }, 1000));
+  assert.throws(() => assessPlacement({ ...answers, greeting: 'not an offered answer' }, 1000));
+  assert.throws(() => assessPlacement(answers, Infinity));
+  assert.throws(() => decodePlacement('{broken'));
+  assert.throws(() => decodePlacement(JSON.stringify({ version: 2, answers, completedAt: 1000 })));
+  assert.equal(decodePlacement(null), null);
+});
+test('placement persists independently, recomputes the band, and exposes failed writes', () => {
+  const writes = [];
+  const answers = placementAnswers(() => false);
+  persistPlacement({ setItem: (key, value) => writes.push([key, value]) }, answers, 1000);
+  assert.equal(writes[0][0], PLACEMENT_KEY);
+  assert.notEqual(PLACEMENT_KEY, 'vxnta.scenechain.v1');
+  const raw = JSON.parse(writes[0][1]);
+  raw.band = 'intermediate';
+  assert.equal(decodePlacement(JSON.stringify(raw)).band, 'beginner');
+  assert.throws(
+    () =>
+      persistPlacement(
+        {
+          setItem: () => {
+            throw new Error('Quota');
+          },
+        },
+        answers,
+        1000,
+      ),
+    /Quota/,
+  );
+});
 
 const vtt = (body) => `WEBVTT\n\n${body}`;
 const cue = (text = 'Hello', start = '00:01.000', end = '00:03.000') =>

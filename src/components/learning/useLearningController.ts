@@ -9,6 +9,8 @@ import { useLesson } from './useLesson';
 import { useMovieLesson } from './useMovieLesson';
 import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
 import { SPIDER_MAN } from '@/lib/learning/movie';
+import { placementBands } from '@/lib/learning/placement';
+import { usePlacementProfile } from './usePlacementProfile';
 export type LearningSource = 'sample' | 'local' | 'movie';
 export const tabs = [
   { id: 'transcript', label: 'Хадмал' },
@@ -27,6 +29,17 @@ export function useLearningController(
   const [now, setNow] = useState(() => Date.now());
   const [message, setMessage] = useState('');
   const [selection, setSelection] = useState<{ note: WordNote; cue: AlignedCue } | null>(null);
+  const placement = usePlacementProfile();
+  const profileKey = placement.profile?.completedAt ?? 0;
+  const [translationChoice, setTranslationChoice] = useState<{ key: number; show: boolean } | null>(
+    null,
+  );
+  const showTranslations =
+    translationChoice?.key === profileKey
+      ? translationChoice.show
+      : placement.profile
+        ? placementBands[placement.profile.band].showTranslations
+        : true;
   const videoRef = useRef<HTMLVideoElement>(null);
   const { progress, storageError, update } = useLearningStorage();
   const baseLesson = useLesson(source);
@@ -171,6 +184,9 @@ export function useLearningController(
     review,
     answer,
     wordSaved,
+    placement,
+    showTranslations,
+    setShowTranslations: (show: boolean) => setTranslationChoice({ key: profileKey, show }),
     movieLesson,
     moviePlayer,
   };

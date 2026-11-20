@@ -1,4 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { skipPlacement } from './helpers';
+test.beforeEach(async ({ page }) => {
+  await skipPlacement(page);
+});
 
 const route = '/watch/spider-man-brand-new-day';
 
@@ -92,7 +96,7 @@ test('CineSrc protocol fixture validates UI wiring only; this is not film playba
   );
   await page.goto(route);
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
-  await page.getByRole('button', { name: 'Хадмалтай тоглуулагч сонгох', exact: true }).click();
+  await expect(page.getByRole('combobox', { name: 'Тоглуулагч', exact: true })).toHaveValue('cine');
   await expect(page.getByText('Тоглуулагчийн цаг:', { exact: false })).toBeVisible();
   await expect(page.getByRole('list', { name: 'Bilingual transcript' }).locator('li')).toHaveCount(
     20,

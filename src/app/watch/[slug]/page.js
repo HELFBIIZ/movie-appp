@@ -85,10 +85,16 @@ export default function WatchPage() {
   const [learning, setLearning] = useState(false)
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get('learn') === '1') setLearning(true)
+    const openLearning = () => setLearning(true)
+    window.addEventListener('vxnta:learning-open', openLearning)
+    return () => window.removeEventListener('vxnta:learning-open', openLearning)
   }, [slug])
   const [learningSource, setLearningSource] = useState(() => slug === SPIDER_MAN.slug ? 'movie' : 'sample')
   const movieIframeRef = useRef(null)
   const showMoviePlayer = !learning || learningSource === 'movie'
+  useEffect(() => {
+    if (learning && learningSource === 'movie' && slug === SPIDER_MAN.slug && gate.status === 'allowed') setSource('cine')
+  }, [learning, learningSource, slug, gate.status])
   useEffect(() => {
     setLearningSource(slug === SPIDER_MAN.slug ? 'movie' : 'sample')
     setSubtitleUrl(null)

@@ -18,6 +18,7 @@ type Props = {
   onWord: (note: WordNote, cue: AlignedCue) => void;
   onSave: (cue: AlignedCue) => void;
   emptyMessage?: string;
+  showTranslations?: boolean;
 };
 
 export default function SubtitleTranscript({
@@ -31,6 +32,7 @@ export default function SubtitleTranscript({
   onWord,
   onSave,
   emptyMessage,
+  showTranslations = true,
 }: Props) {
   const [page, setPage] = useState(0);
   const activeIndex = cues.findIndex((cue) => activeIds.includes(cue.id));
@@ -132,7 +134,7 @@ export default function SubtitleTranscript({
                   );
                 })}
               </p>
-              {cue.translation && (
+              {showTranslations && cue.translation && (
                 <p className="mt-2 text-sm leading-6 text-slate-400" lang="mn">
                   {cue.translation}
                 </p>

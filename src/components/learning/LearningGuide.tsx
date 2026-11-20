@@ -1,6 +1,7 @@
 'use client';
 import { Check, Headphones, MousePointer2, Repeat2 } from 'lucide-react';
 import { lookupWord } from '@/lib/learning/sample';
+import { placementBands } from '@/lib/learning/placement';
 import type { LearningController, LearningSource } from './useLearningController';
 
 export default function LearningGuide({
@@ -12,6 +13,9 @@ export default function LearningGuide({
 }) {
   const { scoped, lesson, time, ready, videoRef, setMessage, setTab, setSelection } = controller;
   const words = scoped.filter((item) => item.kind === 'word');
+  const goal = controller.placement.profile
+    ? placementBands[controller.placement.profile.band].words
+    : 3;
   const reviewed = words.filter((item) => item.correct + item.incorrect > 0).length;
   const cue = lesson.cues.find((item) => item.language !== 'mn');
   const example =
@@ -57,6 +61,9 @@ export default function LearningGuide({
       </ol>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm leading-6 text-slate-300">
+          <span className="mb-1 block text-xs text-amber-200">
+            Энэ хичээлийн зорилго: {Math.min(words.length, goal)}/{goal} үг
+          </span>
           {words.length
             ? `${words.length} үг хадгалсан · ${reviewed} үгээ давтсан. Одоо утгыг нь санаж үзээрэй.`
             : step === 1

@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button"
 import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy, LogOut, User } from "lucide-react"
 import { useTheme } from "@/components/ThemeProvider"
 import NotificationBell from "@/components/NotificationBell"
+import dynamic from "next/dynamic"
+
+const LevelCheck = dynamic(() => import('@/components/learning/LevelCheck'), { ssr: false })
 
 const genres = [
   { label: "Action", slug: "action" },
@@ -60,6 +63,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/90 bg-[#faf7f1]/95 border-[#e5dcc7] dark:bg-[#110e0a]/92 dark:border-black/60 supports-[backdrop-filter]:dark:bg-[#110e0a]/80">
+      <LevelCheck />
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 group">

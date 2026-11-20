@@ -10,6 +10,7 @@ export default function LearningVideo({
   onTime,
   onReady,
   sample,
+  showTranslations = true,
 }: {
   url: string;
   videoRef: RefObject<HTMLVideoElement | null>;
@@ -17,6 +18,7 @@ export default function LearningVideo({
   onTime: (time: number) => void;
   onReady: () => void;
   sample: boolean;
+  showTranslations?: boolean;
 }) {
   const [error, setError] = useState(false);
   return (
@@ -58,9 +60,11 @@ export default function LearningVideo({
               <p className="text-base leading-7 text-amber-100" lang="en">
                 {cue.text}
               </p>
-              <p className="mt-1 text-sm leading-6 text-slate-400" lang="mn">
-                {cue.translation || 'Энэ cue-д монгол орчуулга алга.'}
-              </p>
+              {showTranslations && (
+                <p className="mt-1 text-sm leading-6 text-slate-400" lang="mn">
+                  {cue.translation || 'Энэ cue-д монгол орчуулга алга.'}
+                </p>
+              )}
             </div>
           ))
         ) : (

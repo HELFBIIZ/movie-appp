@@ -34,6 +34,7 @@ export default function LearningPanels({
     answer,
     moviePlayer,
     movieLesson,
+    showTranslations,
   } = controller;
   const guestMovie =
     source === 'movie' &&
@@ -80,6 +81,7 @@ export default function LearningPanels({
           activeIds={active.map((cue) => cue.id)}
           canSeek={source === 'movie' ? moviePlayer.time !== null : ready}
           curated={source === 'sample'}
+          showTranslations={showTranslations}
           canSave={!!progress && !lesson.loading}
           savedSentences={savedSentences}
           onSeek={(seconds) => {

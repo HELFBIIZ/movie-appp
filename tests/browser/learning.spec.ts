@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { skipPlacement } from './helpers';
 
 const route = '/watch/inception';
 async function selectSource(page: Page, name: string) {
@@ -11,6 +12,7 @@ async function selectSource(page: Page, name: string) {
   await settings.locator('summary').first().click();
 }
 test.beforeEach(async ({ page }) => {
+  await skipPlacement(page);
   await page.route('**/api/subtitles/**', (request) => request.fulfill({ status: 404, body: '' }));
   // Only mock the read/access response, never create users, subscriptions or XP.
   await page.route('**/api/watch/inception', (request) =>

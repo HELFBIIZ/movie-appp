@@ -1,4 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { skipPlacement } from './helpers';
+test.beforeEach(async ({ page }) => {
+  await skipPlacement(page);
+});
 
 test('a new visitor starts a real free lesson, hears a sentence, saves a word and reviews it', async ({
   page,

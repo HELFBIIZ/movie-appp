@@ -10,6 +10,7 @@ import { SPIDER_MAN } from '@/lib/learning/movie';
 import MovieLearningStatus from './MovieLearningStatus';
 import WordDialog from './WordDialog';
 import LearningGuide from './LearningGuide';
+import LearningProfile from './LearningProfile';
 type Props = {
   movieId: string;
   movieTitle: string;
@@ -28,7 +29,8 @@ export default function LearningDock({
 }: Props) {
   const controller = useLearningController(movieId, source, movieContext);
   const movieSpecific = movieId === SPIDER_MAN.slug;
-  const { lesson, videoRef, active, setTime, setReady } = controller;
+  const { lesson, videoRef, active, setTime, setReady, showTranslations, setShowTranslations } =
+    controller;
 
   return (
     <section
@@ -42,6 +44,7 @@ export default function LearningDock({
         <p className="mt-2 text-sm text-slate-400">
           Сонсоорой. Мэдэхгүй үгээ дараарай. Хадгалаад, утгыг нь санаж үзээрэй.
         </p>
+        <LearningProfile showTranslations={showTranslations} onTranslations={setShowTranslations} />
         {!intro && (
           <details className="mt-3 text-sm">
             <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
@@ -113,6 +116,7 @@ export default function LearningDock({
                   onTime={setTime}
                   onReady={setReady}
                   sample={source === 'sample'}
+                  showTranslations={showTranslations}
                 />
               )}
             </div>
