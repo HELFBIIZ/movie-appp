@@ -74,7 +74,7 @@ export function DropdownMenuContent({ children, align = 'start', side = 'bottom'
 
   return (
     <div
-      className={`absolute ${sideClass} ${alignClass} mt-1 mb-1 bg-white border rounded shadow-lg ${className}`}
+      className={`absolute ${sideClass} ${alignClass} mt-1 mb-1 bg-white border rounded shadow-lg dark:bg-slate-800 dark:border-slate-700 ${className}`}
       role="menu"
     >
       {children}
@@ -86,7 +86,7 @@ export function DropdownMenuItem({ children, onClick, ...props }) {
   return (
     <div
       role="menuitem"
-      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+      className="px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-slate-700 dark:text-slate-200"
       onClick={(event) => {
         onClick?.(event)
       }}

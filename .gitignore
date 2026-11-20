@@ -36,6 +36,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# database backups (rotated by scripts/backup.mjs)
+/backups
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off script output
+/fill.log
+/fill.err
+/sync.log
+
+# SceneChain local browser evidence
+/test-results/
+/playwright-report/

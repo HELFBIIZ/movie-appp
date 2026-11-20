@@ -1,0 +1,22 @@
+name: SceneChain checks
+on:
+  push:
+    branches: [feat/scenechain-watch, feat/scenechain-spider-man]
+  pull_request:
+jobs:
+  learning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm run test:learning
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
