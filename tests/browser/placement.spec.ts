@@ -60,11 +60,11 @@ test('login is uninterrupted; first site entry can skip and later answer unknown
   await page.goto('/login', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
   await expect(page.getByRole('dialog', { name: 'Эхлэх түвшний тест' })).not.toBeVisible();
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   const dialog = page.getByRole('dialog', { name: 'Эхлэх түвшний тест' });
   await dialog.getByRole('button', { name: 'Дараа үзье', exact: true }).click();
   expect(await page.evaluate((key) => localStorage.getItem(key), PLACEMENT_KEY)).toBeNull();
-  await page.goto('/learn');
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: 'Нэг өгүүлбэрээс эхэлье.' })).toBeVisible();
   await expect(dialog).not.toBeVisible();
   await page.getByRole('button', { name: '2 минутын тест', exact: true }).click();
@@ -88,7 +88,7 @@ test('corrupt placement is reported without deleting placement or vocabulary dat
       '{"items":[],"contextCorrect":3,"contextIncorrect":1}',
     );
   });
-  await page.goto('/learn');
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   const dialog = page.getByRole('dialog', { name: 'Эхлэх түвшний тест' });
   await expect(dialog.getByRole('alert')).toContainText('уншиж чадсангүй');
   await dialog.getByRole('button', { name: 'Дараа үзье', exact: true }).click();
@@ -105,12 +105,12 @@ test('corrupt placement is reported without deleting placement or vocabulary dat
 test('a failed profile write keeps a visible warning and never claims persistence', async ({
   page,
 }) => {
-  await page.goto('/learn');
-  await page.evaluate(() => {
+  await page.addInitScript(() => {
     Storage.prototype.setItem = () => {
       throw new DOMException('Quota', 'QuotaExceededError');
     };
   });
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   const result = await complete(page, (q) => q.answer);
   await expect(result.getByRole('alert')).toContainText('хадгалагдсангүй');
   expect(await page.evaluate((key) => localStorage.getItem(key), PLACEMENT_KEY)).toBeNull();
@@ -131,7 +131,7 @@ test('the recommended lesson actually hides translation and its toggle restores 
       ),
     Object.fromEntries(placementQuestions.map((q) => [q.id, q.answer])),
   );
-  await page.goto('/learn');
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   const first = page.getByRole('list', { name: 'Bilingual transcript' }).locator('li').first();
   await expect(first).toBeVisible();
   await expect(first.locator('[lang="mn"]')).toHaveCount(0);

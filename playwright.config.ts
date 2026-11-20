@@ -7,6 +7,9 @@ export default defineConfig({
   use: {
     baseURL: process.env.SCENECHAIN_BASE_URL || 'http://127.0.0.1:3100',
     headless: true,
+    actionTimeout: 20_000,
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
     launchOptions: { executablePath: process.env.SCENECHAIN_CHROMIUM_PATH || undefined },
   },
   webServer: process.env.SCENECHAIN_BASE_URL

@@ -11,7 +11,7 @@ test('a new visitor starts a real free lesson, hears a sentence, saves a word an
   page.on('request', (request) => {
     if (request.url().includes('/api/watch/')) accessRequests.push(request.url());
   });
-  await page.goto('/learn');
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: 'Нэг өгүүлбэрээс эхэлье.' })).toBeVisible();
   await expect(page.getByText('38 секундийн сургалтын жишээ · Киноны хэсэг биш.')).toBeVisible();
   const video = page.getByLabel('The Last Train sample lesson video');
@@ -39,7 +39,7 @@ test('a new visitor starts a real free lesson, hears a sentence, saves a word an
     'aria-valuenow',
     '1',
   );
-  await page.reload();
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('button', { name: 'Хадгалсан (1)', exact: true })).toBeVisible();
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('vxnta.scenechain.v1')!));
   expect(saved.items[0]).toMatchObject({

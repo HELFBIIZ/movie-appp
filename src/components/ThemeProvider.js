@@ -12,7 +12,8 @@ export function ThemeProvider({ children }) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme')
+    let saved = null
+    try { saved = localStorage.getItem('theme') } catch { /* Use this visit's preference when storage is blocked. */ }
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     const nextTheme = saved ? saved === 'dark' : prefersDark
 
@@ -25,7 +26,7 @@ export function ThemeProvider({ children }) {
 
     const root = document.documentElement
     root.classList.toggle('dark', isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light') } catch { /* Theme switching still works without persistence. */ }
   }, [isDark, mounted])
 
   const toggleTheme = () => setIsDark((current) => !current)
