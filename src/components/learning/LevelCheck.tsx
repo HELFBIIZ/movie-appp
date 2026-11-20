@@ -112,7 +112,7 @@ export default function LevelCheck() {
           <p className="text-4xl" aria-hidden="true">
             🍿
           </p>
-          <h2 className="mt-4 text-2xl font-semibold leading-tight">Танд аль түвшнээс эхлэх вэ?</h2>
+          <h2 className="mt-4 text-2xl font-semibold leading-tight">Та аль түвшнээс эхлэх вэ?</h2>
           <p className="mt-3 text-sm leading-7 text-slate-400">
             Киноны орой, найзын зурвас, нэг сонирхолтой хэллэг. 8 жижиг асуултаар эхлэх түвшнээ
             баримжаалъя.
