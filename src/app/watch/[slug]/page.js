@@ -83,6 +83,9 @@ export default function WatchPage() {
   }, [])
   const [source, setSource] = useState('vidsrc')
   const [learning, setLearning] = useState(false)
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('learn') === '1') setLearning(true)
+  }, [slug])
   const [learningSource, setLearningSource] = useState(() => slug === SPIDER_MAN.slug ? 'movie' : 'sample')
   const movieIframeRef = useRef(null)
   const showMoviePlayer = !learning || learningSource === 'movie'

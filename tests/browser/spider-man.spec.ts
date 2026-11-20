@@ -126,6 +126,7 @@ test('CineSrc protocol fixture validates UI wiring only; this is not film playba
     .fill('User-entered fixture note');
   await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Хадгалсан', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Тайлбарыг хаах', exact: true }).click();
   await page.getByRole('button', { name: 'Өгүүлбэр хадгалах 01:12', exact: true }).click();
   await page.getByRole('button', { name: 'Давтах', exact: true }).click();
   await page.getByRole('button', { name: 'Туршилтын протокол', exact: true }).click();

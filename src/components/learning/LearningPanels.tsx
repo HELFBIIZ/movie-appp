@@ -42,7 +42,7 @@ export default function LearningPanels({
     !lesson.loading &&
     !lesson.error;
   return (
-    <div className="min-w-0 overflow-hidden rounded-xl border border-white/10">
+    <div id="learning-panels" className="min-w-0 overflow-hidden rounded-xl border border-white/10">
       <div
         className="flex gap-1 border-b border-white/10 bg-slate-900/80 p-2"
         role="group"
@@ -120,6 +120,7 @@ export default function LearningPanels({
             key={lesson.mediaId}
             questions={vocabularyQuestions(scoped)}
             onAnswer={answer}
+            onBack={() => setTab('transcript')}
           />
           {source === 'sample' && (
             <details className="border-t border-white/10 p-4">

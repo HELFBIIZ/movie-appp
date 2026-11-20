@@ -123,6 +123,7 @@ test('normal watch gate remains intact and sample works inside the same route', 
   await expect(page.getByRole('button', { name: 'Хадгалсан', exact: true })).toBeDisabled();
   await expect(page.getByLabel('Learning progress')).toContainText('Давтах: 1');
   await page.screenshot({ path: 'test-results/scenechain-desktop.png', fullPage: true });
+  await page.getByRole('button', { name: 'Тайлбарыг хаах', exact: true }).click();
   await page.getByRole('button', { name: 'Өгүүлбэр хадгалах 00:07', exact: true }).click();
   await page.getByRole('button', { name: 'Давтах', exact: true }).click();
   await page.getByRole('button', { name: 'тасалбар', exact: true }).click();
@@ -187,7 +188,7 @@ test('mobile layout fits viewport and storage failures do not report saved succe
   });
   await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
   await expect(
-    page.getByRole('region', { name: 'SceneChain Learning Dock' }).getByRole('alert'),
+    page.getByRole('dialog', { name: 'Үгийн тайлбар' }).getByRole('alert'),
   ).toContainText('Хадгалж чадсангүй');
   await expect(page.getByRole('button', { name: 'Үг хадгалах', exact: true })).toBeEnabled();
   await page.screenshot({ path: 'test-results/scenechain-mobile.png', fullPage: true });

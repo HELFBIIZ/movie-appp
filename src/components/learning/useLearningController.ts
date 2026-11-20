@@ -116,7 +116,9 @@ export function useLearningController(
     if (update((current) => addItem(current, item))) {
       setNow(savedAt);
       setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} хадгалагдлаа.`);
+      return true;
     }
+    return false;
   }
   function review(id: string, remembered: boolean) {
     const timestamp = Date.now();

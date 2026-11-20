@@ -2,7 +2,7 @@
 import { isDue } from '@/lib/learning/srs';
 import type { LearningController } from './useLearningController';
 export default function LearningProgress({ controller }: { controller: LearningController }) {
-  const { items, now, message, storageError } = controller;
+  const { items, now, message, storageError, selection } = controller;
   return (
     <div className="mt-4 border-t border-white/10 pt-4 text-sm">
       <div
@@ -25,7 +25,7 @@ export default function LearningProgress({ controller }: { controller: LearningC
           {message}
         </p>
       )}
-      {storageError && (
+      {storageError && !selection && (
         <p role="alert" className="mt-2 text-rose-300">
           {storageError}
         </p>

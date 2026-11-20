@@ -2,20 +2,21 @@
 import { BookOpen } from 'lucide-react';
 import LocalMediaInput from './LocalMediaInput';
 import LearningVideo from './LearningVideo';
-import WordPanel from './WordPanel';
 import LearningPanels from './LearningPanels';
 import LearningProgress from './LearningProgress';
 import { useLearningController, type LearningSource } from './useLearningController';
 import type { MoviePlayerContext } from './useMoviePlayer';
 import { SPIDER_MAN } from '@/lib/learning/movie';
 import MovieLearningStatus from './MovieLearningStatus';
-import ManualWordPanel from './ManualWordPanel';
+import WordDialog from './WordDialog';
+import LearningGuide from './LearningGuide';
 type Props = {
   movieId: string;
   movieTitle: string;
   source: LearningSource;
   onSource: (source: LearningSource) => void;
   movieContext?: MoviePlayerContext;
+  intro?: boolean;
 };
 export default function LearningDock({
   movieId,
@@ -23,11 +24,11 @@ export default function LearningDock({
   source,
   onSource,
   movieContext,
+  intro = false,
 }: Props) {
   const controller = useLearningController(movieId, source, movieContext);
   const movieSpecific = movieId === SPIDER_MAN.slug;
-  const { lesson, videoRef, active, setTime, setReady, selection, wordSaved, progress, save } =
-    controller;
+  const { lesson, videoRef, active, setTime, setReady } = controller;
 
   return (
     <section
@@ -39,39 +40,44 @@ export default function LearningDock({
           <BookOpen size={19} className="text-[#c9a227]" aria-hidden="true" /> Англи үг суръя
         </h2>
         <p className="mt-2 text-sm text-slate-400">
-          Хадмалын үг дээр дараад утгыг нь тэмдэглэж, хадгалаарай.
+          Сонсоорой. Мэдэхгүй үгээ дараарай. Хадгалаад, утгыг нь санаж үзээрэй.
         </p>
-        <details className="mt-3 text-sm">
-          <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
-            Тохиргоо
-          </summary>
-          <p className="mt-3 text-slate-400">{movieTitle} · Видеогоо сонгоно уу.</p>
-          <div
-            className="mt-3 flex flex-wrap gap-2"
-            role="group"
-            aria-label="Learning media source"
-          >
-            {[
-              { value: 'sample', label: 'Сургалтын жишээ' },
-              { value: 'movie', label: 'Кино' },
-              { value: 'local', label: 'Өөрийн видео' },
-            ]
-              .filter(({ value }) => !movieSpecific || value !== 'sample')
-              .map(({ value, label }) => (
-                <button
-                  type="button"
-                  key={value}
-                  aria-pressed={source === value}
-                  onClick={() => onSource(value as LearningSource)}
-                  className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
-                >
-                  {label}
-                </button>
-              ))}
-          </div>
-        </details>
+        {!intro && (
+          <details className="mt-3 text-sm">
+            <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
+              Тохиргоо
+            </summary>
+            <p className="mt-3 text-slate-400">{movieTitle} · Видеогоо сонгоно уу.</p>
+            <div
+              className="mt-3 flex flex-wrap gap-2"
+              role="group"
+              aria-label="Learning media source"
+            >
+              {[
+                { value: 'sample', label: 'Сургалтын жишээ' },
+                { value: 'movie', label: 'Кино' },
+                { value: 'local', label: 'Өөрийн видео' },
+              ]
+                .filter(({ value }) => !movieSpecific || value !== 'sample')
+                .map(({ value, label }) => (
+                  <button
+                    type="button"
+                    key={value}
+                    aria-pressed={source === value}
+                    onClick={() => onSource(value as LearningSource)}
+                    className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+            </div>
+          </details>
+        )}
       </div>
       <div className="p-4 md:p-5">
+        {(source !== 'movie' || lesson.cues.length > 0) && (
+          <LearningGuide controller={controller} source={source} />
+        )}
         {source === 'movie' && movieSpecific ? (
           <MovieLearningStatus controller={controller} context={movieContext} />
         ) : source === 'movie' ? (
@@ -109,42 +115,11 @@ export default function LearningDock({
                   sample={source === 'sample'}
                 />
               )}
-              {selection && source === 'sample' && (
-                <WordPanel
-                  selection={selection}
-                  saved={wordSaved}
-                  canSave={!!progress}
-                  onSave={() => save('word', selection.cue, selection.note)}
-                />
-              )}
-              {selection && source === 'local' && (
-                <ManualWordPanel
-                  key={`${lesson.mediaId}:${selection.cue.id}:${selection.note.word}`}
-                  selection={selection}
-                  saved={wordSaved}
-                  canSave={!!progress && !lesson.loading}
-                  onSave={(note) => save('word', selection.cue, note)}
-                />
-              )}
-              {source === 'sample' && !selection && (
-                <div className="mt-4 flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-400">
-                  <BookOpen className="shrink-0 text-[#c9a227]" size={19} aria-hidden="true" />
-                  <p>Доогуур зураастай үг дээр дарж утгыг нь хараарай.</p>
-                </div>
-              )}
             </div>
           )}
           <LearningPanels controller={controller} source={source} />
         </div>
-        {selection && source === 'movie' && (
-          <ManualWordPanel
-            key={`${lesson.mediaId}:${selection.cue.id}:${selection.note.word}`}
-            selection={selection}
-            saved={wordSaved}
-            canSave={!!progress && !lesson.loading}
-            onSave={(note) => save('word', selection.cue, note)}
-          />
-        )}
+        <WordDialog controller={controller} source={source} />
         <LearningProgress controller={controller} />
       </div>
     </section>

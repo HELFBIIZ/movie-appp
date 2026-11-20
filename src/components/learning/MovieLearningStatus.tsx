@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { formatTime } from '@/lib/learning/vtt';
 import type { MoviePlayerContext } from './useMoviePlayer';
 import type { LearningController } from './useLearningController';
@@ -14,9 +15,20 @@ export default function MovieLearningStatus({
   return (
     <div className="mb-4 rounded-xl border border-white/10 bg-slate-900/50 p-4 text-sm">
       {!context?.allowed ? (
-        <p role="status" className="leading-6 text-slate-300">
-          Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.
-        </p>
+        <div>
+          <p role="status" className="leading-6 text-slate-300">
+            Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.
+          </p>
+          <Link
+            href="/learn"
+            className="mt-3 inline-flex rounded-lg bg-[#c9a227] px-4 py-2 font-semibold text-slate-950"
+          >
+            Үнэгүй дасгалаар эхлэх
+          </Link>
+          <p className="mt-2 text-xs text-slate-400">
+            Сургалтын богино жишээгээр эхлээд туршаарай.
+          </p>
+        </div>
       ) : (
         <>
           {context.provider !== 'cine' ? (
