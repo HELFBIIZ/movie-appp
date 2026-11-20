@@ -1,7 +1,7 @@
 name: SceneChain checks
 on:
   push:
-    branches: [feat/scenechain-watch]
+    branches: [feat/scenechain-watch, feat/scenechain-spider-man]
   pull_request:
 jobs:
   learning:

@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { notFound, useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getMovieBySlug } from '@/lib/movies'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SubtitlePanel from '@/components/SubtitlePanel'
 import LearningModeToggle from '@/components/learning/LearningModeToggle'
+import { SPIDER_MAN } from '@/lib/learning/movie'
 
 const LearningDock = dynamic(() => import('@/components/learning/LearningDock'), {
   ssr: false,
@@ -74,12 +75,22 @@ export default function WatchPage() {
   const [episode, setEpisode] = useState(1)
   const [gate, setGate] = useState({ status: 'loading' })
 
-  const [, setSubtitleUrl] = useState(null)
-  const [, setSubtitleLabel] = useState('Mongolian')
+  const [subtitleUrl, setSubtitleUrl] = useState(null)
+  const [subtitleLabel, setSubtitleLabel] = useState('Mongolian')
+  const handleSubtitleChange = useCallback((url, label) => {
+    setSubtitleUrl(url)
+    if (label) setSubtitleLabel(label)
+  }, [])
   const [source, setSource] = useState('vidsrc')
   const [learning, setLearning] = useState(false)
-  const [learningSource, setLearningSource] = useState('sample')
+  const [learningSource, setLearningSource] = useState(() => slug === SPIDER_MAN.slug ? 'movie' : 'sample')
+  const movieIframeRef = useRef(null)
   const showMoviePlayer = !learning || learningSource === 'movie'
+  useEffect(() => {
+    setLearningSource(slug === SPIDER_MAN.slug ? 'movie' : 'sample')
+    setSubtitleUrl(null)
+    setSubtitleLabel('Mongolian')
+  }, [slug])
 
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
@@ -204,7 +215,8 @@ export default function WatchPage() {
                 </div>
                 <div className="aspect-video w-full">
 <iframe
-  key={`${source}-${season}-${episode}`}
+  ref={movieIframeRef}
+  key={`${movie.tmdbId}-${source}-${season}-${episode}`}
   src={activeEmbed}
   className="h-full w-full"
   frameBorder="0"
@@ -233,7 +245,7 @@ export default function WatchPage() {
               </div>
             ))}
 
-            {showMoviePlayer && <div className="mt-4">
+            {showMoviePlayer && <div id="watch-subtitle-panel" className="mt-4">
               <SubtitlePanel
                 tmdbId={movie.tmdbId}
                 isTV={isTV}
@@ -242,10 +254,7 @@ export default function WatchPage() {
                 title={movie.title}
                 year={movie.year}
                 slug={movie.slug}
-onSubtitleChange={(url, label) => {
-                   setSubtitleUrl(url)
-                   if (label) setSubtitleLabel(label)
-                 }}
+                onSubtitleChange={handleSubtitleChange}
               />
             </div>}
 
@@ -288,7 +297,7 @@ onSubtitleChange={(url, label) => {
             </div>
           </>
         )}
-        {learning && <LearningDock key={slug} movieId={slug} movieTitle={movie.title} source={learningSource} onSource={setLearningSource} />}
+        {learning && <LearningDock key={slug} movieId={slug} movieTitle={movie.title} source={learningSource} onSource={setLearningSource} movieContext={{ tmdbId: movie.tmdbId, provider: source, allowed: gate.status === 'allowed' && showMoviePlayer, iframeRef: movieIframeRef, onSelectProvider: setSource, englishSubtitleUrl: subtitleLabel === 'English' ? subtitleUrl : undefined }} />}
       </div>
 
       <Footer />

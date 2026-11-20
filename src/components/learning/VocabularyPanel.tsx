@@ -39,6 +39,10 @@ export default function VocabularyPanel({ items, now, onReview, onRemove }: Prop
               </button>
             </div>
             <p className="mt-2 text-sm text-slate-300">{item.example}</p>
+            {item.provenance === 'user-note' && (
+              <p className="mt-2 text-sm text-slate-500">Өөрийн тэмдэглэл · баталгаажаагүй</p>
+            )}
+            {item.grammar && <p className="mt-2 text-sm text-slate-400">Дүрэм: {item.grammar}</p>}
             <p className="mt-2 text-sm text-slate-500">
               {item.kind === 'word' ? 'Үг' : 'Өгүүлбэр'} · {formatTime(item.cueStart)} ·{' '}
               {item.movieId}

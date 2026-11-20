@@ -12,11 +12,18 @@ const unsupported: PlayerCapabilities = {
   seek: false,
 };
 
-// These are conservative integration capabilities, not claims about all versions
-// of a provider. No verified command/event contract for these exact iframe URLs.
+// Conservative static defaults. CineSrc's documented protocol is implemented in
+// cinesrc.ts; capabilities are promoted only from observed, validated events.
+// This registry does not assert that a particular film/stream was verified.
 export const iframeProviders = [
   { id: 'vidsrc', origin: 'https://vidsrcme.ru', capabilities: unsupported },
-  { id: 'cine', origin: 'https://cinesrc.st', capabilities: unsupported },
+  {
+    id: 'cine',
+    origin: 'https://cinesrc.st',
+    capabilities: unsupported,
+    documentation: 'https://cinesrc.st/docs',
+    verification: 'runtime-events-required',
+  },
   { id: 'superembed', origin: 'https://multiembed.mov', capabilities: unsupported },
   { id: 'embedmaster', origin: 'https://embedmaster.link', capabilities: unsupported },
   { id: 'embedapi', origin: 'https://watch.embed-api.stream', capabilities: unsupported },

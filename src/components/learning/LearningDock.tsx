@@ -7,14 +7,26 @@ import WordPanel from './WordPanel';
 import LearningPanels from './LearningPanels';
 import LearningProgress from './LearningProgress';
 import { useLearningController, type LearningSource } from './useLearningController';
+import type { MoviePlayerContext } from './useMoviePlayer';
+import { SPIDER_MAN } from '@/lib/learning/movie';
+import MovieLearningStatus from './MovieLearningStatus';
+import ManualWordPanel from './ManualWordPanel';
 type Props = {
   movieId: string;
   movieTitle: string;
   source: LearningSource;
   onSource: (source: LearningSource) => void;
+  movieContext?: MoviePlayerContext;
 };
-export default function LearningDock({ movieId, movieTitle, source, onSource }: Props) {
-  const controller = useLearningController(movieId, source);
+export default function LearningDock({
+  movieId,
+  movieTitle,
+  source,
+  onSource,
+  movieContext,
+}: Props) {
+  const controller = useLearningController(movieId, source, movieContext);
+  const movieSpecific = movieId === SPIDER_MAN.slug;
   const { lesson, videoRef, active, setTime, setReady, selection, wordSaved, progress, save } =
     controller;
 
@@ -41,19 +53,23 @@ export default function LearningDock({ movieId, movieTitle, source, onSource }: 
             { value: 'sample', label: 'Sample lesson' },
             { value: 'movie', label: 'Movie player' },
             { value: 'local', label: 'Local video + VTT' },
-          ].map(({ value, label }) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={source === value}
-              onClick={() => onSource(value as LearningSource)}
-              className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
-            >
-              {label}
-            </button>
-          ))}
+          ]
+            .filter(({ value }) => !movieSpecific || value !== 'sample')
+            .map(({ value, label }) => (
+              <button
+                type="button"
+                key={value}
+                aria-pressed={source === value}
+                onClick={() => onSource(value as LearningSource)}
+                className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
+              >
+                {label}
+              </button>
+            ))}
         </div>
-        {source === 'movie' ? (
+        {source === 'movie' && movieSpecific ? (
+          <MovieLearningStatus controller={controller} context={movieContext} />
+        ) : source === 'movie' ? (
           <div role="status" className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
             <p className="font-medium text-amber-200">Sync unavailable for this player</p>
             <p className="mt-2 text-sm leading-6 text-slate-400">
@@ -90,12 +106,21 @@ export default function LearningDock({ movieId, movieTitle, source, onSource }: 
                   sample={source === 'sample'}
                 />
               )}
-              {selection && (
+              {selection && source === 'sample' && (
                 <WordPanel
                   selection={selection}
                   saved={wordSaved}
                   canSave={!!progress}
                   onSave={() => save('word', selection.cue, selection.note)}
+                />
+              )}
+              {selection && source === 'local' && (
+                <ManualWordPanel
+                  key={`${lesson.mediaId}:${selection.cue.id}:${selection.note.word}`}
+                  selection={selection}
+                  saved={wordSaved}
+                  canSave={!!progress && !lesson.loading}
+                  onSave={(note) => save('word', selection.cue, note)}
                 />
               )}
               {source === 'sample' && !selection && (
@@ -111,6 +136,15 @@ export default function LearningDock({ movieId, movieTitle, source, onSource }: 
           )}
           <LearningPanels controller={controller} source={source} />
         </div>
+        {selection && source === 'movie' && (
+          <ManualWordPanel
+            key={`${lesson.mediaId}:${selection.cue.id}:${selection.note.word}`}
+            selection={selection}
+            saved={wordSaved}
+            canSave={!!progress && !lesson.loading}
+            onSave={(note) => save('word', selection.cue, note)}
+          />
+        )}
         <LearningProgress controller={controller} />
       </div>
     </section>

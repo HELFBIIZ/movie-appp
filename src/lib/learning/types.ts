@@ -1,5 +1,5 @@
 export type Cue = { id: string; start: number; end: number; text: string };
-export type AlignedCue = Cue & { translation: string };
+export type AlignedCue = Cue & { translation: string; language?: 'en' | 'mn' };
 export type WordNote = {
   word: string;
   meaning: string;
@@ -22,6 +22,10 @@ export type LearningItem = {
   incorrect: number;
   dueAt: number;
   savedAt: number;
+  tmdbId?: number;
+  grammar?: string;
+  context?: string;
+  provenance?: 'curated' | 'user-note' | 'unverified-subtitle';
 };
 export type Progress = {
   items: LearningItem[];

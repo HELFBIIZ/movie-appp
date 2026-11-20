@@ -29,7 +29,8 @@ export default function LearningProgress({ controller }: { controller: LearningC
       </div>
       <p className="mt-4 flex items-center gap-2 text-sm text-slate-500">
         <Layers size={15} aria-hidden="true" />
-        {formatTime(time)} · SRS: 1 / 3 / 7 / 14 хоног. Мартвал 10 минут.
+        {time === null ? 'Player clock: unavailable' : formatTime(time)} · SRS: 1 / 3 / 7 / 14
+        хоног. Мартвал 10 минут.
       </p>
       <p role="status" className="mt-2 min-h-5 text-sm text-emerald-300">
         {message}

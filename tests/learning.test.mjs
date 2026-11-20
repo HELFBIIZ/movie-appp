@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { test } from 'node:test';
+import {
+  readCineMessage,
+  createCineSession,
+  CINESRC_ORIGIN,
+} from '../src/lib/learning/player-adapter/cinesrc.ts';
+import {
+  movieCues,
+  internalEnglishSource,
+  parseExistingVtt,
+  shiftCues,
+  transcriptFingerprint,
+} from '../src/lib/learning/movie.ts';
 import { activeCues, alignCues, parseTimestamp, parseVtt } from '../src/lib/learning/vtt.ts';
 import { DAY_MS, isDue, reviewItem } from '../src/lib/learning/srs.ts';
 import {
@@ -198,4 +210,186 @@ test('committed sample captions match the original script and actual narration-b
   });
   assert.ok(en.at(-1).end < manifest.duration);
   assert.ok(fs.statSync('public/learning/last-train.webm').size > 10000);
+});
+
+function cineFixture() {
+  const sent = [];
+  const peer = { postMessage: (message, origin) => sent.push({ message, origin }) };
+  const frame = {
+    src: 'https://cinesrc.st/embed/movie/969681',
+    contentWindow: peer,
+    isConnected: true,
+  };
+  const event = (data = { type: 'cinesrc:timeupdate', currentTime: 72.3, duration: 8700 }) => ({
+    origin: CINESRC_ORIGIN,
+    source: peer,
+    data,
+  });
+  return { sent, peer, frame, event };
+}
+test('CineSrc accepts only the bound frame, exact origin, movie URL and valid payload', () => {
+  const f = cineFixture();
+  assert.ok(readCineMessage(f.event(), f.frame, 969681));
+  for (const invalid of [
+    { ...f.event(), origin: 'https://cinesrc.st.evil.example' },
+    { ...f.event(), source: {} },
+    { ...f.event(), data: JSON.stringify(f.event().data) },
+    f.event({ ...f.event().data, tmdbId: 42 }),
+    f.event({ ...f.event().data, movieId: 42 }),
+    f.event({ ...f.event().data, mediaType: 'tv' }),
+    f.event({ ...f.event().data, currentTime: -1 }),
+    f.event({ ...f.event().data, currentTime: NaN }),
+    f.event({ ...f.event().data, duration: Infinity }),
+    f.event({ ...f.event().data, duration: 10 }),
+    f.event({ type: 'cinesrc:loadedmetadata' }),
+    f.event({ type: 'cinesrc:response', command: 'getDuration', result: 0 }),
+    f.event({ type: 'unknown:timeupdate', currentTime: 80, duration: 8700 }),
+  ])
+    assert.equal(readCineMessage(invalid, f.frame, 969681), null);
+  assert.equal(readCineMessage(f.event(), { ...f.frame, isConnected: false }, 969681), null);
+  assert.equal(
+    readCineMessage(f.event(), { ...f.frame, src: 'https://cinesrc.st/embed/movie/42' }, 969681),
+    null,
+  );
+  assert.equal(
+    readCineMessage(
+      f.event(),
+      { ...f.frame, src: 'https://cinesrc.st/embed/movie/969681?id=42' },
+      969681,
+    ),
+    null,
+  );
+});
+test('CineSrc never synthesizes a clock or confirms seek from documentation/command alone', () => {
+  const f = cineFixture();
+  let state;
+  const adapter = createCineSession(f.frame, 969681, (value) => {
+    state = value;
+  });
+  adapter.reset();
+  assert.equal(state.time, null);
+  adapter.receive(f.event({ type: 'cinesrc:ready' }));
+  assert.equal(state.capabilities.getCurrentTime, false);
+  assert.equal(adapter.seek(80), false);
+  assert.ok(f.sent.every(({ origin }) => origin === CINESRC_ORIGIN));
+  adapter.receive(f.event());
+  assert.equal(state.time, 72.3);
+  assert.equal(state.contentVerified, false);
+  assert.equal(adapter.seek(500), true);
+  assert.equal(state.time, 72.3);
+  assert.equal(state.capabilities.seek, false);
+  assert.deepEqual(f.sent.at(-1), {
+    message: { type: 'cinesrc:command', command: 'seek', args: [500] },
+    origin: CINESRC_ORIGIN,
+  });
+  adapter.receive(f.event({ type: 'cinesrc:seeked', currentTime: 80, duration: 8700 }));
+  assert.equal(state.capabilities.seek, false);
+  adapter.receive(f.event({ type: 'cinesrc:seeked', currentTime: 500.1, duration: 8700 }));
+  assert.equal(state.time, 500.1);
+  assert.equal(state.capabilities.seek, true);
+  const previous = state;
+  adapter.dispose();
+  adapter.receive(f.event());
+  assert.equal(state, previous);
+  assert.equal(adapter.seek(20), false);
+});
+test('CineSrc getter replies support paused media without inventing time zero', () => {
+  const f = cineFixture();
+  let state;
+  const adapter = createCineSession(f.frame, 969681, (value) => {
+    state = value;
+  });
+  adapter.reset();
+  adapter.requestClock();
+  assert.equal(state.time, null);
+  adapter.receive(f.event({ type: 'cinesrc:response', command: 'getCurrentTime', result: 0 }));
+  assert.equal(state.time, null);
+  adapter.receive(f.event({ type: 'cinesrc:response', command: 'getDuration', result: 8700 }));
+  assert.equal(state.time, 0);
+  assert.equal(state.capabilities.getCurrentTime, true);
+  adapter.receive(f.event());
+  adapter.receive(f.event({ type: 'cinesrc:response', command: 'getDuration', result: 8700 }));
+  assert.equal(state.time, 72.3);
+  adapter.receive(f.event({ type: 'cinesrc:loadedmetadata', duration: 10 }));
+  assert.equal(state.time, null);
+  assert.equal(state.capabilities.getCurrentTime, false);
+  adapter.dispose();
+});
+test('CineSrc seek timeout and source change revoke confirmation', (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const f = cineFixture();
+  let state;
+  const adapter = createCineSession(f.frame, 969681, (value) => {
+    state = value;
+  });
+  adapter.receive(f.event());
+  adapter.seek(200);
+  t.mock.timers.tick(5001);
+  assert.equal(state.status, 'seek-unconfirmed');
+  assert.equal(state.time, 72.3);
+  adapter.receive(f.event({ type: 'cinesrc:sourceused' }));
+  assert.equal(state.time, null);
+  assert.equal(state.capabilities.getCurrentTime, false);
+  adapter.dispose();
+  t.mock.timers.reset();
+});
+test('movie captions remain MN-only until EN is imported; offsets do not create English', async () => {
+  const mn = parseVtt(vtt(cue('Монгол өгүүлбэр')));
+  const en = parseVtt(vtt(cue('Protocol fixture, not film dialogue')));
+  assert.equal(movieCues(mn, [], 0, 0)[0].language, 'mn');
+  assert.equal(movieCues(mn, [], 0, 0)[0].translation, '');
+  assert.equal(movieCues(mn, en, 0, 0)[0].translation, 'Монгол өгүүлбэр');
+  assert.equal(shiftCues(en, 2)[0].start, 3);
+  assert.equal(shiftCues(en, -5).length, 0);
+  assert.throws(() => shiftCues(en, NaN));
+  assert.throws(() => shiftCues(en, 601));
+  assert.equal(await transcriptFingerprint('en', 'mn'), await transcriptFingerprint('en', 'mn'));
+  assert.notEqual(
+    await transcriptFingerprint('en', 'mn'),
+    await transcriptFingerprint('en2', 'mn'),
+  );
+  const old = card();
+  assert.deepEqual(
+    decodeProgress(JSON.stringify({ ...emptyProgress(), items: [old] })).items[0],
+    old,
+  );
+  const annotated = card({
+    tmdbId: 969681,
+    grammar: 'User note',
+    context: 'User context',
+    provenance: 'user-note',
+  });
+  assert.deepEqual(
+    decodeProgress(JSON.stringify({ ...emptyProgress(), items: [annotated] })).items[0],
+    annotated,
+  );
+});
+
+test('existing MN legacy separators yield 1753 individual cues without changing the asset', () => {
+  const text = fs.readFileSync('data/subtitles/spider-man-brand-new-day.vtt', 'utf8');
+  const cues = parseExistingVtt(text);
+  assert.equal(cues.length, 1753);
+  assert.equal(cues[0].start, 72.188);
+  assert.equal(cues.at(-1).end, 8666.7);
+  assert.ok(Math.max(...cues.map((cue) => cue.text.length)) < 4000);
+  assert.equal(fs.readFileSync('data/subtitles/spider-man-brand-new-day.vtt', 'utf8'), text);
+  assert.equal(
+    parseExistingVtt(vtt('NOTE comment\n' + cue('not a cue') + '\n\n' + cue('valid'))).length,
+    1,
+  );
+});
+
+test('subtitle panel imports are restricted to exact same-origin source endpoints', () => {
+  const path = '/api/subtitles/source/12345678-1234-1234-1234-123456789abc';
+  assert.equal(
+    internalEnglishSource(path, 'https://vxnta.example'),
+    'https://vxnta.example' + path,
+  );
+  for (const input of [
+    'https://evil.example' + path,
+    '/api/checkout',
+    path + '?token=foo',
+    '/api/subtitles/source/../checkout',
+  ])
+    assert.equal(internalEnglishSource(input, 'https://vxnta.example'), null);
 });

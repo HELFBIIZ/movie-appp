@@ -13,6 +13,7 @@ export function useLesson(source: 'sample' | 'local' | 'movie') {
   const [localUrl, setLocalUrl] = useState('');
   const [retry, setRetry] = useState(0);
   useEffect(() => {
+    if (source !== 'sample') return;
     const controller = new AbortController();
     setLoading(true);
     setError('');
@@ -35,7 +36,7 @@ export function useLesson(source: 'sample' | 'local' | 'movie') {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [retry]);
+  }, [retry, source]);
   useEffect(() => {
     if (!local) return;
     const url = URL.createObjectURL(local.file);

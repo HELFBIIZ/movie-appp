@@ -6,6 +6,9 @@ import { reviewItem } from '@/lib/learning/srs';
 import type { AlignedCue, LearningItem, Question, WordNote } from '@/lib/learning/types';
 import { useLearningStorage } from './useLearningStorage';
 import { useLesson } from './useLesson';
+import { useMovieLesson } from './useMovieLesson';
+import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
+import { SPIDER_MAN } from '@/lib/learning/movie';
 export type LearningSource = 'sample' | 'local' | 'movie';
 export const tabs = [
   { id: 'transcript', label: 'Transcript' },
@@ -14,7 +17,11 @@ export const tabs = [
   { id: 'context', label: 'Scene Quiz' },
 ] as const;
 
-export function useLearningController(movieId: string, source: LearningSource) {
+export function useLearningController(
+  movieId: string,
+  source: LearningSource,
+  context?: MoviePlayerContext,
+) {
   const [tab, setTab] = useState<(typeof tabs)[number]['id']>('transcript');
   const [time, setTime] = useState(0);
   const [readyMedia, setReadyMedia] = useState('');
@@ -23,7 +30,26 @@ export function useLearningController(movieId: string, source: LearningSource) {
   const [selection, setSelection] = useState<{ note: WordNote; cue: AlignedCue } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { progress, storageError, update } = useLearningStorage();
-  const lesson = useLesson(source);
+  const baseLesson = useLesson(source);
+  const movieLesson = useMovieLesson(
+    source === 'movie',
+    !!context?.allowed,
+    movieId,
+    context?.englishSubtitleUrl,
+  );
+  const isMovie = source === 'movie' && movieId === SPIDER_MAN.slug;
+  const moviePlayer = useMoviePlayer(isMovie, context);
+  const lesson = isMovie
+    ? {
+        ...baseLesson,
+        cues: movieLesson.cues,
+        mediaId: movieLesson.mediaId,
+        loading: movieLesson.loading,
+        error: movieLesson.error,
+        retry: movieLesson.retry,
+      }
+    : baseLesson;
+  const displayTime = source === 'movie' ? moviePlayer.time : time;
   const mediaKey = `${lesson.mediaId}:${lesson.videoUrl}`;
   const ready = readyMedia === mediaKey;
   const setReady = () => setReadyMedia(mediaKey);
@@ -44,9 +70,13 @@ export function useLearningController(movieId: string, source: LearningSource) {
   }, [lesson.mediaId]);
   const items = progress?.items ?? [];
   const scoped = items.filter(
-    (item) => item.movieId === movieId && item.mediaId === lesson.mediaId,
+    (item) =>
+      item.movieId === movieId &&
+      (isMovie
+        ? item.mediaId.startsWith(`movie:${SPIDER_MAN.tmdbId}:`)
+        : item.mediaId === lesson.mediaId),
   );
-  const active = activeCues(lesson.cues, time);
+  const active = displayTime === null ? [] : activeCues(lesson.cues, displayTime);
   const savedSentences = new Set(
     lesson.cues
       .filter((cue) =>
@@ -73,6 +103,15 @@ export function useLearningController(movieId: string, source: LearningSource) {
       incorrect: 0,
       dueAt: savedAt,
       savedAt,
+      tmdbId: isMovie ? SPIDER_MAN.tmdbId : undefined,
+      grammar: note?.grammar,
+      context: note?.context,
+      provenance:
+        source === 'sample'
+          ? ('curated' as const)
+          : note
+            ? ('user-note' as const)
+            : ('unverified-subtitle' as const),
     };
     const item: LearningItem = { ...data, id: itemId(data) };
     if (update((current) => addItem(current, item))) {
@@ -111,7 +150,7 @@ export function useLearningController(movieId: string, source: LearningSource) {
   return {
     tab,
     setTab,
-    time,
+    time: displayTime,
     setTime,
     ready,
     setReady,
@@ -133,6 +172,8 @@ export function useLearningController(movieId: string, source: LearningSource) {
     review,
     answer,
     wordSaved,
+    movieLesson,
+    moviePlayer,
   };
 }
 export type LearningController = ReturnType<typeof useLearningController>;

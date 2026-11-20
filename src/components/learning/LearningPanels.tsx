@@ -32,6 +32,8 @@ export default function LearningPanels({
     setMessage,
     scoped,
     answer,
+    moviePlayer,
+    movieLesson,
   } = controller;
   return (
     <div className="min-w-0 overflow-hidden rounded-xl border border-white/10">
@@ -69,17 +71,30 @@ export default function LearningPanels({
       ) : tab === 'transcript' ? (
         <SubtitleTranscript
           cues={lesson.cues}
+          emptyMessage={
+            source === 'movie' && movieLesson.supported
+              ? 'Киноны transcript нээгдээгүй. Login/VIP эрх баталгаажсаны дараа existing MN болон өөрийн EN хадмалыг ашиглана.'
+              : undefined
+          }
           activeIds={active.map((cue) => cue.id)}
-          canSeek={ready && source !== 'movie'}
+          canSeek={source === 'movie' ? moviePlayer.time !== null : ready}
           curated={source === 'sample'}
-          canSave={!!progress}
+          canSave={!!progress && !lesson.loading}
           savedSentences={savedSentences}
           onSeek={(seconds) => {
+            if (source === 'movie') {
+              if (moviePlayer.seek(seconds))
+                setMessage(
+                  'Seek хүсэлт илгээсэн; баталгаажсан player event иртэл цагийг өөрчлөхгүй.',
+                );
+              return;
+            }
             if (videoRef.current && htmlVideoAdapter(videoRef.current).seek(seconds))
               setTime(seconds);
           }}
           onWord={(note, cue) => {
-            videoRef.current?.pause();
+            if (source === 'movie') moviePlayer.pause();
+            else videoRef.current?.pause();
             setSelection({ note, cue });
           }}
           onSave={(cue) => save('sentence', cue)}
@@ -113,7 +128,9 @@ export default function LearningPanels({
           <QuizPanel key="sample-context" questions={[contextQuestion]} onAnswer={answer} />
         ) : (
           <p className="p-6 text-sm text-slate-400">
-            Scene Quiz нь зөвхөн The Last Train sample-ийн бодит үйл явдалд зориулагдсан.
+            {source === 'movie' && movieLesson.supported
+              ? 'Энэ киноны үзэгдэлд тулгасан, нягталсан асуулт алга. Scene Quiz зохиож нэмээгүй.'
+              : 'Scene Quiz нь зөвхөн The Last Train sample-ийн бодит үйл явдалд зориулагдсан.'}
           </p>
         ))}
     </div>

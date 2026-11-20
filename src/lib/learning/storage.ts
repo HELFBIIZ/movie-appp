@@ -19,6 +19,10 @@ const itemSchema = z.object({
   incorrect: z.number().int().nonnegative(),
   dueAt: z.number().finite().nonnegative(),
   savedAt: z.number().finite().nonnegative(),
+  tmdbId: z.number().int().positive().optional(),
+  grammar: z.string().max(4000).optional(),
+  context: z.string().max(4000).optional(),
+  provenance: z.enum(['curated', 'user-note', 'unverified-subtitle']).optional(),
 });
 const progressSchema = z.object({
   items: z.array(itemSchema).max(MAX_ITEMS),

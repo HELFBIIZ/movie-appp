@@ -1,5 +1,9 @@
 # VXNTA × SceneChain — багшид үзүүлэх тэмдэглэл
 
+Spider-Man-specific дараагийн өөрчлөлт, existing MN хадмалын баталгаажаагүй provenance,
+CineSrc adapter болон real-film validation-ийн хязгаарыг [SCENECHAIN_SPIDER_MAN.md](SCENECHAIN_SPIDER_MAN.md)-ээс үзнэ.
+Доорх нь анхны sample-based release-ийн тайлан; түүнийг Spider-Man verified playback гэж нэрлэхгүй.
+
 Энэ ажлыг AI-ийн тусламжтай хөгжүүлсэн. Зорилго нь архитектур, логик, хязгаар,
 шалгалт болон live demo-г ойлгож тайлбарлах юм.
 
