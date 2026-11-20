@@ -80,7 +80,7 @@ test('review shows one question at a time and explains a wrong answer before con
   await page.goto('/learn');
   await page.getByRole('button', { name: 'Хадгалсан үгээ давтах', exact: true }).click();
   const panels = page.locator('#learning-panels');
-  await expect(panels.locator('fieldset')).toHaveCount(1);
+  await expect(panels.locator('fieldset:visible')).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Дараагийн үг →', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'сүүлчийн', exact: true }).click();
   await page.getByRole('button', { name: 'Дараагийн үг →', exact: true }).click();
