@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { Check, Headphones, MousePointer2, Repeat2 } from 'lucide-react';
 import { lookupWord } from '@/lib/learning/sample';
 import { placementBands } from '@/lib/learning/placement';
@@ -11,7 +12,8 @@ export default function LearningGuide({
   controller: LearningController;
   source: LearningSource;
 }) {
-  const { scoped, lesson, time, ready, videoRef, setMessage, setTab, setSelection } = controller;
+  const { scoped, lesson, time, videoRef, setMessage, setTab, setSelection } = controller;
+  const [starting, setStarting] = useState(false);
   const words = scoped.filter((item) => item.kind === 'word');
   const goal = controller.placement.profile
     ? placementBands[controller.placement.profile.band].words
@@ -28,12 +30,22 @@ export default function LearningGuide({
   ];
   async function start() {
     const video = videoRef.current;
-    if (!video || !cue || !ready) return;
+    if (!video || !cue) return;
+    const seekToStart = () => {
+      if (video.readyState >= 1) video.currentTime = cue.start;
+    };
+    setStarting(true);
+    video.addEventListener('loadedmetadata', seekToStart, { once: true });
     try {
-      video.currentTime = cue.start;
+      video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      seekToStart();
+      // User intent must initiate loading even if offscreen metadata was deferred.
       await video.play();
     } catch {
       setMessage('Видео дээрх тоглуулах товчийг дарна уу.');
+    } finally {
+      video.removeEventListener('loadedmetadata', seekToStart);
+      setStarting(false);
     }
   }
   return (
@@ -99,7 +111,7 @@ export default function LearningGuide({
         ) : source !== 'movie' && cue ? (
           <button
             type="button"
-            disabled={!ready}
+            disabled={starting || !lesson.videoUrl}
             onClick={() => void start()}
             className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-semibold text-slate-950 disabled:opacity-40"
           >

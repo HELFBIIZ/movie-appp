@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { activeCues } from '@/lib/learning/vtt';
 import { addItem, itemId } from '@/lib/learning/storage';
 import { reviewItem } from '@/lib/learning/srs';
@@ -64,7 +64,7 @@ export function useLearningController(
   const displayTime = source === 'movie' ? moviePlayer.time : time;
   const mediaKey = `${lesson.mediaId}:${lesson.videoUrl}`;
   const ready = readyMedia === mediaKey;
-  const setReady = () => setReadyMedia(mediaKey);
+  const setReady = useCallback(() => setReadyMedia(mediaKey), [mediaKey]);
   useEffect(() => {
     const tick = () => setNow(Date.now());
     const timer = setInterval(tick, 30_000);
