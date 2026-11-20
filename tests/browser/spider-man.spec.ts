@@ -13,29 +13,36 @@ test('real Spider-Man route: guest gate, no sample substitution, unknown clock, 
   await page.goto(route);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Spider-Man: Brand New Day');
   await expect(
-    page.getByRole('heading', { name: 'This title needs VIP', exact: true }),
+    page.getByRole('heading', { name: 'Кино үзэхийн тулд нэвтэрнэ үү', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Movie player', exact: true })).toHaveAttribute(
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  const dock = page.getByRole('region', { name: 'SceneChain Learning Dock' });
+  await expect(
+    dock.getByRole('group', { name: 'Learning panels' }).getByRole('button'),
+  ).toHaveCount(3);
+  const settings = dock.locator('details').first();
+  await expect(settings).not.toHaveAttribute('open');
+  await expect(page.getByRole('button', { name: 'Өөрийн видео', exact: true })).toBeHidden();
+  await settings.locator('summary').first().click();
+  await expect(page.getByRole('button', { name: 'Кино', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
-  await expect(page.getByRole('button', { name: 'Sample lesson', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Сургалтын жишээ', exact: true })).toHaveCount(0);
   await expect(page.locator('iframe, video')).toHaveCount(0);
-  await expect(page.getByText('Player clock: unavailable', { exact: false })).toBeVisible();
+  await expect(page.getByText('Тоглуулагчийн цаг:', { exact: false })).toHaveCount(0);
   await expect(
-    page.getByText(
-      'Кино болон киноны transcript нээхийн өмнө VXNTA-д нэвтэрч, VIP эрхээ баталгаажуулна уу.',
-      { exact: true },
-    ),
+    page.getByText('Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.', { exact: true }),
   ).toBeVisible();
+  await settings.locator('summary').first().click();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/spider-man-guest-mobile.png', fullPage: true });
-  await page.getByRole('button', { name: 'Local video + VTT', exact: true }).click();
-  await expect(page.getByLabel('Local video', { exact: true })).toBeVisible();
-  await expect(page.getByLabel('English VTT', { exact: true })).toBeVisible();
-  await expect(page.getByLabel('Mongolian VTT', { exact: true })).toBeVisible();
+  await settings.locator('summary').first().click();
+  await page.getByRole('button', { name: 'Өөрийн видео', exact: true }).click();
+  await expect(page.getByLabel('Видео файл', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Англи хадмал (.vtt)', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Монгол хадмал (.vtt)', { exact: true })).toBeVisible();
 });
 
 test('CineSrc protocol fixture validates UI wiring only; this is not film playback verification', async ({
@@ -84,21 +91,23 @@ test('CineSrc protocol fixture validates UI wiring only; this is not film playba
     }),
   );
   await page.goto(route);
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await page.getByRole('button', { name: 'Player 2 · CineSrc сонгох', exact: true }).click();
-  await expect(page.getByText('CineSrc-ээс ирсэн цаг:', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await page.getByRole('button', { name: 'Хадмалтай тоглуулагч сонгох', exact: true }).click();
+  await expect(page.getByText('Тоглуулагчийн цаг:', { exact: false })).toBeVisible();
   await expect(page.getByRole('list', { name: 'Bilingual transcript' }).locator('li')).toHaveCount(
-    50,
+    20,
   );
-  await expect(page.getByText('EN: байхгүй', { exact: false })).toBeVisible();
+  await expect(page.getByText('Англи хадмал нэмэх', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Англи хадмал (.vtt)')).toBeHidden();
   const panel = page.locator('#watch-subtitle-panel');
   await panel.getByRole('button', { name: /^Subtitles/ }).click();
   await panel.getByRole('button', { name: /English$/ }).click();
   await panel.getByRole('button', { name: 'Find English Subtitles', exact: true }).click();
   await panel.getByRole('button', { name: /panel-fixture.vtt/ }).click();
   await expect(page.getByTestId('active-cue')).toContainText('Panel fixture');
-  await expect(page.getByText('EN: 2 cue', { exact: false })).toBeVisible();
-  await page.getByLabel('Кинотой таарах English VTT (browser-local)').setInputFiles({
+  await page.getByText('Хадмалын тохиргоо', { exact: true }).click();
+  await expect(page.getByText('Англи: 2 мөр', { exact: false })).toBeVisible();
+  await page.getByLabel('Англи хадмал (.vtt)').setInputFiles({
     name: 'protocol-fixture.en.vtt',
     mimeType: 'text/vtt',
     buffer: Buffer.from(
@@ -106,31 +115,27 @@ test('CineSrc protocol fixture validates UI wiring only; this is not film playba
     ),
   });
   await expect(page.getByTestId('active-cue')).toContainText('Protocol fixture');
-  await page.getByRole('button', { name: 'Seek to 01:12', exact: true }).click();
-  await expect(page.getByText('seek acknowledged', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: '01:12 руу очих', exact: true }).click();
+  await expect(page.getByText('Тоглуулагчийн цаг: 01:12', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select word protocol', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Save Word', exact: true })).toBeDisabled();
-  await page.getByLabel('Тухайн өгүүлбэр дэх утга', { exact: true }).fill('Туршилтын протокол');
+  await expect(page.getByRole('button', { name: 'Үг хадгалах', exact: true })).toBeDisabled();
+  await page.getByLabel('Утга', { exact: true }).fill('Туршилтын протокол');
+  await page.getByText('Нэмэлт тэмдэглэл', { exact: true }).click();
   await page
     .getByLabel('Дүрмийн тэмдэглэл (сонголттой)', { exact: true })
     .fill('User-entered fixture note');
-  await page.getByRole('button', { name: 'Save Word', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Saved Word', exact: true })).toBeDisabled();
-  await page.getByRole('button', { name: 'Save Sentence 01:12', exact: true }).click();
-  await page.getByRole('button', { name: 'Word Quiz', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Хадгалсан', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Өгүүлбэр хадгалах 01:12', exact: true }).click();
+  await page.getByRole('button', { name: 'Давтах', exact: true }).click();
   await page.getByRole('button', { name: 'Туршилтын протокол', exact: true }).click();
   await expect(page.getByText('Оноо: 1/1', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Scene Quiz', exact: true }).click();
-  await expect(
-    page.getByText(
-      'Энэ киноны үзэгдэлд тулгасан, нягталсан асуулт алга. Scene Quiz зохиож нэмээгүй.',
-      { exact: true },
-    ),
-  ).toBeVisible();
+  await expect(page.locator('summary').filter({ hasText: 'Үзэгдлийн асуулт' })).toHaveCount(0);
   await page.reload();
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Saved & Review (2)', exact: true })).toBeVisible();
-  await expect(page.getByText('EN: 1 cue', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Хадгалсан (2)', exact: true })).toBeVisible();
+  await page.getByText('Хадмалын тохиргоо', { exact: true }).click();
+  await expect(page.getByText('Англи: 1 мөр', { exact: false })).toBeVisible();
   const data = await page.evaluate(() => JSON.parse(localStorage.getItem('vxnta.scenechain.v1')!));
   expect(data.items.find((item: { kind: string }) => item.kind === 'word')).toMatchObject({
     movieId: 'spider-man-brand-new-day',

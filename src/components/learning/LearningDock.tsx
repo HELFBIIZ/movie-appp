@@ -1,6 +1,5 @@
 'use client';
-import { BookOpen, Sparkles } from 'lucide-react';
-import { SAMPLE_TITLE } from '@/lib/learning/sample';
+import { BookOpen } from 'lucide-react';
 import LocalMediaInput from './LocalMediaInput';
 import LearningVideo from './LearningVideo';
 import WordPanel from './WordPanel';
@@ -35,54 +34,58 @@ export default function LearningDock({
       aria-label="SceneChain Learning Dock"
       className="my-6 rounded-2xl border border-white/10 bg-slate-950 shadow-2xl"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/10 p-5 md:p-6">
-        <div>
-          <p className="mb-2 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#c9a227]">
-            <Sparkles size={16} aria-hidden="true" /> SceneChain Learning
-          </p>
-          <h2 className="text-2xl font-semibold">Нэг үзэгдэл. Шинэ ойлголт.</h2>
-          <p className="mt-2 text-sm text-slate-400">{movieTitle} · Үзэж, ойлгож, тогтооно.</p>
-        </div>
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-400">
-          Browser-local · Cloud sync байхгүй
-        </span>
+      <div className="border-b border-white/10 p-4 md:p-5">
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <BookOpen size={19} className="text-[#c9a227]" aria-hidden="true" /> Англи үг суръя
+        </h2>
+        <p className="mt-2 text-sm text-slate-400">
+          Хадмалын үг дээр дараад утгыг нь тэмдэглэж, хадгалаарай.
+        </p>
+        <details className="mt-3 text-sm">
+          <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
+            Тохиргоо
+          </summary>
+          <p className="mt-3 text-slate-400">{movieTitle} · Видеогоо сонгоно уу.</p>
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="group"
+            aria-label="Learning media source"
+          >
+            {[
+              { value: 'sample', label: 'Сургалтын жишээ' },
+              { value: 'movie', label: 'Кино' },
+              { value: 'local', label: 'Өөрийн видео' },
+            ]
+              .filter(({ value }) => !movieSpecific || value !== 'sample')
+              .map(({ value, label }) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-pressed={source === value}
+                  onClick={() => onSource(value as LearningSource)}
+                  className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
+                >
+                  {label}
+                </button>
+              ))}
+          </div>
+        </details>
       </div>
-      <div className="p-4 md:p-6">
-        <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Learning media source">
-          {[
-            { value: 'sample', label: 'Sample lesson' },
-            { value: 'movie', label: 'Movie player' },
-            { value: 'local', label: 'Local video + VTT' },
-          ]
-            .filter(({ value }) => !movieSpecific || value !== 'sample')
-            .map(({ value, label }) => (
-              <button
-                type="button"
-                key={value}
-                aria-pressed={source === value}
-                onClick={() => onSource(value as LearningSource)}
-                className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
-              >
-                {label}
-              </button>
-            ))}
-        </div>
+      <div className="p-4 md:p-5">
         {source === 'movie' && movieSpecific ? (
           <MovieLearningStatus controller={controller} context={movieContext} />
         ) : source === 'movie' ? (
           <div role="status" className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
-            <p className="font-medium text-amber-200">Sync unavailable for this player</p>
+            <p className="font-medium text-amber-200">Хадмал тоглуулагчтай холбогдоогүй байна.</p>
             <p className="mt-2 text-sm leading-6 text-slate-400">
-              Энэ iframe-д цаг унших болон seek хийх баталгаажсан API холбогдоогүй. Sample lesson
-              сонгож бодит HTML video sync туршина уу. Киноны нэвтрэх эрхийн шалгалт хэвээр
-              ажиллана.
+              Тохиргооноос сургалтын жишээ эсвэл өөрийн видео сонгож болно.
             </p>
           </div>
         ) : (
           <p className="mb-4 text-sm leading-6 text-slate-400">
             {source === 'sample'
-              ? `${SAMPLE_TITLE} · SceneChain-д зориулан бүтээсэн 38 секундийн original animated lesson, synthetic narration. Энэ киноны яриа эсвэл орчуулга биш.`
-              : 'Local файл browser дотор тоглоно. Нээсэн файлаа refresh хийсний дараа дахин сонгоно.'}
+              ? '38 секундийн сургалтын жишээ · Киноны хэсэг биш.'
+              : 'Өөрийн видео · Хуудсыг шинэчилбэл файлаа дахин сонгоно.'}
           </p>
         )}
         {source === 'local' && (
@@ -126,10 +129,7 @@ export default function LearningDock({
               {source === 'sample' && !selection && (
                 <div className="mt-4 flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-400">
                   <BookOpen className="shrink-0 text-[#c9a227]" size={19} aria-hidden="true" />
-                  <p>
-                    Transcript доторх доогуур зураастай үгийг сонго. Утга, тухайн үзэгдлийн
-                    контекст, жишээ, дүрэм харна.
-                  </p>
+                  <p>Доогуур зураастай үг дээр дарж утгыг нь хараарай.</p>
                 </div>
               )}
             </div>

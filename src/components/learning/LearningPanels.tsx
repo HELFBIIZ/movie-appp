@@ -35,10 +35,16 @@ export default function LearningPanels({
     moviePlayer,
     movieLesson,
   } = controller;
+  const guestMovie =
+    source === 'movie' &&
+    movieLesson.supported &&
+    !lesson.cues.length &&
+    !lesson.loading &&
+    !lesson.error;
   return (
     <div className="min-w-0 overflow-hidden rounded-xl border border-white/10">
       <div
-        className="flex flex-wrap gap-1 border-b border-white/10 bg-slate-900/80 p-2"
+        className="flex gap-1 border-b border-white/10 bg-slate-900/80 p-2"
         role="group"
         aria-label="Learning panels"
       >
@@ -48,7 +54,7 @@ export default function LearningPanels({
             key={id}
             onClick={() => setTab(id)}
             aria-pressed={tab === id}
-            className={`rounded-lg px-3 py-2 text-sm ${tab === id ? 'bg-white/10 text-amber-200' : 'text-slate-400 hover:text-white'}`}
+            className={`flex-1 rounded-lg px-3 py-2 text-sm ${tab === id ? 'bg-white/10 text-amber-200' : 'text-slate-400 hover:text-white'}`}
           >
             {label}
             {id === 'saved' ? ` (${items.length})` : ''}
@@ -68,14 +74,9 @@ export default function LearningPanels({
             Дахин ачаалах
           </button>
         </div>
-      ) : tab === 'transcript' ? (
+      ) : tab === 'transcript' && !guestMovie ? (
         <SubtitleTranscript
           cues={lesson.cues}
-          emptyMessage={
-            source === 'movie' && movieLesson.supported
-              ? 'Киноны transcript нээгдээгүй. Login/VIP эрх баталгаажсаны дараа existing MN болон өөрийн EN хадмалыг ашиглана.'
-              : undefined
-          }
           activeIds={active.map((cue) => cue.id)}
           canSeek={source === 'movie' ? moviePlayer.time !== null : ready}
           curated={source === 'sample'}
@@ -83,10 +84,7 @@ export default function LearningPanels({
           savedSentences={savedSentences}
           onSeek={(seconds) => {
             if (source === 'movie') {
-              if (moviePlayer.seek(seconds))
-                setMessage(
-                  'Seek хүсэлт илгээсэн; баталгаажсан player event иртэл цагийг өөрчлөхгүй.',
-                );
+              if (moviePlayer.seek(seconds)) setMessage('Хугацаа шилжүүлэх хүсэлт илгээлээ.');
               return;
             }
             if (videoRef.current && htmlVideoAdapter(videoRef.current).seek(seconds))
@@ -117,22 +115,22 @@ export default function LearningPanels({
         />
       )}
       {tab === 'quiz' && (
-        <QuizPanel
-          key={`word-${lesson.mediaId}`}
-          questions={vocabularyQuestions(scoped)}
-          onAnswer={answer}
-        />
+        <>
+          <QuizPanel
+            key={lesson.mediaId}
+            questions={vocabularyQuestions(scoped)}
+            onAnswer={answer}
+          />
+          {source === 'sample' && (
+            <details className="border-t border-white/10 p-4">
+              <summary className="w-fit cursor-pointer text-sm text-slate-400">
+                Үзэгдлийн асуулт
+              </summary>
+              <QuizPanel key="sample-context" questions={[contextQuestion]} onAnswer={answer} />
+            </details>
+          )}
+        </>
       )}
-      {tab === 'context' &&
-        (source === 'sample' ? (
-          <QuizPanel key="sample-context" questions={[contextQuestion]} onAnswer={answer} />
-        ) : (
-          <p className="p-6 text-sm text-slate-400">
-            {source === 'movie' && movieLesson.supported
-              ? 'Энэ киноны үзэгдэлд тулгасан, нягталсан асуулт алга. Scene Quiz зохиож нэмээгүй.'
-              : 'Scene Quiz нь зөвхөн The Last Train sample-ийн бодит үйл явдалд зориулагдсан.'}
-          </p>
-        ))}
     </div>
   );
 }

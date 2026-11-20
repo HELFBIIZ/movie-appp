@@ -17,8 +17,8 @@ export default function LearningModeToggle({
         aria-label="Watch mode"
       >
         {[
-          { value: false, label: 'Normal', Icon: Film },
-          { value: true, label: 'Learning Mode', Icon: BookOpen },
+          { value: false, label: 'Кино үзэх', Icon: Film },
+          { value: true, label: 'Үг сурах', Icon: BookOpen },
         ].map(({ value, label, Icon }) => (
           <button
             type="button"
@@ -32,9 +32,6 @@ export default function LearningModeToggle({
           </button>
         ))}
       </div>
-      <p className="text-sm text-slate-400">
-        {enabled ? 'SceneChain · Watch. Understand. Remember.' : 'Киноноос үг, өгүүлбэр сур.'}
-      </p>
     </div>
   );
 }

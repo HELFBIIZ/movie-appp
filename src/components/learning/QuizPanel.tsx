@@ -16,9 +16,7 @@ export default function QuizPanel({
   const score = answered.filter((question) => isCorrect(question, answers[question.id])).length;
   if (!questions.length)
     return (
-      <p className="p-6 text-slate-400">
-        Quiz эхлүүлэхийн өмнө sample хадмалаас дор хаяж нэг үг хадгална уу.
-      </p>
+      <p className="p-6 text-slate-400">Хадмалаас үг хадгалсны дараа энд өөрийгөө шалгаарай.</p>
     );
   return (
     <div className="max-h-[32rem] space-y-5 overflow-y-auto p-4">

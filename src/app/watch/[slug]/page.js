@@ -167,7 +167,7 @@ export default function WatchPage() {
         {showMoviePlayer && gate.status === 'blocked' && (
           <div className="flex aspect-video w-full flex-col items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 px-6 text-center animate-scale-in">
             <p className="text-2xl">🔒</p>
-            <h2 className="mt-2 text-xl font-semibold">This title needs VIP</h2>
+            <h2 className="mt-2 text-xl font-semibold">{gate.statusCode === 401 ? 'Кино үзэхийн тулд нэвтэрнэ үү' : 'Кино үзэхэд VIP эрх хэрэгтэй'}</h2>
             <p className="mt-2 max-w-md text-sm text-slate-400">
               {gate.statusCode === 401
                 ? 'Sign in to your account to continue.'
@@ -176,15 +176,14 @@ export default function WatchPage() {
             <div className="mt-5 flex gap-3">
               {gate.statusCode === 401 ? (
                 <Link href="/login" className="rounded-xl bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-5 py-2.5 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110">
-                  Sign in
+                  Нэвтрэх
                 </Link>
               ) : (
                 <Link href="/pricing" className="rounded-xl bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-5 py-2.5 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110">
-                  Get VIP
+                  VIP эрх авах
                 </Link>
               )}
             </div>
-            <p className="mt-4 text-xs text-slate-600">({gate.code})</p>
           </div>
         )}
 
@@ -193,22 +192,18 @@ export default function WatchPage() {
             {showMoviePlayer && (movie.tmdbId ? (
               <div className="overflow-hidden rounded-2xl border border-slate-800 bg-black shadow-lg transition-all hover:shadow-xl animate-scale-in">
                 <div className="flex flex-wrap items-center gap-1 border-b border-slate-800 bg-slate-900/60 px-4 py-2.5 animate-fade-in-down">
-                  <span className="mr-2 text-xs uppercase tracking-wider text-slate-500">Player</span>
-                  {visibleTabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setSource(tab.id)}
-                      aria-pressed={source === tab.id}
-                      className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
-                        source === tab.id
-                          ? 'bg-[#c9a227] text-[#1a150b] shadow-[0_6px_18px_-6px_rgba(214,180,86,0.5)]'
-                          : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                      }`}
+                  <label className="flex min-w-0 items-center gap-3 text-sm text-slate-400">
+                    Тоглуулагч
+                    <select
+                      value={source}
+                      onChange={(event) => setSource(event.target.value)}
+                      className="min-w-0 rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-slate-100"
                     >
-                      ▶ {tab.label}
-                    </button>
-                  ))}
+                      {visibleTabs.map((tab) => (
+                        <option key={tab.id} value={tab.id}>{tab.label.replace('Player ', '')}</option>
+                      ))}
+                    </select>
+                  </label>
                   {gate.xp?.gained ? (
                     <span className="ml-auto rounded-full bg-amber-400/10 px-3 py-1 text-xs text-amber-300">+{gate.xp.gained} XP</span>
                   ) : null}
@@ -291,10 +286,10 @@ export default function WatchPage() {
               </div>
             )}
 
-            <div className="mt-8 animate-fade-in-up delay-200">
-              <h2 className="mb-2 text-xl font-semibold">About this {isTV ? 'series' : 'film'}</h2>
-              <p className="text-slate-400">{movie.plot}</p>
-            </div>
+            <details className="mt-6 text-sm text-slate-400">
+              <summary className="w-fit cursor-pointer">{isTV ? 'Цувралын тухай' : 'Киноны тухай'}</summary>
+              <p className="mt-3 leading-6">{movie.plot}</p>
+            </details>
           </>
         )}
         {learning && <LearningDock key={slug} movieId={slug} movieTitle={movie.title} source={learningSource} onSource={setLearningSource} movieContext={{ tmdbId: movie.tmdbId, provider: source, allowed: gate.status === 'allowed' && showMoviePlayer, iframeRef: movieIframeRef, onSelectProvider: setSource, englishSubtitleUrl: subtitleLabel === 'English' ? subtitleUrl : undefined }} />}

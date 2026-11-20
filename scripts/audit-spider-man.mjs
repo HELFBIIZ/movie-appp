@@ -23,24 +23,32 @@ try {
     waitUntil: 'domcontentloaded',
     timeout: 60000,
   });
-  await page.getByRole('heading', { name: 'This title needs VIP', exact: true }).waitFor();
+  await page.getByRole('heading', { name: 'Кино үзэхийн тулд нэвтэрнэ үү', exact: true }).waitFor();
   report.title = await page.getByRole('heading', { level: 1 }).innerText();
   const gate = await page.request.post(`${base}/api/watch/spider-man-brand-new-day`);
   report.gate = { status: gate.status(), error: (await gate.json()).error?.code };
   report.movieIframes = await page.locator('iframe').count();
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await page.getByRole('button', { name: 'Movie player', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  const settings = page
+    .getByRole('region', { name: 'SceneChain Learning Dock' })
+    .locator('details')
+    .first();
+  report.settingsCollapsed = !(await settings.evaluate((element) => element.open));
+  report.mainTabs = await page
+    .getByRole('group', { name: 'Learning panels' })
+    .getByRole('button')
+    .allTextContents();
+  await settings.locator('summary').first().click();
+  await page.getByRole('button', { name: 'Кино', exact: true }).waitFor();
   report.sampleOffered =
-    (await page.getByRole('button', { name: 'Sample lesson', exact: true }).count()) > 0;
-  await page.getByRole('button', { name: 'Movie player', exact: true }).click();
+    (await page.getByRole('button', { name: 'Сургалтын жишээ', exact: true }).count()) > 0;
+  await page.getByRole('button', { name: 'Кино', exact: true }).click();
+  await settings.locator('summary').first().click();
   report.unsupported =
-    (await page.getByText('Sync unavailable for this player', { exact: true }).count()) > 0;
+    (await page.getByText('Хадмал тоглуулагчтай холбогдоогүй байна.', { exact: true }).count()) > 0;
   report.guestNotice =
     (await page
-      .getByText(
-        'Кино болон киноны transcript нээхийн өмнө VXNTA-д нэвтэрч, VIP эрхээ баталгаажуулна уу.',
-        { exact: true },
-      )
+      .getByText('Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.', { exact: true })
       .count()) > 0;
   report.filmVideoElements = await page.locator('video').count();
   const metadata = await page.request.get(
@@ -56,11 +64,12 @@ try {
     scrollWidth: document.documentElement.scrollWidth,
   }));
   await page.screenshot({ path: 'test-results/spider-man-live-audit.png', fullPage: true });
-  await page.getByRole('button', { name: 'Local video + VTT', exact: true }).click();
+  await settings.locator('summary').first().click();
+  await page.getByRole('button', { name: 'Өөрийн видео', exact: true }).click();
   report.localInputs = {
-    video: await page.getByLabel('Local video', { exact: true }).count(),
-    en: await page.getByLabel('English VTT', { exact: true }).count(),
-    mn: await page.getByLabel('Mongolian VTT', { exact: true }).count(),
+    video: await page.getByLabel('Видео файл', { exact: true }).count(),
+    en: await page.getByLabel('Англи хадмал (.vtt)', { exact: true }).count(),
+    mn: await page.getByLabel('Монгол хадмал (.vtt)', { exact: true }).count(),
   };
   report.samplePlayed = false;
   fs.writeFileSync(

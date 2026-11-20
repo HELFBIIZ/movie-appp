@@ -1,6 +1,15 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const route = '/watch/inception';
+async function selectSource(page: Page, name: string) {
+  const settings = page
+    .getByRole('region', { name: 'SceneChain Learning Dock' })
+    .locator('details')
+    .first();
+  await settings.locator('summary').first().click();
+  await settings.getByRole('button', { name, exact: true }).click();
+  await settings.locator('summary').first().click();
+}
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/subtitles/**', (request) => request.fulfill({ status: 404, body: '' }));
   // Only mock the read/access response, never create users, subscriptions or XP.
@@ -27,51 +36,52 @@ test('native password login page renders without creating an account or session'
 test('local video and VTT stay in the browser and untrusted captions are plain text', async ({
   page,
 }) => {
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await page.getByRole('button', { name: 'Local video + VTT', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await selectSource(page, 'Өөрийн видео');
   await page
-    .getByLabel('Local video', { exact: true })
+    .getByLabel('Видео файл', { exact: true })
     .setInputFiles('public/learning/last-train.webm');
-  await page.getByLabel('English VTT', { exact: true }).setInputFiles({
+  await page.getByLabel('Англи хадмал (.vtt)', { exact: true }).setInputFiles({
     name: 'local.en.vtt',
     mimeType: 'text/vtt',
     buffer: Buffer.from(
       'WEBVTT\n\n00:01.000 --> 00:04.000\n<script>window.__captionInjected=true</script><b>The last train.</b> &lt;img onerror=evil&gt;\n',
     ),
   });
-  await page.getByLabel('Mongolian VTT', { exact: true }).setInputFiles({
+  await page.getByLabel('Монгол хадмал (.vtt)', { exact: true }).setInputFiles({
     name: 'local.mn.vtt',
     mimeType: 'text/vtt',
     buffer: Buffer.from('WEBVTT\n\n00:01.000 --> 00:04.000\nСүүлчийн галт тэрэг.\n'),
   });
-  await page.getByRole('button', { name: 'Local lesson нээх', exact: true }).click();
+  await page.getByRole('button', { name: 'Видеогоо нээх', exact: true }).click();
   const video = page.getByLabel('Local lesson video', { exact: true });
   await expect
     .poll(() => video.evaluate((element: HTMLVideoElement) => element.readyState))
     .toBeGreaterThan(0);
   expect(await video.getAttribute('src')).toMatch(/^blob:/);
-  await page.getByRole('button', { name: 'Seek to 00:01', exact: true }).click();
+  await page.getByRole('button', { name: '00:01 руу очих', exact: true }).click();
   await expect(page.getByTestId('active-cue')).toContainText('The last train. <img onerror=evil>');
   expect(await page.evaluate(() => '__captionInjected' in window)).toBe(false);
   await expect(page.getByRole('button', { name: /Explain / })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Save Sentence 00:01', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Saved & Review (1)', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Scene Quiz', exact: true }).click();
+  await page.getByRole('button', { name: 'Өгүүлбэр хадгалах 00:01', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Хадгалсан (1)', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Давтах', exact: true }).click();
   await expect(
-    page.getByText('Scene Quiz нь зөвхөн The Last Train sample-ийн бодит үйл явдалд зориулагдсан.'),
+    page.getByText('Хадмалаас үг хадгалсны дараа энд өөрийгөө шалгаарай.'),
   ).toBeVisible();
+  await expect(page.locator('summary').filter({ hasText: 'Үзэгдлийн асуулт' })).toHaveCount(0);
 });
 
 test('corrupt stored data is reported without silently replacing existing data', async ({
   page,
 }) => {
   await page.evaluate(() => localStorage.setItem('vxnta.scenechain.v1', '{broken'));
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await expect(
     page.getByRole('region', { name: 'SceneChain Learning Dock' }).getByRole('alert'),
   ).toContainText('Browser storage уншиж чадсангүй');
   await expect(
-    page.getByRole('button', { name: 'Save Sentence 00:01', exact: true }),
+    page.getByRole('button', { name: 'Өгүүлбэр хадгалах 00:01', exact: true }),
   ).toBeDisabled();
   expect(await page.evaluate(() => localStorage.getItem('vxnta.scenechain.v1'))).toBe('{broken');
 });
@@ -79,9 +89,9 @@ test('corrupt stored data is reported without silently replacing existing data',
 test('normal watch gate remains intact and sample works inside the same route', async ({
   page,
 }) => {
-  await expect(page.getByRole('heading', { name: 'This title needs VIP' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Кино үзэхийн тулд нэвтэрнэ үү' })).toBeVisible();
   await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`${route}$`));
   const video = page.getByLabel('The Last Train sample lesson video');
@@ -102,46 +112,41 @@ test('normal watch gate remains intact and sample works inside the same route', 
   });
   await expect(page.getByTestId('active-cue').first()).toContainText('The last train');
   await expect(page.getByTestId('active-cue').first()).toContainText('Сүүлчийн галт тэрэг');
-  await expect(page.getByRole('button', { name: 'Seek to 00:07' })).toBeEnabled();
-  await page.getByRole('button', { name: 'Seek to 00:07' }).click();
+  await expect(page.getByRole('button', { name: '00:07 руу очих' })).toBeEnabled();
+  await page.getByRole('button', { name: '00:07 руу очих' }).click();
   await expect
     .poll(() => video.evaluate((element: HTMLVideoElement) => element.currentTime))
     .toBeGreaterThanOrEqual(7);
   await page.getByRole('button', { name: 'Explain ticket', exact: true }).first().click();
   await expect(page.getByRole('region', { name: 'Word explanation' })).toContainText('тасалбар');
-  await page.getByRole('button', { name: 'Save Word', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Saved Word', exact: true })).toBeDisabled();
-  await expect(
-    page
-      .getByLabel('Learning progress')
-      .getByText('Давтах карт', { exact: true })
-      .locator('..')
-      .locator('p')
-      .first(),
-  ).toHaveText('1');
+  await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Хадгалсан', exact: true })).toBeDisabled();
+  await expect(page.getByLabel('Learning progress')).toContainText('Давтах: 1');
   await page.screenshot({ path: 'test-results/scenechain-desktop.png', fullPage: true });
-  await page.getByRole('button', { name: 'Save Sentence 00:07', exact: true }).click();
-  await page.getByRole('button', { name: 'Word Quiz', exact: true }).click();
+  await page.getByRole('button', { name: 'Өгүүлбэр хадгалах 00:07', exact: true }).click();
+  await page.getByRole('button', { name: 'Давтах', exact: true }).click();
   await page.getByRole('button', { name: 'тасалбар', exact: true }).click();
   await expect(page.getByText('Оноо: 1/1')).toBeVisible();
-  await page.getByRole('button', { name: 'Scene Quiz', exact: true }).click();
+  await page.getByText('Үзэгдлийн асуулт', { exact: true }).click();
   await page.getByRole('button', { name: 'Лео галт тэрэг жолооддог байсан.', exact: true }).click();
   await expect(page.getByText('Оноо: 0/1')).toBeVisible();
-  await page.getByRole('button', { name: 'Saved & Review (2)', exact: true }).click();
-  await page.getByRole('button', { name: 'Утгыг харах / Review' }).click();
+  await page.getByRole('button', { name: 'Хадгалсан (2)', exact: true }).click();
+  await page.getByRole('button', { name: 'Утгыг харах' }).click();
   await page.getByRole('button', { name: 'Мартсан', exact: true }).click();
-  await expect(page.getByText('SRS: 10 минутын дараа дахин давтана.')).toBeVisible();
+  await expect(page.getByText('10 минутын дараа дахин давтана.')).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Saved & Review (2)', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Хадгалсан (2)', exact: true })).toBeVisible();
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('vxnta.scenechain.v1')!));
   expect(saved.items).toHaveLength(2);
   expect(saved.items.find((item: { kind: string }) => item.kind === 'word').correct).toBe(1);
   expect(saved.contextIncorrect).toBe(1);
-  await page.getByRole('button', { name: 'Movie player', exact: true }).click();
-  await expect(page.getByText('Sync unavailable for this player', { exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'This title needs VIP' })).toBeVisible();
-  await page.getByRole('button', { name: 'Normal', exact: true }).click();
+  await selectSource(page, 'Кино');
+  await expect(
+    page.getByText('Хадмал тоглуулагчтай холбогдоогүй байна.', { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Кино үзэхийн тулд нэвтэрнэ үү' })).toBeVisible();
+  await page.getByRole('button', { name: 'Кино үзэх', exact: true }).click();
   await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toHaveCount(0);
 });
 
@@ -157,12 +162,15 @@ test('authorized normal watch retains five iframe providers; sample never claims
   );
   await page.reload();
   await expect(page.getByTitle('Inception player')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Player [1-5] ·/ })).toHaveCount(5);
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
+  const providers = page.getByRole('combobox', { name: 'Тоглуулагч', exact: true });
+  await expect(providers.getByRole('option')).toHaveCount(5);
+  await providers.selectOption('cine');
+  await expect(page.getByTitle('Inception player')).toHaveAttribute('src', /cinesrc\.st/);
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await expect(page.getByTitle('Inception player')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Movie player', exact: true }).click();
+  await selectSource(page, 'Кино');
   await expect(page.getByTitle('Inception player')).toBeVisible();
-  await page.getByRole('button', { name: 'Normal', exact: true }).click();
+  await page.getByRole('button', { name: 'Кино үзэх', exact: true }).click();
   await expect(page.getByTitle('Inception player')).toBeVisible();
 });
 
@@ -170,18 +178,18 @@ test('mobile layout fits viewport and storage failures do not report saved succe
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: 'Learning Mode', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await page.getByRole('button', { name: 'Explain train', exact: true }).first().click();
   await page.evaluate(() => {
     Storage.prototype.setItem = () => {
       throw new DOMException('Quota exceeded', 'QuotaExceededError');
     };
   });
-  await page.getByRole('button', { name: 'Save Word', exact: true }).click();
+  await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
   await expect(
     page.getByRole('region', { name: 'SceneChain Learning Dock' }).getByRole('alert'),
   ).toContainText('Хадгалж чадсангүй');
-  await expect(page.getByRole('button', { name: 'Save Word', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Үг хадгалах', exact: true })).toBeEnabled();
   await page.screenshot({ path: 'test-results/scenechain-mobile.png', fullPage: true });
   const layout = await page.evaluate(() => ({
     width: window.innerWidth,

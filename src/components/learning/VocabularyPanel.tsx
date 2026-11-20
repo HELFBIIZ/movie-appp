@@ -16,9 +16,7 @@ export default function VocabularyPanel({ items, now, onReview, onRemove }: Prop
   const [revealed, setRevealed] = useState<string | null>(null);
   if (!items.length)
     return (
-      <p className="p-6 text-slate-400">
-        Хадмалын доогуур зураастай үг дээр дарж Save Word хийнэ үү. Эсвэл өгүүлбэр хадгалж болно.
-      </p>
+      <p className="p-6 text-slate-400">Хадмалын үг эсвэл өгүүлбэрийг хадгалахад энд гарна.</p>
     );
   return (
     <ul className="max-h-[28rem] space-y-3 overflow-y-auto p-4" aria-label="Saved vocabulary">
@@ -40,29 +38,30 @@ export default function VocabularyPanel({ items, now, onReview, onRemove }: Prop
             </div>
             <p className="mt-2 text-sm text-slate-300">{item.example}</p>
             {item.provenance === 'user-note' && (
-              <p className="mt-2 text-sm text-slate-500">Өөрийн тэмдэглэл · баталгаажаагүй</p>
+              <p className="mt-2 text-xs text-slate-500">Өөрийн тэмдэглэл</p>
             )}
-            {item.grammar && <p className="mt-2 text-sm text-slate-400">Дүрэм: {item.grammar}</p>}
-            <p className="mt-2 text-sm text-slate-500">
-              {item.kind === 'word' ? 'Үг' : 'Өгүүлбэр'} · {formatTime(item.cueStart)} ·{' '}
-              {item.movieId}
-            </p>
             <p className="mt-2 text-sm text-slate-400">
               {due
-                ? 'Давтах цаг болсон'
-                : `Дараагийн давтлага: ${new Date(item.dueAt).toLocaleString('mn-MN')}`}{' '}
-              · Шат {item.stage}/4
+                ? 'Давтахад бэлэн'
+                : `Дараагийн давтлага: ${new Date(item.dueAt).toLocaleString('mn-MN')}`}
             </p>
-            <p className="mt-1 text-sm text-slate-500">
-              Зөв {item.correct} · Буруу {item.incorrect}
-            </p>
+            <details className="mt-2 text-xs text-slate-500">
+              <summary className="w-fit cursor-pointer">Дэлгэрэнгүй</summary>
+              <p className="mt-2">
+                {item.kind === 'word' ? 'Үг' : 'Өгүүлбэр'} · {formatTime(item.cueStart)}
+              </p>
+              {item.grammar && <p className="mt-2">Дүрэм: {item.grammar}</p>}
+              <p className="mt-2">
+                Зөв {item.correct} · Буруу {item.incorrect} · Шат {item.stage}/4
+              </p>
+            </details>
             {due && !show && (
               <button
                 type="button"
                 onClick={() => setRevealed(item.id)}
                 className="mt-3 rounded-lg border border-amber-400/30 px-3 py-2 text-sm text-amber-200"
               >
-                Утгыг харах / Review
+                Утгыг харах
               </button>
             )}
             {(!due || show) && (
@@ -77,7 +76,7 @@ export default function VocabularyPanel({ items, now, onReview, onRemove }: Prop
                   }}
                   className="rounded-lg bg-emerald-500/15 px-3 py-2 text-sm text-emerald-300"
                 >
-                  Саналаа
+                  Санаж байна
                 </button>
                 <button
                   type="button"

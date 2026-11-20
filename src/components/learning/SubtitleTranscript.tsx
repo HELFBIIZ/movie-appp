@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { formatTime } from '@/lib/learning/vtt';
 import { lookupWord } from '@/lib/learning/sample';
 import type { AlignedCue, WordNote } from '@/lib/learning/types';
+const PAGE_SIZE = 20;
 
 type Props = {
   cues: AlignedCue[];
@@ -34,16 +35,15 @@ export default function SubtitleTranscript({
   const [page, setPage] = useState(0);
   const activeIndex = cues.findIndex((cue) => activeIds.includes(cue.id));
   useEffect(() => {
-    if (activeIndex >= 0) setPage(Math.floor(activeIndex / 50));
+    if (activeIndex >= 0) setPage(Math.floor(activeIndex / PAGE_SIZE));
   }, [activeIndex]);
-  const pageCount = Math.max(1, Math.ceil(cues.length / 50));
+  const pageCount = Math.max(1, Math.ceil(cues.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount - 1);
-  const visible = cues.slice(currentPage * 50, (currentPage + 1) * 50);
+  const visible = cues.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
   if (!cues.length)
     return (
       <p className="p-6 text-slate-400">
-        {emptyMessage ||
-          'Энэ тоглуулагчийн синхрон хадмал алга. Sample lesson эсвэл local video + EN/MN VTT сонгоно уу.'}
+        {emptyMessage || 'Хадмал алга. Тохиргооноос өөрийн видео, хадмал нэмж болно.'}
       </p>
     );
   return (
@@ -56,10 +56,10 @@ export default function SubtitleTranscript({
             onClick={() => setPage(currentPage - 1)}
             className="rounded border border-white/15 px-3 py-2 disabled:opacity-40"
           >
-            Өмнөх 50
+            Өмнөх
           </button>
           <span>
-            {currentPage + 1} / {pageCount} · {cues.length} cue
+            {currentPage + 1} / {pageCount}
           </span>
           <button
             type="button"
@@ -67,7 +67,7 @@ export default function SubtitleTranscript({
             onClick={() => setPage(currentPage + 1)}
             className="rounded border border-white/15 px-3 py-2 disabled:opacity-40"
           >
-            Дараах 50
+            Дараах
           </button>
         </div>
       )}
@@ -87,7 +87,7 @@ export default function SubtitleTranscript({
                   type="button"
                   disabled={!canSeek}
                   onClick={() => onSeek(cue.start)}
-                  aria-label={`Seek to ${formatTime(cue.start)}`}
+                  aria-label={`${formatTime(cue.start)} руу очих`}
                   className="rounded px-1 font-mono text-sm text-amber-300 hover:bg-white/10 disabled:cursor-not-allowed disabled:text-slate-500"
                 >
                   {formatTime(cue.start)}
@@ -97,10 +97,10 @@ export default function SubtitleTranscript({
                   disabled={saved || !canSave}
                   onClick={() => onSave(cue)}
                   className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-slate-300 hover:bg-white/10 disabled:opacity-50"
-                  aria-label={`${saved ? 'Saved sentence' : 'Save Sentence'} ${formatTime(cue.start)}`}
+                  aria-label={`${saved ? 'Хадгалсан өгүүлбэр' : 'Өгүүлбэр хадгалах'} ${formatTime(cue.start)}`}
                 >
                   {saved ? <Check size={14} /> : <Bookmark size={14} />}
-                  {saved ? 'Saved' : 'Save Sentence'}
+                  {saved ? 'Хадгалсан' : 'Хадгалах'}
                 </button>
               </div>
               <p className="leading-8 text-slate-100" lang={cue.language ?? 'en'}>
@@ -132,11 +132,11 @@ export default function SubtitleTranscript({
                   );
                 })}
               </p>
-              <p className="mt-2 text-sm leading-6 text-slate-400" lang="mn">
-                {cue.language === 'mn'
-                  ? 'EN хадмал импортлоогүй.'
-                  : cue.translation || 'Монгол хадмал энэ хугацаанд алга.'}
-              </p>
+              {cue.translation && (
+                <p className="mt-2 text-sm leading-6 text-slate-400" lang="mn">
+                  {cue.translation}
+                </p>
+              )}
             </li>
           );
         })}

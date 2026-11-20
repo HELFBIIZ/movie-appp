@@ -11,10 +11,9 @@ import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
 import { SPIDER_MAN } from '@/lib/learning/movie';
 export type LearningSource = 'sample' | 'local' | 'movie';
 export const tabs = [
-  { id: 'transcript', label: 'Transcript' },
-  { id: 'saved', label: 'Saved & Review' },
-  { id: 'quiz', label: 'Word Quiz' },
-  { id: 'context', label: 'Scene Quiz' },
+  { id: 'transcript', label: 'Хадмал' },
+  { id: 'saved', label: 'Хадгалсан' },
+  { id: 'quiz', label: 'Давтах' },
 ] as const;
 
 export function useLearningController(
@@ -116,7 +115,7 @@ export function useLearningController(
     const item: LearningItem = { ...data, id: itemId(data) };
     if (update((current) => addItem(current, item))) {
       setNow(savedAt);
-      setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} browser-local хадгалагдлаа.`);
+      setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} хадгалагдлаа.`);
     }
   }
   function review(id: string, remembered: boolean) {
@@ -129,9 +128,7 @@ export function useLearningController(
     }));
     if (success) {
       setNow(timestamp);
-      setMessage(
-        remembered ? 'SRS: дараагийн давтлагыг товлолоо.' : 'SRS: 10 минутын дараа дахин давтана.',
-      );
+      setMessage(remembered ? 'Дараагийн давтлагыг товлолоо.' : '10 минутын дараа дахин давтана.');
     }
     return success;
   }

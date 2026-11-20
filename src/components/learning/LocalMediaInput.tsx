@@ -46,14 +46,14 @@ export default function LocalMediaInput({
   return (
     <div className="space-y-3 rounded-xl border border-white/10 bg-slate-900/60 p-4">
       <p className="text-sm leading-6 text-slate-400">
-        Өөрийн ашиглах эрхтэй video болон түүнтэй таарах EN/MN VTT сонгоно уу. Файлууд browser-оос
-        сервер рүү upload хийгдэхгүй. Local media-д curated үгийн тайлбар, context quiz үйлчлэхгүй.
+        Өөрийн ашиглах эрхтэй видео, англи болон монгол хадмалаа сонгоно уу. Файлууд серверт
+        илгээгдэхгүй.
       </p>
       <div className="grid gap-3 md:grid-cols-3">
         {[
-          { label: 'Local video', accept: 'video/*', set: setVideo },
-          { label: 'English VTT', accept: '.vtt', set: setEn },
-          { label: 'Mongolian VTT', accept: '.vtt', set: setMn },
+          { label: 'Видео файл', accept: 'video/*', set: setVideo },
+          { label: 'Англи хадмал (.vtt)', accept: '.vtt', set: setEn },
+          { label: 'Монгол хадмал (.vtt)', accept: '.vtt', set: setMn },
         ].map(({ label, accept, set }) => (
           <label key={label} className="min-w-0 text-sm text-slate-300">
             {label}
@@ -72,7 +72,7 @@ export default function LocalMediaInput({
         onClick={load}
         className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-semibold text-slate-950 disabled:opacity-40"
       >
-        {loading ? 'Уншиж байна…' : 'Local lesson нээх'}
+        {loading ? 'Уншиж байна…' : 'Видеогоо нээх'}
       </button>
       {error && (
         <p role="alert" className="text-sm text-rose-300">
