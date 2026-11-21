@@ -1,6 +1,16 @@
-import React from 'react';
+import type { ButtonHTMLAttributes } from 'react';
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'link';
+  size?: 'sm' | 'md' | 'lg';
+};
 
-export function Button({ children, variant = 'default', size = 'md', className = '', ...props }) {
+export function Button({
+  children,
+  variant = 'default',
+  size = 'md',
+  className = '',
+  ...props
+}: Props) {
   const baseStyles =
     'inline-flex items-center justify-center rounded-lg font-medium transition-colors';
 

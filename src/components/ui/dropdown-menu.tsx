@@ -1,25 +1,42 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type ReactElement,
+  type ButtonHTMLAttributes,
+  type HTMLAttributes,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
+type DropdownState = { open: boolean; setOpen: Dispatch<SetStateAction<boolean>>; side: string };
+type MenuProps = { children: ReactNode; defaultOpen?: boolean; side?: string };
+type ContentProps = { children: ReactNode; align?: string; side?: string; className?: string };
+type TriggerProps = {
+  children: ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>;
+  asChild?: boolean;
+};
 
-const DropdownContext = React.createContext({
+const DropdownContext = React.createContext<DropdownState>({
   open: false,
   setOpen: () => {},
   side: 'bottom',
 });
 
-export function DropdownMenu({ children, defaultOpen = false, side = 'bottom' }) {
+export function DropdownMenu({ children, defaultOpen = false, side = 'bottom' }: MenuProps) {
   const [open, setOpen] = useState(defaultOpen);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && event.target instanceof Node && !ref.current.contains(event.target)) {
         setOpen(false);
       }
     }
 
-    function handleKeyDown(event) {
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         setOpen(false);
       }
@@ -43,10 +60,10 @@ export function DropdownMenu({ children, defaultOpen = false, side = 'bottom' })
   );
 }
 
-export function DropdownMenuTrigger({ children, asChild = false }) {
+export function DropdownMenuTrigger({ children, asChild = false }: TriggerProps) {
   const { open, setOpen } = React.useContext(DropdownContext);
 
-  const triggerProps = {
+  const triggerProps: ButtonHTMLAttributes<HTMLButtonElement> = {
     type: 'button',
     onClick: () => setOpen((value) => !value),
     'aria-expanded': open,
@@ -70,7 +87,7 @@ export function DropdownMenuContent({
   align = 'start',
   side = 'bottom',
   className = '',
-}) {
+}: ContentProps) {
   const { open, side: parentSide } = React.useContext(DropdownContext);
   const actualSide = side || parentSide;
 
@@ -89,7 +106,7 @@ export function DropdownMenuContent({
   );
 }
 
-export function DropdownMenuItem({ children, onClick, ...props }) {
+export function DropdownMenuItem({ children, onClick, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       role="menuitem"
