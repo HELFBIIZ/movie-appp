@@ -3,12 +3,12 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 import { createCineSession, emptyCineState } from '@/lib/learning/player-adapter/cinesrc';
 
 export type MoviePlayerContext = {
-  tmdbId: number;
+  tmdbId: number | string | null | undefined;
   provider: string;
   allowed: boolean;
   iframeRef: RefObject<HTMLIFrameElement | null>;
   onSelectProvider: (provider: string) => void;
-  englishSubtitleUrl?: string;
+  englishSubtitleUrl?: string | null;
 };
 export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
   const [observed, setObserved] = useState({ key: '', state: emptyCineState() });

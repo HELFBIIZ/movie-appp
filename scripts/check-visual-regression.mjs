@@ -46,6 +46,7 @@ async function capture(cwd, port, update) {
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
     const variables = { ...env, SCENECHAIN_BASE_URL: `http://127.0.0.1:${port}` };
+    if (!update) variables.VXNTA_AFTER_DIR = path.join(root, '.refactor-evidence/after');
     run(
       process.execPath,
       [

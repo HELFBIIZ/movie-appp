@@ -40,7 +40,19 @@ function loadModule(file, original = false, cache = new Map()) {
     if (!path.extname(target)) target += '.ts';
     return loadModule(target, original, cache);
   };
-  vm.runInNewContext(source, { exports, require, Date, URL, Number, RegExp }, { filename: file });
+  vm.runInNewContext(
+    source,
+    {
+      exports,
+      require,
+      Date,
+      URL,
+      Number,
+      RegExp,
+      window: { location: { origin: 'https://vxnta.fixture.test' } },
+    },
+    { filename: file },
+  );
   return exports;
 }
 const plain = (value) => JSON.parse(JSON.stringify(value));
@@ -173,4 +185,35 @@ test('legacy subtitle formatting and constant values remain unchanged', () => {
     plain(loadModule(current('const'))),
     plain(loadModule('src/lib/const.js', true)),
   );
+});
+
+test('all five provider URL builders preserve movie, TV, missing ID and subtitle encoding', () => {
+  const source = execFileSync('git', ['show', `${production}:src/app/watch/[slug]/page.js`], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  const functions = source.slice(
+    source.indexOf('function vidsrcUrl'),
+    source.indexOf('export default function WatchPage'),
+  );
+  const before = vm.runInNewContext(
+    functions + '\n({vidsrcUrl, cinesrcUrl, superEmbedUrl, embedMasterUrl, embedApiStreamUrl})',
+    { window: { location: { origin: 'https://vxnta.fixture.test' } }, URL },
+  );
+  const after = loadModule('src/lib/watch/providers.ts');
+  for (const movie of [undefined, null, { tmdbId: 0 }, { tmdbId: 969681 }, { tmdbId: '969681' }]) {
+    for (const isTV of [false, true]) {
+      for (const [season, episode, subSlug] of [
+        [1, 1, undefined],
+        [0, 0, 'a slug/season'],
+        [2, 4, 'movie-S02E04'],
+      ]) {
+        for (const name of Object.keys(before))
+          assert.equal(
+            after[name](movie, isTV, season, episode, subSlug),
+            before[name](movie, isTV, season, episode, subSlug),
+          );
+      }
+    }
+  }
 });

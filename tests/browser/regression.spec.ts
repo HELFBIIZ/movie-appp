@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // UI contract fixtures. All account/payment writes are intercepted, never charged.
 const me = {
@@ -72,6 +74,20 @@ async function ready(page: Page) {
   ).toBeVisible();
 }
 
+async function appearance(page: Page, name: string) {
+  const mask = [page.locator('video, iframe')];
+  await expect(page).toHaveScreenshot(name, { mask });
+  if (process.env.VXNTA_AFTER_DIR) {
+    fs.mkdirSync(process.env.VXNTA_AFTER_DIR, { recursive: true });
+    await page.screenshot({
+      path: path.join(process.env.VXNTA_AFTER_DIR, name),
+      mask,
+      animations: 'allow',
+      style: fs.readFileSync('tests/fixtures/visual.css', 'utf8'),
+    });
+  }
+}
+
 for (const [name, route] of [
   ['home', '/'],
   ['catalog', '/movies'],
@@ -88,13 +104,9 @@ for (const [name, route] of [
       await expect(page.getByRole('heading', { level: 2 })).toContainText('нэвтэрнэ');
     if (name === 'pricing')
       await expect(page.getByText('Monthly Unlimited', { exact: true }).first()).toBeVisible();
-    await expect(page).toHaveScreenshot(`${name}-desktop.png`, {
-      mask: [page.locator('video, iframe')],
-    });
+    await appearance(page, `${name}-desktop.png`);
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(page).toHaveScreenshot(`${name}-mobile.png`, {
-      mask: [page.locator('video, iframe')],
-    });
+    await appearance(page, `${name}-mobile.png`);
   });
 }
 
@@ -107,7 +119,7 @@ test('search and mobile navigation preserve their existing results and URLs', as
   await expect(result).toContainText('Inception');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Toggle menu', exact: true }).click();
-  await expect(page).toHaveScreenshot('mobile-navigation.png');
+  await appearance(page, 'mobile-navigation.png');
   await page.getByRole('link', { name: 'All Movies', exact: true }).click();
   await expect(page).toHaveURL(/\/movies$/);
 });
@@ -123,7 +135,10 @@ test('profile editing uses the same payload without writing a real user', async 
   await page.goto('/profile');
   await ready(page);
   await expect(page.getByRole('heading', { name: 'Profile', exact: true })).toBeVisible();
-  await expect(page).toHaveScreenshot('profile-desktop.png');
+  await appearance(page, 'profile-desktop.png');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await appearance(page, 'profile-mobile.png');
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.getByPlaceholder('How others see you').fill('New learner');
   await page.getByRole('button', { name: 'Save profile', exact: true }).click();
   await expect(page.getByText('Profile saved!', { exact: true })).toBeVisible();
@@ -151,6 +166,45 @@ test('password login handles failure and success with mocked sessions', async ({
   succeed = true;
   await page.locator('form').getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL('/');
+});
+
+test('theme colors and mobile menu remain the same in dark mode', async ({ page }) => {
+  await page.goto('/');
+  await ready(page);
+  await page.getByRole('button', { name: 'Toggle theme', exact: true }).click();
+  await expect(page.locator('html')).toHaveClass(/dark/);
+  await appearance(page, 'home-dark-desktop.png');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await appearance(page, 'home-dark-mobile.png');
+  await page.getByRole('button', { name: 'Toggle menu', exact: true }).click();
+  await appearance(page, 'mobile-navigation-dark.png');
+});
+
+test('admin navigation and logout use mocked identity without changing server roles', async ({
+  page,
+}) => {
+  let loggedIn = true;
+  await page.route('**/api/auth/me', (route) =>
+    route.fulfill({ json: { me: loggedIn ? { ...me, roleCode: 'ADMIN' } : null } }),
+  );
+  await page.route('**/api/auth/logout', async (route) => {
+    expect(route.request().method()).toBe('POST');
+    loggedIn = false;
+    await route.fulfill({ json: { ok: true } });
+  });
+  await page.goto('/');
+  await expect(
+    page.locator('header').getByRole('link', { name: 'Admin', exact: true }),
+  ).toBeVisible();
+  await page
+    .locator('header button')
+    .filter({ has: page.locator('svg.lucide-user') })
+    .click();
+  await page.getByRole('menuitem').filter({ hasText: 'Logout' }).click();
+  await expect(
+    page.locator('header').getByRole('link', { name: 'Sign In', exact: true }),
+  ).toBeVisible();
+  expect(loggedIn).toBe(false);
 });
 
 test('all five existing player URLs remain selectable without loading third-party film', async ({

@@ -43,6 +43,7 @@ jobs:
           include-hidden-files: true
           path: |
             .refactor-evidence/baseline
+            .refactor-evidence/after
             test-results
             playwright-report
           retention-days: 14

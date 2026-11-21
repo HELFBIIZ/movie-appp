@@ -43,7 +43,7 @@ export const emptyCineState = (): CineState => ({
   capabilities: { getCurrentTime: false, play: false, pause: false, seek: false },
 });
 
-function isBoundFrame(frame: Frame, tmdbId: number): boolean {
+function isBoundFrame(frame: Frame, tmdbId: number | string): boolean {
   if (!frame.isConnected || !frame.contentWindow) return false;
   try {
     const url = new URL(frame.src);
@@ -63,7 +63,7 @@ function isBoundFrame(frame: Frame, tmdbId: number): boolean {
 export function readCineMessage(
   event: Pick<MessageEvent, 'origin' | 'source' | 'data'>,
   frame: Frame,
-  tmdbId: number,
+  tmdbId: number | string,
 ) {
   if (
     !isBoundFrame(frame, tmdbId) ||
@@ -96,7 +96,11 @@ export function readCineMessage(
 
 // Uses only the provider's documented command/event envelope. No DOM access,
 // stream extraction, wildcard target origin, optimistic clocks or guessed SDK.
-export function createCineSession(frame: Frame, tmdbId: number, emit: (state: CineState) => void) {
+export function createCineSession(
+  frame: Frame,
+  tmdbId: number | string,
+  emit: (state: CineState) => void,
+) {
   let state = emptyCineState();
   let disposed = false;
   let seekTimer: ReturnType<typeof setTimeout> | undefined;

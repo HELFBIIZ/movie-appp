@@ -21,7 +21,7 @@ export function useMovieLesson(
   enabled: boolean,
   allowed: boolean,
   movieId: string,
-  englishSelection?: string,
+  englishSelection?: string | null,
 ) {
   const [settings, setSettings] = useState(initialSettings);
   const settingsRef = useRef(initialSettings);
