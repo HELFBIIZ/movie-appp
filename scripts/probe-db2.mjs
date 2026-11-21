@@ -2,7 +2,7 @@ import fs from 'fs'
 import Database from 'better-sqlite3'
 import crypto from 'crypto'
 
-const dbSrc = fs.readFileSync('src/lib/db.mjs', 'utf8')
+const dbSrc = fs.readFileSync('src/db/index.mjs', 'utf8')
 const ddl = fs.readFileSync('data/db/schema.sql', 'utf8')
 
 const db = new Database(':memory:')

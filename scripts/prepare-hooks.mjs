@@ -1,7 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import husky from 'husky';
 
-if (!process.env.CI && process.env.HUSKY !== '0') {
+if (!process.env.CI && process.env.HUSKY !== '0' && process.env.NODE_ENV !== 'production') {
   let existing = '';
   try {
     existing = execFileSync('git', ['config', '--get', 'core.hooksPath'], {
@@ -15,6 +14,7 @@ if (!process.env.CI && process.env.HUSKY !== '0') {
       `Existing hooksPath preserved (${existing}); chain npx lint-staged in your current pre-commit hook.\n`,
     );
   } else {
+    const { default: husky } = await import('husky');
     const result = husky();
     if (result) throw new Error(result);
   }

@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync } from 'fs'
 
 // ---- FIX 1: db.mjs — remove FIRST export block (256.. next top-level export
 //      after its closing brace), keep the SECOND at 293.
-let d = readFileSync('src/lib/db.mjs', 'utf8')
+let d = readFileSync('src/db/index.mjs', 'utf8')
 const mark = 'export function createMerchantApplication'
 let first = d.indexOf(mark)
 let second = d.indexOf(mark, first + 1)
@@ -28,7 +28,7 @@ function blockEnd(s, fromMark) {
 
 let firstEnd = blockEnd(d, first)
 d = d.slice(0, first) + d.slice(firstEnd)
-writeFileSync('src/lib/db.mjs', d)
+writeFileSync('src/db/index.mjs', d)
 const dupes = (d.match(/export function createMerchantApplication/g) || []).length
 console.log('db.mjs createMerchantApplication exports now:', dupes, '(MUST be 1)')
 

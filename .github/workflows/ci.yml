@@ -2,8 +2,6 @@ name: VXNTA CI
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [refactor/pinebaatars-typescript-20261121]
 permissions:
   contents: read
 concurrency:

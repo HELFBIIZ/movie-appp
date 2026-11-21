@@ -1,4 +1,4 @@
-// src/lib/db.mjs — SINGLE server-side data access layer.
+// src/db/index.mjs — SINGLE server-side data access layer.
 //
 // Engine: libSQL (@libsql/client) — the Turso SQLite-compatible HTTP client.
 //   • local   → `file:data/db/app.db` (same schema/data as before; WAL)

@@ -19,7 +19,7 @@ function blockAfter(s, mark) {
 }
 
 // ---- 1: db.mjs — keep first `export function createMerchantApplication`
-let d = readFileSync('src/lib/db.mjs', 'utf8')
+let d = readFileSync('src/db/index.mjs', 'utf8')
 const mk = 'export function createMerchantApplication'
 const a1 = d.indexOf(mk)
 const a2 = d.indexOf(mk, a1 + 1)
@@ -27,7 +27,7 @@ if (a1 === -1 || a2 === -1) throw new Error('db mark gone ' + a1 + '/' + a2)
 const a2End = blockAfter(d, mk) // FIRST block end; keep [a1..a2End)
 const dEnd = (() => { let r = d.slice(a2End); const e = r.indexOf('\nexport '); return e === -1 ? r.length : e })()
 d = d.slice(0, a1) + d.slice(a2End + dEnd)
-writeFileSync('src/lib/db.mjs', d)
+writeFileSync('src/db/index.mjs', d)
 const dCount = (d.match(/export function createMerchantApplication/g) || []).length
 console.log('db.mjs createMerchantApplication now:', dCount, '(must be 1)')
 

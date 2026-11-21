@@ -1,5 +1,5 @@
 // Walk the LIVE app.db, snapshot its real DDL into data/db/schema.sql
-// (the SCHEMA_FILE path src/lib/db.mjs opens at boot). Source of truth:
+// (the SCHEMA_FILE path src/db/index.mjs opens at boot). Source of truth:
 // SQLite's own sqlite_master — not a hand-maintained copy.
 import Database from 'better-sqlite3'
 import fs from 'fs'

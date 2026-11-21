@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs'
 
-const seam = 'src/lib/db.mjs'
+const seam = 'src/db/index.mjs'
 const src = readFileSync(seam, 'utf8')
 const trimmed = src.replace(/\s+$/, '')
 const tail = trimmed.slice(-40)

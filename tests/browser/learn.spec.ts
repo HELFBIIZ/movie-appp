@@ -101,7 +101,7 @@ test('the movie entry opens learning mode and gives guests a separate free start
   await page.route('**/api/watch/spider-man-brand-new-day', (route) =>
     route.fulfill({ status: 401, json: { error: { code: 'UNAUTHENTICATED' } } }),
   );
-  await page.goto('/movie/spider-man-brand-new-day');
+  await page.goto('/movie/spider-man-brand-new-day', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('link', { name: 'Үзэнгээ үг сурах' })).toHaveAttribute(
     'href',
     '/watch/spider-man-brand-new-day?learn=1',

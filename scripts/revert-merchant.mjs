@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync, existsSync, rmSync } from 'fs'
 
 // ---- 1) db.mjs: strip exactly ONE createMerchantApplication block
-let d = readFileSync('src/lib/db.mjs', 'utf8')
+let d = readFileSync('src/db/index.mjs', 'utf8')
 const mark = 'export function createMerchantApplication'
 const i = d.indexOf(mark)
 if (i === -1) {
@@ -24,7 +24,7 @@ if (i === -1) {
   if (j === d.length) throw new Error('seam broke: no close-brace after ' + i)
   const end = j + 1
   d = d.slice(0, i) + d.slice(end)
-  writeFileSync('src/lib/db.mjs', d)
+  writeFileSync('src/db/index.mjs', d)
   const remaining = (d.match(/export function createMerchantApplication/g) || []).length
   console.log('db.mjs createMerchantApplication now:', remaining, '(MUST be 0)')
 }

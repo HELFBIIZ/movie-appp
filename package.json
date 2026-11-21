@@ -11,7 +11,7 @@
     "backfill": "node scripts/backfill-media.mjs",
     "trailers": "node scripts/backfill-trailers.mjs",
     "qpay:watch": "node scripts/qpay-watcher.mjs",
-    "lint": "eslint src tests playwright*.ts eslint.config.mjs lint-staged.config.mjs --max-warnings=0",
+    "lint": "eslint src tests scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs playwright*.ts eslint.config.mjs lint-staged.config.mjs --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test:learning": "node --experimental-strip-types --test tests/learning.test.mjs",
     "test:browser": "playwright test",

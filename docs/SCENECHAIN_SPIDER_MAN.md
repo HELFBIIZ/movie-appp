@@ -110,13 +110,13 @@ Retail listing-ийг VXNTA-д embed хийх зөвшөөрөл гэж нэрл
 
 ## Provider-ийн төлөв
 
-| Provider | Энэ өөрчлөлтийн бодит төлөв |
-| --- | --- |
-| CineSrc / `cinesrc.st` | Documented API adapter холбогдсон; бодит frame event ирсэн method л transport capability авна. Энэ киноны authenticated playback батлагдаагүй. |
-| VidSrc / `vidsrcme.ru` | Normal сонголтыг хадгалсан; clock/seek contract холбогдоогүй. Root page domain-for-sale гэж ирсэн нь embed endpoint-ийн бүх нөхцөлийг шалгасан гэсэн үг биш. |
-| SuperEmbed / `multiembed.mov` | Existing iframe; verified clock/seek байхгүй. |
-| EmbedMaster / `embedmaster.link` | Existing iframe; subtitle URL parameter нь time/control API proof биш. |
-| Embed API / `watch.embed-api.stream` | Existing iframe; энэ өөрчлөлтөд clock/seek contract холбогдоогүй. |
+| Provider                             | Энэ өөрчлөлтийн бодит төлөв                                                                                                                                  |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| CineSrc / `cinesrc.st`               | Documented API adapter холбогдсон; бодит frame event ирсэн method л transport capability авна. Энэ киноны authenticated playback батлагдаагүй.               |
+| VidSrc / `vidsrcme.ru`               | Normal сонголтыг хадгалсан; clock/seek contract холбогдоогүй. Root page domain-for-sale гэж ирсэн нь embed endpoint-ийн бүх нөхцөлийг шалгасан гэсэн үг биш. |
+| SuperEmbed / `multiembed.mov`        | Existing iframe; verified clock/seek байхгүй.                                                                                                                |
+| EmbedMaster / `embedmaster.link`     | Existing iframe; subtitle URL parameter нь time/control API proof биш.                                                                                       |
+| Embed API / `watch.embed-api.stream` | Existing iframe; энэ өөрчлөлтөд clock/seek contract холбогдоогүй.                                                                                            |
 
 ## Тестийг зөв ойлгох нь
 
@@ -142,28 +142,28 @@ final report-д тухайн бодит дүнгээр нь бичнэ.
 
 ## Өөрчилсөн файлууд
 
-| Файл | Тайлбар |
-| --- | --- |
-| `src/app/watch/[slug]/page.js` | Target-ийн default movie mode; бодит iframe ref/provider/VIP state-ийг dock руу өгнө. Frame key-д TMDB ID нэмсэн. |
-| `src/lib/learning/movie.ts` | Target identity, fixed MN URL, offset/alignment, transcript fingerprint. |
-| `src/lib/learning/player-adapter/cinesrc.ts` | Strict frame/message binding, real event/getter clock, acknowledged seek, cleanup. |
-| `player-adapter/index.ts` | Static false defaults болон CineSrc runtime verification requirement-ийг ялгана. |
-| `useMoviePlayer.ts` | React lifecycle-д adapter холбож, хуучин connection state-ийг шинэ provider-д зөөхгүй. |
-| `useMovieLesson.ts` | VIP зөвшөөрсний дараа MN уншина; EN upload, local settings, offsets, hash. |
-| `MovieLearningStatus.tsx` | Source/metadata uncertainty, actual event state, EN import, offsets болон active movie cue. |
-| `ManualWordPanel.tsx` | Англи үгийн өөрийн meaning/grammar/context; утга оруулж байж хадгална. |
-| `LearningDock.tsx` | Movie-specific controls, target дээр sample option үгүй, manual note panel. |
-| `useLesson.ts` | Sample-ийг зөвхөн sample source сонгосон үед татна. |
-| `useLearningController.ts` | Native болон movie event clock ялгах; movie-scoped quiz, provenance/TMDB notes. |
-| `LearningPanels.tsx` | Real adapter seek/pause, manual word selection, context quiz unavailable state. |
-| `SubtitleTranscript.tsx` | MN-only/EN import, manual token selection, 50 cue pagination. |
-| `LearningProgress.tsx` | Clock unknown үед 00:00 гэж дүр эсгэхгүй. |
-| `VocabularyPanel.tsx` | User-note provenance болон grammar харуулна. |
-| `types.ts`, `storage.ts` | Backward-compatible optional provenance/TMDB/context/grammar fields. |
-| `tests/learning.test.mjs` | Transport security, real/unknown clock distinction, offsets, storage compatibility. |
-| `tests/browser/spider-man.spec.ts` | Real guest audit ба тусдаа labeled protocol fixture. |
-| `scripts/audit-spider-man.mjs` | Mock-гүй live audit JSON/screenshot; film verification flags false. |
-| `.github/workflows/scenechain.yml` | Dedicated feature branch-д existing Node 22 CI ажиллуулна. |
+| Файл                                         | Тайлбар                                                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `src/app/watch/[slug]/page.js`               | Target-ийн default movie mode; бодит iframe ref/provider/VIP state-ийг dock руу өгнө. Frame key-д TMDB ID нэмсэн. |
+| `src/lib/learning/movie.ts`                  | Target identity, fixed MN URL, offset/alignment, transcript fingerprint.                                          |
+| `src/lib/learning/player-adapter/cinesrc.ts` | Strict frame/message binding, real event/getter clock, acknowledged seek, cleanup.                                |
+| `player-adapter/index.ts`                    | Static false defaults болон CineSrc runtime verification requirement-ийг ялгана.                                  |
+| `useMoviePlayer.ts`                          | React lifecycle-д adapter холбож, хуучин connection state-ийг шинэ provider-д зөөхгүй.                            |
+| `useMovieLesson.ts`                          | VIP зөвшөөрсний дараа MN уншина; EN upload, local settings, offsets, hash.                                        |
+| `MovieLearningStatus.tsx`                    | Source/metadata uncertainty, actual event state, EN import, offsets болон active movie cue.                       |
+| `ManualWordPanel.tsx`                        | Англи үгийн өөрийн meaning/grammar/context; утга оруулж байж хадгална.                                            |
+| `LearningDock.tsx`                           | Movie-specific controls, target дээр sample option үгүй, manual note panel.                                       |
+| `useLesson.ts`                               | Sample-ийг зөвхөн sample source сонгосон үед татна.                                                               |
+| `useLearningController.ts`                   | Native болон movie event clock ялгах; movie-scoped quiz, provenance/TMDB notes.                                   |
+| `LearningPanels.tsx`                         | Real adapter seek/pause, manual word selection, context quiz unavailable state.                                   |
+| `SubtitleTranscript.tsx`                     | MN-only/EN import, manual token selection, 50 cue pagination.                                                     |
+| `LearningProgress.tsx`                       | Clock unknown үед 00:00 гэж дүр эсгэхгүй.                                                                         |
+| `VocabularyPanel.tsx`                        | User-note provenance болон grammar харуулна.                                                                      |
+| `types.ts`, `storage.ts`                     | Backward-compatible optional provenance/TMDB/context/grammar fields.                                              |
+| `tests/learning.test.mjs`                    | Transport security, real/unknown clock distinction, offsets, storage compatibility.                               |
+| `tests/browser/spider-man.spec.ts`           | Real guest audit ба тусдаа labeled protocol fixture.                                                              |
+| `scripts/audit-spider-man.mjs`               | Mock-гүй live audit JSON/screenshot; film verification flags false.                                               |
+| `.github/workflows/scenechain.yml`           | Dedicated feature branch-д existing Node 22 CI ажиллуулна.                                                        |
 
 Component нэртэй файлууд `src/components/learning/` дотор, lib нэртэй файлууд
 `src/lib/learning/` дотор. Payment/authentication/production DB/DNS/secret settings
