@@ -1,0 +1,5 @@
+/* Screenshot-only stabilization; never imported by the application. */
+* {
+  animation: none !important;
+  transition: none !important;
+}

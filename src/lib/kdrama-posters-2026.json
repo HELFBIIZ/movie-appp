@@ -1,0 +1,488 @@
+{
+  "100-days-of-deception": {
+    "poster": "https://image.tmdb.org/t/p/w500/5oR8AaB2av21qu6ZYD5kDA1pxrL.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/3SvKCITqMtjgPIhFBjRc4yTAc4H.jpg",
+    "tmdbId": "293607",
+    "media": "tv"
+  },
+  "a-bona-fide-killer": {
+    "poster": "https://image.tmdb.org/t/p/w500/e9ziA4Y6md4Ytr62r5y9vRdv4ll.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/j9AqsMJxuq7NEYJX4Q1vSfKb5CG.jpg",
+    "tmdbId": "294095",
+    "media": "tv"
+  },
+  "a-love-other-than-yours": {
+    "poster": "https://image.tmdb.org/t/p/w500/jvNFIc9qy9ynCuKMar9YC258gJP.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/aamqCMt8yjcLqfSWvrJk7qApGyT.jpg",
+    "tmdbId": "314939",
+    "media": "tv"
+  },
+  "a-trap-called-desire": {
+    "poster": "https://image.tmdb.org/t/p/w500/repjdxPyA19x0ghyJFmECTDwGvj.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/qJeyb3SHzH9B8K6ozayzE6VbmA3.jpg",
+    "tmdbId": "326991",
+    "media": "tv"
+  },
+  "absolute-value-of-romance": {
+    "poster": "https://image.tmdb.org/t/p/w500/wY4rhPE90jJ4bp1JZOFY0MeRJQX.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/d8O1bLwn7eoqv0acBwxmkxEkhqe.jpg",
+    "tmdbId": "314784",
+    "media": "tv"
+  },
+  "agent-kim-reactivated": {
+    "poster": "https://image.tmdb.org/t/p/w500/mxa7YxVln3Rwnd2Va82PoclTznj.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/g1LJLlmWP74zv9yXKEXm7g9p10O.jpg",
+    "tmdbId": "296206",
+    "media": "tv"
+  },
+  "azure-spring": {
+    "poster": "https://image.tmdb.org/t/p/w500/6gotRZOJFMC4N4wHamsRnZNJtmh.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/gLRdw3GkinA9k6GFvG8OKZh56Kv.jpg",
+    "tmdbId": "319600",
+    "media": "tv"
+  },
+  "bloodhounds-season-2": {
+    "poster": "https://image.tmdb.org/t/p/w500/uSQzD7TXsL96J5ggDrJFdUs8uXU.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/zhsEnDNCQX5dlI2wbKzV90pV0B9.jpg",
+    "tmdbId": "127529",
+    "media": "tv"
+  },
+  "bloody-flower": {
+    "poster": "https://image.tmdb.org/t/p/w500/bDoAdJLEAiCRj8B0QRAz2wt2xfv.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5T4ij5RgI7y5UHNgI2scH8BU5J9.jpg",
+    "tmdbId": "310024",
+    "media": "tv"
+  },
+  "boyfriend-on-demand": {
+    "poster": "https://image.tmdb.org/t/p/w500/1WSuH8eK44KDavNggmWhKS5zUCF.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/sjOTFlGapgXFjwV3LmD9eHZEp3d.jpg",
+    "tmdbId": "281016",
+    "media": "tv"
+  },
+  "cabbage-your-life": {
+    "poster": "https://image.tmdb.org/t/p/w500/wb0gJuRBD5c4C1AXIGokUTG5pML.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/VD0J0SAwBQ6XhB662atAz2hSGS.jpg",
+    "tmdbId": "311650",
+    "media": "tv"
+  },
+  "can-this-love-be-translated": {
+    "poster": "https://image.tmdb.org/t/p/w500/zgUh4cgalSzBjbsT5P0qmU7Rjzk.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/svnZYhAboLrwHEtkKRm2mIdjocB.jpg",
+    "tmdbId": "229891",
+    "media": "tv"
+  },
+  "climax": {
+    "poster": "https://image.tmdb.org/t/p/w500/znQD6puGiyMpNXPLs172Vv1h0GK.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/ynixwhYEcDrYRr5Jft0LNqAQERQ.jpg",
+    "tmdbId": "241860",
+    "media": "tv"
+  },
+  "crash-season-2": {
+    "poster": "https://image.tmdb.org/t/p/w500/uZfEkKi3yn8epQpukKrCtLOv7fc.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/oaJydi1KwWMK04pIPfiqHD8hGfg.jpg",
+    "tmdbId": "226102",
+    "media": "tv"
+  },
+  "dead-end-job": {
+    "poster": "https://image.tmdb.org/t/p/w500/nJBw3r2X02PTgZIIaTaU5OihDs2.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/2bIuLHpNIciIN69sJQOiHNJJL9J.jpg",
+    "tmdbId": "289517",
+    "media": "tv"
+  },
+  "dive-into-you": {
+    "poster": "https://image.tmdb.org/t/p/w500/6OAuQOGqjYY1JXbkTlWz4Mm2Kmi.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/y5JiciTmHUVIDCRf0CnuzP4IgOn.jpg",
+    "tmdbId": "316197",
+    "media": "tv"
+  },
+  "doctor-on-the-edge": {
+    "poster": "https://image.tmdb.org/t/p/w500/zwEYhe03vN1rbjF8Bsf9Dng0W8e.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/vllHmrJ2pKSjRlqOVY9SYWXcbeo.jpg",
+    "tmdbId": "287009",
+    "media": "tv"
+  },
+  "doctor-shin": {
+    "poster": "https://image.tmdb.org/t/p/w500/6aFUObSFb0zItRg6gow7T88kIm5.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/aWJ69UgwuksIt055n1Z9eyV1aND.jpg",
+    "tmdbId": "314669",
+    "media": "tv"
+  },
+  "doctor-x": {
+    "poster": "https://image.tmdb.org/t/p/w500/pMDVPdi79WdkpRrREp617d4AWDY.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/f0JkNBCO5WuCI63F0iM0Xs32k9C.jpg",
+    "tmdbId": "293610",
+    "media": "tv"
+  },
+  "dream-to-you": {
+    "poster": "https://image.tmdb.org/t/p/w500/cBiwrUwUNNYXTc5xrDEQWcMqftd.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/5AhL7NKa8UC6QOyzKiDohUM9VYT.jpg",
+    "tmdbId": "301412",
+    "media": "tv"
+  },
+  "family-register": {
+    "poster": "https://image.tmdb.org/t/p/w500/1NyZYjWNfFmnXBpkdIg4iKIhHqy.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/xBFkSHJAco6XCwYZ3YRZc81pn22.jpg",
+    "tmdbId": "320406",
+    "media": "tv"
+  },
+  "fifties-professionals": {
+    "poster": "https://image.tmdb.org/t/p/w500/lPG0WrpcKKl3QegDBvYf0vW9mbl.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/gfBw8ZoGtRHSmSD5jo0McgwDzYd.jpg",
+    "tmdbId": "297712",
+    "media": "tv"
+  },
+  "filing-for-love": {
+    "poster": "https://image.tmdb.org/t/p/w500/5dgTRxtP5g07RSH5LEOl367Fuwi.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/xrzle63zw2MduVGmTFeKNXKqUla.jpg",
+    "tmdbId": "297640",
+    "media": "tv"
+  },
+  "final-table": {
+    "poster": "https://image.tmdb.org/t/p/w500/yNafNPWYUPEljFlaf7zScmunUTG.jpg",
+    "banner": null,
+    "tmdbId": "316702",
+    "media": "tv"
+  },
+  "flex-x-cop-season-2": {
+    "poster": "https://image.tmdb.org/t/p/w500/2eWH2RDxpbIfEs17BpJTQhcOqRs.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nOGPxfYqd0f3oeFGGinpDOP68MQ.jpg",
+    "tmdbId": "220074",
+    "media": "tv"
+  },
+  "four-hands-two-sonatas": {
+    "poster": "https://image.tmdb.org/t/p/w500/a7p6htiJKx68USDAcilJ5rzKAWB.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/fYL4I6cezb06BHhQlrNjNhy7jhf.jpg",
+    "tmdbId": "305644",
+    "media": "tv"
+  },
+  "gold-land": {
+    "poster": "https://image.tmdb.org/t/p/w500/qhbwTTeSnIGctR4CEmHc9RQBwtT.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/AoJgqEYpxRWd58gNQKNwYlPUFeZ.jpg",
+    "tmdbId": "278113",
+    "media": "tv"
+  },
+  "honour": {
+    "poster": "https://image.tmdb.org/t/p/w500/d1kQcjue665jjB8AABliD8V9jFL.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/fULDivcid9WAuV6hKwobgRhVWD4.jpg",
+    "tmdbId": "287346",
+    "media": "tv"
+  },
+  "if-wishes-could-kill": {
+    "poster": "https://image.tmdb.org/t/p/w500/2CfTNVaR8kZQkWtWWE3Cntaiq33.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/zV9WYOfFr4MAnzXXD8PR5J6JnN3.jpg",
+    "tmdbId": "285838",
+    "media": "tv"
+  },
+  "in-your-radiant-season": {
+    "poster": "https://image.tmdb.org/t/p/w500/35UAIEtQQsjVl38GVPvbqc00pcJ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/pHhGVPOi9qI6CVYIrgZ2VWflg0u.jpg",
+    "tmdbId": "233833",
+    "media": "tv"
+  },
+  "king-mun-mu": {
+    "poster": "https://image.tmdb.org/t/p/w500/juMhcFFdwMUdMZYqvrMmaGDFntK.jpg",
+    "banner": null,
+    "tmdbId": "301354",
+    "media": "tv"
+  },
+  "love-in-disguise": {
+    "poster": null,
+    "banner": "https://image.tmdb.org/t/p/w1280/eELCGuN24A8lcgYhN5DH2qTyaIU.jpg",
+    "tmdbId": "303745",
+    "media": "tv"
+  },
+  "love-in-sync": {
+    "poster": "https://image.tmdb.org/t/p/w500/iLf17aFCx2ESajFp1oyb03fmzNp.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/2p8SssGsphxOELypa5GREVTblwj.jpg",
+    "tmdbId": "315007",
+    "media": "tv"
+  },
+  "love-on-the-menu": {
+    "poster": "https://image.tmdb.org/t/p/w500/6M34aDRWttbjApzgWqYr43xpJzA.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/4bIELFjQ8sHCwJrnYfq2hlGYSkm.jpg",
+    "tmdbId": "310326",
+    "media": "tv"
+  },
+  "love-phobia": {
+    "poster": "https://image.tmdb.org/t/p/w500/3hsCoGDAceyh1FnFHHLkozPNlSS.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/SYzF7EFhhKTspLDzogpel2HHDl.jpg",
+    "tmdbId": "289690",
+    "media": "tv"
+  },
+  "mad-concrete-dreams": {
+    "poster": "https://image.tmdb.org/t/p/w500/vX5dzW0qmFvrhTsTQj4IPZHnbpt.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/uyXmG9UoUrCaDwAK3HtXtPSImeU.jpg",
+    "tmdbId": "281965",
+    "media": "tv"
+  },
+  "made-in-korea-season-2": {
+    "poster": "https://image.tmdb.org/t/p/w500/cyBg9FJ2AmTWEGktA43gMo4t0Vj.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/3GmRS3efCTp6jumogKOxYBrV5mO.jpg",
+    "tmdbId": "246473",
+    "media": "tv"
+  },
+  "mission-mompossible": {
+    "poster": "https://image.tmdb.org/t/p/w500/DzvZmReaTNhIRDWKMblHJbgUuh.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/iwg85MC2hgN33KGJVwvUHscNNci.jpg",
+    "tmdbId": "329190",
+    "media": "tv"
+  },
+  "mousetrap": {
+    "poster": "https://image.tmdb.org/t/p/w500/2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/3bHz9dYSZ5XDxY0zDaBpYgUOhE2.jpg",
+    "tmdbId": "290193",
+    "media": "tv"
+  },
+  "my-bias-my-boss": {
+    "poster": "https://image.tmdb.org/t/p/w500/A4Y4xlDHS4xi2WI9265vRyIYLoo.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/eBD46F44qKGPZiRLffO4q3JF8Hc.jpg",
+    "tmdbId": "296140",
+    "media": "tv"
+  },
+  "my-royal-nemesis": {
+    "poster": "https://image.tmdb.org/t/p/w500/rYLQbyIvbEd0lF84iXrx7CbPcBB.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/p1ntnKJwn1URGv1xpU6NN33Y11O.jpg",
+    "tmdbId": "303143",
+    "media": "tv"
+  },
+  "new-recruit-season-4": {
+    "poster": "https://image.tmdb.org/t/p/w500/yB9eZWC7LR5Lz1uomfCojPFBOzI.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/aJQtme9BDr7sldL5skIRkOlF7uP.jpg",
+    "tmdbId": "197083",
+    "media": "tv"
+  },
+  "no-tail-to-tell": {
+    "poster": "https://image.tmdb.org/t/p/w500/bSX49M4tjDsnC8dOVQxt1sLgH6z.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/sa9igU1XIER6bMgtZ2Ejfo1KsD8.jpg",
+    "tmdbId": "270420",
+    "media": "tv"
+  },
+  "notes-from-the-last-row": {
+    "poster": "https://image.tmdb.org/t/p/w500/paRFCxAJRZOypfgnzYLo6KH5jjO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/oBJ6dZ6A1tY1O94RmWnJkkQVbLz.jpg",
+    "tmdbId": "286360",
+    "media": "tv"
+  },
+  "ok-lets-get-divorced": {
+    "poster": "https://image.tmdb.org/t/p/w500/eE15dAtxrO3m8O9puVgBOgpF4a8.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/7JlcvcsS0dfzElD97ucgI7WtjWG.jpg",
+    "tmdbId": "276470",
+    "media": "tv"
+  },
+  "our-happy-days": {
+    "poster": "https://image.tmdb.org/t/p/w500/3NyAGAgALv51AaYXPPHnDTISbJ7.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nydsd4EttPQyzgLaZpX8ybmZo7t.jpg",
+    "tmdbId": "313735",
+    "media": "tv"
+  },
+  "our-sticky-love": {
+    "poster": "https://image.tmdb.org/t/p/w500/tSZ4aFpTGc8Oj52SuzPUUZ7WKL0.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/mp2AFsWsuyxCzenJh3DTKw7z4jG.jpg",
+    "tmdbId": "291496",
+    "media": "tv"
+  },
+  "our-universe": {
+    "poster": "https://image.tmdb.org/t/p/w500/d0ZW2r5L8Ma50gvkvSY7BZSE6fb.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/bHv9tTPd0dxpV2OD3WeDoZOFzPQ.jpg",
+    "tmdbId": "297424",
+    "media": "tv"
+  },
+  "pearl-in-red": {
+    "poster": "https://image.tmdb.org/t/p/w500/oX8k9Pzl8HSnoKuiwPawPIoNfyE.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/oQzp6JxTqjESsEkWsnmGYgvP5Ur.jpg",
+    "tmdbId": "310033",
+    "media": "tv"
+  },
+  "perfect-crown": {
+    "poster": "https://image.tmdb.org/t/p/w500/ocXkHSslrSWMz2ZJGl5MjF6dQr3.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/6ekykPwvAywJRjFEnUoCFWTO9O3.jpg",
+    "tmdbId": "278573",
+    "media": "tv"
+  },
+  "phantom-lawyer": {
+    "poster": "https://image.tmdb.org/t/p/w500/afLKnB1yzh28YbpbB5Z5xragMf.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/p98XiePTvNrXegxyKc6n46UJD85.jpg",
+    "tmdbId": "281010",
+    "media": "tv"
+  },
+  "positively-yours": {
+    "poster": "https://image.tmdb.org/t/p/w500/6lnM7PecwSEyYjrWr2nQzmmZaDU.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/zzLRrEtJPyqMAgCbpTiokRilGTd.jpg",
+    "tmdbId": "296009",
+    "media": "tv"
+  },
+  "reborn-rookie": {
+    "poster": "https://image.tmdb.org/t/p/w500/kPHv37XVpyWCsae3gtHujw1wPyW.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nxOsQE8UrifZpQ9hcZ7xjMHEbmn.jpg",
+    "tmdbId": "299365",
+    "media": "tv"
+  },
+  "recipe-for-love": {
+    "poster": "https://image.tmdb.org/t/p/w500/u9CoYXucqSrIVvucjvQq6WsgWOU.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/l1iP4NG6dhEoqooag7btdO807k1.jpg",
+    "tmdbId": "307602",
+    "media": "tv"
+  },
+  "reverse": {
+    "poster": "https://image.tmdb.org/t/p/w500/AuOpTRzztBKq0fAagGxc2tGexNO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/sJ4BOkTcAm3iH7UPaIkW3v5mjxa.jpg",
+    "tmdbId": "284000",
+    "media": "tv"
+  },
+  "see-you-at-work-tomorrow": {
+    "poster": "https://image.tmdb.org/t/p/w500/gTP1MKGz5kIrXCpb3HTgzVyIW6l.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/zftF4KDGuhAGIA50bywcCXPjz5f.jpg",
+    "tmdbId": "289763",
+    "media": "tv"
+  },
+  "sirens-kiss": {
+    "poster": "https://image.tmdb.org/t/p/w500/8r8YU97YfSf6QtMKfePmTqhFTeQ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/dWSR0GpWsgnLZCEe6bGZZIzw8YP.jpg",
+    "tmdbId": "310800",
+    "media": "tv"
+  },
+  "sold-out-on-you": {
+    "poster": "https://image.tmdb.org/t/p/w500/bcnneY1DWQzmwfvsuhGGnwv9KYD.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/dL5mViE22ZHnhrUU9wlklzIU4Iy.jpg",
+    "tmdbId": "287011",
+    "media": "tv"
+  },
+  "spooky-in-love": {
+    "poster": "https://image.tmdb.org/t/p/w500/acVOH8Pr5LEZ7WKZCbzwNuHVr9x.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/p9tpGftvG18M5y5wsBmPrQpVBsd.jpg",
+    "tmdbId": "298610",
+    "media": "tv"
+  },
+  "spring-fever": {
+    "poster": "https://image.tmdb.org/t/p/w500/50e9qtv8rKmcayAQSgB9P9XELpQ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/nRxbtO6OchyepUL2Zr4dpMZsdsX.jpg",
+    "tmdbId": "280948",
+    "media": "tv"
+  },
+  "still-shining": {
+    "poster": "https://image.tmdb.org/t/p/w500/tVOq3YkCTnbrycnXHmth9f6qYs7.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/gtxt1avGOgu3nhYGqWQWFPHSpKc.jpg",
+    "tmdbId": "276472",
+    "media": "tv"
+  },
+  "teach-you-a-lesson": {
+    "poster": "https://image.tmdb.org/t/p/w500/fMECSPrTmRClSViMsXFYmiYIcWP.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg",
+    "tmdbId": "276161",
+    "media": "tv"
+  },
+  "the-affair-was-just-the-beginning": {
+    "poster": "https://image.tmdb.org/t/p/w500/k1uOMMHv0o9xPJuxh0q28nqN83Y.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/463KX5md13Db6pIMCCnIZqtPWFK.jpg",
+    "tmdbId": "301418",
+    "media": "tv"
+  },
+  "the-apartment-job": {
+    "poster": "https://image.tmdb.org/t/p/w500/qFxbrHvNq5tn9SCBq3aKPgaGfyO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/stJcZWrpfT2DjY0K261Q2FpxUkS.jpg",
+    "tmdbId": "300727",
+    "media": "tv"
+  },
+  "the-art-of-sarah": {
+    "poster": "https://image.tmdb.org/t/p/w500/8hZqZB4DAC1Ebzbk80zc0H80SNa.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/uLYp6qxGNzDlDtBOAlDbfcf4QgO.jpg",
+    "tmdbId": "273977",
+    "media": "tv"
+  },
+  "the-east-palace": {
+    "poster": "https://image.tmdb.org/t/p/w500/yfYohBszGqoAW8oM0qydOtJ4kPh.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/8PHBAdPyfIwS5W6cfKLhItEb875.jpg",
+    "tmdbId": "279323",
+    "media": "tv"
+  },
+  "the-husband": {
+    "poster": "https://image.tmdb.org/t/p/w500/z74qJEf1MRsEEIKFgbeyBAHmJXg.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/lfTUwBiSyCVcvBPAMzSOYGUgr2c.jpg",
+    "tmdbId": "300954",
+    "media": "tv"
+  },
+  "the-judge-returns": {
+    "poster": "https://image.tmdb.org/t/p/w500/xWYVlBIWrpdiGnSRfLgZIxf2V11.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/l3qDk8o59jgLfO5HBAJKpCwMAld.jpg",
+    "tmdbId": "282810",
+    "media": "tv"
+  },
+  "the-legend-of-kitchen-soldier": {
+    "poster": "https://image.tmdb.org/t/p/w500/nmYgPJiZebWUtL6D72D0Qp9ce0H.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/9lQZ18CYk5n3YNbOfmSjkiBrfrk.jpg",
+    "tmdbId": "295509",
+    "media": "tv"
+  },
+  "the-ordinary-jackpot": {
+    "poster": "https://image.tmdb.org/t/p/w500/mkHMNq0PUHDVn3w5QPM2hcnOdVb.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/2vN1SjkpXT6oCBxeE9GOK5NVS2b.jpg",
+    "tmdbId": "294636",
+    "media": "tv"
+  },
+  "the-perfect-lie": {
+    "poster": "https://image.tmdb.org/t/p/w500/a8qjbVX7lo1v7m5Awzhx7Ptk8gO.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/vYO9OkYHSNfYuqz6VMS4aCCfRb8.jpg",
+    "tmdbId": "325755",
+    "media": "tv"
+  },
+  "the-practical-guide-to-love": {
+    "poster": "https://image.tmdb.org/t/p/w500/AhZDz5309V0zsZfUyF4cilkUM4T.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/zqrqsShNcOJAExYrpnTSrCSK6RG.jpg",
+    "tmdbId": "287344",
+    "media": "tv"
+  },
+  "the-prosecutors-proposal": {
+    "poster": "https://image.tmdb.org/t/p/w500/lK6DrnFecG0AsA8O5UqEYOrOArd.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/feISh3qoREwIPWbSaLqqumbmh7m.jpg",
+    "tmdbId": "322055",
+    "media": "tv"
+  },
+  "the-scandal": {
+    "poster": "https://image.tmdb.org/t/p/w500/4TU0PcHBIl0wPW5B6aVRGExOnHE.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/uc1p1PEbEMpdIHqnU9TESNC6Jhp.jpg",
+    "tmdbId": "275102",
+    "media": "tv"
+  },
+  "the-scarecrow": {
+    "poster": "https://image.tmdb.org/t/p/w500/4buHiyaXkkzIdFDu66GOhvXEqbK.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/dfLjomSCGwjDe1fQy1QZBHNqgDS.jpg",
+    "tmdbId": "292121",
+    "media": "tv"
+  },
+  "the-wonderfools": {
+    "poster": "https://image.tmdb.org/t/p/w500/q5wfakAtbiO4dMss2N21vY1i128.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/810mXC0xkxXVtoKIPGGVgO9PuLh.jpg",
+    "tmdbId": "259837",
+    "media": "tv"
+  },
+  "to-my-beloved-thief": {
+    "poster": "https://image.tmdb.org/t/p/w500/rovxC2ugTtaMsgo7lOF4R4VBSb9.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/enTNCPGiu3dhul8XTBZEJCLZWbI.jpg",
+    "tmdbId": "301886",
+    "media": "tv"
+  },
+  "undercover-miss-hong": {
+    "poster": "https://image.tmdb.org/t/p/w500/bZr3i8yczHGDzyqZQ9oOArEEVON.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/6yyKOxjQgb0C3I43T6qyXbieHni.jpg",
+    "tmdbId": "293608",
+    "media": "tv"
+  },
+  "we-are-all-trying-here": {
+    "poster": "https://image.tmdb.org/t/p/w500/c2jswCrMoqDEBEXwSAlrCWtXdfZ.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/4ZXZi107TbfBJFGT4cnqbavQIoc.jpg",
+    "tmdbId": "289424",
+    "media": "tv"
+  },
+  "your-personal-taxi": {
+    "poster": "https://image.tmdb.org/t/p/w500/rqjCmDerQ8C7BYMmalVzBiyF8bV.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/xUoZKrI750C6seXagGUdDiQ01Rp.jpg",
+    "tmdbId": "333484",
+    "media": "tv"
+  },
+  "yumis-cells-season-3": {
+    "poster": "https://image.tmdb.org/t/p/w500/wb0ysW1H4bjceY551Dh4VW2jOzF.jpg",
+    "banner": "https://image.tmdb.org/t/p/w1280/4TJG9k0u1WZfs9iwhLpHshnryaR.jpg",
+    "tmdbId": "128995",
+    "media": "tv"
+  }
+}

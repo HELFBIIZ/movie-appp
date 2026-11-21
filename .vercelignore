@@ -1,0 +1,8 @@
+# Runtime/local DB must never reach Vercel (source of truth is Turso remote).
+data/db/app.db
+data/db/app.db-wal
+data/db/app.db-shm
+backups/
+.env*
+.git
+.gitignore

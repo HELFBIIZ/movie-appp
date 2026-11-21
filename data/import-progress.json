@@ -1,0 +1,17 @@
+{
+  "movie": {
+    "lastPage": 24,
+    "lastRun": "2026-09-15T04:27:07.263Z",
+    "addedTotal": 763
+  },
+  "kdrama": {
+    "lastPage": 7,
+    "lastRun": "2026-09-15T04:27:28.694Z",
+    "addedTotal": 272
+  },
+  "western": {
+    "lastPage": 20,
+    "lastRun": "2026-09-15T04:48:12.210Z",
+    "addedTotal": 4053
+  }
+}

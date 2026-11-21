@@ -4,18 +4,57 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build --webpack",
+    "start": "next start",
+    "cron": "node scripts/scheduler.mjs",
+    "cron:once": "node scripts/scheduler.mjs --once",
+    "backfill": "node scripts/backfill-media.mjs",
+    "trailers": "node scripts/backfill-trailers.mjs",
+    "qpay:watch": "node scripts/qpay-watcher.mjs",
+    "lint": "eslint src tests scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs playwright*.ts eslint.config.mjs lint-staged.config.mjs --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test:learning": "node --experimental-strip-types --test tests/learning.test.mjs",
+    "test:browser": "playwright test",
+    "format:check": "prettier --check src tests docs scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs *.json *.mjs playwright*.ts .github/workflows/ci.yml",
+    "format": "prettier --write src tests docs scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs *.json *.mjs playwright*.ts .github/workflows/ci.yml",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test:regression": "playwright test --config playwright.refactor.config.ts",
+    "test:visual": "node scripts/check-visual-regression.mjs",
+    "prepare": "node scripts/prepare-hooks.mjs"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.12",
+    "@libsql/client": "^0.18.0",
+    "hls.js": "^1.7.3",
     "lucide-react": "^1.37.0",
     "next": "16.3.3",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.16.0",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "1.0.0",
-    "tailwindcss": "^4"
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.10.1",
+    "tailwindcss": "^4",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
