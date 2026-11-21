@@ -115,8 +115,8 @@ function loadMovies() {
     if (!m?.slug) continue
     out.set(m.slug, { slug: m.slug, title: m.title, year: m.year, category: m.category, tmdbId: m.tmdbId || null })
   }
-  // hardcoded popularFallbackMovies in movies.js
-  const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'movies.js'), 'utf8')
+  // Curated fallback entries now live in catalog/curated.ts
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'catalog', 'curated.ts'), 'utf8')
   const blocks = src.match(/\{[^{}]*slug:\s*'[^']+'[^{}]*\}/g) || []
   for (const b of blocks) {
     const slug = b.match(/slug:\s*'([^']+)'/)?.[1]

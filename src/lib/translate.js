@@ -1,4 +1,4 @@
-import { parseCues, buildVtt } from './subtitles-format.js';
+import { parseCues, buildVtt } from './subtitles-format';
 import {
   subtisSearchTitles,
   subtisListSubtitles,

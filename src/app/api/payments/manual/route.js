@@ -15,7 +15,7 @@ import {
   createNotification,
   listAdminUserIds,
 } from '../../../../lib/db.mjs';
-import { parseJsonBody, reqStr, optStr, all, badInput } from '../../../../lib/validate.mjs';
+import { parseJsonBody, reqStr, optStr, all, badInput } from '../../../../lib/validate';
 
 export const KHAN_BANK_ACCOUNT = Object.freeze({
   name: 'Taivanbaatar',

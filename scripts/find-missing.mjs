@@ -44,7 +44,7 @@ function catalogSlugs() {
   const set = new Set()
   const gen = JSON.parse(fs.readFileSync(path.join(root, 'src', 'lib', 'movies.generated.json'), 'utf8'))
   for (const m of (Array.isArray(gen) ? gen : gen.movies || [])) if (m?.slug) set.add(m.slug)
-  const src = fs.readFileSync(path.join(root, 'src', 'lib', 'movies.js'), 'utf8')
+  const src = fs.readFileSync(path.join(root, 'src', 'lib', 'catalog', 'curated.ts'), 'utf8')
   for (const m of src.matchAll(/slug:\s*'([^']+)'/g)) set.add(m[1])
   for (const f of ['kdramas.json', 'western.json']) {
     const arr = JSON.parse(fs.readFileSync(path.join(root, 'src', 'lib', f), 'utf8'))

@@ -7,7 +7,7 @@ import {
   getUserRoleByUserId,
   activatePaymentSuccess,
 } from '../../../../lib/db.mjs';
-import { parseJsonBody, reqStr, oneOf, all, badInput } from '../../../../lib/validate.mjs';
+import { parseJsonBody, reqStr, oneOf, all, badInput } from '../../../../lib/validate';
 
 export async function GET(request) {
   const token = request.cookies.get('mn_session')?.value;

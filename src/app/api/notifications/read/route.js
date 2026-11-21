@@ -3,7 +3,7 @@
 //   200 { ok, unread } · 401 UNAUTHENTICATED
 import { NextResponse } from 'next/server';
 import { requireUser, markNotificationsRead } from '../../../../lib/db.mjs';
-import { parseJsonBody } from '../../../../lib/validate.mjs';
+import { parseJsonBody } from '../../../../lib/validate';
 
 export async function POST(request) {
   const token = request.cookies.get('mn_session')?.value;

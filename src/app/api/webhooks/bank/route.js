@@ -4,7 +4,7 @@
 //  200 { ok, payment, subscription } · 401/403 UNAUTHENTICATED/FORBIDDEN · 404 UNKNOWN_TXN
 import { NextResponse } from 'next/server';
 import { requireRole, activatePaymentSuccess } from '../../../../lib/db.mjs';
-import { parseJsonBody, reqStr } from '../../../../lib/validate.mjs';
+import { parseJsonBody, reqStr } from '../../../../lib/validate';
 
 export async function POST(request) {
   const token = request.cookies.get('mn_session')?.value;

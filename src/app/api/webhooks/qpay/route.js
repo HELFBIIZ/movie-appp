@@ -11,7 +11,7 @@ import {
   getPlanById,
   createNotification,
 } from '../../../../lib/db.mjs';
-import { parseJsonBody } from '../../../../lib/validate.mjs';
+import { parseJsonBody } from '../../../../lib/validate';
 import { verifyQpayToken } from '../../../../lib/qpay.mjs';
 
 const SECRET = process.env.QPAY_CALLBACK_TOKEN?.trim();

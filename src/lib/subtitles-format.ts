@@ -1,4 +1,6 @@
-export function parseCues(content) {
+import type { SubtitleCue } from '../types/subtitle';
+
+export function parseCues(content: string): SubtitleCue[] {
   let text = content
     .replace(/^\uFEFF/, '')
     .replace(/\r\n/g, '\n')
@@ -33,7 +35,7 @@ export function parseCues(content) {
   return cues;
 }
 
-export function buildVtt(cues) {
+export function buildVtt(cues: SubtitleCue[]): string {
   return [
     'WEBVTT',
     '',
@@ -46,6 +48,6 @@ export function buildVtt(cues) {
   ].join('\n');
 }
 
-export function normalizeToVtt(content) {
+export function normalizeToVtt(content: string): string {
   return buildVtt(parseCues(content));
 }

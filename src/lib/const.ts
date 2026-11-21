@@ -1,4 +1,4 @@
-// src/lib/const.js — typed constant sets. Prisma contract keeps every
+// src/lib/const.ts — typed constant sets. Prisma contract keeps every
 // "enum-like" column a String constrained to these sets server-side (SQLite
 // connector disallows native enums). The SAME sets validate on PostgreSQL.
 // Only server routes import this — never ship it to the browser bundle.

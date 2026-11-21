@@ -99,8 +99,8 @@ async function findArt(id, slug) {
   return { poster, backdrop: wide ? wide[1] : null }
 }
 
-// Load movies directly from the source of truth (movies.js)
-const moviesJs = path.join(__dirname, '..', 'src', 'lib', 'movies.js')
+// Load movies directly from the source of truth (movies.ts)
+const moviesJs = path.join(__dirname, '..', 'src', 'lib', 'movies.ts')
 const moviesModule = await import(pathToFileURL(moviesJs).href).catch(() => {
   // import executes the file; it has side-effect-free exports, but fall back to babel-less parse below if it fails
   return null
@@ -119,7 +119,7 @@ if (moviesModule?.movies && Array.isArray(moviesModule.movies) && moviesModule.m
 
 if (!catalog.length) {
   // Parse the raw list as a fallback
-  const src = fs.readFileSync(moviesJs, 'utf8')
+  const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'lib', 'catalog', 'curated.ts'), 'utf8')
   const slugRe = /slug: '([^']+)'/g
   const titleRe = /title:\s*'([^']*)'|title:\s*"([^"]*)"/g
   const yearRe = /year: (\d+)/g

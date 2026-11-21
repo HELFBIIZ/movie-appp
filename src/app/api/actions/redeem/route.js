@@ -8,7 +8,7 @@
 //   409 REWARD_INACTIVE | REWARD_OWNED | XP_INSUFFICIENT
 import { NextResponse } from 'next/server';
 import { requireUser, rateLimit, redeemReward } from '../../../../lib/db.mjs';
-import { parseJsonBody, reqStr, badInput } from '../../../../lib/validate.mjs';
+import { parseJsonBody, reqStr, badInput } from '../../../../lib/validate';
 
 export async function POST(request) {
   const token = request.cookies.get('mn_session')?.value;
