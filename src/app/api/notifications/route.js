@@ -3,7 +3,7 @@
 //   200 { ok, unread, notifications:[{id,type,title,body,link,readAt,createdAt}] }
 //   401 UNAUTHENTICATED
 import { NextResponse } from 'next/server';
-import { requireUser, listNotifications, unreadNotificationsCount } from '../../../lib/db.mjs';
+import { requireUser, listNotifications, unreadNotificationsCount } from '../../../db/index.mjs';
 
 export async function GET(request) {
   const token = request.cookies.get('mn_session')?.value;

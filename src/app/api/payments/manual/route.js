@@ -14,7 +14,7 @@ import {
   createManualReceipt,
   createNotification,
   listAdminUserIds,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { parseJsonBody, reqStr, optStr, all, badInput } from '../../../../lib/validate';
 
 export const KHAN_BANK_ACCOUNT = Object.freeze({

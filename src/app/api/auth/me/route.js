@@ -9,7 +9,7 @@ import {
   listXpTransactions,
   getActiveSubscription,
   listMyRewards,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 
 const COOKIE_NAME = 'mn_session';
 

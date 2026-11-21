@@ -2,7 +2,7 @@ import {
   getDb, hashSecret, verifySecret,
   createUser, requireUser, requireRole,
   rateLimit, getActiveSubscription, canWatch,
-} from '../src/lib/db.mjs'
+} from '../src/db/index.mjs'
 
 const db = await getDb()
 const tables = (await db.execute(

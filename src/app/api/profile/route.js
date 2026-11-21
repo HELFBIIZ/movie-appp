@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getUserBySessionToken, getProfile, updateProfile } from '../../../lib/db.mjs';
+import { getUserBySessionToken, getProfile, updateProfile } from '../../../db/index.mjs';
 
 const COOKIE_NAME = 'mn_session';
 

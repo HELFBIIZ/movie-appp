@@ -6,7 +6,7 @@ import {
   setUserDeleted,
   getUserRoleByUserId,
   activatePaymentSuccess,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { parseJsonBody, reqStr, oneOf, all, badInput } from '../../../../lib/validate';
 
 export async function GET(request) {

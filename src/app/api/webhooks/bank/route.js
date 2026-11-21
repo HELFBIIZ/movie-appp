@@ -3,7 +3,7 @@
 // Idempotent: replaying the same txn is a no-op.
 //  200 { ok, payment, subscription } · 401/403 UNAUTHENTICATED/FORBIDDEN · 404 UNKNOWN_TXN
 import { NextResponse } from 'next/server';
-import { requireRole, activatePaymentSuccess } from '../../../../lib/db.mjs';
+import { requireRole, activatePaymentSuccess } from '../../../../db/index.mjs';
 import { parseJsonBody, reqStr } from '../../../../lib/validate';
 
 export async function POST(request) {

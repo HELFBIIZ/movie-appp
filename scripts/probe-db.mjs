@@ -2,7 +2,7 @@
 import {
   getDb, hashSecret, verifySecret,
   createUser, getActiveSubscription, canWatch,
-} from '../src/lib/db.mjs'
+} from '../src/db/index.mjs'
 
 const db = await getDb()
 const boot = {

@@ -7,7 +7,7 @@
 //   401 UNAUTHENTICATED · 400 INVALID_INPUT · 404 UNKNOWN_REWARD ·
 //   409 REWARD_INACTIVE | REWARD_OWNED | XP_INSUFFICIENT
 import { NextResponse } from 'next/server';
-import { requireUser, rateLimit, redeemReward } from '../../../../lib/db.mjs';
+import { requireUser, rateLimit, redeemReward } from '../../../../db/index.mjs';
 import { parseJsonBody, reqStr, badInput } from '../../../../lib/validate';
 
 export async function POST(request) {

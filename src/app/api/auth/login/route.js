@@ -9,7 +9,7 @@ import {
   buildSessionCookie,
   rateLimit,
   logSecurity,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { flipLoginStreak, awardXp } from '../../../../lib/xp.mjs';
 
 export async function POST(request) {

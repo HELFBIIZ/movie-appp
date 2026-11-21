@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteSession } from '../../../../lib/db.mjs';
+import { deleteSession } from '../../../../db/index.mjs';
 
 const COOKIE_NAME = 'mn_session';
 

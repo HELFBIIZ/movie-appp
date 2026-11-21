@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getUserBySessionToken, listFavorites, toggleFavorite } from '../../../lib/db.mjs';
+import { getUserBySessionToken, listFavorites, toggleFavorite } from '../../../db/index.mjs';
 
 const COOKIE_NAME = 'mn_session';
 

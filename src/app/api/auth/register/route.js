@@ -3,7 +3,7 @@
 // Returns { user: {id,email,username,roleId} } + sets httpOnly session cookie.
 // Client can NEVER see the hash; client tells us zero security facts.
 import { NextResponse } from 'next/server';
-import { createUser, createSession, buildSessionCookie, rateLimit } from '../../../../lib/db.mjs';
+import { createUser, createSession, buildSessionCookie, rateLimit } from '../../../../db/index.mjs';
 
 export async function POST(request) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';

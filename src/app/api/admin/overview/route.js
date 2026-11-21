@@ -2,7 +2,7 @@
 // XP, reviews) + recent rows. ADMIN/SUPER_ADMIN only.
 //   200 { ok, stats, recent, catalog } · 401/403 UNAUTHENTICATED/FORBIDDEN
 import { NextResponse } from 'next/server';
-import { requireRole, adminOverview } from '../../../../lib/db.mjs';
+import { requireRole, adminOverview } from '../../../../db/index.mjs';
 import { movies, kdramaMovies, westernMovies } from '../../../../lib/movies';
 
 export async function GET(request) {

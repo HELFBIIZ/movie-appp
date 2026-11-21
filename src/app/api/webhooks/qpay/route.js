@@ -10,7 +10,7 @@ import {
   findPaymentByProviderRef,
   getPlanById,
   createNotification,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { parseJsonBody } from '../../../../lib/validate';
 import { verifyQpayToken } from '../../../../lib/qpay.mjs';
 

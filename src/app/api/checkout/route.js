@@ -18,7 +18,7 @@ import {
   activatePaymentSuccess,
   logSecurity,
   setPaymentProviderRef,
-} from '../../../lib/db.mjs';
+} from '../../../db/index.mjs';
 import { parseJsonBody, reqStr, oneOf, badInput } from '../../../lib/validate';
 import { createQpayInvoice } from '../../../lib/qpay.mjs';
 import { createPaymentIntent, createCheckoutSession } from '../../../lib/wire.mjs';

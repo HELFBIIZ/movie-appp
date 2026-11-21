@@ -23,7 +23,7 @@ import {
   getActiveSubscription,
   canWatch,
   upsertWatchRecord,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { awardXp } from '../../../../lib/xp.mjs';
 
 const VIDSRC_BASE = 'https://vidsrc.buzz';

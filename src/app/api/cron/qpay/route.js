@@ -12,7 +12,7 @@ import {
   activatePaymentSuccess,
   getPlanById,
   createNotification,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { checkQpayInvoices, isQpayPaid } from '../../../../lib/qpay.mjs';
 
 const SECRET = process.env.CRON_SECRET?.trim();

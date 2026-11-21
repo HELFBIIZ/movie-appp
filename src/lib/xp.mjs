@@ -8,7 +8,7 @@
 // rate-limited per user per day by the same WINDOW_MS bucket db.mjs uses.
 // ────────────────────────────────────────────────────────────────────────
 import crypto from 'crypto';
-import { getDb, rateLimit } from './db.mjs';
+import { getDb, rateLimit } from '../db/index.mjs';
 
 const XP_RULES = Object.freeze({
   VIDEO_VIEW: { amount: 20, daily: 120 }, // 6/day cap → 6×20 = 120 XP max/day

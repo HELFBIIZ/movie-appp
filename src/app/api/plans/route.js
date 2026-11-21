@@ -1,6 +1,6 @@
 // GET /api/plans — public, paid subscription catalog (XP-pass anchors hidden).
 import { NextResponse } from 'next/server';
-import { listSubscriptionPlans } from '../../../lib/db.mjs';
+import { listSubscriptionPlans } from '../../../db/index.mjs';
 
 export async function GET() {
   try {

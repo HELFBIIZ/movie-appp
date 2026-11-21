@@ -2,7 +2,7 @@
 // body) notifications read. Owner-guarded via the session.
 //   200 { ok, unread } · 401 UNAUTHENTICATED
 import { NextResponse } from 'next/server';
-import { requireUser, markNotificationsRead } from '../../../../lib/db.mjs';
+import { requireUser, markNotificationsRead } from '../../../../db/index.mjs';
 import { parseJsonBody } from '../../../../lib/validate';
 
 export async function POST(request) {

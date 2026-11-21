@@ -8,9 +8,9 @@ import {
   findPaymentByProviderRef,
   getPlanById,
   createNotification,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { verifyWireSignature } from '../../../../lib/wire.mjs';
-import { logWebhookEvent, isWebhookEventProcessed } from '../../../../lib/db.mjs';
+import { logWebhookEvent, isWebhookEventProcessed } from '../../../../db/index.mjs';
 
 const SECRET = process.env.WIRE_SIGNING_SECRET?.trim();
 

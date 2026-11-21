@@ -1,6 +1,6 @@
 // GET /api/rewards — XP shop catalog + the visitor's owned rewards when authed.
 import { NextResponse } from 'next/server';
-import { listRewards, listMyRewards, getUserBySessionToken } from '../../../lib/db.mjs';
+import { listRewards, listMyRewards, getUserBySessionToken } from '../../../db/index.mjs';
 
 export async function GET(request) {
   const token = request.cookies.get('mn_session')?.value;

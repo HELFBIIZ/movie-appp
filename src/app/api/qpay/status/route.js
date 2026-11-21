@@ -13,7 +13,7 @@ import {
   activatePaymentSuccess,
   getPlanById,
   createNotification,
-} from '../../../../lib/db.mjs';
+} from '../../../../db/index.mjs';
 import { checkQpayInvoices, isQpayPaid } from '../../../../lib/qpay.mjs';
 
 export async function GET(request) {
