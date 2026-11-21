@@ -51,3 +51,4 @@ next-env.d.ts
 # SceneChain local browser evidence
 /test-results/
 /playwright-report/
+/.refactor-evidence/
