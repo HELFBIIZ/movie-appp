@@ -50,7 +50,7 @@ API routes: `/api/actions/redeem`, `/api/admin/{overview,payments,users}`, `/api
 | Existing unit tests         | 17/17 passed.                                                                                                                                  |
 | Existing scoped lint        | Passed; previously covered only learning code and disabled `set-state-in-effect`.                                                              |
 | Existing typecheck          | Passed; previously included only learning TypeScript.                                                                                          |
-| Existing format check       | Failed on 36 files. Recorded debt, not a new refactor regression.                                                                              |
+| Existing format check       | Failed on 36 files in this Windows checkout; CRLF checkout also contributes. LF attributes now keep hook restores and CI consistent.           |
 | Browser / screenshots       | See the completed runs and evidence paths in `TEST_REPORT.md`. Capture tooling is added before runtime edits.                                  |
 
 Deterministic screenshots use the same browser, fixed date, viewport, locale, fonts and fixture artwork before/after. Artwork and third-party playback are separately checked through URL/behavior assertions. Existing learning tests exercise the actual original local video. The live read-only capture script is supplementary and does not authenticate or mutate accounts.

@@ -116,14 +116,15 @@ Payment API, production DB, DNS, Clerk settings болон secret утгууды
   `getCurrentTime/play/pause/seek` false. Энэ нь provider бүрийн бүх хувилбарт
   API байхгүй гэсэн дүгнэлт биш. Untrusted postMessage огт хүлээн авахгүй.
 
-  | Provider / iframe origin | getCurrentTime / play / pause / seek | Нотолгоо, шийдвэр |
-  | --- | --- | --- |
-  | VidSrc / `vidsrcme.ru` | false / false / false / false | Existing watch iframe; SDK import эсвэл баталгаажсан message contract холбогдоогүй. |
-  | CineSrc / `cinesrc.st` | false / false / false / false | Existing watch iframe; ижил conservative шийдвэр. |
-  | SuperEmbed / `multiembed.mov` | false / false / false / false | Existing watch iframe; redirect origin-ийг тааж command явуулахгүй. |
-  | EmbedMaster / `embedmaster.link` | false / false / false / false | Subtitle URL parameter нь clock/seek API-ийн баталгаа биш. |
-  | Embed API / `watch.embed-api.stream` | false / false / false / false | Нэрэндээ API гэсэн ч verified time/control contract суулгаагүй. |
-  | Native HTML video / same-origin asset эсвэл local blob | true / true / true / true | HTMLMediaElement-ийн бодит property/event/method; unit болон browser smoke тест. |
+  | Provider / iframe origin                               | getCurrentTime / play / pause / seek | Нотолгоо, шийдвэр                                                                   |
+  | ------------------------------------------------------ | ------------------------------------ | ----------------------------------------------------------------------------------- |
+  | VidSrc / `vidsrcme.ru`                                 | false / false / false / false        | Existing watch iframe; SDK import эсвэл баталгаажсан message contract холбогдоогүй. |
+  | CineSrc / `cinesrc.st`                                 | false / false / false / false        | Existing watch iframe; ижил conservative шийдвэр.                                   |
+  | SuperEmbed / `multiembed.mov`                          | false / false / false / false        | Existing watch iframe; redirect origin-ийг тааж command явуулахгүй.                 |
+  | EmbedMaster / `embedmaster.link`                       | false / false / false / false        | Subtitle URL parameter нь clock/seek API-ийн баталгаа биш.                          |
+  | Embed API / `watch.embed-api.stream`                   | false / false / false / false        | Нэрэндээ API гэсэн ч verified time/control contract суулгаагүй.                     |
+  | Native HTML video / same-origin asset эсвэл local blob | true / true / true / true            | HTMLMediaElement-ийн бодит property/event/method; unit болон browser smoke тест.    |
+
 - **Киноны бүрэн хадмал:** sample нь тухайн киноны EN/MN dialogue биш.
   Cross-origin DOM, stream extraction, DRM bypass, scraping/proxy нэмээгүй.
 - **AI:** curated тайлбарууд AI service биш. Live AI translation, explanation,
@@ -151,44 +152,44 @@ SRS зөв/буруу тоо, шат, дараагийн давтлагын time
 
 ## Файлуудын үүрэг
 
-| Файл | Юу хийдэг вэ? |
-| --- | --- |
-| `src/app/watch/[slug]/page.js` | Existing watch page-д toggle болон lazy-loaded dock холбосон. Movie gate болон provider URL-уудыг хадгалсан. |
-| `src/components/Footer.js` | Existing social/help/admin холбоосууд жижиг дэлгэцэд 7 px overflow үүсгэж байсныг wrap хийсэн. URL болон footer агуулга өөрчлөгдөөгүй. |
-| `src/components/ClerkOAuth.js` | Clerk key байхгүй CI build-д provider-гүй hook дуудаж /login prerender унаж байсныг гадна component guard-аар зассан. Нэвтрэлтийн хүсэлт, Clerk settings, session bridge өөрчлөгдөөгүй. |
-| `src/proxy.ts` | Clerk key байхгүй үед login request/prefetch-ийг унагаахгүйгээр native password flow-д хүргэнэ. Clerk key-тэй үед existing middleware хэвээр; OAuth bridge өөрийн auth шалгалтаа хадгална. |
-| `LearningModeToggle.tsx` | Keyboard-оор ашиглах боломжтой Normal/Learning сонголт. |
-| `LearningDock.tsx` | Source сонголт, video, тайлбар, сургалтын panel-уудын responsive байрлал. |
-| `LearningPanels.tsx` | Transcript, Saved & Review, Word Quiz, Scene Quiz panel солих. |
-| `LearningProgress.tsx` | Хадгалсан/due/mastered карт болон context оролдлогын бодит тоо. |
-| `LearningVideo.tsx` | Native video event-үүд, seek-ийн бэлэн байдал, одоогийн хос cue, video error. |
-| `LocalMediaInput.tsx` | Video/VTT file size/type шалгаад browser-д уншина. Subtitle болон file metadata-аас media fingerprint үүсгэнэ. |
-| `SubtitleTranscript.tsx` | Хугацаатай EN/MN cue, идэвхтэй мөр, үг сонгох, sentence хадгалах. |
-| `WordPanel.tsx` | Сонгосон үгийн утга, тухайн өгүүлбэрийн контекст, жишээ, дүрэм, Save Word. |
-| `VocabularyPanel.tsx` | Картууд, due date, зөв/буруу, reveal/review болон устгах үйлдэл. |
-| `QuizPanel.tsx` | Сонголт, зөв/буруу feedback, оноо; storage амжилттай үед хариултыг хүлээн авна. |
-| `useLearningController.ts` | Video цаг, cue, сонголт, хадгалалт, quiz/SRS-ийн UI orchestration. Ready төлөвийг media key-тэй холбож cached metadata event-ийн дараа reset хийхгүй; шинэ картын due тоог шууд шинэчилнэ. |
-| `useLearningStorage.ts` | Storage унших/бичих, cross-tab шинэчлэлт, амжилтгүй хадгалалтын UI. |
-| `useLesson.ts` | Зөвхөн хоёр тогтмол same-origin VTT татна; local object URL-ийн lifecycle. |
-| `src/lib/learning/types.ts` | Cue, үг, хадгалсан карт, progress, question-ийн TypeScript бүтэц. |
-| `vtt.ts` | Safe parse, timestamp validation, overlap alignment, active cues, time formatting. |
-| `storage.ts` | Zod schema, versioned storage key, давхардалгүй id, 500 картын хязгаар. |
-| `srs.ts` | Интервал, due шалгалт, зөв/буруу тоо болон reset. |
-| `quiz.ts` | Хадгалсан үгсээс ялгаатай сонголт үүсгэх, хариулт бодитоор шалгах. |
-| `sample.ts` | Original зохиол, 16 curated үг, sample context question. |
-| `player-adapter/index.ts` | Native video adapter болон conservative iframe capability registry. |
-| `public/learning/last-train.webm` | Репод хадгалсан original lesson видео; гаднын stream хамааралгүй. |
-| `last-train.en.vtt`, `last-train.mn.vtt`, `timings.json` | Actual narration-тай таарсан EN/MN cue болон түүний timing manifest. |
-| `public/learning/README.md` | Asset provenance, лиценз, sample-ийн хязгаар болон дахин үүсгэх заавар. |
-| `scripts/create-learning-sample.mjs` | Windows SAPI + canvas + MediaRecorder-оор original sample үүсгэж, seek metadata-тай remux хийнэ. |
-| `tests/learning.test.mjs` | Parser, alignment, SRS, storage, quiz, adapter, asset timing unit tests. |
-| `tests/browser/learning.spec.ts` | Normal gate/player, video sync, seek, save, quiz, review, refresh, mobile, storage failure smoke tests. |
-| `playwright.config.ts` | Нэг browser worker, local production server эсвэл өгсөн base URL дээр smoke тест. |
-| `tsconfig.json` | Шинэ learning module-ийн strict TypeScript шалгалт; existing JavaScript-ийг хүчээр migrate хийхгүй. |
-| `eslint.config.mjs`, `.prettierrc.json` | Learning source-ийн lint болон formatting дүрэм. |
-| `.github/workflows/scenechain.yml`, `.nvmrc` | Node 22 CI: install, lint, type, format, unit, build, browser checks. |
-| `package.json`, `package-lock.json` | TypeScript, Zod, ESLint/Prettier, Playwright болон шалгах script-үүд. Windows-ийн Turbopack memory алдааг тойрч Webpack build хэрэглэнэ. |
-| `.gitignore` | Local browser test output/screenshot-ийг commit-оос хасна. |
+| Файл                                                     | Юу хийдэг вэ?                                                                                                                                                                              |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `src/app/watch/[slug]/page.js`                           | Existing watch page-д toggle болон lazy-loaded dock холбосон. Movie gate болон provider URL-уудыг хадгалсан.                                                                               |
+| `src/components/Footer.js`                               | Existing social/help/admin холбоосууд жижиг дэлгэцэд 7 px overflow үүсгэж байсныг wrap хийсэн. URL болон footer агуулга өөрчлөгдөөгүй.                                                     |
+| `src/components/ClerkOAuth.js`                           | Clerk key байхгүй CI build-д provider-гүй hook дуудаж /login prerender унаж байсныг гадна component guard-аар зассан. Нэвтрэлтийн хүсэлт, Clerk settings, session bridge өөрчлөгдөөгүй.    |
+| `src/proxy.ts`                                           | Clerk key байхгүй үед login request/prefetch-ийг унагаахгүйгээр native password flow-д хүргэнэ. Clerk key-тэй үед existing middleware хэвээр; OAuth bridge өөрийн auth шалгалтаа хадгална. |
+| `LearningModeToggle.tsx`                                 | Keyboard-оор ашиглах боломжтой Normal/Learning сонголт.                                                                                                                                    |
+| `LearningDock.tsx`                                       | Source сонголт, video, тайлбар, сургалтын panel-уудын responsive байрлал.                                                                                                                  |
+| `LearningPanels.tsx`                                     | Transcript, Saved & Review, Word Quiz, Scene Quiz panel солих.                                                                                                                             |
+| `LearningProgress.tsx`                                   | Хадгалсан/due/mastered карт болон context оролдлогын бодит тоо.                                                                                                                            |
+| `LearningVideo.tsx`                                      | Native video event-үүд, seek-ийн бэлэн байдал, одоогийн хос cue, video error.                                                                                                              |
+| `LocalMediaInput.tsx`                                    | Video/VTT file size/type шалгаад browser-д уншина. Subtitle болон file metadata-аас media fingerprint үүсгэнэ.                                                                             |
+| `SubtitleTranscript.tsx`                                 | Хугацаатай EN/MN cue, идэвхтэй мөр, үг сонгох, sentence хадгалах.                                                                                                                          |
+| `WordPanel.tsx`                                          | Сонгосон үгийн утга, тухайн өгүүлбэрийн контекст, жишээ, дүрэм, Save Word.                                                                                                                 |
+| `VocabularyPanel.tsx`                                    | Картууд, due date, зөв/буруу, reveal/review болон устгах үйлдэл.                                                                                                                           |
+| `QuizPanel.tsx`                                          | Сонголт, зөв/буруу feedback, оноо; storage амжилттай үед хариултыг хүлээн авна.                                                                                                            |
+| `useLearningController.ts`                               | Video цаг, cue, сонголт, хадгалалт, quiz/SRS-ийн UI orchestration. Ready төлөвийг media key-тэй холбож cached metadata event-ийн дараа reset хийхгүй; шинэ картын due тоог шууд шинэчилнэ. |
+| `useLearningStorage.ts`                                  | Storage унших/бичих, cross-tab шинэчлэлт, амжилтгүй хадгалалтын UI.                                                                                                                        |
+| `useLesson.ts`                                           | Зөвхөн хоёр тогтмол same-origin VTT татна; local object URL-ийн lifecycle.                                                                                                                 |
+| `src/lib/learning/types.ts`                              | Cue, үг, хадгалсан карт, progress, question-ийн TypeScript бүтэц.                                                                                                                          |
+| `vtt.ts`                                                 | Safe parse, timestamp validation, overlap alignment, active cues, time formatting.                                                                                                         |
+| `storage.ts`                                             | Zod schema, versioned storage key, давхардалгүй id, 500 картын хязгаар.                                                                                                                    |
+| `srs.ts`                                                 | Интервал, due шалгалт, зөв/буруу тоо болон reset.                                                                                                                                          |
+| `quiz.ts`                                                | Хадгалсан үгсээс ялгаатай сонголт үүсгэх, хариулт бодитоор шалгах.                                                                                                                         |
+| `sample.ts`                                              | Original зохиол, 16 curated үг, sample context question.                                                                                                                                   |
+| `player-adapter/index.ts`                                | Native video adapter болон conservative iframe capability registry.                                                                                                                        |
+| `public/learning/last-train.webm`                        | Репод хадгалсан original lesson видео; гаднын stream хамааралгүй.                                                                                                                          |
+| `last-train.en.vtt`, `last-train.mn.vtt`, `timings.json` | Actual narration-тай таарсан EN/MN cue болон түүний timing manifest.                                                                                                                       |
+| `public/learning/README.md`                              | Asset provenance, лиценз, sample-ийн хязгаар болон дахин үүсгэх заавар.                                                                                                                    |
+| `scripts/create-learning-sample.mjs`                     | Windows SAPI + canvas + MediaRecorder-оор original sample үүсгэж, seek metadata-тай remux хийнэ.                                                                                           |
+| `tests/learning.test.mjs`                                | Parser, alignment, SRS, storage, quiz, adapter, asset timing unit tests.                                                                                                                   |
+| `tests/browser/learning.spec.ts`                         | Normal gate/player, video sync, seek, save, quiz, review, refresh, mobile, storage failure smoke tests.                                                                                    |
+| `playwright.config.ts`                                   | Нэг browser worker, local production server эсвэл өгсөн base URL дээр smoke тест.                                                                                                          |
+| `tsconfig.json`                                          | Шинэ learning module-ийн strict TypeScript шалгалт; existing JavaScript-ийг хүчээр migrate хийхгүй.                                                                                        |
+| `eslint.config.mjs`, `.prettierrc.json`                  | Learning source-ийн lint болон formatting дүрэм.                                                                                                                                           |
+| `.github/workflows/scenechain.yml`, `.nvmrc`             | Node 22 CI: install, lint, type, format, unit, build, browser checks.                                                                                                                      |
+| `package.json`, `package-lock.json`                      | TypeScript, Zod, ESLint/Prettier, Playwright болон шалгах script-үүд. Windows-ийн Turbopack memory алдааг тойрч Webpack build хэрэглэнэ.                                                   |
+| `.gitignore`                                             | Local browser test output/screenshot-ийг commit-оос хасна.                                                                                                                                 |
 
 Component нэртэй файлууд `src/components/learning/` дотор, lib нэртэй файлууд
 `src/lib/learning/` дотор байна.
@@ -224,19 +225,19 @@ Component нэртэй файлууд `src/components/learning/` дотор, lib
 [standards](https://pinebaatars-stack.pineconegpt1.workers.dev/standards),
 [projects](https://pinebaatars-stack.pineconegpt1.workers.dev/projects)-ийг уншсан.
 
-| Шаардлага | Энэ MVP |
-| --- | --- |
-| Next.js + React + Tailwind, existing UI хадгалах | Биелсэн; шинэ learning module TypeScript. |
-| TypeScript, component boundary, нэршил, input validation | Learning code strict types, Zod storage, safe VTT, жижиг UI modules. Existing app бүхэлдээ TS болоогүй. |
-| ESLint + Prettier | Learning module дээр хэрэгжсэн. Legacy payment/auth бүх source-ийн lint migration дараагийн milestone. |
-| Node 22 | `.nvmrc` болон CI 22; шинэ 10 unit test-ийг Node 22 дээр ажиллуулж давсан. Existing Windows/Vercel 24.x тохиргоог өөрчлөөгүй. |
-| GitHub Actions | Learning CI нэмсэн. Branch protection/review settings өөрчлөөгүй. |
-| Pre-commit hook, нийт app-ийн стандарт | Дараагийн milestone; existing Git hook-ийг өөрчлөөгүй. |
-| Secrets | Шинэ secret шаардлагагүй; `.env` болон client bundle-д API key нэмээгүй. |
-| Clerk + payment | Existing implementation хадгалсан; шинэ төлбөр бодитоор туршаагүй. |
-| Supabase/Drizzle | Хийгдээгүй; existing Turso-г migrate хийгээгүй. Learning storage browser-local. |
-| HF/Pinecone/Claude RAG, n8n, Facebook | Дараагийн milestone; энэ MVP-д хийсэн гэж танилцуулахгүй. |
-| Explainable working demo | Original sample, deterministic curated content, бодит quiz/SRS, tests. |
+| Шаардлага                                                | Энэ MVP                                                                                                                       |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Next.js + React + Tailwind, existing UI хадгалах         | Биелсэн; шинэ learning module TypeScript.                                                                                     |
+| TypeScript, component boundary, нэршил, input validation | Learning code strict types, Zod storage, safe VTT, жижиг UI modules. Existing app бүхэлдээ TS болоогүй.                       |
+| ESLint + Prettier                                        | Learning module дээр хэрэгжсэн. Legacy payment/auth бүх source-ийн lint migration дараагийн milestone.                        |
+| Node 22                                                  | `.nvmrc` болон CI 22; шинэ 10 unit test-ийг Node 22 дээр ажиллуулж давсан. Existing Windows/Vercel 24.x тохиргоог өөрчлөөгүй. |
+| GitHub Actions                                           | Learning CI нэмсэн. Branch protection/review settings өөрчлөөгүй.                                                             |
+| Pre-commit hook, нийт app-ийн стандарт                   | Дараагийн milestone; existing Git hook-ийг өөрчлөөгүй.                                                                        |
+| Secrets                                                  | Шинэ secret шаардлагагүй; `.env` болон client bundle-д API key нэмээгүй.                                                      |
+| Clerk + payment                                          | Existing implementation хадгалсан; шинэ төлбөр бодитоор туршаагүй.                                                            |
+| Supabase/Drizzle                                         | Хийгдээгүй; existing Turso-г migrate хийгээгүй. Learning storage browser-local.                                               |
+| HF/Pinecone/Claude RAG, n8n, Facebook                    | Дараагийн milestone; энэ MVP-д хийсэн гэж танилцуулахгүй.                                                                     |
+| Explainable working demo                                 | Original sample, deterministic curated content, бодит quiz/SRS, tests.                                                        |
 
 ## Шалгах команд ба deployment
 
