@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { LifeBuoy } from "lucide-react"
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { LifeBuoy } from 'lucide-react';
 
 export default function HelpButton() {
-  const pathname = usePathname()
-  if (pathname?.startsWith("/watch")) return null
+  const pathname = usePathname();
+  if (pathname?.startsWith('/watch')) return null;
 
   return (
     <Link
@@ -16,5 +16,5 @@ export default function HelpButton() {
     >
       <LifeBuoy className="h-6 w-6" />
     </Link>
-  )
+  );
 }

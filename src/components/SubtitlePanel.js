@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react'
-import { Subtitles, Search, Loader2, Check, X, Languages, Zap } from 'lucide-react'
+import { useState, useCallback, useEffect } from 'react';
+import { Subtitles, Search, Loader2, Check, X, Languages, Zap } from 'lucide-react';
 
 const LANGUAGES = [
   { code: 'mon', label: 'Mongolian', flag: '🇲🇳' },
@@ -16,7 +16,7 @@ const LANGUAGES = [
   { code: 'ara', label: 'Arabic', flag: '🇸🇦' },
   { code: 'hin', label: 'Hindi', flag: '🇮🇳' },
   { code: 'tur', label: 'Turkish', flag: '🇹🇷' },
-]
+];
 
 const OS_TO_LABEL = {
   mn: 'Mongolian',
@@ -36,15 +36,15 @@ const OS_TO_LABEL = {
   vi: 'Vietnamese',
   th: 'Thai',
   id: 'Indonesian',
-}
+};
 
 function labelFor(sub) {
-  const code = sub?.language || sub?.languageLabel
-  const known = LANGUAGES.find((l) => l.code === code)
-  if (known) return known.label
-  if (code && OS_TO_LABEL[code]) return OS_TO_LABEL[code]
-  if (sub?.languageLabel && sub.languageLabel !== 'Detected') return sub.languageLabel
-  return 'Subtitles'
+  const code = sub?.language || sub?.languageLabel;
+  const known = LANGUAGES.find((l) => l.code === code);
+  if (known) return known.label;
+  if (code && OS_TO_LABEL[code]) return OS_TO_LABEL[code];
+  if (sub?.languageLabel && sub.languageLabel !== 'Detected') return sub.languageLabel;
+  return 'Subtitles';
 }
 
 export default function SubtitlePanel({
@@ -57,243 +57,266 @@ export default function SubtitlePanel({
   slug,
   onSubtitleChange,
 }) {
-  const [subtitleOpen, setSubtitleOpen] = useState(false)
-  const [selectedLang, setSelectedLang] = useState('mon')
-  const [subtitleUrl, setSubtitleUrl] = useState(null)
-  const [subtitlesEnabled, setSubtitlesEnabled] = useState(true)
-  const [searching, setSearching] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
-  const [searchError, setSearchError] = useState(null)
-  const [searchNotice, setSearchNotice] = useState(null)
-  const [hasSearched, setHasSearched] = useState(false)
-  const [translating, setTranslating] = useState(false)
-  const [translateError, setTranslateError] = useState(null)
-  const [translateWarning, setTranslateWarning] = useState(null)
-  const [translateInfo, setTranslateInfo] = useState(null)
-  const [isMongolian, setIsMongolian] = useState(false)
-  const [loadedLabel, setLoadedLabel] = useState(null)
-  const [instantReady, setInstantReady] = useState(false)
-  const [instantChecked, setInstantChecked] = useState(false)
+  const [subtitleOpen, setSubtitleOpen] = useState(false);
+  const [selectedLang, setSelectedLang] = useState('mon');
+  const [subtitleUrl, setSubtitleUrl] = useState(null);
+  const [subtitlesEnabled, setSubtitlesEnabled] = useState(true);
+  const [searching, setSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchError, setSearchError] = useState(null);
+  const [searchNotice, setSearchNotice] = useState(null);
+  const [, setHasSearched] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const [translateError, setTranslateError] = useState(null);
+  const [translateWarning, setTranslateWarning] = useState(null);
+  const [translateInfo, setTranslateInfo] = useState(null);
+  const [isMongolian, setIsMongolian] = useState(false);
+  const [loadedLabel, setLoadedLabel] = useState(null);
+  const [instantReady, setInstantReady] = useState(false);
+  const [, setInstantChecked] = useState(false);
 
-  const applyInstantMongolian = useCallback((path) => {
-    if (!slug) return
-    const origin = typeof window !== 'undefined' ? window.location.origin : ''
-    const url = path
-      ? `${origin}${path}`
-      : `${origin}/api/subtitles/mongolian/${encodeURIComponent(slug)}`
-    setSubtitleUrl(url)
-    setSubtitlesEnabled(true)
-    setIsMongolian(true)
-    setLoadedLabel('Mongolian')
-    setTranslateError(null)
-    setTranslateWarning(null)
-    onSubtitleChange?.(url, 'Mongolian')
-  }, [slug, onSubtitleChange])
+  const applyInstantMongolian = useCallback(
+    (path) => {
+      if (!slug) return;
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const url = path
+        ? `${origin}${path}`
+        : `${origin}/api/subtitles/mongolian/${encodeURIComponent(slug)}`;
+      setSubtitleUrl(url);
+      setSubtitlesEnabled(true);
+      setIsMongolian(true);
+      setLoadedLabel('Mongolian');
+      setTranslateError(null);
+      setTranslateWarning(null);
+      onSubtitleChange?.(url, 'Mongolian');
+    },
+    [slug, onSubtitleChange],
+  );
 
-  const loadInstantMongolian = applyInstantMongolian
+  const loadInstantMongolian = applyInstantMongolian;
 
   useEffect(() => {
-    if (!slug) return
-    let cancelled = false
+    if (!slug) return;
+    let cancelled = false;
 
     async function checkInstant() {
-      const candidates = []
+      const candidates = [];
       if (isTV) {
         candidates.push(
-          `/api/subtitles/mongolian/${encodeURIComponent(`${slug}-S${String(season ?? 1).padStart(2, '0')}E${String(episode).padStart(2, '0')}`)}`
-        )
+          `/api/subtitles/mongolian/${encodeURIComponent(`${slug}-S${String(season ?? 1).padStart(2, '0')}E${String(episode).padStart(2, '0')}`)}`,
+        );
         if (Number(episode) === 1) {
-          candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`)
+          candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`);
         }
       } else {
-        candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`)
+        candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`);
       }
 
-      let okPath = null
+      let okPath = null;
       for (const path of candidates) {
-        if (cancelled) return
+        if (cancelled) return;
         try {
-          const res = await fetch(path)
+          const res = await fetch(path);
           if (res.ok) {
-            okPath = path
-            break
+            okPath = path;
+            break;
           }
         } catch {}
       }
-      if (cancelled) return
+      if (cancelled) return;
       if (okPath) {
-        setInstantReady(true)
-        applyInstantMongolian(okPath)
+        setInstantReady(true);
+        applyInstantMongolian(okPath);
       }
-      setInstantChecked(true)
+      setInstantChecked(true);
     }
 
-    checkInstant()
+    checkInstant();
     return () => {
-      cancelled = true
-    }
-  }, [slug, applyInstantMongolian, isTV, season, episode])
+      cancelled = true;
+    };
+  }, [slug, applyInstantMongolian, isTV, season, episode]);
 
   const searchSubtitles = useCallback(async () => {
-    if (!tmdbId) return
-    setSearching(true)
-    setSearchError(null)
-    setSearchNotice(null)
-    setHasSearched(true)
-    setSearchResults([])
+    if (!tmdbId) return;
+    setSearching(true);
+    setSearchError(null);
+    setSearchNotice(null);
+    setHasSearched(true);
+    setSearchResults([]);
 
     try {
-      const type = isTV ? 'episode' : 'movie'
+      const type = isTV ? 'episode' : 'movie';
       const params = new URLSearchParams({
         tmdb_id: tmdbId,
         lang: selectedLang,
         type,
-      })
-      if (title) params.set('title', title)
-      if (year) params.set('year', year)
+      });
+      if (title) params.set('title', title);
+      if (year) params.set('year', year);
       if (isTV) {
         params.set(
           'query',
-          `S${String(season ?? 1).padStart(2, '0')}E${String(episode ?? 1).padStart(2, '0')}`
-        )
-        params.set('season', String(season ?? 1))
-        params.set('episode', String(episode ?? 1))
+          `S${String(season ?? 1).padStart(2, '0')}E${String(episode ?? 1).padStart(2, '0')}`,
+        );
+        params.set('season', String(season ?? 1));
+        params.set('episode', String(episode ?? 1));
       }
 
-      const res = await fetch(`/api/subtitles?${params}`)
-      const data = await res.json()
+      const res = await fetch(`/api/subtitles?${params}`);
+      const data = await res.json();
 
       if (!res.ok) {
-        setSearchError(data.error || 'Failed to search subtitles')
-        return
+        setSearchError(data.error || 'Failed to search subtitles');
+        return;
       }
 
-      setSearchResults(data.results || [])
+      setSearchResults(data.results || []);
       if (data.message) {
-        setSearchNotice(data.message)
+        setSearchNotice(data.message);
       }
       if (!data.results?.length) {
-        setSearchError('No subtitles found for this language')
+        setSearchError('No subtitles found for this language');
       }
-    } catch (err) {
-      setSearchError('Network error. Please try again.')
+    } catch {
+      setSearchError('Network error. Please try again.');
     } finally {
-      setSearching(false)
+      setSearching(false);
     }
-  }, [tmdbId, selectedLang, isTV, season, episode, title, year])
+  }, [tmdbId, selectedLang, isTV, season, episode, title, year]);
 
-  const downloadSubtitle = useCallback(async (sub) => {
-    const isObj = sub && typeof sub === 'object'
-    const fileId = isObj ? sub.fileId : sub
-    const subId = isObj ? sub.subId : null
-    setSearching(true)
-    try {
-      const res = await fetch('/api/subtitles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(subId && !fileId ? { subId } : { fileId }),
-      })
-      const data = await res.json()
+  const downloadSubtitle = useCallback(
+    async (sub) => {
+      const isObj = sub && typeof sub === 'object';
+      const fileId = isObj ? sub.fileId : sub;
+      const subId = isObj ? sub.subId : null;
+      setSearching(true);
+      try {
+        const res = await fetch('/api/subtitles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(subId && !fileId ? { subId } : { fileId }),
+        });
+        const data = await res.json();
 
-      if (!res.ok) {
-        setSearchError(data.error || 'Failed to download subtitle')
-        return
+        if (!res.ok) {
+          setSearchError(data.error || 'Failed to download subtitle');
+          return;
+        }
+
+        setSubtitleUrl(data.link);
+        setSubtitlesEnabled(true);
+        setSearchResults([]);
+        setIsMongolian(false);
+        const found =
+          typeof sub === 'object'
+            ? sub
+            : searchResults.find((r) => (r.fileId ?? r.subId) === fileId);
+        const label = labelFor(found);
+        setLoadedLabel(label);
+        onSubtitleChange?.(data.link, label);
+      } catch {
+        setSearchError('Download failed. Please try again.');
+      } finally {
+        setSearching(false);
       }
-
-      setSubtitleUrl(data.link)
-      setSubtitlesEnabled(true)
-      setSearchResults([])
-      setIsMongolian(false)
-      const found = typeof sub === 'object' ? sub : searchResults.find((r) => (r.fileId ?? r.subId) === fileId)
-      const label = labelFor(found)
-      setLoadedLabel(label)
-      onSubtitleChange?.(data.link, label)
-    } catch (err) {
-      setSearchError('Download failed. Please try again.')
-    } finally {
-      setSearching(false)
-    }
-  }, [onSubtitleChange, selectedLang])
+    },
+    [onSubtitleChange, searchResults],
+  );
 
   const translateToMongolian = useCallback(async () => {
-    if (translating) return
-    setTranslating(true)
-    setTranslateError(null)
-    setTranslateWarning(null)
-    setTranslateInfo(null)
+    if (translating) return;
+    setTranslating(true);
+    setTranslateError(null);
+    setTranslateWarning(null);
+    setTranslateInfo(null);
     try {
       const payload = subtitleUrl
         ? { subFileUrl: subtitleUrl, slug, title, year }
-        : { tmdbId, title, year, type: isTV ? 'episode' : 'movie', season, episode, slug }
+        : { tmdbId, title, year, type: isTV ? 'episode' : 'movie', season, episode, slug };
       const res = await fetch('/api/subtitles/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
 
       if (!res.ok) {
-        setTranslateError(data.error || 'Translation failed')
-        return
+        setTranslateError(data.error || 'Translation failed');
+        return;
       }
 
-      const origin = typeof window !== 'undefined' ? window.location.origin : ''
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
       const absUrl = data.translatedUrl.startsWith('http')
         ? data.translatedUrl
-        : `${origin}${data.translatedUrl}`
-      setSubtitleUrl(absUrl)
-      setSubtitlesEnabled(true)
-      setIsMongolian(true)
-      setLoadedLabel('Mongolian')
+        : `${origin}${data.translatedUrl}`;
+      setSubtitleUrl(absUrl);
+      setSubtitlesEnabled(true);
+      setIsMongolian(true);
+      setLoadedLabel('Mongolian');
       if (data.sourceDetail) {
-        setTranslateInfo(data.sourceDetail)
+        setTranslateInfo(data.sourceDetail);
       }
       if (data.partial) {
         setTranslateWarning(
-          'Mongolian translation is partial — the free daily character limit was reached. Remaining lines are untranslated. Add TranslateAPI credits or retry tomorrow.'
-        )
+          'Mongolian translation is partial — the free daily character limit was reached. Remaining lines are untranslated. Add TranslateAPI credits or retry tomorrow.',
+        );
       }
-      onSubtitleChange?.(absUrl, 'Mongolian')
-    } catch (err) {
-      setTranslateError('Translation request failed. Please try again.')
+      onSubtitleChange?.(absUrl, 'Mongolian');
+    } catch {
+      setTranslateError('Translation request failed. Please try again.');
     } finally {
-      setTranslating(false)
+      setTranslating(false);
     }
-  }, [subtitleUrl, title, year, isTV, season, episode, slug, tmdbId, translating, onSubtitleChange])
+  }, [
+    subtitleUrl,
+    title,
+    year,
+    isTV,
+    season,
+    episode,
+    slug,
+    tmdbId,
+    translating,
+    onSubtitleChange,
+  ]);
 
   const clearSubtitles = useCallback(() => {
-    setSubtitleUrl(null)
-    setSearchResults([])
-    setHasSearched(false)
-    setSearchError(null)
-    setIsMongolian(false)
-    setLoadedLabel(null)
-    setTranslateError(null)
-    setTranslateWarning(null)
-    setTranslateInfo(null)
-    setSearchNotice(null)
-    onSubtitleChange?.(null)
-  }, [onSubtitleChange])
+    setSubtitleUrl(null);
+    setSearchResults([]);
+    setHasSearched(false);
+    setSearchError(null);
+    setIsMongolian(false);
+    setLoadedLabel(null);
+    setTranslateError(null);
+    setTranslateWarning(null);
+    setTranslateInfo(null);
+    setSearchNotice(null);
+    onSubtitleChange?.(null);
+  }, [onSubtitleChange]);
 
-  const selectLanguage = useCallback((code) => {
-    setSelectedLang(code)
-    setSubtitleUrl(null)
-    setSearchResults([])
-    setHasSearched(false)
-    setSearchError(null)
-    setIsMongolian(false)
-    setLoadedLabel(null)
-    setTranslateError(null)
-    setTranslateWarning(null)
-    setTranslateInfo(null)
-    setSearchNotice(null)
-    onSubtitleChange?.(null)
-  }, [onSubtitleChange])
+  const selectLanguage = useCallback(
+    (code) => {
+      setSelectedLang(code);
+      setSubtitleUrl(null);
+      setSearchResults([]);
+      setHasSearched(false);
+      setSearchError(null);
+      setIsMongolian(false);
+      setLoadedLabel(null);
+      setTranslateError(null);
+      setTranslateWarning(null);
+      setTranslateInfo(null);
+      setSearchNotice(null);
+      onSubtitleChange?.(null);
+    },
+    [onSubtitleChange],
+  );
 
-  const activeLang = LANGUAGES.find(l => l.code === selectedLang)
-  const hasSubtitles = !!subtitleUrl
-  const displayLabel = loadedLabel ?? (isMongolian ? 'Mongolian' : activeLang?.label)
-  const displayFlag = isMongolian ? '🇲🇳' : activeLang?.flag
+  const activeLang = LANGUAGES.find((l) => l.code === selectedLang);
+  const hasSubtitles = !!subtitleUrl;
+  const displayLabel = loadedLabel ?? (isMongolian ? 'Mongolian' : activeLang?.label);
+  const displayFlag = isMongolian ? '🇲🇳' : activeLang?.flag;
 
   return (
     <div className="animate-fade-in-up delay-100">
@@ -419,9 +442,7 @@ export default function SubtitlePanel({
             </div>
           )}
 
-          {translateError && (
-            <p className="text-sm text-yellow-400">{translateError}</p>
-          )}
+          {translateError && <p className="text-sm text-yellow-400">{translateError}</p>}
 
           {translateWarning && !translateError && (
             <p className="text-sm text-amber-300">{translateWarning}</p>
@@ -464,13 +485,13 @@ export default function SubtitlePanel({
           )}
 
           {/* Search results */}
-          {searchNotice && (
-            <p className="text-xs text-slate-400 leading-relaxed">{searchNotice}</p>
-          )}
+          {searchNotice && <p className="text-xs text-slate-400 leading-relaxed">{searchNotice}</p>}
 
           {searchResults.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm text-slate-400">Found {searchResults.length} subtitle(s). Click to load:</p>
+              <p className="text-sm text-slate-400">
+                Found {searchResults.length} subtitle(s). Click to load:
+              </p>
               <div className="max-h-60 space-y-1 overflow-y-auto">
                 {searchResults.map((sub) => (
                   <button
@@ -493,9 +514,7 @@ export default function SubtitlePanel({
           )}
 
           {/* Error */}
-          {searchError && (
-            <p className="text-sm text-yellow-400">{searchError}</p>
-          )}
+          {searchError && <p className="text-sm text-yellow-400">{searchError}</p>}
 
           {/* No TMDB ID warning */}
           {!tmdbId && (
@@ -506,5 +525,5 @@ export default function SubtitlePanel({
         </div>
       )}
     </div>
-  )
+  );
 }

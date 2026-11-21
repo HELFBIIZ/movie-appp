@@ -25,7 +25,7 @@ const blankArt =
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200"><rect width="800" height="1200" fill="#334155"/></svg>';
 
 test.beforeEach(async ({ page }) => {
-  await page.clock.install({ time: new Date('2026-11-21T04:00:00Z') });
+  await page.clock.install({ time: new Date('2026-11-21T03:00:00Z') });
   await page.clock.pauseAt(new Date('2026-11-21T04:00:00Z'));
   await page.route('**/api/auth/me', (route) =>
     route.fulfill({ status: 401, json: { error: { code: 'UNAUTHENTICATED' } } }),

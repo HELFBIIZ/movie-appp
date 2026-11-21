@@ -1,61 +1,77 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { ChevronDown, Moon, Sun, Film, Menu, X, Home, ListVideo, TrendingUp, Calendar, Star, Tv2, Mountain, LifeBuoy, LogOut, User } from "lucide-react"
-import { useTheme } from "@/components/ThemeProvider"
-import NotificationBell from "@/components/NotificationBell"
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import {
+  ChevronDown,
+  Moon,
+  Sun,
+  Film,
+  Menu,
+  X,
+  Home,
+  ListVideo,
+  Calendar,
+  Star,
+  Tv2,
+  Mountain,
+  LifeBuoy,
+  LogOut,
+  User,
+} from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
+import NotificationBell from '@/components/NotificationBell';
 
 const genres = [
-  { label: "Action", slug: "action" },
-  { label: "Drama", slug: "drama" },
-  { label: "Comedy", slug: "comedy" },
-  { label: "Sci-Fi", slug: "sci-fi" },
-  { label: "Horror", slug: "horror" },
-  { label: "Romance", slug: "romance" },
-  { label: "Thriller", slug: "thriller" },
-  { label: "Adventure", slug: "adventure" },
-  { label: "Fantasy", slug: "fantasy" },
-  { label: "Crime", slug: "crime" },
-  { label: "Animation", slug: "animation" },
-  { label: "Mystery", slug: "mystery" },
-  { label: "Documentary", slug: "documentary" },
-]
+  { label: 'Action', slug: 'action' },
+  { label: 'Drama', slug: 'drama' },
+  { label: 'Comedy', slug: 'comedy' },
+  { label: 'Sci-Fi', slug: 'sci-fi' },
+  { label: 'Horror', slug: 'horror' },
+  { label: 'Romance', slug: 'romance' },
+  { label: 'Thriller', slug: 'thriller' },
+  { label: 'Adventure', slug: 'adventure' },
+  { label: 'Fantasy', slug: 'fantasy' },
+  { label: 'Crime', slug: 'crime' },
+  { label: 'Animation', slug: 'animation' },
+  { label: 'Mystery', slug: 'mystery' },
+  { label: 'Documentary', slug: 'documentary' },
+];
 
 export default function Header() {
-  const { isDark, toggleTheme } = useTheme()
-  const router = useRouter()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { isDark, toggleTheme } = useTheme();
+  const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me')
       .then((r) => r.json())
       .then((d) => {
         if (d.me) {
-          setIsLoggedIn(true)
-          const code = d.me.roleCode
-          if (code === 'ADMIN' || code === 'SUPER_ADMIN') setIsAdmin(true)
+          setIsLoggedIn(true);
+          const code = d.me.roleCode;
+          if (code === 'ADMIN' || code === 'SUPER_ADMIN') setIsAdmin(true);
         }
       })
-      .catch(() => {})
-  }, [])
+      .catch(() => {});
+  }, []);
 
   async function handleLogout() {
-    await fetch('/api/auth/logout', { method: 'POST' })
-    setIsLoggedIn(false)
-    setIsAdmin(false)
-    router.push('/')
-    router.refresh()
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    router.push('/');
+    router.refresh();
   }
 
   return (
@@ -88,14 +104,32 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <NavLink href="/movies" icon={<Film className="h-4 w-4" />}>Movies</NavLink>
-            <NavLink href="/movies?category=upcoming" icon={<Calendar className="h-4 w-4" />}>New Releases</NavLink>
-            <NavLink href="/movies?category=top-rated" icon={<Star className="h-4 w-4" />}>Top Rated</NavLink>
-            <NavLink href="/movies?category=kdrama" icon={<Tv2 className="h-4 w-4" />}>K-Dramas</NavLink>
-            <NavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />}>Western</NavLink>
-            <NavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />}>Watchlist</NavLink>
-            <NavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />}>Тусламж</NavLink>
-            {isAdmin && <NavLink href="/admin" icon={<Film className="h-4 w-4" />}>Admin</NavLink>}
+            <NavLink href="/movies" icon={<Film className="h-4 w-4" />}>
+              Movies
+            </NavLink>
+            <NavLink href="/movies?category=upcoming" icon={<Calendar className="h-4 w-4" />}>
+              New Releases
+            </NavLink>
+            <NavLink href="/movies?category=top-rated" icon={<Star className="h-4 w-4" />}>
+              Top Rated
+            </NavLink>
+            <NavLink href="/movies?category=kdrama" icon={<Tv2 className="h-4 w-4" />}>
+              K-Dramas
+            </NavLink>
+            <NavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />}>
+              Western
+            </NavLink>
+            <NavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />}>
+              Watchlist
+            </NavLink>
+            <NavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />}>
+              Тусламж
+            </NavLink>
+            {isAdmin && (
+              <NavLink href="/admin" icon={<Film className="h-4 w-4" />}>
+                Admin
+              </NavLink>
+            )}
           </nav>
         </div>
 
@@ -133,7 +167,10 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link href="/login" className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] hover:bg-[#d6b456] transition-colors">
+            <Link
+              href="/login"
+              className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] hover:bg-[#d6b456] transition-colors"
+            >
               Sign In
             </Link>
           )}
@@ -143,11 +180,7 @@ export default function Header() {
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
             aria-label="Toggle menu"
           >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
@@ -155,20 +188,85 @@ export default function Header() {
       {mobileOpen && (
         <div className="lg:hidden border-t bg-[#faf7f1] dark:bg-[#0f0c09] dark:border-black/70 animate-fade-in-down">
           <nav className="container px-4 py-3 flex flex-col gap-1">
-            <MobileNavLink href="/" icon={<Home className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Home</MobileNavLink>
-            <MobileNavLink href="/movies" icon={<Film className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>All Movies</MobileNavLink>
-            <MobileNavLink href="/movies?category=upcoming" icon={<Calendar className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>New Releases</MobileNavLink>
-            <MobileNavLink href="/movies?category=top-rated" icon={<Star className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Top Rated</MobileNavLink>
-            <MobileNavLink href="/movies?category=kdrama" icon={<Tv2 className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>K-Dramas</MobileNavLink>
-            <MobileNavLink href="/movies?category=western" icon={<Mountain className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Western</MobileNavLink>
-            <MobileNavLink href="/watchlist" icon={<ListVideo className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Watchlist</MobileNavLink>
-            <MobileNavLink href="/help" icon={<LifeBuoy className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Тусламж</MobileNavLink>
-            {isAdmin && <MobileNavLink href="/admin" icon={<Film className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Admin</MobileNavLink>}
+            <MobileNavLink
+              href="/"
+              icon={<Home className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              Home
+            </MobileNavLink>
+            <MobileNavLink
+              href="/movies"
+              icon={<Film className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              All Movies
+            </MobileNavLink>
+            <MobileNavLink
+              href="/movies?category=upcoming"
+              icon={<Calendar className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              New Releases
+            </MobileNavLink>
+            <MobileNavLink
+              href="/movies?category=top-rated"
+              icon={<Star className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              Top Rated
+            </MobileNavLink>
+            <MobileNavLink
+              href="/movies?category=kdrama"
+              icon={<Tv2 className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              K-Dramas
+            </MobileNavLink>
+            <MobileNavLink
+              href="/movies?category=western"
+              icon={<Mountain className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              Western
+            </MobileNavLink>
+            <MobileNavLink
+              href="/watchlist"
+              icon={<ListVideo className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              Watchlist
+            </MobileNavLink>
+            <MobileNavLink
+              href="/help"
+              icon={<LifeBuoy className="h-4 w-4" />}
+              onClick={() => setMobileOpen(false)}
+            >
+              Тусламж
+            </MobileNavLink>
+            {isAdmin && (
+              <MobileNavLink
+                href="/admin"
+                icon={<Film className="h-4 w-4" />}
+                onClick={() => setMobileOpen(false)}
+              >
+                Admin
+              </MobileNavLink>
+            )}
             {isLoggedIn ? (
               <>
-                <MobileNavLink href="/profile" icon={<User className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Profile</MobileNavLink>
+                <MobileNavLink
+                  href="/profile"
+                  icon={<User className="h-4 w-4" />}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Profile
+                </MobileNavLink>
                 <button
-                  onClick={() => { handleLogout(); setMobileOpen(false) }}
+                  onClick={() => {
+                    handleLogout();
+                    setMobileOpen(false);
+                  }}
                   className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 transition-colors w-full text-left"
                 >
                   <LogOut className="h-4 w-4" />
@@ -176,10 +274,18 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <MobileNavLink href="/login" icon={<LogOut className="h-4 w-4" />} onClick={() => setMobileOpen(false)}>Sign In</MobileNavLink>
+              <MobileNavLink
+                href="/login"
+                icon={<LogOut className="h-4 w-4" />}
+                onClick={() => setMobileOpen(false)}
+              >
+                Sign In
+              </MobileNavLink>
             )}
             <div className="mt-2 pt-2 border-t border-[#e5dcc7] dark:border-black/60">
-              <p className="px-3 py-1 text-xs font-medium text-[#8a7540] dark:text-[#cbb277]">Genres</p>
+              <p className="px-3 py-1 text-xs font-medium text-[#8a7540] dark:text-[#cbb277]">
+                Genres
+              </p>
               <div className="grid grid-cols-3 gap-1 px-3">
                 {genres.map((genre) => (
                   <Link
@@ -197,16 +303,19 @@ export default function Header() {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 function NavLink({ href, icon, children }) {
   return (
-    <Link href={href} className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition-all hover:bg-[#f0e8d4] hover:text-[#8a6d1f] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-amber-200">
+    <Link
+      href={href}
+      className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition-all hover:bg-[#f0e8d4] hover:text-[#8a6d1f] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-amber-200"
+    >
       {icon}
       {children}
     </Link>
-  )
+  );
 }
 
 function MobileNavLink({ href, icon, children, onClick }) {
@@ -219,5 +328,5 @@ function MobileNavLink({ href, icon, children, onClick }) {
       {icon}
       {children}
     </Link>
-  )
+  );
 }

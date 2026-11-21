@@ -1,8 +1,8 @@
-import tmdbArt from './posters.json'
-import kdramaArt from './kdrama-posters.json'
-import fetchedCatalog from './movies.generated.json'
-import kdramaCatalog from './kdramas.json'
-import westernCatalog from './western.json'
+import tmdbArt from './posters.json';
+import kdramaArt from './kdrama-posters.json';
+import fetchedCatalog from './movies.generated.json';
+import kdramaCatalog from './kdramas.json';
+import westernCatalog from './western.json';
 
 const toDataUri = (svg) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 
@@ -19,16 +19,26 @@ const palettes = [
 
 const createMovieArt = (title, subtitle = 'Movie') => {
   const safeTitle = title
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
   const safeSubtitle = subtitle
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
 
   const hash = title.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
   const palette = palettes[hash % palettes.length];
-  const x1 = 150 + (hash * 7) % 500, y1 = 100 + (hash * 13) % 300, r1 = 80 + (hash * 3) % 100;
-  const x2 = 100 + (hash * 11) % 600, y2 = 700 + (hash * 5) % 400, r2 = 100 + (hash * 7) % 150;
+  const x1 = 150 + ((hash * 7) % 500),
+    y1 = 100 + ((hash * 13) % 300),
+    r1 = 80 + ((hash * 3) % 100);
+  const x2 = 100 + ((hash * 11) % 600),
+    y2 = 700 + ((hash * 5) % 400),
+    r2 = 100 + ((hash * 7) % 150);
 
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" role="img" aria-label="${safeTitle}">
@@ -47,18 +57,8 @@ const createMovieArt = (title, subtitle = 'Movie') => {
   return toDataUri(svg);
 };
 
-const buildPosterAsset = (movie) => createMovieArt(movie.title, movie.category.toUpperCase());
-const buildBannerAsset = (movie) => createMovieArt(movie.title, movie.year.toString());
-
 const makePosterUrl = (title) => createMovieArt(title, 'MOVIE');
 const makeBannerUrl = (title) => createMovieArt(title, 'NOW PLAYING');
-
-// Merge fetched catalog with fallback local movies, using fetched as primary
-const fetchedMoviesWithPosters = (fetchedCatalog.movies || []).map(m => ({
-  ...m,
-  poster: m.poster || buildPosterAsset(m),
-  banner: m.banner || buildBannerAsset(m),
-}));
 
 const popularFallbackMovies = [
   {
@@ -73,7 +73,7 @@ const popularFallbackMovies = [
     cast: ['Tom Holland', 'Zendaya', 'Jacob Batalon'],
     plot: 'Peter Parker faces a new chapter of heroism as old enemies return, new allies emerge, and his life is forced to balance between responsibility, heart, and destiny.',
     trailerYouTubeId: '8Qn_spdMlt4',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'dear-santa',
@@ -87,7 +87,7 @@ const popularFallbackMovies = [
     cast: ['Jack Black', 'Emma Stone', 'John Cena'],
     plot: 'A determined young boy writes to Santa and discovers that the holiday magic is closer than he thinks when a surprise adventure sends him across the snowy town on a mission to save Christmas.',
     trailerYouTubeId: 'aqz-KE-bpKQ',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'how-to-train-your-dragon',
@@ -101,7 +101,7 @@ const popularFallbackMovies = [
     cast: ['Mason Thames', 'Nico Parker', 'Gerard Butler'],
     plot: 'A young Viking discovers a deep bond with a dragon and learns that courage and friendship can reshape the fate of his tribe.',
     trailerYouTubeId: 'oKiYuIsPxYtM',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'alien-romulus',
@@ -115,7 +115,7 @@ const popularFallbackMovies = [
     cast: ['Cailee Spaeny', 'David Jonsson', 'Archie Renaux'],
     plot: 'A group of space colonists stumbles into a deadly threat when they uncover a terrifying secret beneath their industrial world.',
     trailerYouTubeId: 'CGQh7qV8JWQ',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'the-matrix',
@@ -129,7 +129,7 @@ const popularFallbackMovies = [
     cast: ['Keanu Reeves', 'Laurence Fishburne', 'Carrie-Anne Moss'],
     plot: 'A hacker discovers reality is a simulated illusion and joins a rebellion against machines that rule humanity.',
     trailerYouTubeId: 'vKQi3bBA1y8',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'inception',
@@ -143,7 +143,7 @@ const popularFallbackMovies = [
     cast: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Elliot Page'],
     plot: 'A thief who steals secrets from dreams is tasked with planting an idea into the mind of a target.',
     trailerYouTubeId: '8hP9D6kZseM',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'interstellar',
@@ -157,7 +157,7 @@ const popularFallbackMovies = [
     cast: ['Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain'],
     plot: 'A team of explorers leaves Earth to find a new world as humanity faces extinction.',
     trailerYouTubeId: 'zSWdZVtXT7E',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'pulp-fiction',
@@ -171,7 +171,7 @@ const popularFallbackMovies = [
     cast: ['John Travolta', 'Uma Thurman', 'Samuel L. Jackson'],
     plot: 'The lives of gangsters, hitmen, and a boxer collide in a nonlinear story of violence and redemption.',
     trailerYouTubeId: 's7EdQ4FqbhY',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'fight-club',
@@ -185,7 +185,7 @@ const popularFallbackMovies = [
     cast: ['Brad Pitt', 'Edward Norton', 'Helena Bonham Carter'],
     plot: 'An insomniac office worker starts an underground fight club that evolves into something far more dangerous.',
     trailerYouTubeId: 'BdJKm16Co6M',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-dark-knight',
@@ -199,7 +199,7 @@ const popularFallbackMovies = [
     cast: ['Christian Bale', 'Heath Ledger', 'Aaron Eckhart'],
     plot: 'Batman faces the Joker, a criminal mastermind who turns chaos into a weapon against Gotham.',
     trailerYouTubeId: 'EXeTwQWrcwY',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-godfather',
@@ -213,7 +213,7 @@ const popularFallbackMovies = [
     cast: ['Marlon Brando', 'Al Pacino', 'James Caan'],
     plot: 'The aging patriarch of an organized crime dynasty transfers power to his reluctant son.',
     trailerYouTubeId: 'UaVTIH8mujA',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'shawshank-redemption',
@@ -227,7 +227,7 @@ const popularFallbackMovies = [
     cast: ['Tim Robbins', 'Morgan Freeman', 'Bob Gunton'],
     plot: 'A banker convicted of murder forms an unlikely friendship with a prison contraband smuggler.',
     trailerYouTubeId: '6hB3S9bIaco',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'forrest-gump',
@@ -241,7 +241,7 @@ const popularFallbackMovies = [
     cast: ['Tom Hanks', 'Robin Wright', 'Gary Sinise'],
     plot: 'A gentle man with a remarkable life journey becomes witness to major events in American history.',
     trailerYouTubeId: 'bLvqoHBptjg',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'gladiator',
@@ -255,7 +255,7 @@ const popularFallbackMovies = [
     cast: ['Russell Crowe', 'Joaquin Phoenix', 'Connie Nielsen'],
     plot: 'A betrayed Roman general fights for revenge and honor in the arena of ancient Rome.',
     trailerYouTubeId: 'owK1qxDselE',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'seven',
@@ -269,7 +269,7 @@ const popularFallbackMovies = [
     cast: ['Brad Pitt', 'Morgan Freeman', 'Gwyneth Paltrow'],
     plot: 'Two detectives pursue a serial killer who stages murders around the seven deadly sins.',
     trailerYouTubeId: 'znmZOXw7m6g',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-shining',
@@ -283,7 +283,7 @@ const popularFallbackMovies = [
     cast: ['Jack Nicholson', 'Shelley Duvall', 'Danny Lloyd'],
     plot: 'A family settles into an isolated hotel where a sinister force threatens the father’s sanity.',
     trailerYouTubeId: '5Cb3ik6zP2I',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'avatar',
@@ -297,7 +297,7 @@ const popularFallbackMovies = [
     cast: ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
     plot: 'A paraplegic marine joins a war on Pandora and becomes entangled with the native Na’vi.',
     trailerYouTubeId: '5PSNL1qE6VY',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'guardians-of-the-galaxy-vol-3',
@@ -311,7 +311,7 @@ const popularFallbackMovies = [
     cast: ['Chris Pratt', 'Zoe Saldaña', 'Dave Bautista'],
     plot: 'The Guardians face emotional sacrifice and a final mission that could change their lives forever.',
     trailerYouTubeId: 'AAE5VZkX_2o',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'final-signal',
@@ -325,7 +325,7 @@ const popularFallbackMovies = [
     cast: ['Ari Miles', 'Sasha Cole', 'Milo Grant'],
     plot: 'A final transmission reveals a secret network controlling the fate of every space mission.',
     trailerYouTubeId: 'jTQ7tK9YvSo',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'specter-harbor',
@@ -339,7 +339,7 @@ const popularFallbackMovies = [
     cast: ['Nia Brooks', 'Owen Vale', 'Lena Hart'],
     plot: 'A haunted port town hides a conspiracy beneath its foggy docks and abandoned piers.',
     trailerYouTubeId: 'mQ1YhxPZr0Q',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'stormline',
@@ -353,7 +353,7 @@ const popularFallbackMovies = [
     cast: ['Mila Frost', 'Theo Reeves', 'Nina West'],
     plot: 'A storm chaser discovers a pattern that points to a weaponized weather event threatening the coast.',
     trailerYouTubeId: '9hVL6PR_FWs',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'atlas-below',
@@ -367,7 +367,7 @@ const popularFallbackMovies = [
     cast: ['Jess Vale', 'Milo Hart', 'Nia Cross'],
     plot: 'A team racing below the crust of a dead planet discovers a civilization still hidden in the dark.',
     trailerYouTubeId: 'Lx2nP8CGh2M',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'aurora-drift',
@@ -381,7 +381,7 @@ const popularFallbackMovies = [
     cast: ['Tara Ridge', 'Milo North', 'Ari Vale'],
     plot: 'A scientific expedition drifts through the polar lights while a mysterious signal follows them home.',
     trailerYouTubeId: 'Cfu8fNVFrZ0',
-    category: 'upcoming'
+    category: 'upcoming',
   },
   {
     slug: 'dune-part-two',
@@ -395,7 +395,7 @@ const popularFallbackMovies = [
     cast: ['Timothée Chalamet', 'Zendaya', 'Rebecca Ferguson'],
     plot: 'Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family.',
     trailerYouTubeId: 'Way9Dexny3w',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'oppenheimer',
@@ -409,7 +409,7 @@ const popularFallbackMovies = [
     cast: ['Cillian Murphy', 'Emily Blunt', 'Matt Damon'],
     plot: 'The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.',
     trailerYouTubeId: 'uYPbbksJxIg',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-batman',
@@ -421,9 +421,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Matt Reeves',
     cast: ['Robert Pattinson', 'Zoë Kravitz', 'Jeffrey Wright'],
-    plot: 'When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city\'s hidden corruption and question his family\'s involvement.',
+    plot: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
     trailerYouTubeId: 'mqqft2x_Aa4',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'spiderman-across-the-spiderverse',
@@ -437,7 +437,7 @@ const popularFallbackMovies = [
     cast: ['Shameik Moore', 'Hailee Steinfeld', 'Oscar Isaac'],
     plot: 'Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence.',
     trailerYouTubeId: 'shW9i6k8cB0',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'everything-everywhere-all-at-once',
@@ -451,7 +451,7 @@ const popularFallbackMovies = [
     cast: ['Michelle Yeoh', 'Stephanie Hsu', 'Ke Huy Quan'],
     plot: 'A middle-aged Chinese immigrant is swept up into an insane adventure in which she alone can save existence by exploring other universes and connecting with the lives she could have led.',
     trailerYouTubeId: 'wxN1T1uxQ2g',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-whale',
@@ -465,7 +465,7 @@ const popularFallbackMovies = [
     cast: ['Brendan Fraser', 'Sadie Sink', 'Ty Simpkins'],
     plot: 'A reclusive English teacher attempts to reconnect with his estranged teenage daughter.',
     trailerYouTubeId: 'nDiot6slSms',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'top-gun-maverick',
@@ -477,9 +477,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Joseph Kosinski',
     cast: ['Tom Cruise', 'Miles Teller', 'Jennifer Connelly'],
-    plot: 'After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN\'s elite graduates on a mission that demands the ultimate sacrifice.',
+    plot: "After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice.",
     trailerYouTubeId: 'giXco2jaZ_4',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'parasite',
@@ -493,7 +493,7 @@ const popularFallbackMovies = [
     cast: ['Song Kang-ho', 'Lee Sun-kyun', 'Cho Yeo-jeong'],
     plot: 'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.',
     trailerYouTubeId: '5xH0HfJHsaY',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'joker',
@@ -507,7 +507,7 @@ const popularFallbackMovies = [
     cast: ['Joaquin Phoenix', 'Robert De Niro', 'Zazie Beetz'],
     plot: 'During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.',
     trailerYouTubeId: 'zAGVQLHvwOY',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-wolf-of-wall-street',
@@ -521,7 +521,7 @@ const popularFallbackMovies = [
     cast: ['Leonardo DiCaprio', 'Jonah Hill', 'Margot Robbie'],
     plot: 'Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption and the federal government.',
     trailerYouTubeId: 'iszwuX1AK6A',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'mad-max-fury-road',
@@ -535,7 +535,7 @@ const popularFallbackMovies = [
     cast: ['Tom Hardy', 'Charlize Theron', 'Nicholas Hoult'],
     plot: 'In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the help of a group of female prisoners, a psychotic worshiper, and a drifter named Max.',
     trailerYouTubeId: 'hEJnMQG9ev8',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'blade-runner-2049',
@@ -547,9 +547,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Denis Villeneuve',
     cast: ['Ryan Gosling', 'Harrison Ford', 'Ana de Armas'],
-    plot: 'Young Blade Runner K\'s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who\'s been missing for thirty years.',
+    plot: "Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years.",
     trailerYouTubeId: 'gCcx85zWz6U',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'whiplash',
@@ -561,9 +561,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Damien Chazelle',
     cast: ['Miles Teller', 'J.K. Simmons', 'Melissa Benoist'],
-    plot: 'A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student\'s potential.',
+    plot: "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
     trailerYouTubeId: '7d_jQC6Wpwc',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-prestige',
@@ -577,7 +577,7 @@ const popularFallbackMovies = [
     cast: ['Christian Bale', 'Hugh Jackman', 'Scarlett Johansson'],
     plot: 'After a tragic accident, two stage magicians in 1890s London engage in a battle to create the ultimate illusion while sacrificing everything they have to outwit each other.',
     trailerYouTubeId: 'o4gHCmTQDVI',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'shutter-island',
@@ -591,7 +591,7 @@ const popularFallbackMovies = [
     cast: ['Leonardo DiCaprio', 'Emily Mortimer', 'Mark Ruffalo'],
     plot: 'In 1954, a U.S. Marshal investigates the disappearance of a murderer who escaped from a hospital for the criminally insane.',
     trailerYouTubeId: '5iaYLCiq5RM',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-departed',
@@ -605,7 +605,7 @@ const popularFallbackMovies = [
     cast: ['Leonardo DiCaprio', 'Matt Damon', 'Jack Nicholson'],
     plot: 'An undercover cop and a mole in the police force attempt to identify each other while infiltrating an Irish gang in South Boston.',
     trailerYouTubeId: 'iojhqm0JTW4',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'coco',
@@ -617,9 +617,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Lee Unkrich',
     cast: ['Anthony Gonzalez', 'Gael García Bernal', 'Benjamin Bratt'],
-    plot: 'Aspiring musician Miguel, confronted with his family\'s ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer.',
+    plot: "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer.",
     trailerYouTubeId: 'xlnPHQ75OT8',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'spirited-away',
@@ -631,9 +631,9 @@ const popularFallbackMovies = [
     language: 'Japanese',
     director: 'Hayao Miyazaki',
     cast: ['Daveigh Chase', 'Suzanne Pleshette', 'Miyu Irino'],
-    plot: 'During her family\'s move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.',
+    plot: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
     trailerYouTubeId: 'ByXuk9QqQkk',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'the-lion-king',
@@ -647,7 +647,7 @@ const popularFallbackMovies = [
     cast: ['Matthew Broderick', 'Jeremy Irons', 'James Earl Jones'],
     plot: 'Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.',
     trailerYouTubeId: '4sj1MT05lAA',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'goodfellas',
@@ -661,7 +661,7 @@ const popularFallbackMovies = [
     cast: ['Robert De Niro', 'Ray Liotta', 'Joe Pesci'],
     plot: 'The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.',
     trailerYouTubeId: 'qo5jJpHtI1Y',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'sopranos-family-dinner',
@@ -675,7 +675,7 @@ const popularFallbackMovies = [
     cast: ['Viola Davis', 'Oscar Isaac', 'Awkwafina'],
     plot: 'Three generations of a Chinese-American family collide during a seemingly simple holiday dinner.',
     trailerYouTubeId: 'dQw4w9WgXcQ',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-grand-budapest-hotel',
@@ -689,7 +689,7 @@ const popularFallbackMovies = [
     cast: ['Ralph Fiennes', 'Tony Revolori', 'Saoirse Ronan'],
     plot: 'A writer encounters the owner of an aging high-class hotel, who tells of his early years as a lobby boy.',
     trailerYouTubeId: '1Fg5iWmQjwk',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'eternal-sunshine',
@@ -703,7 +703,7 @@ const popularFallbackMovies = [
     cast: ['Jim Carrey', 'Kate Winslet', 'Tom Wilkinson'],
     plot: 'When their relationship turns sour, someone visits a company to have their memories of each other erased.',
     trailerYouTubeId: 'rbDyELrRvHY',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'get-out',
@@ -715,9 +715,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Jordan Peele',
     cast: ['Daniel Kaluuya', 'Allison Williams', 'Bradley Whitford'],
-    plot: 'A young African-American man visits his white girlfriend\'s family estate for the weekend, where a simmering tension reveals disturbing truths.',
+    plot: "A young African-American man visits his white girlfriend's family estate for the weekend, where a simmering tension reveals disturbing truths.",
     trailerYouTubeId: 'DzfpyUB60YY',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'a-quiet-place',
@@ -731,7 +731,7 @@ const popularFallbackMovies = [
     cast: ['Emily Blunt', 'John Krasinski', 'Millicent Simmonds'],
     plot: 'A family struggles for survival in a post-apocalyptic world filled with blind aliens with ultra-sensitive hearing.',
     trailerYouTubeId: 'WR7cc5t7tv8',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'arrival',
@@ -745,7 +745,7 @@ const popularFallbackMovies = [
     cast: ['Amy Adams', 'Jeremy Renner', 'Forest Whitaker'],
     plot: 'A linguist is recruited by the military to communicate with alien lifeforms after mysterious spacecraft land around the world.',
     trailerYouTubeId: 'tFMo3UJ4Bmg',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'pride-and-prejudice',
@@ -759,7 +759,7 @@ const popularFallbackMovies = [
     cast: ['Keira Knightley', 'Matthew Macfadyen', 'Brendan Coyle'],
     plot: 'Sparks fly when fiery Elizabeth Bennet meets the handsome but haughty Mr. Darcy.',
     trailerYouTubeId: '1MKsVmD5GMA',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'la-la-land',
@@ -773,7 +773,7 @@ const popularFallbackMovies = [
     cast: ['Ryan Gosling', 'Emma Stone', 'Rosemarie DeWitt'],
     plot: 'While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations.',
     trailerYouTubeId: '0pdqf4P9MB8',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'rocky',
@@ -787,7 +787,7 @@ const popularFallbackMovies = [
     cast: ['Sylvester Stallone', 'Talia Shire', 'Burt Young'],
     plot: 'A small-time boxer from Philadelphia gets a once-in-a-lifetime opportunity to fight the heavyweight champion.',
     trailerYouTubeId: 'S1cYRRf7bQQ',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'jump-street',
@@ -801,7 +801,7 @@ const popularFallbackMovies = [
     cast: ['Jonah Hill', 'Channing Tatum', 'Ice Cube'],
     plot: 'A mismatched pair of cops go undercover as high school students to take down a drug ring.',
     trailerYouTubeId: 'RLoKtb4c4W0',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'superbad',
@@ -815,7 +815,7 @@ const popularFallbackMovies = [
     cast: ['Jonah Hill', 'Michael Cera', 'Christopher Mintz-Plasse'],
     plot: 'Two co-dependent high school seniors are forced to deal with separation anxiety when their plan to stage a booze-soaked party goes awry.',
     trailerYouTubeId: 'Y7BMWgjvOkk',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'mean-girls',
@@ -829,7 +829,7 @@ const popularFallbackMovies = [
     cast: ['Lindsay Lohan', 'Rachel McAdams', 'Tim Meadows'],
     plot: 'Cady Heron is a hit with The Plastics, the A-list girl clique at her new school, until she makes the mistake of falling for Aaron Samuels.',
     trailerYouTubeId: 'PikeGwDoXFg',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-hangover',
@@ -843,7 +843,7 @@ const popularFallbackMovies = [
     cast: ['Bradley Cooper', 'Zach Galifianakis', 'Ed Helms'],
     plot: 'Three buddies awaken from a bachelor party in Las Vegas with no memory and must find their friend before his wedding.',
     trailerYouTubeId: 'tcdUhdOlz9M',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'saw',
@@ -855,9 +855,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'James Wan',
     cast: ['Cary Elwes', 'Leigh Whannell', 'Danny Glover'],
-    plot: 'Two strangers wake up chained to a toilet in a bathroom, without knowing who put them there, but receiving a series of clues through a dead man\'s voice.',
+    plot: "Two strangers wake up chained to a toilet in a bathroom, without knowing who put them there, but receiving a series of clues through a dead man's voice.",
     trailerYouTubeId: 'G5HrJtM4wB8',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-conjuring',
@@ -871,7 +871,7 @@ const popularFallbackMovies = [
     cast: ['Vera Farmiga', 'Patrick Wilson', 'Lili Taylor'],
     plot: 'Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse.',
     trailerYouTubeId: 'k10ETZ41q5o',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'jaws',
@@ -883,9 +883,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Steven Spielberg',
     cast: ['Roy Scheider', 'Robert Shaw', 'Richard Dreyfuss'],
-    plot: 'When a killer shark unleashes chaos on a beach community, it\'s up to a local sheriff, a marine biologist, and an old seafarer to hunt the beast down.',
+    plot: "When a killer shark unleashes chaos on a beach community, it's up to a local sheriff, a marine biologist, and an old seafarer to hunt the beast down.",
     trailerYouTubeId: 'U1fu-Sx0_Og',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'et',
@@ -899,7 +899,7 @@ const popularFallbackMovies = [
     cast: ['Henry Thomas', 'Drew Barrymore', 'Peter Coyote'],
     plot: 'A troubled child summons the courage to help a friendly alien escape Earth and return to his home world.',
     trailerYouTubeId: 'bD7bpG-zDJQ',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'back-to-the-future',
@@ -913,7 +913,7 @@ const popularFallbackMovies = [
     cast: ['Michael J. Fox', 'Christopher Lloyd', 'Lea Thompson'],
     plot: 'Marty McFly, a 17-year-old high school student, is accidentally sent 30 years into the past in a time-traveling DeLorean.',
     trailerYouTubeId: 'QvHg2DWX0bI',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'terminator-2',
@@ -927,7 +927,7 @@ const popularFallbackMovies = [
     cast: ['Arnold Schwarzenegger', 'Linda Hamilton', 'Edward Furlong'],
     plot: 'A cyborg, identical to the one who failed to kill Sarah Connor, must now protect her ten-year-old son John from a more advanced cyborg.',
     trailerYouTubeId: 'CRRlK4y8OZs',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'alien',
@@ -941,7 +941,7 @@ const popularFallbackMovies = [
     cast: ['Sigourney Weaver', 'Tom Skerritt', 'John Hurt'],
     plot: 'After investigating a mysterious transmission of unknown origin, the crew of a commercial spacecraft encounters a deadly lifeform.',
     trailerYouTubeId: 'Xm4gNhVV6PQ',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: '2001-a-space-odyssey',
@@ -955,7 +955,7 @@ const popularFallbackMovies = [
     cast: ['Keir Dullea', 'Gary Lockwood', 'William Sylvester'],
     plot: 'After uncovering a mysterious artifact buried beneath the Lunar surface, a spacecraft is sent to Jupiter with the advanced AI computer HAL 9000.',
     trailerYouTubeId: 'oR_e9y-bka0',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'titanic',
@@ -969,7 +969,7 @@ const popularFallbackMovies = [
     cast: ['Leonardo DiCaprio', 'Kate Winslet', 'Billy Zane'],
     plot: 'A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic.',
     trailerYouTubeId: 'kVrqfYjkWUU',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'the-truman-show',
@@ -983,7 +983,7 @@ const popularFallbackMovies = [
     cast: ['Jim Carrey', 'Ed Harris', 'Laura Linney'],
     plot: 'An insurance salesman discovers his whole life is actually a reality TV show.',
     trailerYouTubeId: 'loTIzXSS7C0',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'dont-breathe',
@@ -995,9 +995,9 @@ const popularFallbackMovies = [
     language: 'English',
     director: 'Fede Álvarez',
     cast: ['Stephen Lang', 'Jane Levy', 'Dylan Minnette'],
-    plot: 'Three confident thieves think it\'s a risk-free bet to burglarize the house of a blind man, but they soon realize it\'s anything but that.',
+    plot: "Three confident thieves think it's a risk-free bet to burglarize the house of a blind man, but they soon realize it's anything but that.",
     trailerYouTubeId: '7upxU3i6BL4',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'bird-box',
@@ -1011,7 +1011,7 @@ const popularFallbackMovies = [
     cast: ['Sandra Bullock', 'Travis Fimmel', 'John Malkovich'],
     plot: 'Five years after a mysterious force wipes out human civilization, a mother and her two children make a desperate bid for safety.',
     trailerYouTubeId: 'o2AnhgQOKHs',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'wonder-woman',
@@ -1025,7 +1025,7 @@ const popularFallbackMovies = [
     cast: ['Gal Gadot', 'Chris Pine', 'Robin Wright'],
     plot: 'When a pilot crashes and tells of conflict in the outside world, Diana, an Amazonian warrior in training, leaves home to fight a war.',
     trailerYouTubeId: '1Q8fG0TtVAY',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'black-panther',
@@ -1036,10 +1036,10 @@ const popularFallbackMovies = [
     runtime: '2h 14m',
     language: 'English',
     director: 'Ryan Coogler',
-    cast: ['Chadwick Boseman', 'Michael B. Jordan', 'Lupita Nyong\'o'],
-    plot: 'T\'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future.',
+    cast: ['Chadwick Boseman', 'Michael B. Jordan', "Lupita Nyong'o"],
+    plot: "T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future.",
     trailerYouTubeId: '34PgqTOXaP4',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'avengers-endgame',
@@ -1053,7 +1053,7 @@ const popularFallbackMovies = [
     cast: ['Robert Downey Jr.', 'Chris Evans', 'Scarlett Johansson'],
     plot: 'After the devastating events of Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more.',
     trailerYouTubeId: 'TcMBFSGVi1c',
-    category: 'popular'
+    category: 'popular',
   },
   {
     slug: 'parasite-burning',
@@ -1065,9 +1065,9 @@ const popularFallbackMovies = [
     language: 'Korean',
     director: 'Lee Chang-dong',
     cast: ['Yoo Ah-in', 'Steven Yeun', 'Jung Yu-mi'],
-    plot: 'Jong-su encounters Hae-mi, who used to live in the same neighborhood. She asks him to look after her cat while she\'s on a trip to Africa.',
+    plot: "Jong-su encounters Hae-mi, who used to live in the same neighborhood. She asks him to look after her cat while she's on a trip to Africa.",
     trailerYouTubeId: '1VAuKFAgQ48',
-    category: 'top-rated'
+    category: 'top-rated',
   },
   {
     slug: 'oldboy',
@@ -1081,18 +1081,18 @@ const popularFallbackMovies = [
     cast: ['Choi Min-sik', 'Yoo Ji-tae', 'Kang Hye-jung'],
     plot: 'After being imprisoned for 15 years without knowing why, a man is released and given 5 days to find his captor.',
     trailerYouTubeId: '2HkjrJ6IK5',
-    category: 'top-rated'
+    category: 'top-rated',
   },
 ];
 
-const curatedSlugs = new Set(popularFallbackMovies.map((movie) => movie.slug))
+const curatedSlugs = new Set(popularFallbackMovies.map((movie) => movie.slug));
 const generatedMovies = (fetchedCatalog.movies || [])
   .filter((movie) => movie?.slug && !curatedSlugs.has(movie.slug))
   .map((movie) => ({
     ...movie,
     poster: movie.poster || makePosterUrl(movie.title),
     banner: movie.banner || makeBannerUrl(movie.title),
-  }))
+  }));
 
 const kdramaCatalogMovies = (kdramaCatalog || [])
   .filter((movie) => movie?.slug)
@@ -1101,7 +1101,7 @@ const kdramaCatalogMovies = (kdramaCatalog || [])
     poster: kdramaArt[movie.slug]?.poster || makePosterUrl(movie.title),
     banner: kdramaArt[movie.slug]?.banner || makeBannerUrl(movie.title),
     tmdbId: kdramaArt[movie.slug]?.tmdbId || null,
-  }))
+  }));
 
 const westernCatalogMovies = (westernCatalog || [])
   .filter((movie) => movie?.slug)
@@ -1109,7 +1109,7 @@ const westernCatalogMovies = (westernCatalog || [])
     ...movie,
     poster: movie.poster || makePosterUrl(movie.title),
     banner: movie.banner || makeBannerUrl(movie.title),
-  }))
+  }));
 
 export const movies = [
   ...popularFallbackMovies.map((movie) => {
@@ -1149,30 +1149,30 @@ export function getMoviesByGenre(genre) {
 
 export function getRecommendations(movie, count = 6) {
   if (!movie) return movies.slice(0, count);
-  const other = movies.filter(m => m.slug !== movie.slug);
-  const scored = other.map(m => {
+  const other = movies.filter((m) => m.slug !== movie.slug);
+  const scored = other.map((m) => {
     let score = 0;
-    score += m.genres.filter(g => movie.genres.includes(g)).length * 10;
+    score += m.genres.filter((g) => movie.genres.includes(g)).length * 10;
     score += Math.abs(m.year - movie.year) <= 3 ? 5 : 0;
     score += Math.abs(m.rating - movie.rating) <= 1 ? 3 : 0;
     score += m.rating;
     return { movie: m, score };
   });
   scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, count).map(s => s.movie);
+  return scored.slice(0, count).map((s) => s.movie);
 }
 
 export function getTopRecentlyAdded(count = 10) {
   const near = new Date();
   return [...movies]
-    .filter(m => m.year >= near.getFullYear() - 3 && m.rating >= 6)
+    .filter((m) => m.year >= near.getFullYear() - 3 && m.rating >= 6)
     .sort((a, b) => b.year - a.year || b.rating - a.rating)
     .slice(0, count);
 }
 
 export function getTrendingMovies(count = 5) {
   return [...movies]
-    .filter(m => m.rating >= 7)
+    .filter((m) => m.rating >= 7)
     .sort((a, b) => b.rating - a.rating)
     .slice(0, count);
 }

@@ -34,6 +34,7 @@ export function useMovieLesson(
   useEffect(() => {
     if (!enabled || !allowed || !supported) return;
     const controller = new AbortController();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     setLoading(true);
     setError('');
     try {
@@ -66,6 +67,7 @@ export function useMovieLesson(
   useEffect(() => {
     if (!mongolian) return;
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     setFingerprint('');
     transcriptFingerprint(settings.english, mongolian)
       .then((hash) => {
@@ -104,6 +106,7 @@ export function useMovieLesson(
     if (!enabled || !allowed || !supported || !englishSelection) return;
     const url = internalEnglishSource(englishSelection, window.location.origin);
     if (!url) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
       setError('English source нь same-origin subtitle URL биш байна. Local EN VTT сонгоно уу.');
       return;
     }

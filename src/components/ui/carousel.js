@@ -1,66 +1,66 @@
-'use client'
+'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-const CarouselContext = React.createContext(null)
+const CarouselContext = React.createContext(null);
 
 export function Carousel({ children, opts = {}, className = '' }) {
-  const trackRef = useRef(null)
-  const [canScrollPrev, setCanScrollPrev] = useState(false)
-  const [canScrollNext, setCanScrollNext] = useState(true)
+  const trackRef = useRef(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
 
   const scrollAmount = useMemo(() => {
-    return opts?.slideSize || 320
-  }, [opts])
+    return opts?.slideSize || 320;
+  }, [opts]);
 
   const updateButtons = () => {
-    const el = trackRef.current
-    if (!el) return
+    const el = trackRef.current;
+    if (!el) return;
 
-    const nearStart = el.scrollLeft <= 2
-    const nearEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2
+    const nearStart = el.scrollLeft <= 2;
+    const nearEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
 
-    setCanScrollPrev(!nearStart)
-    setCanScrollNext(!nearEnd)
-  }
+    setCanScrollPrev(!nearStart);
+    setCanScrollNext(!nearEnd);
+  };
 
   useEffect(() => {
-    updateButtons()
+    updateButtons();
 
-    const el = trackRef.current
-    if (!el) return
+    const el = trackRef.current;
+    if (!el) return;
 
-    const handleScroll = () => updateButtons()
-    const handleResize = () => updateButtons()
+    const handleScroll = () => updateButtons();
+    const handleResize = () => updateButtons();
 
-    el.addEventListener('scroll', handleScroll)
-    window.addEventListener('resize', handleResize)
+    el.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      el.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+      el.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const scrollByAmount = (direction) => {
-    const el = trackRef.current
-    if (!el) return
+    const el = trackRef.current;
+    if (!el) return;
 
     el.scrollBy({
       left: direction * scrollAmount,
       behavior: 'smooth',
-    })
-  }
+    });
+  };
 
   return (
     <CarouselContext.Provider value={{ trackRef, scrollByAmount, canScrollPrev, canScrollNext }}>
       <div className={`relative ${className}`}>{children}</div>
     </CarouselContext.Provider>
-  )
+  );
 }
 
 export function CarouselContent({ children, className = '' }) {
-  const { trackRef } = React.useContext(CarouselContext)
+  const { trackRef } = React.useContext(CarouselContext);
 
   return (
     <div
@@ -69,15 +69,15 @@ export function CarouselContent({ children, className = '' }) {
     >
       {children}
     </div>
-  )
+  );
 }
 
 export function CarouselItem({ children, className = '' }) {
-  return <div className={`flex-shrink-0 snap-start ${className}`}>{children}</div>
+  return <div className={`flex-shrink-0 snap-start ${className}`}>{children}</div>;
 }
 
 export function CarouselNext({ className = '' }) {
-  const { scrollByAmount, canScrollNext } = React.useContext(CarouselContext)
+  const { scrollByAmount, canScrollNext } = React.useContext(CarouselContext);
 
   return (
     <button
@@ -89,11 +89,11 @@ export function CarouselNext({ className = '' }) {
     >
       →
     </button>
-  )
+  );
 }
 
 export function CarouselPrevious({ className = '' }) {
-  const { scrollByAmount, canScrollPrev } = React.useContext(CarouselContext)
+  const { scrollByAmount, canScrollPrev } = React.useContext(CarouselContext);
 
   return (
     <button
@@ -105,5 +105,5 @@ export function CarouselPrevious({ className = '' }) {
     >
       ←
     </button>
-  )
+  );
 }

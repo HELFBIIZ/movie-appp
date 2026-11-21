@@ -1,20 +1,22 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
+import prettier from 'eslint-config-prettier';
 
-// The legacy application is JavaScript. Apply the new checks to SceneChain;
-// migrating unrelated payment/auth code is deliberately a separate milestone.
-const files = ['src/components/learning/**/*.{ts,tsx}', 'src/lib/learning/**/*.ts'];
 export default defineConfig([
-  ...nextVitals.map((config) => ({ ...config, files })),
-  ...nextTs.map((config) => ({ ...config, files })),
+  ...nextVitals,
+  ...nextTs,
+  prettier,
   {
-    files,
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
       eqeqeq: 'error',
-      'react-hooks/set-state-in-effect': 'off',
+      'no-console': ['warn', { allow: ['error'] }],
+      'prefer-const': 'error',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'error',
     },
   },
-  globalIgnores(['.next/**', 'node_modules/**']),
+  globalIgnores(['.next/**', 'node_modules/**', '.refactor-evidence/**', 'test-results/**']),
 ]);

@@ -1,29 +1,28 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { Play, Mountain, Star, Layers3 } from 'lucide-react'
+import Link from 'next/link';
+import Image from 'next/image';
+import { Play, Mountain, Star, Layers3 } from 'lucide-react';
 
 export default function WesternFeature({
   movies,
   eyebrow = 'Western Spotlight',
-  title = 'Western',
   viewAllHref = '/movies?category=western',
   viewAllLabel = 'Explore Western Series',
   stripTitle = 'More from the frontier',
 }) {
-  if (!movies || !movies.length) return null
+  if (!movies || !movies.length) return null;
 
-  const withArt = movies.filter(
-    (m) => m && m.poster && m.banner && (m.episodes ?? 0) > 1
-  )
-  const liveAction = withArt.filter((m) => !(m.genres || []).some((g) => g === 'Animation' || g === 'Animated'))
-  const pool = liveAction.length ? liveAction : withArt
+  const withArt = movies.filter((m) => m && m.poster && m.banner && (m.episodes ?? 0) > 1);
+  const liveAction = withArt.filter(
+    (m) => !(m.genres || []).some((g) => g === 'Animation' || g === 'Animated'),
+  );
+  const pool = liveAction.length ? liveAction : withArt;
   const ranked = [...pool].sort(
-    (a, b) => (b.rating || 0) - (a.rating || 0) || (b.year || 0) - (a.year || 0)
-  )
-  const featured = ranked[0] || movies[0]
-  const strip = ranked.filter((m) => m.slug !== featured.slug).slice(0, 6)
+    (a, b) => (b.rating || 0) - (a.rating || 0) || (b.year || 0) - (a.year || 0),
+  );
+  const featured = ranked[0] || movies[0];
+  const strip = ranked.filter((m) => m.slug !== featured.slug).slice(0, 6);
 
   return (
     <section className="relative overflow-hidden border-y border-slate-200 dark:border-slate-800 animate-scale-in">
@@ -137,5 +136,5 @@ export default function WesternFeature({
         </div>
       </div>
     </section>
-  )
+  );
 }

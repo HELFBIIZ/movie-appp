@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export function SkeletonPoster({ count = 6, className = '' }) {
   return (
@@ -13,14 +13,17 @@ export function SkeletonPoster({ count = 6, className = '' }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function SkeletonCard({ count = 3, className = '' }) {
   return (
     <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${className}`}>
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900">
+        <div
+          key={index}
+          className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900"
+        >
           <div className="skeleton aspect-video w-full rounded-xl" />
           <div className="mt-4 space-y-3">
             <div className="skeleton h-6 w-3/4 rounded" />
@@ -30,7 +33,7 @@ export function SkeletonCard({ count = 3, className = '' }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function SkeletonText({ lines = 3, className = '' }) {
@@ -42,12 +45,12 @@ export function SkeletonText({ lines = 3, className = '' }) {
           className="skeleton rounded"
           style={{
             height: '1rem',
-            width: `${85 - (index % 3) * 15}%`
+            width: `${85 - (index % 3) * 15}%`,
           }}
         />
       ))}
     </div>
-  )
+  );
 }
 
 export function SkeletonHero({ className = '' }) {
@@ -68,7 +71,7 @@ export function SkeletonHero({ className = '' }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function SkeletonCarousel({ count = 6, className = '' }) {
@@ -82,13 +85,11 @@ export function SkeletonCarousel({ count = 6, className = '' }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function SkeletonButton({ className = '' }) {
-  return (
-    <div className={`skeleton h-12 w-40 rounded ${className}`} />
-  )
+  return <div className={`skeleton h-12 w-40 rounded ${className}`} />;
 }
 
 export function SkeletonProfile({ className = '' }) {
@@ -100,7 +101,7 @@ export function SkeletonProfile({ className = '' }) {
         <div className="skeleton h-4 w-24 rounded" />
       </div>
     </div>
-  )
+  );
 }
 
 export function SkeletonPage({ className = '' }) {
@@ -114,5 +115,5 @@ export function SkeletonPage({ className = '' }) {
         <SkeletonPoster count={12} />
       </div>
     </div>
-  )
+  );
 }

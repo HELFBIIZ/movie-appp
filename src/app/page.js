@@ -1,15 +1,9 @@
-import Header from "@/components/Header"
-import Hero from "@/components/Hero"
-import Footer from "@/components/Footer"
-import SearchAndFilters from "@/components/SearchAndFilters"
-import WesternFeature from "@/components/WesternFeature"
-import {
-  movies,
-  topRatedMovies,
-  upcomingMovies,
-  westernMovies,
-  kdramas2026,
-} from "@/lib/movies"
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import Footer from '@/components/Footer';
+import SearchAndFilters from '@/components/SearchAndFilters';
+import WesternFeature from '@/components/WesternFeature';
+import { movies, topRatedMovies, upcomingMovies, westernMovies, kdramas2026 } from '@/lib/movies';
 
 export default function Home() {
   return (
@@ -25,8 +19,12 @@ export default function Home() {
         viewAllLabel="Explore K-Drama"
         stripTitle="New 2026 releases"
       />
-      <SearchAndFilters movies={movies} upcomingMovies={upcomingMovies} topRatedMovies={topRatedMovies} />
+      <SearchAndFilters
+        movies={movies}
+        upcomingMovies={upcomingMovies}
+        topRatedMovies={topRatedMovies}
+      />
       <Footer />
     </main>
-  )
+  );
 }

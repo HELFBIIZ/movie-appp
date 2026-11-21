@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.refactor-evidence/
+test-results/
+playwright-report/
+coverage/
+data/
+public/
+src/lib/*.json
+package-lock.json
+scenechain-demo/

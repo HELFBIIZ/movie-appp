@@ -11,11 +11,16 @@
     "backfill": "node scripts/backfill-media.mjs",
     "trailers": "node scripts/backfill-trailers.mjs",
     "qpay:watch": "node scripts/qpay-watcher.mjs",
-    "lint": "eslint src/components/learning src/lib/learning",
+    "lint": "eslint src tests playwright*.ts eslint.config.mjs lint-staged.config.mjs --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test:learning": "node --experimental-strip-types --test tests/learning.test.mjs",
     "test:browser": "playwright test",
-    "format:check": "prettier --check src/components/learning src/lib/learning tests/learning.test.mjs tests/browser playwright.config.ts tsconfig.json eslint.config.mjs scripts/create-learning-sample.mjs"
+    "format:check": "prettier --check src tests docs scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs *.json *.mjs playwright*.ts .github/workflows/ci.yml",
+    "format": "prettier --write src tests docs scripts/capture-refactor-baseline.mjs scripts/check-visual-regression.mjs scripts/prepare-hooks.mjs *.json *.mjs playwright*.ts .github/workflows/ci.yml",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test:regression": "playwright test --config playwright.refactor.config.ts",
+    "test:visual": "node scripts/check-visual-regression.mjs",
+    "prepare": "node scripts/prepare-hooks.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.12",
@@ -41,9 +46,15 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.3",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
     "nodemon": "^3.1.14",
     "prettier": "^3.10.1",
     "tailwindcss": "^4",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { useParams, notFound } from 'next/navigation'
-import { getMovieBySlug, movies } from '@/lib/movies'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import WatchlistButton from '@/components/WatchlistButton'
-import UserReviews from '@/components/UserReviews'
-import WhereToWatch from '@/components/WhereToWatch'
-import { BookOpen } from 'lucide-react'
+import Link from 'next/link';
+import Image from 'next/image';
+import { useParams, notFound } from 'next/navigation';
+import { getMovieBySlug, movies } from '@/lib/movies';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import WatchlistButton from '@/components/WatchlistButton';
+import UserReviews from '@/components/UserReviews';
+import WhereToWatch from '@/components/WhereToWatch';
+import { BookOpen } from 'lucide-react';
 
 export default function MoviePage() {
-  const { slug } = useParams()
-  const movie = getMovieBySlug(slug)
+  const { slug } = useParams();
+  const movie = getMovieBySlug(slug);
 
   if (!movie) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -145,18 +145,26 @@ export default function MoviePage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                 {(() => {
                   const recommended = movies
-                    .filter(m => m.slug !== movie.slug && m.genres.some(g => movie.genres.includes(g)))
+                    .filter(
+                      (m) =>
+                        m.slug !== movie.slug && m.genres.some((g) => movie.genres.includes(g)),
+                    )
                     .sort((a, b) => b.rating - a.rating)
                     .slice(0, 6);
-                  return recommended.map(m => (
+                  return recommended.map((m) => (
                     <Link key={m.slug} href={`/movie/${m.slug}`} className="group">
                       <div className="image-zoom relative aspect-[2/3] overflow-hidden rounded-xl">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- Preserve existing external/receipt image sizing and loading behavior. */}
                         <img src={m.poster} alt={m.title} className="h-full w-full object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                       </div>
                       <div className="mt-2 space-y-0.5">
-                        <p className="text-sm font-medium leading-tight line-clamp-1 group-hover:text-[#8a6d1f] dark:group-hover:text-amber-200 transition-colors">{m.title}</p>
-                        <p className="flex items-center gap-1 text-xs text-yellow-400">★ {m.rating} · {m.year}</p>
+                        <p className="text-sm font-medium leading-tight line-clamp-1 group-hover:text-[#8a6d1f] dark:group-hover:text-amber-200 transition-colors">
+                          {m.title}
+                        </p>
+                        <p className="flex items-center gap-1 text-xs text-yellow-400">
+                          ★ {m.rating} · {m.year}
+                        </p>
                       </div>
                     </Link>
                   ));
@@ -189,7 +197,10 @@ export default function MoviePage() {
                 )}
                 <li className="flex justify-between">
                   <span className="font-semibold text-slate-900 dark:text-white">Rating:</span>
-                  <span className="text-yellow-400">★ {movie.rating ?? '—'}{movie.rating ? '/10' : ''}</span>
+                  <span className="text-yellow-400">
+                    ★ {movie.rating ?? '—'}
+                    {movie.rating ? '/10' : ''}
+                  </span>
                 </li>
                 <li className="flex justify-between">
                   <span className="font-semibold text-slate-900 dark:text-white">Runtime:</span>
@@ -213,5 +224,5 @@ export default function MoviePage() {
 
       <Footer />
     </main>
-  )
+  );
 }

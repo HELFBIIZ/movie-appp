@@ -35,6 +35,7 @@ export default function SubtitleTranscript({
   const [page, setPage] = useState(0);
   const activeIndex = cues.findIndex((cue) => activeIds.includes(cue.id));
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     if (activeIndex >= 0) setPage(Math.floor(activeIndex / PAGE_SIZE));
   }, [activeIndex]);
   const pageCount = Math.max(1, Math.ceil(cues.length / PAGE_SIZE));

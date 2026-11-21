@@ -1,62 +1,63 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react';
 
 const TYPE_COLORS = {
-  sub: "bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300",
-  flatrate: "bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300",
-  ads: "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300",
-  free: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300",
-  rent: "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300",
-  buy: "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300",
-}
+  sub: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
+  flatrate: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
+  ads: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300',
+  free: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300',
+  rent: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300',
+  buy: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300',
+};
 
 function Badge({ type, label }) {
   return (
     <span
       className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
-        TYPE_COLORS[type] || "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+        TYPE_COLORS[type] || 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
       }`}
     >
       {label}
     </span>
-  )
+  );
 }
 
 export default function WhereToWatch({ tmdbId }) {
-  const [state, setState] = useState({ loading: Boolean(tmdbId), sources: [] })
-  const [error, setError] = useState(false)
+  const [state, setState] = useState({ loading: Boolean(tmdbId), sources: [] });
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!tmdbId) {
-      setState({ loading: false, sources: [] })
-      return
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
+      setState({ loading: false, sources: [] });
+      return;
     }
 
-    let cancelled = false
-    setState({ loading: true, sources: [] })
+    let cancelled = false;
+    setState({ loading: true, sources: [] });
 
     fetch(`/api/watchmode/sources?tmdbId=${encodeURIComponent(tmdbId)}`)
       .then((res) => (res.ok ? res.json() : { sources: [] }))
       .then((data) => {
         if (!cancelled) {
-          setState({ loading: false, sources: data.sources || [] })
-          setError(false)
+          setState({ loading: false, sources: data.sources || [] });
+          setError(false);
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setState({ loading: false, sources: [] })
-          setError(true)
+          setState({ loading: false, sources: [] });
+          setError(true);
         }
-      })
+      });
 
     return () => {
-      cancelled = true
-    }
-  }, [tmdbId])
+      cancelled = true;
+    };
+  }, [tmdbId]);
 
-  if (!tmdbId) return null
+  if (!tmdbId) return null;
 
   return (
     <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900">
@@ -90,7 +91,7 @@ export default function WhereToWatch({ tmdbId }) {
                 <span className="text-sm font-medium">{s.name}</span>
                 <Badge type={s.type} label={s.label} />
               </div>
-            )
+            );
             return s.url ? (
               <a
                 key={`${s.name}-${s.type}`}
@@ -108,10 +109,10 @@ export default function WhereToWatch({ tmdbId }) {
               >
                 {row}
               </div>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }

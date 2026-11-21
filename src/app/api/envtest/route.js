@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 const names = [
   'OPENSUBTITLES_API_KEY',
@@ -6,11 +6,11 @@ const names = [
   'OPENSUBTITLES_USERNAME',
   'OPENSUBTITLES_PASSWORD',
   'TRANSLATEAPI_API_KEY',
-]
+];
 
 export async function GET() {
   const info = Object.fromEntries(
-    names.map((n) => [n, process.env[n] ? `${process.env[n].length} chars set` : '(missing)'])
-  )
-  return NextResponse.json(info)
+    names.map((n) => [n, process.env[n] ? `${process.env[n].length} chars set` : '(missing)']),
+  );
+  return NextResponse.json(info);
 }

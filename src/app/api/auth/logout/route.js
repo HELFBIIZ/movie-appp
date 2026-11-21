@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server'
-import { deleteSession } from '../../../../lib/db.mjs'
+import { NextResponse } from 'next/server';
+import { deleteSession } from '../../../../lib/db.mjs';
 
-const COOKIE_NAME = 'mn_session'
+const COOKIE_NAME = 'mn_session';
 
 export async function POST(request) {
-  const token = request.cookies.get(COOKIE_NAME)?.value
+  const token = request.cookies.get(COOKIE_NAME)?.value;
   if (token) {
-    await deleteSession(token).catch(() => {})
+    await deleteSession(token).catch(() => {});
   }
-  const res = NextResponse.json({ ok: true })
-  res.cookies.set(COOKIE_NAME, '', { maxAge: 0, path: '/' })
-  return res
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(COOKIE_NAME, '', { maxAge: 0, path: '/' });
+  return res;
 }
 
 export async function GET(request) {
-  return POST(request)
+  return POST(request);
 }

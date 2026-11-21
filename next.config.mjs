@@ -7,13 +7,13 @@
 //     while blocking everything else from embedding or executing off-origin.
 //   • HSTS is emitted in all environments; harmless on localhost, essential on
 //     the production domain (add preload when you control HSTS preload lists).
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development';
 // React dev + our dynamic import('hls.js') need eval to rebuild callstacks —
 // NEVER ship 'unsafe-eval' to production. worker-src blob: is required by
 // hls.js's optional WebWorker (MediaSource buffering) in both envs.
 const scriptSrc = isDev
   ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : "script-src 'self' 'unsafe-inline'"
+  : "script-src 'self' 'unsafe-inline'";
 
 const securityHeaders = [
   {
@@ -54,14 +54,14 @@ const securityHeaders = [
       "worker-src 'self' blob:",
       // Player iframes. Several providers (multiembed, embedmaster) immediately
       // redirect to a separate player origin, so those must be allowlisted too.
-      "frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com",
+      'frame-src https://vidsrcme.ru https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://vidsrc.buzz https://vidcore.org https://www.youtube.com https://www.youtube-nocookie.com',
       "frame-ancestors 'none'",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
     ].join('; '),
   },
-]
+];
 
 const nextConfig = {
   reactCompiler: true,
@@ -71,7 +71,7 @@ const nextConfig = {
         source: '/:path*',
         headers: securityHeaders,
       },
-    ]
+    ];
   },
   images: {
     remotePatterns: [

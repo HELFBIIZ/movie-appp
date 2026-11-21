@@ -1,51 +1,52 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useMemo } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { movies } from '@/lib/movies'
+import { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { movies } from '@/lib/movies';
 
 const resizeImage = (url) => {
-  if (!url || url.startsWith('data:')) return url
-  return url.replace(/\/p\/w\d+/, '/p/w1280')
-}
+  if (!url || url.startsWith('data:')) return url;
+  return url.replace(/\/p\/w\d+/, '/p/w1280');
+};
 
 export default function Hero() {
-  const [activeMovie, setActiveMovie] = useState(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [activeMovie, setActiveMovie] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [, setCurrentIndex] = useState(0);
   const featured = useMemo(() => {
-    const pool = movies.filter((m) => m.banner && m.category !== 'upcoming')
+    const pool = movies.filter((m) => m.banner && m.category !== 'upcoming');
     const upcoming = movies
       .filter((m) => m.banner && m.category === 'upcoming')
-      .sort((a, b) => (b.year || 0) - (a.year || 0) || (b.rating || 0) - (a.rating || 0))
-    const starred = [...pool.filter((m) => m.category === 'top-rated' || m.category === 'popular')]
-    const merged = [...starred]
+      .sort((a, b) => (b.year || 0) - (a.year || 0) || (b.rating || 0) - (a.rating || 0));
+    const starred = [...pool.filter((m) => m.category === 'top-rated' || m.category === 'popular')];
+    const merged = [...starred];
     for (const m of upcoming) {
-      if (merged.length >= 5) break
-      if (!merged.some((x) => x.slug === m.slug)) merged.push(m)
+      if (merged.length >= 5) break;
+      if (!merged.some((x) => x.slug === m.slug)) merged.push(m);
     }
-    return (merged.length ? merged : movies.filter((m) => m.banner)).slice(0, 5)
-  }, [])
+    return (merged.length ? merged : movies.filter((m) => m.banner)).slice(0, 5);
+  }, []);
 
   useEffect(() => {
-    setActiveMovie(featured[0])
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
+    setActiveMovie(featured[0]);
 
     const interval = setInterval(() => {
-      setIsTransitioning(true)
+      setIsTransitioning(true);
       setTimeout(() => {
         setCurrentIndex((prev) => {
-          const next = (prev + 1) % featured.length
-          setActiveMovie(featured[next])
-          return next
-        })
-        setIsTransitioning(false)
-      }, 500)
-    }, 6000)
+          const next = (prev + 1) % featured.length;
+          setActiveMovie(featured[next]);
+          return next;
+        });
+        setIsTransitioning(false);
+      }, 500);
+    }, 6000);
 
-    return () => clearInterval(interval)
-  }, [featured])
+    return () => clearInterval(interval);
+  }, [featured]);
 
   if (!activeMovie) {
     return (
@@ -53,14 +54,14 @@ export default function Hero() {
         <div className="skeleton absolute inset-0" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
       </section>
-    )
+    );
   }
 
   const item = {
     ...activeMovie,
     banner: resizeImage(activeMovie.banner),
     poster: resizeImage(activeMovie.poster),
-  }
+  };
 
   return (
     <section
@@ -94,7 +95,10 @@ export default function Hero() {
           }`}
         >
           <div className="flex items-center gap-3 mb-2">
-            <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#d6b456]" aria-hidden="true" />
+            <span
+              className="h-px w-8 bg-gradient-to-r from-transparent to-[#d6b456]"
+              aria-hidden="true"
+            />
             <span className="rounded-full border border-[#c9a227]/40 bg-[#c9a227]/10 px-3 py-1 font-display text-xs font-semibold uppercase tracking-[0.22em] text-gold-soft">
               {item.category === 'top-rated' ? 'Hall of Fame' : 'Featured Premier'}
             </span>
@@ -146,8 +150,8 @@ export default function Hero() {
           <button
             key={m.slug}
             onClick={() => {
-              setCurrentIndex(idx)
-              setActiveMovie(m)
+              setCurrentIndex(idx);
+              setActiveMovie(m);
             }}
             className={`h-2 rounded-full transition-all duration-300 ${
               m.slug === item.slug
@@ -159,5 +163,5 @@ export default function Hero() {
         ))}
       </div>
     </section>
-  )
+  );
 }

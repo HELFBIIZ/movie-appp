@@ -1,46 +1,48 @@
-"use client"
+'use client';
 
-import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/carousel';
+import { Card, CardContent } from '@/components/ui/card';
 
 function useIntersectionObserver(options = {}) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true)
-        observer.disconnect()
-      }
-    }, { threshold: 0.1, ...options })
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, ...options },
+    );
 
     if (ref.current) {
-      observer.observe(ref.current)
+      observer.observe(ref.current);
     }
 
-    return () => observer.disconnect()
-  }, [options])
+    return () => observer.disconnect();
+  }, [options]);
 
-  return [ref, isVisible]
+  return [ref, isVisible];
 }
 
 export default function MovieCarousel({ title, movies, categoryTag }) {
-  const [ref, isVisible] = useIntersectionObserver()
+  const [ref, isVisible] = useIntersectionObserver();
 
   const seeMoreHref = categoryTag
     ? `/movies?category=${categoryTag}`
-    : `/movies?category=${encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'))}`
+    : `/movies?category=${encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'))}`;
 
   return (
     <section
@@ -61,10 +63,10 @@ export default function MovieCarousel({ title, movies, categoryTag }) {
             See more →
           </Link>
         </div>
- 
+
         <Carousel
           opts={{
-            align: "start",
+            align: 'start',
             loop: true,
           }}
           className="w-full"
@@ -77,7 +79,9 @@ export default function MovieCarousel({ title, movies, categoryTag }) {
                 style={{
                   animationDelay: `${index * 0.05}s`,
                   opacity: isVisible ? 1 : 0,
-                  animation: isVisible ? `fadeInUp 0.5s ease-out ${index * 0.05}s forwards` : 'none'
+                  animation: isVisible
+                    ? `fadeInUp 0.5s ease-out ${index * 0.05}s forwards`
+                    : 'none',
                 }}
               >
                 <Link href={`/movie/${movie.slug}`}>
@@ -97,7 +101,9 @@ export default function MovieCarousel({ title, movies, categoryTag }) {
                       <div className="mt-2.5 space-y-1">
                         <div className="flex items-center gap-1 text-sm">
                           <span className="text-[#d6b456]">★</span>
-                          <span className="font-medium text-[#6b5c33] dark:text-[#cdbf9c]">{movie.rating}/10</span>
+                          <span className="font-medium text-[#6b5c33] dark:text-[#cdbf9c]">
+                            {movie.rating}/10
+                          </span>
                         </div>
                         <p className="line-clamp-2 text-sm font-medium leading-snug text-[#3d341f] transition-colors hover:text-[#8a6d1f] dark:text-[#e9e2d3] dark:hover:text-amber-200">
                           {movie.title}
@@ -114,5 +120,5 @@ export default function MovieCarousel({ title, movies, categoryTag }) {
         </Carousel>
       </div>
     </section>
-  )
+  );
 }

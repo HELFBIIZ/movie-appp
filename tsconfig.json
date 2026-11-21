@@ -25,9 +25,10 @@
   },
   "include": [
     "next-env.d.ts",
-    "src/components/learning/**/*.ts",
-    "src/components/learning/**/*.tsx",
-    "src/lib/learning/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "playwright*.ts",
+    "tests/browser/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

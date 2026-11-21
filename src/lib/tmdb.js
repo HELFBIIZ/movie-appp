@@ -1,57 +1,23 @@
-import { movies as fallbackMovies } from './movies'
+import { movies as fallbackMovies } from './movies';
 
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
-const imageBase = 'https://image.tmdb.org/t/p/w500'
-const backdropBase = 'https://image.tmdb.org/t/p/original'
-
-const genreMap = {
-  28: 'Action',
-  12: 'Adventure',
-  16: 'Animation',
-  35: 'Comedy',
-  80: 'Crime',
-  99: 'Documentary',
-  18: 'Drama',
-  10751: 'Family',
-  14: 'Fantasy',
-  36: 'History',
-  27: 'Horror',
-  10402: 'Music',
-  9648: 'Mystery',
-  10749: 'Romance',
-  878: 'Sci-Fi',
-  10770: 'TV Movie',
-  53: 'Thriller',
-  10752: 'War',
-  37: 'Western',
-}
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const imageBase = 'https://image.tmdb.org/t/p/w500';
 
 function slugify(value) {
   return String(value)
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
+    .replace(/(^-|-$)/g, '');
 }
 
 async function getApiKey() {
-  return process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY
-}
-
-async function fetchWithRetry(url, options, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const res = await fetch(url, options)
-      if (res.ok) return res
-    } catch (e) {
-      if (i === retries - 1) throw e
-    }
-  }
+  return process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY;
 }
 
 async function fetchTrailerYouTubeId(movieId) {
-  const apiKey = await getApiKey()
-  if (!apiKey) return null
+  const apiKey = await getApiKey();
+  if (!apiKey) return null;
 
   try {
     const res = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?language=en-US`, {
@@ -60,27 +26,28 @@ async function fetchTrailerYouTubeId(movieId) {
         'Content-Type': 'application/json',
       },
       next: { revalidate: 86400 },
-    })
-    if (!res.ok) return null
+    });
+    if (!res.ok) return null;
 
-    const data = await res.json()
-    const videos = data.results || []
+    const data = await res.json();
+    const videos = data.results || [];
     const trailers = videos.filter(
-      (video) => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser')
-    )
+      (video) => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser'),
+    );
     const preferred =
-      trailers.find((video) => video.official) || trailers[0] ||
-      videos.find((video) => video.site === 'YouTube')
+      trailers.find((video) => video.official) ||
+      trailers[0] ||
+      videos.find((video) => video.site === 'YouTube');
 
-    return preferred?.key || null
+    return preferred?.key || null;
   } catch {
-    return null
+    return null;
   }
 }
 
 async function fetchCast(movieId, limit = 4) {
-  const apiKey = await getApiKey()
-  if (!apiKey) return []
+  const apiKey = await getApiKey();
+  if (!apiKey) return [];
 
   try {
     const res = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/credits?language=en-US`, {
@@ -89,19 +56,19 @@ async function fetchCast(movieId, limit = 4) {
         'Content-Type': 'application/json',
       },
       next: { revalidate: 86400 },
-    })
-    if (!res.ok) return []
+    });
+    if (!res.ok) return [];
 
-    const data = await res.json()
-    return (data.cast || []).slice(0, limit).map((c) => c.name)
+    const data = await res.json();
+    return (data.cast || []).slice(0, limit).map((c) => c.name);
   } catch {
-    return []
+    return [];
   }
 }
 
 async function fetchDirector(movieId) {
-  const apiKey = await getApiKey()
-  if (!apiKey) return null
+  const apiKey = await getApiKey();
+  if (!apiKey) return null;
 
   try {
     const res = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/credits?language=en-US`, {
@@ -110,22 +77,22 @@ async function fetchDirector(movieId) {
         'Content-Type': 'application/json',
       },
       next: { revalidate: 86400 },
-    })
-    if (!res.ok) return null
+    });
+    if (!res.ok) return null;
 
-    const data = await res.json()
-    const directors = (data.crew || []).filter((c) => c.job === 'Director')
-    return directors.length > 0 ? directors[0].name : null
+    const data = await res.json();
+    const directors = (data.crew || []).filter((c) => c.job === 'Director');
+    return directors.length > 0 ? directors[0].name : null;
   } catch {
-    return null
+    return null;
   }
 }
 
 function formatRuntime(minutes) {
-  if (!minutes) return null
-  const h = Math.floor(minutes / 60)
-  const m = minutes % 60
-  return `${h}h ${m}m`
+  if (!minutes) return null;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `${h}h ${m}m`;
 }
 
 const languageMap = {
@@ -141,10 +108,10 @@ const languageMap = {
   it: 'Italian',
   ar: 'Arabic',
   hi: 'Hindi',
-}
+};
 
 function normalizeLanguage(code) {
-  return languageMap[code] || (code ? code.charAt(0).toUpperCase() + code.slice(1) : 'English')
+  return languageMap[code] || (code ? code.charAt(0).toUpperCase() + code.slice(1) : 'English');
 }
 
 export async function normalizeTmdbMovie(movie) {
@@ -152,13 +119,13 @@ export async function normalizeTmdbMovie(movie) {
     fetchTrailerYouTubeId(movie.id),
     fetchCast(movie.id, 4),
     fetchDirector(movie.id),
-  ])
+  ]);
 
-  const genreNames = []
+  const genreNames = [];
   if (movie.genres) {
     movie.genres.forEach((g) => {
-      if (g.name) genreNames.push(g.name)
-    })
+      if (g.name) genreNames.push(g.name);
+    });
   }
 
   return {
@@ -176,14 +143,14 @@ export async function normalizeTmdbMovie(movie) {
     banner: movie.backdrop_path ? `${imageBase}${movie.backdrop_path}` : null,
     trailerYouTubeId: trailerId || null,
     category: 'tmdb',
-  }
+  };
 }
 
 export async function fetchTmdbMovies(page = 1) {
-  const apiKey = await getApiKey()
+  const apiKey = await getApiKey();
 
   if (!apiKey) {
-    return fallbackMovies
+    return fallbackMovies;
   }
 
   try {
@@ -193,64 +160,61 @@ export async function fetchTmdbMovies(page = 1) {
         'Content-Type': 'application/json',
       },
       next: { revalidate: 60 },
-    })
+    });
 
     if (!res.ok) {
-      return fallbackMovies
+      return fallbackMovies;
     }
 
-    const data = await res.json()
-    const results = (data.results || []).slice(0, 20)
+    const data = await res.json();
+    const results = (data.results || []).slice(0, 20);
 
-    const normalized = await Promise.all(
-      results.map((movie) => normalizeTmdbMovie(movie))
-    )
+    const normalized = await Promise.all(results.map((movie) => normalizeTmdbMovie(movie)));
 
-    return normalized
+    return normalized;
   } catch {
-    console.error('TMDB fetch failed, using fallback movies')
-    return fallbackMovies
+    console.error('TMDB fetch failed, using fallback movies');
+    return fallbackMovies;
   }
 }
 
 export async function searchTmdbMovies(query, page = 1) {
-  const apiKey = await getApiKey()
+  const apiKey = await getApiKey();
 
   if (!apiKey || !query) {
-    return fallbackMovies.filter((m) =>
-      m.title.toLowerCase().includes(query?.toLowerCase() || '')
-    )
+    return fallbackMovies.filter((m) => m.title.toLowerCase().includes(query?.toLowerCase() || ''));
   }
 
   try {
-    const res = await fetch(`${TMDB_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&language=en-US&page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${TMDB_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&language=en-US&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 60 },
       },
-      next: { revalidate: 60 },
-    })
+    );
 
     if (!res.ok) {
-      return []
+      return [];
     }
 
-    const data = await res.json()
-    const results = (data.results || []).slice(0, 20)
+    const data = await res.json();
+    const results = (data.results || []).slice(0, 20);
 
-    return Promise.all(
-      results.map((movie) => normalizeTmdbMovie(movie))
-    )
+    return Promise.all(results.map((movie) => normalizeTmdbMovie(movie)));
   } catch {
-    return []
+    return [];
   }
 }
 
 export async function getTmdbMovieDetails(movieId) {
-  const apiKey = await getApiKey()
+  const apiKey = await getApiKey();
 
   if (!apiKey) {
-    return null
+    return null;
   }
 
   try {
@@ -260,15 +224,15 @@ export async function getTmdbMovieDetails(movieId) {
         'Content-Type': 'application/json',
       },
       next: { revalidate: 3600 },
-    })
+    });
 
     if (!res.ok) {
-      return null
+      return null;
     }
 
-    const data = await res.json()
-    return normalizeTmdbMovie(data)
+    const data = await res.json();
+    return normalizeTmdbMovie(data);
   } catch {
-    return null
+    return null;
   }
 }

@@ -1,125 +1,160 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function PricingPage() {
-  const [me, setMe] = useState(null)
-  const [plans, setPlans] = useState([])
-  const [rewards, setRewards] = useState([])
-  const [myRewards, setMyRewards] = useState([])
-  const [busy, setBusy] = useState(null)
-  const [notice, setNotice] = useState(null)
-  const [bankPlan, setBankPlan] = useState('')
-  const [phone, setPhone] = useState('')
-  const [note, setNote] = useState('')
-  const [imageData, setImageData] = useState(null)
-  const [imageName, setImageName] = useState('')
+  const [me, setMe] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [rewards, setRewards] = useState([]);
+  const [myRewards, setMyRewards] = useState([]);
+  const [busy, setBusy] = useState(null);
+  const [notice, setNotice] = useState(null);
+  const [bankPlan, setBankPlan] = useState('');
+  const [phone, setPhone] = useState('');
+  const [note, setNote] = useState('');
+  const [imageData, setImageData] = useState(null);
+  const [imageName, setImageName] = useState('');
 
   useEffect(() => {
-    fetch('/api/auth/me').then((r) => (r.ok ? r.json() : null)).then((d) => setMe(d?.me ?? null))
-    fetch('/api/plans').then((r) => r.json()).then((d) => setPlans(d.plans ?? []))
-    fetch('/api/rewards').then((r) => r.json()).then((d) => {
-      setRewards(d.rewards ?? [])
-      setMyRewards(d.myRewards ?? [])
-    })
-  }, [])
+    fetch('/api/auth/me')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setMe(d?.me ?? null));
+    fetch('/api/plans')
+      .then((r) => r.json())
+      .then((d) => setPlans(d.plans ?? []));
+    fetch('/api/rewards')
+      .then((r) => r.json())
+      .then((d) => {
+        setRewards(d.rewards ?? []);
+        setMyRewards(d.myRewards ?? []);
+      });
+  }, []);
 
   async function checkout(planCode, provider) {
-    setBusy(`${planCode}:${provider}`)
-    setNotice(null)
+    setBusy(`${planCode}:${provider}`);
+    setNotice(null);
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ planCode, provider }),
-    })
-    const data = await res.json()
-    setBusy(null)
+    });
+    const data = await res.json();
+    setBusy(null);
     if (!res.ok) {
-      setNotice({ kind: 'error', text: `${data.error?.code ?? 'CHECKOUT_FAILED'}${data.error?.retryAfterSeconds ? ` (retry in ${data.error.retryAfterSeconds}s)` : ''}` })
-      return
+      setNotice({
+        kind: 'error',
+        text: `${data.error?.code ?? 'CHECKOUT_FAILED'}${data.error?.retryAfterSeconds ? ` (retry in ${data.error.retryAfterSeconds}s)` : ''}`,
+      });
+      return;
     }
     if (data.subscription) {
-      setNotice({ kind: 'ok', text: `VIP active until ${new Date(data.subscription.expiresAt).toLocaleDateString()} · ${data.payment.txnId}` })
-      const fresh = await (await fetch('/api/auth/me')).json()
-      setMe(fresh.me ?? null)
+      setNotice({
+        kind: 'ok',
+        text: `VIP active until ${new Date(data.subscription.expiresAt).toLocaleDateString()} · ${data.payment.txnId}`,
+      });
+      const fresh = await (await fetch('/api/auth/me')).json();
+      setMe(fresh.me ?? null);
     } else if (data.wire?.checkoutUrl) {
-      setNotice({ kind: 'ok', text: 'Төлбөрийн хуудас нээгдлээ — Wire-ээр төлнө уу.' })
-      window.open(data.wire.checkoutUrl, '_blank')
+      setNotice({ kind: 'ok', text: 'Төлбөрийн хуудас нээгдлээ — Wire-ээр төлнө уу.' });
+      window.open(data.wire.checkoutUrl, '_blank');
     } else if (data.qpay?.url) {
-      setNotice({ kind: 'ok', text: 'Invoice ready — open the QPay link to pay, then it activates automatically.' })
-      window.open(data.qpay.url, '_blank')
+      setNotice({
+        kind: 'ok',
+        text: 'Invoice ready — open the QPay link to pay, then it activates automatically.',
+      });
+      window.open(data.qpay.url, '_blank');
     } else {
-      setNotice({ kind: 'ok', text: data.note || 'Payment recorded as PENDING (no gateway configured for sandbox).' })
+      setNotice({
+        kind: 'ok',
+        text: data.note || 'Payment recorded as PENDING (no gateway configured for sandbox).',
+      });
     }
   }
 
   async function redeem(code) {
-    setBusy(`redeem:${code}`)
-    setNotice(null)
+    setBusy(`redeem:${code}`);
+    setNotice(null);
     const res = await fetch('/api/actions/redeem', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rewardCode: code }),
-    })
-    const data = await res.json()
-    setBusy(null)
+    });
+    const data = await res.json();
+    setBusy(null);
     if (!res.ok) {
-      setNotice({ kind: 'error', text: `${data.error?.code ?? 'REDEEM_FAILED'}${data.error?.needed ? ` — need ${data.error.needed} XP` : ''}` })
-      return
+      setNotice({
+        kind: 'error',
+        text: `${data.error?.code ?? 'REDEEM_FAILED'}${data.error?.needed ? ` — need ${data.error.needed} XP` : ''}`,
+      });
+      return;
     }
-    setNotice({ kind: 'ok', text: `Unlocked ${data.reward.name} (-${data.reward ? '' : ''}XP, balance ${data.xpBalance})` })
-    const fresh = await (await fetch('/api/auth/me')).json()
-    setMe(fresh.me ?? null)
-    const rw = await (await fetch('/api/rewards')).json()
-    setMyRewards(rw.myRewards ?? [])
+    setNotice({
+      kind: 'ok',
+      text: `Unlocked ${data.reward.name} (-${data.reward ? '' : ''}XP, balance ${data.xpBalance})`,
+    });
+    const fresh = await (await fetch('/api/auth/me')).json();
+    setMe(fresh.me ?? null);
+    const rw = await (await fetch('/api/rewards')).json();
+    setMyRewards(rw.myRewards ?? []);
   }
 
-  const bankPlans = plans.filter((p) => p.code === 'WEEKLY' || /^MONTHLY_\d+$/.test(p.code))
-  const selectedBankPlan = bankPlans.find((p) => p.code === bankPlan)
+  const bankPlans = plans.filter((p) => p.code === 'WEEKLY' || /^MONTHLY_\d+$/.test(p.code));
+  const selectedBankPlan = bankPlans.find((p) => p.code === bankPlan);
 
   function onFile(e) {
-    const file = e.target.files?.[0]
-    setImageData(null)
-    setImageName('')
-    if (!file) return
+    const file = e.target.files?.[0];
+    setImageData(null);
+    setImageName('');
+    if (!file) return;
     if (file.size > 1_500_000) {
-      setNotice({ kind: 'error', text: 'Receipt screenshot must be under 1.5 MB.' })
-      return
+      setNotice({ kind: 'error', text: 'Receipt screenshot must be under 1.5 MB.' });
+      return;
     }
-    const reader = new FileReader()
-    reader.onload = () => { setImageData(reader.result); setImageName(file.name) }
-    reader.readAsDataURL(file)
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageData(reader.result);
+      setImageName(file.name);
+    };
+    reader.readAsDataURL(file);
   }
 
   async function submitBank() {
     if (!bankPlan || !phone.trim()) {
-      setNotice({ kind: 'error', text: 'Pick a plan and enter your phone number.' })
-      return
+      setNotice({ kind: 'error', text: 'Pick a plan and enter your phone number.' });
+      return;
     }
-    setBusy('bank')
-    setNotice(null)
+    setBusy('bank');
+    setNotice(null);
     const res = await fetch('/api/payments/manual', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ planCode: bankPlan, phone: phone.trim(), note: note.trim() || null, imageData }),
-    })
-    const data = await res.json()
-    setBusy(null)
+      body: JSON.stringify({
+        planCode: bankPlan,
+        phone: phone.trim(),
+        note: note.trim() || null,
+        imageData,
+      }),
+    });
+    const data = await res.json();
+    setBusy(null);
     if (!res.ok) {
-      setNotice({ kind: 'error', text: data.error?.code ?? 'SUBMIT_FAILED' })
-      return
+      setNotice({ kind: 'error', text: data.error?.code ?? 'SUBMIT_FAILED' });
+      return;
     }
-    setNotice({ kind: 'ok', text: `Receipt submitted (${data.receipt.txnId}). VIP activates once an admin approves.` })
-    setImageData(null)
-    setImageName('')
-    setPhone('')
-    setNote('')
+    setNotice({
+      kind: 'ok',
+      text: `Receipt submitted (${data.receipt.txnId}). VIP activates once an admin approves.`,
+    });
+    setImageData(null);
+    setImageName('');
+    setPhone('');
+    setNote('');
   }
 
-  const fmt = (mnt) => `₮${mnt.toLocaleString('en-US')}`
+  const fmt = (mnt) => `₮${mnt.toLocaleString('en-US')}`;
 
   return (
     <main className="min-h-screen bg-slate-950 text-white page-enter">
@@ -131,7 +166,9 @@ export default function PricingPage() {
         {me && (
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm">
             <span>@{me.username}</span>
-            <span className="text-amber-300">◆ {me.xp} XP · Lv {me.level}</span>
+            <span className="text-amber-300">
+              ◆ {me.xp} XP · Lv {me.level}
+            </span>
             <span className={me.streakDays > 0 ? 'text-emerald-300' : 'text-slate-400'}>
               🔥 {me.streakDays}-day streak
             </span>
@@ -144,7 +181,9 @@ export default function PricingPage() {
         )}
 
         {notice && (
-          <div className={`mt-4 rounded-2xl border p-3 text-sm ${notice.kind === 'ok' ? 'border-emerald-700 bg-emerald-950/40 text-emerald-300' : 'border-red-700 bg-red-950/40 text-red-300'}`}>
+          <div
+            className={`mt-4 rounded-2xl border p-3 text-sm ${notice.kind === 'ok' ? 'border-emerald-700 bg-emerald-950/40 text-emerald-300' : 'border-red-700 bg-red-950/40 text-red-300'}`}
+          >
             {notice.text}
           </div>
         )}
@@ -156,7 +195,9 @@ export default function PricingPage() {
               <div key={p.code} className="luxe-card rounded-2xl p-5">
                 <div className="text-[#c9a227] text-xs uppercase tracking-wider">{p.code}</div>
                 <div className="mt-1 text-lg font-semibold break-words">{p.name}</div>
-                <div className="mt-2 text-2xl font-bold gradient-text inline-block">{fmt(p.priceMnt)}</div>
+                <div className="mt-2 text-2xl font-bold gradient-text inline-block">
+                  {fmt(p.priceMnt)}
+                </div>
                 <div className="text-sm text-slate-400">{p.durationDays} days</div>
                 <div className="mt-4 flex flex-col gap-2">
                   <button
@@ -189,21 +230,34 @@ export default function PricingPage() {
         <section className="mt-10">
           <h2 className="text-xl font-semibold">Pay by Khan Bank transfer</h2>
           <p className="mt-1 text-sm text-slate-400">
-            Send the plan amount to the account below, then upload your receipt screenshot (or note the transfer ID) and phone number. An operator approves it manually and your VIP is extended automatically.
+            Send the plan amount to the account below, then upload your receipt screenshot (or note
+            the transfer ID) and phone number. An operator approves it manually and your VIP is
+            extended automatically.
           </p>
 
           <div className="mt-4 grid gap-3 rounded-2xl border border-[#d6b456]/20 bg-black/30 p-5 sm:grid-cols-3">
             <div>
               <div className="font-display text-2xl text-gold-soft">1.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">Хүссэн төлөвлөгөөгөө доор сонгоно уу (WEEKLY / MONTHLY / уян хатан сарууд).</p>
+              <p className="mt-1 text-sm text-[#cdbf9c]">
+                Хүссэн төлөвлөгөөгөө доор сонгоно уу (WEEKLY / MONTHLY / уян хатан сарууд).
+              </p>
             </div>
             <div>
               <div className="font-display text-2xl text-gold-soft">2.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">Khan Bank-р төлөвлөгөөний дүнг данс руу шилжүүлнэ: <span className="font-semibold text-amber-200">Taivanbaatar — MN550005005771031864</span>.</p>
+              <p className="mt-1 text-sm text-[#cdbf9c]">
+                Khan Bank-р төлөвлөгөөний дүнг данс руу шилжүүлнэ:{' '}
+                <span className="font-semibold text-amber-200">
+                  Taivanbaatar — MN550005005771031864
+                </span>
+                .
+              </p>
             </div>
             <div>
               <div className="font-display text-2xl text-gold-soft">3.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">Утасны дугаар, гүйлгээний мэдээлэл эсвэл чек-зураг оруулаад «Submit receipt» дарна. Администратор баталгаажуулсны дараа VIP сунгагдана.</p>
+              <p className="mt-1 text-sm text-[#cdbf9c]">
+                Утасны дугаар, гүйлгээний мэдээлэл эсвэл чек-зураг оруулаад «Submit receipt» дарна.
+                Администратор баталгаажуулсны дараа VIP сунгагдана.
+              </p>
             </div>
           </div>
 
@@ -216,7 +270,10 @@ export default function PricingPage() {
               <div className="select-all rounded-lg bg-black/40 px-3 py-2 font-mono text-sm font-semibold text-amber-300">
                 MN550005005771031864
               </div>
-              <div className="mt-4 text-xs text-slate-500">No gateway fee — funds go straight to the merchant account; the app only records receipts for approval.</div>
+              <div className="mt-4 text-xs text-slate-500">
+                No gateway fee — funds go straight to the merchant account; the app only records
+                receipts for approval.
+              </div>
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
@@ -262,10 +319,20 @@ export default function PricingPage() {
                   <div className="mt-1 flex items-center gap-3">
                     <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-slate-600 px-4 py-2 text-sm text-slate-300 hover:border-amber-500/50 hover:text-white">
                       {imageName || 'Choose image…'}
-                      <input type="file" accept="image/png,image/jpeg,image/webp" onChange={onFile} className="hidden" />
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={onFile}
+                        className="hidden"
+                      />
                     </label>
                     {imageData && (
-                      <img src={imageData} alt="receipt preview" className="h-14 w-14 rounded-lg border border-slate-700 object-cover" />
+                      // eslint-disable-next-line @next/next/no-img-element -- Preserve existing external/receipt image sizing and loading behavior.
+                      <img
+                        src={imageData}
+                        alt="receipt preview"
+                        className="h-14 w-14 rounded-lg border border-slate-700 object-cover"
+                      />
                     )}
                   </div>
                 </div>
@@ -290,23 +357,37 @@ export default function PricingPage() {
 
         <section className="mt-10">
           <h2 className="text-xl font-semibold">XP shop</h2>
-          <p className="mt-1 text-sm text-slate-400">Earn XP by watching, rating, reviewing and logging in daily. Spend it here.</p>
+          <p className="mt-1 text-sm text-slate-400">
+            Earn XP by watching, rating, reviewing and logging in daily. Spend it here.
+          </p>
           {!me ? (
-            <p className="mt-3 text-sm text-slate-400"><Link href="/login" className="text-[#c9a227] hover:underline dark:text-amber-200">Sign in</Link> to redeem.</p>
+            <p className="mt-3 text-sm text-slate-400">
+              <Link href="/login" className="text-[#c9a227] hover:underline dark:text-amber-200">
+                Sign in
+              </Link>{' '}
+              to redeem.
+            </p>
           ) : null}
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {rewards.map((r) => {
-              const owned = myRewards.some((m) => m.code === r.code)
+              const owned = myRewards.some((m) => m.code === r.code);
               // VIP passes are consumable — re-buyable after expiry; cosmetics stay one-time.
-              const reusable = r.type === 'feature' && (r.days || 0) > 0
-              const locked = owned && !reusable
-              const tooPoor = me && !locked && me.xp < r.xpPrice
+              const reusable = r.type === 'feature' && (r.days || 0) > 0;
+              const locked = owned && !reusable;
+              const tooPoor = me && !locked && me.xp < r.xpPrice;
               return (
-                <div key={r.code} className={`rounded-2xl border p-5 ${owned && !reusable ? 'border-emerald-700 bg-emerald-950/30' : 'border-slate-800 bg-slate-900'}`}>
+                <div
+                  key={r.code}
+                  className={`rounded-2xl border p-5 ${owned && !reusable ? 'border-emerald-700 bg-emerald-950/30' : 'border-slate-800 bg-slate-900'}`}
+                >
                   <div className="text-xs uppercase tracking-wider text-amber-300">{r.type}</div>
                   <div className="mt-1 font-semibold">{r.name}</div>
                   <div className="mt-1 text-sm text-slate-400">{r.description}</div>
-                  {r.days > 0 && <div className="mt-1 text-sm text-gold-soft">VIP +{r.days} days{owned ? ' · дахин авч сунгаж болно' : ''}</div>}
+                  {r.days > 0 && (
+                    <div className="mt-1 text-sm text-gold-soft">
+                      VIP +{r.days} days{owned ? ' · дахин авч сунгаж болно' : ''}
+                    </div>
+                  )}
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-amber-300 font-semibold">◆ {r.xpPrice} XP</span>
                     <button
@@ -318,16 +399,21 @@ export default function PricingPage() {
                     </button>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </section>
 
         <p className="mt-10 text-xs text-slate-500">
-          Payments MNT (₮). Wire-ээр төлбөр pay.wire.mn дээрх hosted хуудсаар төлнө; QPay/QR-ээр төлнө; bank буюу Khan Bank шилжүүлэг admin-аар баталгаажуулна (<Link href="/admin/payments" className="text-amber-400 hover:underline">admin review page</Link>).
+          Payments MNT (₮). Wire-ээр төлбөр pay.wire.mn дээрх hosted хуудсаар төлнө; QPay/QR-ээр
+          төлнө; bank буюу Khan Bank шилжүүлэг admin-аар баталгаажуулна (
+          <Link href="/admin/payments" className="text-amber-400 hover:underline">
+            admin review page
+          </Link>
+          ).
         </p>
       </div>
       <Footer />
     </main>
-  )
+  );
 }

@@ -15,6 +15,7 @@ export function useLesson(source: 'sample' | 'local' | 'movie') {
   useEffect(() => {
     if (source !== 'sample') return;
     const controller = new AbortController();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     setLoading(true);
     setError('');
     Promise.all(
@@ -40,6 +41,7 @@ export function useLesson(source: 'sample' | 'local' | 'movie') {
   useEffect(() => {
     if (!local) return;
     const url = URL.createObjectURL(local.file);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     setLocalUrl(url);
     return () => URL.revokeObjectURL(url);
   }, [local]);

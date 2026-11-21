@@ -63,6 +63,7 @@ export function useLearningController(
   }, []);
   // Readiness belongs to a media key; never reset it after a native event.
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
     setTime(0);
     setSelection(null);
     setMessage('');
