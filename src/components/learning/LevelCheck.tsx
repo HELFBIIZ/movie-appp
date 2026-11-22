@@ -11,6 +11,7 @@ import {
   type PlacementProfile,
 } from '@/lib/learning/placement';
 import { usePlacementProfile } from './usePlacementProfile';
+import { useLearningAccount } from './LearningAccount';
 
 let shownInMemory = false;
 export default function LevelCheck() {
@@ -19,6 +20,7 @@ export default function LevelCheck() {
   const pathname = usePathname();
   const router = useRouter();
   const { loaded, profile, error, save } = usePlacementProfile();
+  const { scope, sync } = useLearningAccount();
   const [stage, setStage] = useState<'welcome' | 'quiz' | 'result'>('welcome');
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<PlacementAnswers>({});
@@ -45,6 +47,7 @@ export default function LevelCheck() {
   useEffect(() => {
     if (
       !loaded ||
+      (scope !== 'guest' && !sync) ||
       profile ||
       shownInMemory ||
       !/^\/(?:$|movies$|movie\/|watch\/|learn$|learning$)/.test(pathname ?? '')
@@ -57,7 +60,7 @@ export default function LevelCheck() {
     }
     shownInMemory = true;
     if (dialog.current && !dialog.current.open) dialog.current.showModal();
-  }, [loaded, profile, pathname]);
+  }, [loaded, profile, pathname, scope, sync]);
   useEffect(() => {
     if (stage !== 'welcome') heading.current?.focus();
   }, [stage, index]);
