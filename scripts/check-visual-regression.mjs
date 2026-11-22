@@ -8,7 +8,11 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'vxnta-visual-'));
 assert.ok(path.resolve(temporary).startsWith(path.resolve(os.tmpdir()) + path.sep));
-const baseline = path.join(temporary, 'production');
+const baseline = path.join(temporary, 'learning-baseline');
+// The requested placement/dashboard/payment UI intentionally changes the old
+// refactor baseline. Compare this reviewed feature implementation, rebuilt in
+// the same browser, while retaining the original baseline in Git history.
+const baselineCommit = '1771883174ed100d409b9822f5338b86939ceee9';
 const env = { ...process.env };
 for (const key of Object.keys(env)) {
   if (/TURSO|CLERK|WIRE_|QPAY_|OPENSUBTITLES|TRANSLATE|TMDB|^NETLIFY$/.test(key)) delete env[key];
@@ -66,7 +70,7 @@ async function capture(cwd, port, update) {
 }
 let added = false;
 try {
-  run('git', ['worktree', 'add', '--detach', baseline, 'c120658b904a2942134f31323a54f78d414659b5']);
+  run('git', ['worktree', 'add', '--detach', baseline, baselineCommit]);
   added = true;
   run(process.execPath, [npmCli, 'ci', '--no-audit', '--no-fund'], baseline);
   run(process.execPath, [npmCli, 'run', 'build'], baseline);

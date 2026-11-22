@@ -44,3 +44,5 @@ The existing database client is retained. Additive tables are created lazily: `l
 Before release, run Node 22 lint, TypeScript, formatting, unit tests, production build and browser tests. Browser evidence distinguishes real local account/API tests, native exercise media, mocked player/payment protocol checks, and any public live checks. A successful mock checkout is not a real movie playback or settlement verification.
 
 The visual baseline for this feature release must reflect the intentionally requested test, dashboard, navigation and payment changes. Keep the original refactor baseline available in Git history; do not claim the new screens are identical to the old refactor UI.
+
+The feature visual baseline is pinned to `1771883174ed100d409b9822f5338b86939ceee9`. CI rebuilds that commit and the proposed head in the same browser, runs the current regression contracts against both, and compares screenshots without a pixel tolerance. The original refactor baseline remains available at `de51971` and its earlier CI history. The required quality job also runs for release PRs targeting `vercel-turso`.
