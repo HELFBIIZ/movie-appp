@@ -27,6 +27,9 @@ const blankArt =
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200"><rect width="800" height="1200" fill="#334155"/></svg>';
 
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() =>
+    sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
+  );
   await page.clock.install({ time: new Date('2026-11-21T03:00:00Z') });
   await page.clock.pauseAt(new Date('2026-11-21T04:00:00Z'));
   await page.route('**/api/auth/me', (route) =>
@@ -96,14 +99,17 @@ for (const [name, route] of [
   ['login', '/login'],
   ['pricing', '/pricing'],
   ['learning', '/learn'],
+  ['dashboard', '/learning'],
 ]) {
-  test(`preserved ${name} desktop and mobile appearance`, async ({ page }) => {
+  test(`current ${name} desktop and mobile appearance`, async ({ page }) => {
     await page.goto(route);
     await ready(page);
     if (name === 'watch')
       await expect(page.getByRole('heading', { level: 2 })).toContainText('нэвтэрнэ');
     if (name === 'pricing')
       await expect(page.getByText('Monthly Unlimited', { exact: true }).first()).toBeVisible();
+    if (name === 'dashboard')
+      await expect(page.getByText('Сонссон минут', { exact: true })).toBeVisible();
     await appearance(page, `${name}-desktop.png`);
     await page.setViewportSize({ width: 390, height: 844 });
     await appearance(page, `${name}-mobile.png`);
@@ -231,21 +237,38 @@ test('all five existing player URLs remain selectable without loading third-part
   }
 });
 
-test('checkout keeps its provider payload and errors without creating a payment', async ({
+test('checkout sends server-priced plan and safe return route without creating a payment', async ({
   page,
 }) => {
   const submitted: unknown[] = [];
+  await page.route('**/api/auth/me', (route) => route.fulfill({ json: { me } }));
+  await page.route('**/api/learning/state', (route) =>
+    route.fulfill({
+      json: {
+        revision: 0,
+        snapshot: {
+          progress: { items: [], contextCorrect: 0, contextIncorrect: 0 },
+          assessments: [],
+          activity: [],
+        },
+      },
+    }),
+  );
+  await page.route('**/api/payment-options', (route) =>
+    route.fulfill({ json: { bank: true, wire: true, qpay: true, demo: false } }),
+  );
   await page.route('**/api/checkout', async (route) => {
     submitted.push(route.request().postDataJSON());
     await route.fulfill({ status: 503, json: { error: { code: 'FIXTURE_PROVIDER_UNAVAILABLE' } } });
   });
   await page.goto('/pricing');
-  await page.getByRole('button', { name: 'Buy with card (demo)', exact: true }).click();
-  await expect(page.getByText('FIXTURE_PROVIDER_UNAVAILABLE', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Buy with card (demo)', exact: true })).toHaveCount(
+    0,
+  );
   await page.getByRole('button', { name: /Wire-ээр төлөх/ }).click();
   await page.getByRole('button', { name: /QPay-ээр төлөх/ }).click();
   expect(submitted).toEqual(
-    ['local_dev', 'wire', 'qpay'].map((provider) => ({ planCode: 'MONTHLY', provider })),
+    ['wire', 'qpay'].map((provider) => ({ planCode: 'MONTHLY', provider, returnTo: '/learning' })),
   );
 });
 
@@ -264,7 +287,7 @@ test('real guest API contracts keep account, VIP, admin and payment gates', asyn
   expect(favorites.status()).toBe(200);
   expect(await favorites.json()).toEqual({ favorites: [] });
   const options = await request.get('/api/payment-options');
-  expect(await options.json()).toEqual({ bank: true, qpay: false, demo: false });
+  expect(await options.json()).toEqual({ bank: true, qpay: false, demo: false, wire: false });
   const catalog = await request.get('/api/plans');
   expect(catalog.status()).toBe(200);
   expect((await catalog.json()).plans.length).toBeGreaterThan(0);

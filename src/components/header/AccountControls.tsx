@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, BookOpen } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +10,13 @@ type Props = { isLoggedIn: boolean; handleLogout: () => Promise<void> };
 export default function AccountControls({ isLoggedIn, handleLogout }: Props) {
   return (
     <>
+      <Link
+        href="/learning"
+        aria-label="Миний сургалтын ахиц"
+        className="rounded-lg p-2 text-[#c9a227] hover:bg-white/5"
+      >
+        <BookOpen className="h-5 w-5" />
+      </Link>
       {isLoggedIn ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

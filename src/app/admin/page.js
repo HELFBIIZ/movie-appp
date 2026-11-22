@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AdminCaptionUpload from '@/components/learning/AdminCaptionUpload';
 
 const fmtMnt = (mnt) => `₮${Number(mnt || 0).toLocaleString()}`;
 const fmtDate = (iso) => new Date((iso ?? '') + (iso?.includes('T') ? '' : 'Z')).toLocaleString();
@@ -110,6 +111,7 @@ export default function AdminPage() {
 
         {data && (
           <>
+            <AdminCaptionUpload />
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-8">
               <Card label="Users" value={data.stats.users} />
               <Card

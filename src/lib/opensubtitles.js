@@ -37,9 +37,9 @@ export async function osSearch({ tmdbId, lang, title, year, type, season, episod
   if (!apiKey) return null;
 
   const params = new URLSearchParams();
-  if (tmdbId) params.set('tmdb_id', tmdbId);
-  if (title) params.set('query', title);
-  if (year) params.set('year', year);
+  if (tmdbId) params.set(type === 'episode' ? 'parent_tmdb_id' : 'tmdb_id', tmdbId);
+  if (!tmdbId && title) params.set('query', title);
+  if (year && type !== 'episode') params.set('year', year);
   if (lang) params.set('languages', lang);
   params.set('type', type || 'movie');
   if (type === 'episode' && season !== null && season !== undefined)
@@ -47,7 +47,10 @@ export async function osSearch({ tmdbId, lang, title, year, type, season, episod
   if (type === 'episode' && episode !== null && episode !== undefined)
     params.set('episode_number', String(episode));
 
-  const res = await fetch(`${OS_API}/subtitles?${params}`, { headers: osHeaders() });
+  const res = await fetch(`${OS_API}/subtitles?${params}`, {
+    headers: osHeaders(),
+    signal: AbortSignal.timeout(12000),
+  });
   if (!res.ok) return null;
   const data = await res.json();
 
@@ -64,6 +67,11 @@ export async function osSearch({ tmdbId, lang, title, year, type, season, episod
       rating: attrs.ratings,
       downloadCount: attrs.download_count,
       format: file?.format,
+      tmdbId: attrs.feature_details?.tmdb_id,
+      parentTmdbId: attrs.feature_details?.parent_tmdb_id,
+      season: attrs.feature_details?.season_number,
+      episode: attrs.feature_details?.episode_number,
+      machineTranslated: Boolean(attrs.machine_translated || attrs.ai_translated),
     };
   });
 }

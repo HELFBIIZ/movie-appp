@@ -37,6 +37,29 @@ export function internalEnglishSource(input: string, origin: string): string | n
   }
 }
 
+export function internalMongolianSource(
+  input: string,
+  origin: string,
+  subtitleKey: string,
+): string | null {
+  const source = internalEnglishSource(input, origin);
+  if (source) return source;
+  try {
+    const url = new URL(input, origin);
+    return url.origin === origin &&
+      !url.search &&
+      !url.hash &&
+      !url.username &&
+      !url.password &&
+      (url.pathname === `/api/subtitles/mongolian/${encodeURIComponent(subtitleKey)}` ||
+        /^\/api\/subtitles\/translated\/[a-f0-9-]{36}$/i.test(url.pathname))
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function shiftCues(cues: Cue[], offset: number): Cue[] {
   if (!Number.isFinite(offset) || Math.abs(offset) > 600)
     throw new Error('Offset: −600…600 секунд.');

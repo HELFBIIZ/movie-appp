@@ -11,6 +11,9 @@ async function selectSource(page: Page, name: string) {
   await settings.locator('summary').first().click();
 }
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() =>
+    sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
+  );
   await page.route('**/api/subtitles/**', (request) => request.fulfill({ status: 404, body: '' }));
   // Only mock the read/access response, never create users, subscriptions or XP.
   await page.route('**/api/watch/inception', (request) =>
@@ -76,7 +79,9 @@ test('corrupt stored data is reported without silently replacing existing data',
   page,
 }) => {
   await page.evaluate(() => localStorage.setItem('vxnta.scenechain.v1', '{broken'));
+  await page.reload();
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await selectSource(page, 'Сургалтын жишээ');
   await expect(
     page.getByRole('region', { name: 'SceneChain Learning Dock' }).getByRole('alert'),
   ).toContainText('Browser storage уншиж чадсангүй');
@@ -93,6 +98,7 @@ test('normal watch gate remains intact and sample works inside the same route', 
   await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toBeVisible();
+  await selectSource(page, 'Сургалтын жишээ');
   await expect(page).toHaveURL(new RegExp(`${route}$`));
   const video = page.getByLabel('The Last Train sample lesson video');
   await expect
@@ -144,7 +150,7 @@ test('normal watch gate remains intact and sample works inside the same route', 
   expect(saved.contextIncorrect).toBe(1);
   await selectSource(page, 'Кино');
   await expect(
-    page.getByText('Хадмал тоглуулагчтай холбогдоогүй байна.', { exact: true }),
+    page.getByText('Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.', { exact: true }),
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Кино үзэхийн тулд нэвтэрнэ үү' })).toBeVisible();
   await page.getByRole('button', { name: 'Кино үзэх', exact: true }).click();
@@ -168,6 +174,8 @@ test('authorized normal watch retains five iframe providers; sample never claims
   await providers.selectOption('cine');
   await expect(page.getByTitle('Inception player')).toHaveAttribute('src', /cinesrc\.st/);
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await expect(page.getByTitle('Inception player')).toBeVisible();
+  await selectSource(page, 'Сургалтын жишээ');
   await expect(page.getByTitle('Inception player')).toHaveCount(0);
   await selectSource(page, 'Кино');
   await expect(page.getByTitle('Inception player')).toBeVisible();
@@ -180,6 +188,7 @@ test('mobile layout fits viewport and storage failures do not report saved succe
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
+  await selectSource(page, 'Сургалтын жишээ');
   await page.getByRole('button', { name: 'Explain train', exact: true }).first().click();
   await page.evaluate(() => {
     Storage.prototype.setItem = () => {

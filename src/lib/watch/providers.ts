@@ -1,4 +1,5 @@
 import type { Movie } from '../../types/movie';
+import { playerCaptionUrl, captionLanguage, type SelectedCaption } from './captions.ts';
 type ProviderMovie = Pick<Movie, 'tmdbId'> | null | undefined;
 export type PlayerTab = { id: string; label: string; url: string | null };
 export function vidsrcUrl(
@@ -7,16 +8,17 @@ export function vidsrcUrl(
   season: number,
   episode: number,
   subSlug?: string,
+  selection?: SelectedCaption,
 ): string | null {
   if (!movie?.tmdbId) return null;
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const subUrl =
-    subSlug && origin ? `${origin}/api/subtitles/mongolian/${encodeURIComponent(subSlug)}` : null;
+  const subUrl = playerCaptionUrl(origin, subSlug, selection);
   const base = isTV
     ? `https://vidsrcme.ru/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
     : `https://vidsrcme.ru/embed/movie/${movie.tmdbId}`;
   if (!subUrl) return base;
-  return `${base}?sub_url=${encodeURIComponent(subUrl)}&sub_label=${encodeURIComponent('Mongolian')}&sub_lang=mn`;
+  const label = selection?.label || 'Mongolian';
+  return `${base}?sub_url=${encodeURIComponent(subUrl)}&sub_label=${encodeURIComponent(label)}&sub_lang=${captionLanguage(label)}`;
 }
 
 export function cinesrcUrl(
@@ -49,19 +51,19 @@ export function embedMasterUrl(
   season: number,
   episode: number,
   subSlug?: string,
+  selection?: SelectedCaption,
 ): string | null {
   if (!movie?.tmdbId) return null;
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const base = isTV
     ? `https://embedmaster.link/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
     : `https://embedmaster.link/movie/${movie.tmdbId}`;
-  const subUrl =
-    subSlug && origin ? `${origin}/api/subtitles/mongolian/${encodeURIComponent(subSlug)}` : null;
+  const subUrl = playerCaptionUrl(origin, subSlug, selection);
   const params = ['skin=onyx', 'welcome_page=off'];
   if (subUrl) {
     params.push(
       `sub_url[]=${encodeURIComponent(subUrl)}`,
-      `sub_label[]=${encodeURIComponent('Mongolian')}`,
+      `sub_label[]=${encodeURIComponent(selection?.label || 'Mongolian')}`,
     );
   }
   return `${base}?${params.join('&')}`;
@@ -85,13 +87,14 @@ export function getPlayerTabs(
   season: number,
   episode: number,
   subSlug?: string,
+  selection?: SelectedCaption,
 ): PlayerTab[] {
   return movie?.tmdbId
     ? [
         {
           id: 'vidsrc',
           label: 'Player 1 · VidSrc',
-          url: vidsrcUrl(movie, isTV, season, episode, subSlug),
+          url: vidsrcUrl(movie, isTV, season, episode, subSlug, selection),
         },
         {
           id: 'cine',
@@ -106,7 +109,7 @@ export function getPlayerTabs(
         {
           id: 'embedmaster',
           label: 'Player 4 · EmbedMaster',
-          url: embedMasterUrl(movie, isTV, season, episode, subSlug),
+          url: embedMasterUrl(movie, isTV, season, episode, subSlug, selection),
         },
         {
           id: 'embedapi',

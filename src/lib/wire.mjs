@@ -1,107 +1,113 @@
-// src/lib/wire.mjs — Wire.mn payment API client (server-only).
-//
-// Flow: create PaymentIntent → create checkout session → redirect user to pay.wire.mn
-// Webhook verifies signature and activates subscription.
-//
-// Env:
-//   WIRE_API_BASE      https://api.wire.mn
-//   WIRE_SECRET_KEY    sk_live_...
-//   WIRE_SIGNING_SECRET  whsec_... (webhook endpoint secret)
-import crypto from 'crypto';
-
+// Official protocol: https://docs.wire.mn/en/docs/quickstart
+import crypto from 'node:crypto';
 const env = (key) => process.env[key]?.trim();
-
-function wireHeaders(idempotencyKey) {
-  const h = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${env('WIRE_SECRET_KEY')}`,
-  };
-  if (idempotencyKey) h['Idempotency-Key'] = idempotencyKey;
-  return h;
+export function wireConfigured() {
+  return Boolean(
+    (env('WIRE_SECRET_KEY') || env('WIRE_API_KEY')) &&
+    (!env('WIRE_API_BASE') || env('WIRE_API_BASE').replace(/\/$/, '') === 'https://api.wire.mn'),
+  );
 }
-
-/** Create a PaymentIntent on Wire.mn */
-export async function createPaymentIntent({ amountMnt, description, reference, idempotencyKey }) {
-  const base = env('WIRE_API_BASE');
-  const key = env('WIRE_SECRET_KEY');
-  if (!base || !key) return null;
-
+async function wireRequest(path, body, idempotencyKey) {
+  if (!wireConfigured()) return null;
   try {
-    const res = await fetch(`${base}/v1/payment_intents`, {
-      method: 'POST',
+    const response = await fetch(`https://api.wire.mn/v1${path}`, {
+      method: body ? 'POST' : 'GET',
       cache: 'no-store',
-      headers: wireHeaders(idempotencyKey),
-      body: JSON.stringify({
-        currency: 'MNT',
-        amount: amountMnt,
-        description: String(description || '').slice(0, 500),
-        metadata: reference ? { reference } : undefined,
-      }),
+      signal: AbortSignal.timeout(12_000),
+      headers: {
+        Authorization: `Bearer ${env('WIRE_SECRET_KEY') || env('WIRE_API_KEY')}`,
+        'Content-Type': 'application/json',
+        ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+      },
+      ...(body ? { body: JSON.stringify(body) } : {}),
     });
-    if (!res.ok) {
-      const body = (await res.text()).slice(0, 400);
-      console.error(`[Wire] createPaymentIntent HTTP ${res.status}: ${body}`);
-      return { error: { status: res.status, body } };
-    }
-    return await res.json();
-  } catch (err) {
-    const msg = String(err?.message || err);
-    console.error(`[Wire] createPaymentIntent fetch failed: ${msg}`);
-    return { error: { message: msg.slice(0, 200) } };
+    if (!response.ok) return { error: { code: 'WIRE_GATEWAY_ERROR', status: response.status } };
+    return await response.json();
+  } catch {
+    return { error: { code: 'WIRE_UNAVAILABLE' } };
   }
 }
-
-/** Create a checkout session and return the hosted pay URL */
-export async function createCheckoutSession({ paymentIntentId, successUrl, idempotencyKey }) {
-  const base = env('WIRE_API_BASE');
-  const key = env('WIRE_SECRET_KEY');
-  if (!base || !key) return null;
-
+export function createPaymentIntent({ amountMnt, description, reference, idempotencyKey }) {
+  if (!Number.isSafeInteger(amountMnt) || amountMnt <= 0)
+    return Promise.resolve({ error: { code: 'INVALID_AMOUNT' } });
+  return wireRequest(
+    '/payment_intents',
+    {
+      currency: 'MNT',
+      amount: amountMnt,
+      description: String(description || '').slice(0, 500),
+      metadata: { reference },
+    },
+    idempotencyKey,
+  );
+}
+export function createCheckoutSession({ paymentIntentId, successUrl, cancelUrl, idempotencyKey }) {
+  return wireRequest(
+    '/checkout/sessions',
+    { payment_intent: paymentIntentId, success_url: successUrl, cancel_url: cancelUrl },
+    idempotencyKey,
+  );
+}
+export function retrievePaymentIntent(id) {
+  if (typeof id !== 'string' || !/^pi_[a-zA-Z0-9_-]{1,150}$/.test(id))
+    return Promise.resolve({ error: { code: 'INVALID_INTENT' } });
+  return wireRequest(`/payment_intents/${encodeURIComponent(id)}`);
+}
+export function hostedCheckoutUrl(input) {
   try {
-    const body = { payment_intent: paymentIntentId };
-    if (successUrl) body.success_url = successUrl;
-
-    const res = await fetch(`${base}/v1/checkout/sessions`, {
-      method: 'POST',
-      cache: 'no-store',
-      headers: wireHeaders(idempotencyKey),
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      const text = (await res.text()).slice(0, 400);
-      console.error(`[Wire] createCheckoutSession HTTP ${res.status}: ${text}`);
-      return { error: { status: res.status, body: text } };
-    }
-    return await res.json();
-  } catch (err) {
-    const msg = String(err?.message || err);
-    console.error(`[Wire] createCheckoutSession fetch failed: ${msg}`);
-    return { error: { message: msg.slice(0, 200) } };
+    const url = new URL(input);
+    return url.origin === 'https://pay.wire.mn' &&
+      /^\/c\/cs_[a-zA-Z0-9_-]+$/.test(url.pathname) &&
+      !url.username &&
+      !url.password &&
+      !url.hash
+      ? url.href
+      : null;
+  } catch {
+    return null;
   }
 }
-
-/**
- * Verify a Wire webhook signature.
- * Header format: WirePayment-Signature: t=<unix>,v1=<hex-hmac>
- * HMAC-SHA256(secret, "<t>.<rawBody>")
- */
-export function verifyWireSignature(rawBody, signatureHeader, secret) {
+export function wirePaymentMatches(payment, intent) {
+  return Boolean(
+    payment &&
+    intent &&
+    payment.provider === 'wire' &&
+    typeof intent.id === 'string' &&
+    intent.id === payment.providerRef &&
+    Number.isSafeInteger(intent.amount) &&
+    intent.amount === Number(payment.amountMnt) &&
+    intent.currency === 'MNT' &&
+    payment.currency === 'MNT' &&
+    intent.status === 'succeeded' &&
+    (!intent.metadata?.reference || intent.metadata.reference === payment.txnId),
+  );
+}
+export function webhookIntent(event) {
+  const data = event?.data;
+  if (!data || typeof data !== 'object') return null;
+  const intent = data.object && typeof data.object === 'object' ? data.object : data;
+  return typeof intent.id === 'string' && /^pi_[a-zA-Z0-9_-]{1,150}$/.test(intent.id)
+    ? intent
+    : null;
+}
+export function verifyWireSignature(rawBody, signatureHeader, secret, now = Date.now()) {
   if (!rawBody || !signatureHeader || !secret) return false;
   try {
-    const parts = {};
-    for (const part of signatureHeader.split(',')) {
-      const [k, v] = part.split('=');
-      if (k && v) parts[k.trim()] = v.trim();
-    }
-    const t = parts.t;
-    const v1 = parts.v1;
-    if (!t || !v1) return false;
-
-    const payload = `${t}.${typeof rawBody === 'string' ? rawBody : rawBody.toString('utf8')}`;
-    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-
-    if (expected.length !== v1.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(v1));
+    const parts = signatureHeader.split(',').map((part) => part.trim().split('='));
+    const timestamps = parts.filter(([key]) => key === 't');
+    if (timestamps.length !== 1 || !/^\d{1,12}$/.test(timestamps[0][1])) return false;
+    const timestamp = timestamps[0][1];
+    if (Math.abs(now / 1000 - Number(timestamp)) >= 300) return false;
+    const expected = crypto
+      .createHmac('sha256', secret)
+      .update(`${timestamp}.${Buffer.isBuffer(rawBody) ? rawBody.toString('utf8') : rawBody}`)
+      .digest();
+    return parts.some(
+      ([key, value]) =>
+        key === 'v1' &&
+        /^[a-f0-9]{64}$/i.test(value || '') &&
+        crypto.timingSafeEqual(expected, Buffer.from(value, 'hex')),
+    );
   } catch {
     return false;
   }

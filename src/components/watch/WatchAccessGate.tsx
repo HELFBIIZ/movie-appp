@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { WatchGate } from '@/types/api';
-type Props = { showMoviePlayer: boolean; gate: WatchGate };
-export default function WatchAccessGate({ showMoviePlayer, gate }: Props) {
+type Props = { showMoviePlayer: boolean; gate: WatchGate; returnTo?: string };
+export default function WatchAccessGate({ showMoviePlayer, gate, returnTo = '/learning' }: Props) {
   return (
     <>
       {showMoviePlayer && gate.status === 'loading' && (
@@ -25,14 +25,14 @@ export default function WatchAccessGate({ showMoviePlayer, gate }: Props) {
           <div className="mt-5 flex gap-3">
             {gate.statusCode === 401 ? (
               <Link
-                href="/login"
+                href={`/login?next=${encodeURIComponent(returnTo)}`}
                 className="rounded-xl bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-5 py-2.5 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110"
               >
                 Нэвтрэх
               </Link>
             ) : (
               <Link
-                href="/pricing"
+                href={`/pricing?returnTo=${encodeURIComponent(returnTo)}`}
                 className="rounded-xl bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-5 py-2.5 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110"
               >
                 VIP эрх авах

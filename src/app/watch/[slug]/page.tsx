@@ -9,7 +9,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SubtitlePanel from '@/components/SubtitlePanel';
 import LearningModeToggle from '@/components/learning/LearningModeToggle';
-import { SPIDER_MAN } from '@/lib/learning/movie';
 import WatchAccessGate from '@/components/watch/WatchAccessGate';
 import MoviePlayer from '@/components/watch/MoviePlayer';
 import EpisodeSelector from '@/components/watch/EpisodeSelector';
@@ -41,24 +40,29 @@ export default function WatchPage() {
 
   const [subtitleUrl, setSubtitleUrl] = useState<string | null>(null);
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian');
-  const handleSubtitleChange = useCallback((url: string | null, label?: string) => {
+  const [subtitleEnabled, setSubtitleEnabled] = useState(true);
+  const handleSubtitleChange = useCallback((url: string | null, label?: string, enabled = true) => {
     setSubtitleUrl(url);
+    setSubtitleEnabled(enabled);
     if (label) setSubtitleLabel(label);
   }, []);
   const [source, setSource] = useState('vidsrc');
   const [learning, setLearning] = useState(false);
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    if (new URLSearchParams(window.location.search).get('learn') === '1') setLearning(true);
+    if (new URLSearchParams(window.location.search).get('learn') === '1') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Restore learning mode from the existing watch URL after hydration.
+      setLearning(true);
+      setSource('cine');
+    }
   }, [slug]);
-  const [learningSource, setLearningSource] = useState<LearningSource>(() =>
-    slug === SPIDER_MAN.slug ? 'movie' : 'sample',
-  );
+  const [learningSource, setLearningSource] = useState<LearningSource>('movie');
   const movieIframeRef = useRef<HTMLIFrameElement>(null);
   const showMoviePlayer = !learning || learningSource === 'movie';
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    setLearningSource(slug === SPIDER_MAN.slug ? 'movie' : 'sample');
+    setLearningSource(
+      new URLSearchParams(window.location.search).get('media') === 'local' ? 'local' : 'movie',
+    );
     setSubtitleUrl(null);
     setSubtitleLabel('Mongolian');
   }, [slug]);
@@ -68,7 +72,11 @@ export default function WatchPage() {
     : slug;
   // Five players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3),
   // EmbedMaster (4, MN track), Embed API Stream (5).
-  const visibleTabs = getPlayerTabs(movie, isTV, season, episode, subSlug);
+  const visibleTabs = getPlayerTabs(movie, isTV, season, episode, subSlug, {
+    url: subtitleUrl,
+    label: subtitleLabel,
+    enabled: subtitleEnabled,
+  });
   const activeEmbed = visibleTabs.find((t) => t.id === source)?.url || null;
 
   const sourceAvailable = visibleTabs.some((tab) => tab.id === source);
@@ -107,9 +115,19 @@ export default function WatchPage() {
           </div>
         </div>
 
-        <LearningModeToggle enabled={learning} onChange={setLearning} />
+        <LearningModeToggle
+          enabled={learning}
+          onChange={(next) => {
+            setLearning(next);
+            if (next && learningSource === 'movie') setSource('cine');
+          }}
+        />
 
-        <WatchAccessGate showMoviePlayer={showMoviePlayer} gate={gate} />
+        <WatchAccessGate
+          showMoviePlayer={showMoviePlayer}
+          gate={gate}
+          returnTo={`/watch/${slug}${learning ? '?learn=1' : ''}`}
+        />
 
         {gate.status === 'allowed' && (
           <>
@@ -161,7 +179,7 @@ export default function WatchPage() {
         )}
         {learning && (
           <LearningDock
-            key={slug}
+            key={subSlug}
             movieId={slug}
             movieTitle={movie.title}
             source={learningSource}
@@ -173,6 +191,11 @@ export default function WatchPage() {
               iframeRef: movieIframeRef,
               onSelectProvider: setSource,
               englishSubtitleUrl: subtitleLabel === 'English' ? subtitleUrl : undefined,
+              mongolianSubtitleUrl: subtitleLabel === 'Mongolian' ? subtitleUrl : undefined,
+              mediaType: isTV ? 'tv' : 'movie',
+              season,
+              episode,
+              subtitleKey: subSlug,
             }}
           />
         )}

@@ -2,6 +2,7 @@ export interface PaymentOptions {
   bank: boolean;
   qpay: boolean;
   demo: boolean;
+  wire: boolean;
 }
 
 export interface SubscriptionPlan {

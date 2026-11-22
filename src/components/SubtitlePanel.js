@@ -100,24 +100,27 @@ export default function SubtitlePanel({
     let cancelled = false;
 
     async function checkInstant() {
+      setInstantReady(false);
+      setSubtitleUrl(null);
+      setLoadedLabel(null);
+      onSubtitleChange?.(null, 'Mongolian');
       const candidates = [];
       if (isTV) {
         candidates.push(
           `/api/subtitles/mongolian/${encodeURIComponent(`${slug}-S${String(season ?? 1).padStart(2, '0')}E${String(episode).padStart(2, '0')}`)}`,
         );
-        if (Number(episode) === 1) {
-          candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`);
-        }
       } else {
         candidates.push(`/api/subtitles/mongolian/${encodeURIComponent(slug)}`);
       }
 
       let okPath = null;
+      let partial = false;
       for (const path of candidates) {
         if (cancelled) return;
         try {
           const res = await fetch(path);
           if (res.ok) {
+            partial = res.headers.get('x-subtitle-partial') === 'true';
             okPath = path;
             break;
           }
@@ -127,6 +130,7 @@ export default function SubtitlePanel({
       if (okPath) {
         setInstantReady(true);
         applyInstantMongolian(okPath);
+        if (partial) setTranslateWarning('Монгол хадмалын зарим мөр орчуулагдаагүй байна.');
       }
       setInstantChecked(true);
     }
@@ -135,7 +139,7 @@ export default function SubtitlePanel({
     return () => {
       cancelled = true;
     };
-  }, [slug, applyInstantMongolian, isTV, season, episode]);
+  }, [slug, applyInstantMongolian, isTV, season, episode, onSubtitleChange]);
 
   const searchSubtitles = useCallback(async () => {
     if (!tmdbId) return;
@@ -207,12 +211,12 @@ export default function SubtitlePanel({
         setSubtitleUrl(data.link);
         setSubtitlesEnabled(true);
         setSearchResults([]);
-        setIsMongolian(false);
         const found =
           typeof sub === 'object'
             ? sub
             : searchResults.find((r) => (r.fileId ?? r.subId) === fileId);
         const label = labelFor(found);
+        setIsMongolian(label === 'Mongolian');
         setLoadedLabel(label);
         onSubtitleChange?.(data.link, label);
       } catch {
@@ -259,7 +263,7 @@ export default function SubtitlePanel({
       }
       if (data.partial) {
         setTranslateWarning(
-          'Mongolian translation is partial — the free daily character limit was reached. Remaining lines are untranslated. Add TranslateAPI credits or retry tomorrow.',
+          'Монгол орчуулга дутуу байна. Зарим мөр эх хэлээрээ үлдсэн тул өөр хадмал сонгох эсвэл дараа дахин оролдоно уу.',
         );
       }
       onSubtitleChange?.(absUrl, 'Mongolian');
@@ -292,7 +296,7 @@ export default function SubtitlePanel({
     setTranslateWarning(null);
     setTranslateInfo(null);
     setSearchNotice(null);
-    onSubtitleChange?.(null);
+    onSubtitleChange?.(null, undefined, false);
   }, [onSubtitleChange]);
 
   const selectLanguage = useCallback(
@@ -308,7 +312,7 @@ export default function SubtitlePanel({
       setTranslateWarning(null);
       setTranslateInfo(null);
       setSearchNotice(null);
-      onSubtitleChange?.(null);
+      onSubtitleChange?.(null, undefined, false);
     },
     [onSubtitleChange],
   );
@@ -332,7 +336,13 @@ export default function SubtitlePanel({
           </span>
         )}
         <span className="ml-auto text-sm text-slate-400">
-          {hasSubtitles && subtitlesEnabled ? 'Active' : hasSubtitles ? 'Paused' : 'No subtitles'}
+          {hasSubtitles && subtitlesEnabled
+            ? translateWarning
+              ? 'Дутуу'
+              : 'Active'
+            : hasSubtitles
+              ? 'Paused'
+              : 'No subtitles'}
         </span>
         <svg
           className={`h-4 w-4 text-slate-400 transition-transform ${subtitleOpen ? 'rotate-180' : ''}`}
@@ -471,7 +481,12 @@ export default function SubtitlePanel({
               </span>
 
               <button
-                onClick={() => setSubtitlesEnabled((prev) => !prev)}
+                onClick={() => {
+                  const next = !subtitlesEnabled;
+                  setSubtitlesEnabled(next);
+                  onSubtitleChange?.(next ? subtitleUrl : null, displayLabel, next);
+                }}
+                aria-label={subtitlesEnabled ? 'Хадмал унтраах' : 'Хадмал асаах'}
                 className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
                 style={{ backgroundColor: subtitlesEnabled ? '#22c55e' : '#475569' }}
               >

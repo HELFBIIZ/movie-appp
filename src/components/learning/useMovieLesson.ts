@@ -5,82 +5,163 @@ import { MAX_VTT_BYTES } from '@/lib/learning/vtt';
 import {
   movieCues,
   internalEnglishSource,
+  internalMongolianSource,
   parseExistingVtt,
-  SPIDER_MAN,
   transcriptFingerprint,
 } from '@/lib/learning/movie';
+import type { MoviePlayerContext } from './useMoviePlayer';
 
 const settingsSchema = z.object({
   english: z.string().max(MAX_VTT_BYTES),
+  mongolian: z.string().max(MAX_VTT_BYTES).default(''),
   enOffset: z.number().finite().min(-600).max(600),
   mnOffset: z.number().finite().min(-600).max(600),
 });
-const settingsKey = 'vxnta.scenechain.movie.969681.v1';
-const initialSettings = { english: '', enOffset: 0, mnOffset: 0 };
+const initial = { english: '', mongolian: '', enOffset: 0, mnOffset: 0 };
 export function useMovieLesson(
   enabled: boolean,
   allowed: boolean,
   movieId: string,
-  englishSelection?: string | null,
+  context?: MoviePlayerContext,
 ) {
-  const [settings, setSettings] = useState(initialSettings);
-  const settingsRef = useRef(initialSettings);
-  const [mongolian, setMongolian] = useState('');
-  const [fingerprint, setFingerprint] = useState('');
+  const subtitleKey = context?.subtitleKey ?? movieId;
+  const prefix =
+    context?.mediaType === 'tv'
+      ? `tv:${context.tmdbId}:${context.season}:${context.episode}`
+      : `movie:${context?.tmdbId ?? movieId}`;
+  const settingsKey = `vxnta.scenechain.captions.${subtitleKey}.v2`;
+  const [settings, setSettings] = useState(initial);
+  const settingsRef = useRef(initial);
+  const [fingerprintState, setFingerprint] = useState({ english: '', mongolian: '', hash: '' });
+  const fingerprint =
+    fingerprintState.english === settings.english &&
+    fingerprintState.mongolian === settings.mongolian
+      ? fingerprintState.hash
+      : '';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [retry, setRetry] = useState(0);
-  const supported = movieId === SPIDER_MAN.slug;
+  const change = useCallback(
+    (next: typeof initial) => {
+      const valid = settingsSchema.parse(next);
+      settingsRef.current = valid;
+      setSettings(valid);
+      try {
+        localStorage.setItem(settingsKey, JSON.stringify(valid));
+        setError('');
+      } catch {
+        setError('Хадмал энэ удаад нээгдсэн ч хөтөчид хадгалагдсангүй.');
+      }
+    },
+    [settingsKey],
+  );
+  const season = context?.season ?? 1;
+  const episode = context?.episode ?? 1;
+  const mediaType = context?.mediaType ?? 'movie';
   useEffect(() => {
-    if (!enabled || !allowed || !supported) return;
+    if (!enabled || !allowed) return;
     const controller = new AbortController();
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    setLoading(true);
-    setError('');
-    try {
-      const raw = localStorage.getItem(settingsKey);
-      if (raw) {
-        if (raw.length > 1_100_000) throw new Error('Too large');
-        const saved = settingsSchema.parse(JSON.parse(raw));
+    const load = async () => {
+      setLoading(true);
+      setError('');
+      setNotice('');
+      try {
+        const raw =
+          localStorage.getItem(settingsKey) ??
+          (movieId === 'spider-man-brand-new-day'
+            ? localStorage.getItem('vxnta.scenechain.movie.969681.v1')
+            : null);
+        const saved = raw ? settingsSchema.parse(JSON.parse(raw)) : initial;
         if (saved.english) parseExistingVtt(saved.english);
+        if (saved.mongolian) parseExistingVtt(saved.mongolian);
         settingsRef.current = saved;
         setSettings(saved);
+      } catch {
+        setError('Өмнөх хадмалын тохиргоог уншиж чадсангүй. Хуучин өгөгдлийг устгаагүй.');
       }
-    } catch {
-      setError('Өмнөх EN/offset тохиргоог уншиж чадсангүй. Хуучин өгөгдлийг устгаагүй.');
-    }
-    fetch(SPIDER_MAN.subtitleUrl, { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error('MN subtitle unavailable');
-        const text = await response.text();
-        if (!parseExistingVtt(text).length) throw new Error('Empty subtitles');
-        if (!controller.signal.aborted) setMongolian(text);
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) setError('Одоогийн MN VTT ачаалсангүй.');
-      })
-      .finally(() => {
+      try {
+        const query = new URLSearchParams({
+          slug: movieId,
+          season: String(season),
+          episode: String(episode),
+          type: mediaType,
+        });
+        const response = await fetch(`/api/learning/subtitles?${query}`, {
+          signal: controller.signal,
+        });
+        const data = z
+          .object({ english: z.string(), mongolian: z.string(), notice: z.string() })
+          .parse(await response.json());
+        if (!response.ok) throw new Error('Хадмал ачаалсангүй.');
+        if (controller.signal.aborted) return;
+        if (data.english) parseExistingVtt(data.english);
+        if (data.mongolian) parseExistingVtt(data.mongolian);
+        const next = {
+          ...settingsRef.current,
+          english: settingsRef.current.english || data.english,
+          mongolian: settingsRef.current.mongolian || data.mongolian,
+        };
+        change(next);
+        setNotice(data.notice);
+      } catch {
+        if (!controller.signal.aborted)
+          setNotice('Автомат хадмал олдсонгүй. Хадмалын хэсгээс сонгох эсвэл EN/MN .vtt нэмээрэй.');
+      } finally {
         if (!controller.signal.aborted) setLoading(false);
-      });
+      }
+    };
+    void load();
     return () => controller.abort();
-  }, [enabled, allowed, supported, retry]);
+  }, [enabled, allowed, movieId, settingsKey, season, episode, mediaType, change, retry]);
+  const englishSelection = context?.englishSubtitleUrl;
+  const mongolianSelection = context?.mongolianSubtitleUrl;
   useEffect(() => {
-    if (!mongolian) return;
+    if (!enabled || !allowed) return;
+    const controller = new AbortController();
+    const selections = [
+      ['english', englishSelection],
+      ['mongolian', mongolianSelection],
+    ] as const;
+    for (const [language, selection] of selections) {
+      if (!selection) continue;
+      const url =
+        language === 'mongolian'
+          ? internalMongolianSource(selection, window.location.origin, subtitleKey)
+          : internalEnglishSource(selection, window.location.origin);
+      if (!url) continue;
+      void fetch(url, { signal: controller.signal })
+        .then(async (response) => {
+          if (!response.ok) throw new Error();
+          const text = await response.text();
+          if (!parseExistingVtt(text).length) throw new Error();
+          if (!controller.signal.aborted) change({ ...settingsRef.current, [language]: text });
+        })
+        .catch(() => {
+          if (!controller.signal.aborted)
+            setError('Сонгосон хадмал нээгдсэнгүй. .vtt файл сонгож болно.');
+        });
+    }
+    return () => controller.abort();
+  }, [enabled, allowed, englishSelection, mongolianSelection, subtitleKey, change]);
+  useEffect(() => {
     let cancelled = false;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    setFingerprint('');
-    transcriptFingerprint(settings.english, mongolian)
-      .then((hash) => {
-        if (!cancelled) setFingerprint(hash);
+    void transcriptFingerprint(settings.english, settings.mongolian)
+      .then((value) => {
+        if (!cancelled)
+          setFingerprint({ english: settings.english, mongolian: settings.mongolian, hash: value });
       })
       .catch(() => {
-        if (!cancelled) setError('Transcript fingerprint үүсгэж чадсангүй.');
+        if (!cancelled) setError('Хадмалын таних дугаар үүссэнгүй.');
       });
     return () => {
       cancelled = true;
     };
-  }, [settings.english, mongolian]);
-  const mn = useMemo(() => (mongolian ? parseExistingVtt(mongolian) : []), [mongolian]);
+  }, [settings.english, settings.mongolian]);
+  const mn = useMemo(
+    () => (settings.mongolian ? parseExistingVtt(settings.mongolian) : []),
+    [settings.mongolian],
+  );
   const en = useMemo(
     () => (settings.english ? parseExistingVtt(settings.english) : []),
     [settings.english],
@@ -89,58 +170,28 @@ export function useMovieLesson(
     () => movieCues(mn, en, settings.enOffset, settings.mnOffset),
     [mn, en, settings.enOffset, settings.mnOffset],
   );
-  const change = useCallback((next: typeof initialSettings) => {
-    const valid = settingsSchema.parse(next);
-    settingsRef.current = valid;
-    setSettings(valid);
-    try {
-      localStorage.setItem(settingsKey, JSON.stringify(valid));
-      setError('');
-    } catch {
-      setError(
-        'EN/offset энэ удаа нээгдсэн ч browser-д хадгалагдсангүй. Refresh хийвэл дахин сонгоно.',
-      );
-    }
-  }, []);
-  useEffect(() => {
-    if (!enabled || !allowed || !supported || !englishSelection) return;
-    const url = internalEnglishSource(englishSelection, window.location.origin);
-    if (!url) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-      setError('English source нь same-origin subtitle URL биш байна. Local EN VTT сонгоно уу.');
-      return;
-    }
-    const controller = new AbortController();
-    fetch(url, { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error('EN source unavailable');
-        const text = await response.text();
-        if (!parseExistingVtt(text).length) throw new Error('EN source empty');
-        if (!controller.signal.aborted) change({ ...settingsRef.current, english: text });
-      })
-      .catch(() => {
-        if (!controller.signal.aborted)
-          setError('Subtitle panel-ийн EN source нээгдсэнгүй. Таарах local EN VTT сонгоно уу.');
-      });
-    return () => controller.abort();
-  }, [enabled, allowed, supported, englishSelection, change]);
-  async function loadEnglish(file: File) {
+  async function loadFile(file: File, language: 'english' | 'mongolian') {
     try {
       if (file.size > MAX_VTT_BYTES || !/\.vtt$/i.test(file.name))
-        throw new Error('1 MB хүртэлх English .vtt сонгоно уу.');
+        throw new Error('1 MB хүртэлх .vtt сонгоно уу.');
       const text = await file.text();
-      if (!parseExistingVtt(text).length) throw new Error('English cue олдсонгүй.');
-      change({ ...settings, english: text });
+      if (!parseExistingVtt(text).length) throw new Error('Хадмалын мөр олдсонгүй.');
+      change({ ...settingsRef.current, [language]: text });
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'EN VTT уншиж чадсангүй.');
+      setError(cause instanceof Error ? cause.message : 'VTT уншиж чадсангүй.');
     }
   }
   return {
-    cues: enabled && allowed && supported ? cues : [],
-    mediaId: `movie:969681:${fingerprint || 'pending'}:${settings.enOffset}:${settings.mnOffset}`,
-    loading: enabled && allowed && supported && (loading || (!!mongolian && !fingerprint)),
-    error,
-    supported,
+    cues: enabled && allowed ? cues : [],
+    mediaId: `${prefix}:${fingerprint || 'pending'}:${settings.enOffset}:${settings.mnOffset}`,
+    prefix,
+    loading:
+      enabled &&
+      allowed &&
+      (loading || (!!(settings.english || settings.mongolian) && !fingerprint)),
+    error: '',
+    warning: error || notice,
+    supported: true,
     hasEnglish: en.length > 0,
     mnCount: mn.length,
     enCount: en.length,
@@ -148,9 +199,10 @@ export function useMovieLesson(
     mnOffset: settings.mnOffset,
     changeOffset: (language: 'en' | 'mn', offset: number) => {
       if (Number.isFinite(offset) && Math.abs(offset) <= 600)
-        change({ ...settings, [language === 'en' ? 'enOffset' : 'mnOffset']: offset });
+        change({ ...settingsRef.current, [language === 'en' ? 'enOffset' : 'mnOffset']: offset });
     },
-    loadEnglish,
+    loadEnglish: (file: File) => loadFile(file, 'english'),
+    loadMongolian: (file: File) => loadFile(file, 'mongolian'),
     retry: () => setRetry((value) => value + 1),
   };
 }

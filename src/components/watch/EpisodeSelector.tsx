@@ -1,3 +1,4 @@
+import { useId } from 'react';
 type Props = {
   isTV: boolean;
   totalEpisodes: number;
@@ -16,12 +17,16 @@ export default function EpisodeSelector({
   setSeason,
   setEpisode,
 }: Props) {
+  const id = useId();
   return (
     <>
       {isTV && totalEpisodes > 1 && (
         <div className="mt-6 flex flex-wrap items-center gap-3 animate-fade-in-up delay-100">
-          <label className="text-sm text-slate-400">Season</label>
+          <label htmlFor={`${id}-season`} className="text-sm text-slate-400">
+            Season
+          </label>
           <select
+            id={`${id}-season`}
             value={season}
             onChange={(e) => {
               setSeason(Number(e.target.value));
@@ -36,8 +41,11 @@ export default function EpisodeSelector({
             ))}
           </select>
 
-          <label className="text-sm text-slate-400">Episode</label>
+          <label htmlFor={`${id}-episode`} className="text-sm text-slate-400">
+            Episode
+          </label>
           <select
+            id={`${id}-episode`}
             value={episode}
             onChange={(e) => setEpisode(Number(e.target.value))}
             className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-white focus:border-[#d6b456] focus:outline-none"

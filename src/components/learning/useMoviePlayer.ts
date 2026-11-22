@@ -9,6 +9,11 @@ export type MoviePlayerContext = {
   iframeRef: RefObject<HTMLIFrameElement | null>;
   onSelectProvider: (provider: string) => void;
   englishSubtitleUrl?: string | null;
+  mongolianSubtitleUrl?: string | null;
+  mediaType?: 'movie' | 'tv';
+  season?: number;
+  episode?: number;
+  subtitleKey?: string;
 };
 export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
   const [observed, setObserved] = useState({ key: '', state: emptyCineState() });
@@ -17,13 +22,16 @@ export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
   const tmdbId = context?.tmdbId;
   const provider = context?.provider;
   const allowed = context?.allowed;
-  const key = `${enabled}:${allowed}:${provider}:${tmdbId}`;
+  const mediaType = context?.mediaType ?? 'movie';
+  const season = context?.season ?? 1;
+  const episode = context?.episode ?? 1;
+  const key = `${enabled}:${allowed}:${provider}:${tmdbId}:${mediaType}:${season}:${episode}`;
   useEffect(() => {
     const publish = (state: ReturnType<typeof emptyCineState>) => setObserved({ key, state });
     publish(emptyCineState());
     const frame = frameRef?.current;
     if (!enabled || !allowed || provider !== 'cine' || !frame || !tmdbId) return;
-    const adapter = createCineSession(frame, tmdbId, publish);
+    const adapter = createCineSession(frame, tmdbId, publish, { mediaType, season, episode });
     session.current = adapter;
     const onLoad = () => {
       adapter.reset();
@@ -38,7 +46,7 @@ export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
       window.removeEventListener('message', adapter.receive);
       frame.removeEventListener('load', onLoad);
     };
-  }, [enabled, allowed, provider, tmdbId, frameRef, key]);
+  }, [enabled, allowed, provider, tmdbId, frameRef, key, mediaType, season, episode]);
   return {
     ...(observed.key === key ? observed.state : emptyCineState()),
     seek: (seconds: number) => session.current?.seek(seconds) ?? false,

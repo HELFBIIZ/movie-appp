@@ -3,6 +3,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import HelpButton from '@/components/HelpButton';
 import { ClerkProvider } from '@clerk/nextjs';
+import { LearningAccount } from '@/components/learning/LearningAccount';
+import LevelCheck from '@/components/learning/LevelCheck';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,7 +39,10 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col bg-[#faf7f1] dark:bg-transparent text-stone-900 dark:text-[#e9e2d3]">
         <div aria-hidden="true" className="aurora" />
         <ThemeProvider>
-          {clerkEnabled ? <ClerkProvider>{children}</ClerkProvider> : children}
+          <LearningAccount>
+            {clerkEnabled ? <ClerkProvider>{children}</ClerkProvider> : children}
+            <LevelCheck />
+          </LearningAccount>
         </ThemeProvider>
         <HelpButton />
       </body>

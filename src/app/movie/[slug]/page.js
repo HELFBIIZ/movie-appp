@@ -73,15 +73,15 @@ export default function MoviePage() {
                   </span>
                 )}
                 <WatchlistButton movie={movie} />
-                {movie.tmdbId && (
+                {
                   <Link
-                    href={`/watch/${movie.slug}?learn=1`}
+                    href={`/watch/${movie.slug}?learn=1${movie.tmdbId ? '' : '&media=local'}`}
                     className="inline-flex items-center gap-2 rounded-lg border border-[#d6b456]/50 bg-[#d6b456]/10 px-5 py-3 font-semibold text-gold-soft transition-all duration-300 hover:bg-[#d6b456]/20 hover:border-[#e7c779] hover:shadow-[0_8px_24px_-8px_rgba(214,180,86,0.4)]"
                   >
                     <BookOpen className="h-4 w-4" />
-                    Үзэнгээ үг сурах
+                    {movie.tmdbId ? 'Үзэнгээ үг сурах' : 'Өөрийн видеогоор сурах'}
                   </Link>
-                )}
+                }
                 <Link
                   href="/"
                   className="rounded-lg border border-white/30 px-5 py-3 font-semibold text-white transition-all duration-300 hover:bg-white/10"

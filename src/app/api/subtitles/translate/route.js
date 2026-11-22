@@ -2,10 +2,13 @@ import { NextResponse } from 'next/server';
 import { setTranslatedSubtitle, getAnySubtitle } from '@/lib/subtitle-store';
 import { saveGenerated } from '@/lib/generated-store';
 import { osSearch, osDownloadContent, osTranslateToMongolian } from '@/lib/opensubtitles';
+import { usableMongolian } from '@/lib/learning/captions';
+import { getMovieBySlug } from '@/lib/movies';
+import { requireUser, rateLimit, getActiveSubscription, canWatch } from '@/db/index.mjs';
+import { readCaptionCache, writeCaptionCache } from '@/db/learning';
 import {
   translateLinesToMongolian,
   resolveSubtisSource,
-  fetchRemoteSubtitle,
   parseCues,
   buildVtt,
 } from '@/lib/translate';
@@ -38,13 +41,14 @@ async function resolveOpenSubtitlesSource({ tmdbId, title, year, type, season, e
 }
 
 export async function POST(request) {
-  const apiKey = process.env.TRANSLATEAPI_API_KEY;
-  if (!apiKey) {
+  const { user, error } = await requireUser(request.cookies.get('mn_session')?.value);
+  if (error) return NextResponse.json({ error }, { status: 401 });
+  if (rateLimit(`translate:${user.id}`, { max: 3, windowMs: 600_000 }).limited)
     return NextResponse.json(
-      { error: 'TranslateAPI key not configured. Add TRANSLATEAPI_API_KEY to .env.local' },
-      { status: 500 },
+      { error: 'Орчуулгын хүсэлтийн лимит хүрлээ. Дараа дахин оролдоно уу.' },
+      { status: 429 },
     );
-  }
+  const apiKey = process.env.TRANSLATEAPI_API_KEY;
 
   let body;
   try {
@@ -52,6 +56,26 @@ export async function POST(request) {
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
+  const movie = getMovieBySlug(body?.slug);
+  if (!movie) return NextResponse.json({ error: 'Кино олдсонгүй.' }, { status: 404 });
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(user.roleCode)) {
+    const verdict = await canWatch(user.id, movie, await getActiveSubscription(user.id));
+    if (!verdict.allowed) return NextResponse.json({ error: verdict }, { status: 402 });
+  }
+  body.tmdbId = movie.tmdbId;
+  body.title = movie.title;
+  body.year = movie.year;
+  body.type =
+    ['kdrama', 'western', 'tv', 'series'].includes(movie.category) && movie.episodes > 1
+      ? 'episode'
+      : 'movie';
+  if (
+    body.type === 'episode' &&
+    ![body.season, body.episode].every(
+      (value) => Number.isSafeInteger(value) && value > 0 && value <= 1000,
+    )
+  )
+    return NextResponse.json({ error: 'Улирал, ангийн дугаар буруу байна.' }, { status: 400 });
 
   try {
     let content;
@@ -60,14 +84,22 @@ export async function POST(request) {
     let osEnglish = false;
 
     if (body.subFileUrl) {
-      if (body.subFileUrl.startsWith('/api/subtitles/')) {
-        const parts = body.subFileUrl.split('/').filter(Boolean);
-        const rawId = parts[parts.length - 1];
+      const url = new URL(body.subFileUrl, request.url);
+      if (
+        url.origin === new URL(request.url).origin &&
+        /^\/api\/subtitles\/(?:source|translated)\/[a-f0-9-]{36}$/i.test(url.pathname) &&
+        !url.search &&
+        !url.hash
+      ) {
+        const rawId = url.pathname.split('/').at(-1);
         const stored = getAnySubtitle(rawId);
         if (!stored) throw new Error('Subtitle source not found');
         content = stored.content;
       } else {
-        content = await fetchRemoteSubtitle(body.subFileUrl);
+        return NextResponse.json(
+          { error: 'Энэ сайтын хадмалын хэсгээс эх хадмалаа сонгоно уу.' },
+          { status: 400 },
+        );
       }
     } else if (body.title) {
       const osSource = await resolveOpenSubtitlesSource({
@@ -135,6 +167,10 @@ export async function POST(request) {
         vtt = buildVtt(parseCues(ai.content));
         sourceDetail = `${sourceDetail} (${ai.api})`;
       } catch {
+        if (!apiKey)
+          throw new Error(
+            'Монгол хадмал эсвэл орчуулгын үйлчилгээ одоогоор олдсонгүй. Өөрийн MN .vtt файл нэмж болно.',
+          );
         const lines = cues.map((c) => c.text);
         const result = await translateLinesToMongolian(apiKey, lines);
         translatedUnique = result.translatedUnique;
@@ -161,6 +197,7 @@ export async function POST(request) {
       }
     } else {
       const lines = cues.map((c) => c.text);
+      if (!apiKey) throw new Error('Орчуулгын үйлчилгээ одоогоор боломжгүй байна.');
       const result = await translateLinesToMongolian(apiKey, lines);
       translatedUnique = result.translatedUnique;
       googleTranslated = result.googleTranslated;
@@ -184,15 +221,21 @@ export async function POST(request) {
       }
     }
 
+    if (!usableMongolian(vtt))
+      return NextResponse.json(
+        { error: 'Монгол орчуулга үүссэнгүй. Англи эхийг Монгол хадмал гэж хадгалаагүй.' },
+        { status: 502 },
+      );
     const id = crypto.randomUUID();
     setTranslatedSubtitle(id, vtt);
 
     const isTV = body.type === 'episode' || body.type === 'tv' || body.type === 'series';
-    const durableSlug = body.slug
-      ? isTV && body.season && body.episode
-        ? `${body.slug}-S${String(body.season).padStart(2, '0')}E${String(body.episode).padStart(2, '0')}`
-        : body.slug
-      : null;
+    const durableSlug =
+      ['ADMIN', 'SUPER_ADMIN'].includes(user.roleCode) && body.slug
+        ? isTV && body.season && body.episode
+          ? `${body.slug}-S${String(body.season).padStart(2, '0')}E${String(body.episode).padStart(2, '0')}`
+          : body.slug
+        : null;
 
     const meta = {
       partial: nativeMongolian
@@ -208,6 +251,22 @@ export async function POST(request) {
     };
     let translatedUrl = `/api/subtitles/translated/${id}`;
     if (durableSlug) {
+      try {
+        const cached = await readCaptionCache(durableSlug);
+        await writeCaptionCache(
+          durableSlug,
+          {
+            english: osEnglish ? content : cached?.english || '',
+            mongolian: vtt,
+            partial: meta.partial,
+            notice: `${sourceDetail}${meta.partial ? ' · Зарим мөр орчуулагдаагүй.' : ''}`,
+          },
+          2_592_000_000,
+        );
+        translatedUrl = `/api/subtitles/mongolian/${encodeURIComponent(durableSlug)}`;
+      } catch {
+        /* The existing filesystem/ephemeral fallback still serves this request. */
+      }
       try {
         saveGenerated(durableSlug, vtt, meta);
         translatedUrl = `/api/subtitles/mongolian/${encodeURIComponent(durableSlug)}`;

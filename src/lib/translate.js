@@ -90,7 +90,7 @@ export async function translateLinesToMongolian(apiKey, lines) {
       if (!outs) {
         outs = [];
         for (const item of group) {
-          const single = await googleTranslateLine(restoreKey(item));
+          const single = await googleTranslateLine(restoreKey(item)).catch(() => null);
           outs.push(single || item);
         }
       }
@@ -98,7 +98,7 @@ export async function translateLinesToMongolian(apiKey, lines) {
         const key = restoreKey(group[j]);
         const out = outs[j];
         for (const idx of dedupeMap.get(key)) translated[idx] = restoreKey(out) || key;
-        if (out && out !== group[j]) translatedCount++;
+        if (out && out !== group[j] && /[\u0400-\u04ff]/.test(out)) translatedCount++;
       }
     }
   }
@@ -114,7 +114,7 @@ export async function translateLinesToMongolian(apiKey, lines) {
     translatedUnique: translatedCount,
     googleTranslated: 0,
     totalUnique: uniqueLines.length,
-    quotaHit: false,
+    quotaHit: translatedCount < uniqueLines.length,
   };
 }
 

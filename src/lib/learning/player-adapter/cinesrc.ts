@@ -14,13 +14,16 @@ const messageSchema = z.object({
     'cinesrc:error',
     'cinesrc:sourceused',
     'cinesrc:response',
+    'cinesrc:nextepisode',
   ]),
   currentTime: z.number().finite().nonnegative().max(86400).optional(),
   duration: z.number().finite().positive().max(86400).optional(),
   tmdbId: z.number().int().positive().optional(),
   id: z.number().int().positive().optional(),
   movieId: z.number().int().positive().optional(),
-  mediaType: z.literal('movie').optional(),
+  mediaType: z.enum(['movie', 'tv']).optional(),
+  season: z.number().int().positive().optional(),
+  episode: z.number().int().positive().optional(),
   command: z.enum(['getCurrentTime', 'getDuration']).optional(),
   result: z.number().finite().nonnegative().max(86400).optional(),
 });
@@ -43,14 +46,22 @@ export const emptyCineState = (): CineState => ({
   capabilities: { getCurrentTime: false, play: false, pause: false, seek: false },
 });
 
-function isBoundFrame(frame: Frame, tmdbId: number | string): boolean {
+type EpisodeIdentity = { mediaType: 'movie' | 'tv'; season: number; episode: number };
+const movieIdentity: EpisodeIdentity = { mediaType: 'movie', season: 1, episode: 1 };
+function isBoundFrame(frame: Frame, tmdbId: number | string, identity: EpisodeIdentity): boolean {
   if (!frame.isConnected || !frame.contentWindow) return false;
   try {
     const url = new URL(frame.src);
     return (
       url.origin === CINESRC_ORIGIN &&
-      url.pathname === `/embed/movie/${tmdbId}` &&
-      !url.search &&
+      Number.isSafeInteger(Number(tmdbId)) &&
+      Number(tmdbId) > 0 &&
+      url.pathname === `/embed/${identity.mediaType}/${tmdbId}` &&
+      (identity.mediaType === 'movie'
+        ? !url.search
+        : url.searchParams.get('s') === String(identity.season) &&
+          url.searchParams.get('e') === String(identity.episode) &&
+          [...url.searchParams.keys()].length === 2) &&
       !url.hash &&
       !url.username &&
       !url.password
@@ -64,9 +75,10 @@ export function readCineMessage(
   event: Pick<MessageEvent, 'origin' | 'source' | 'data'>,
   frame: Frame,
   tmdbId: number | string,
+  identity: EpisodeIdentity = movieIdentity,
 ) {
   if (
-    !isBoundFrame(frame, tmdbId) ||
+    !isBoundFrame(frame, tmdbId, identity) ||
     event.source !== frame.contentWindow ||
     event.origin !== CINESRC_ORIGIN
   )
@@ -82,7 +94,15 @@ export function readCineMessage(
       (data.command === 'getDuration' && data.result === 0))
   )
     return null;
-  if ([data.tmdbId, data.id, data.movieId].some((id) => id !== undefined && id !== tmdbId))
+  if ([data.tmdbId, data.id, data.movieId].some((id) => id !== undefined && id !== Number(tmdbId)))
+    return null;
+  if (data.mediaType && data.mediaType !== identity.mediaType) return null;
+  if (
+    data.type !== 'cinesrc:nextepisode' &&
+    identity.mediaType === 'tv' &&
+    ((data.season !== undefined && data.season !== identity.season) ||
+      (data.episode !== undefined && data.episode !== identity.episode))
+  )
     return null;
   if (
     ['cinesrc:timeupdate', 'cinesrc:seeked'].includes(data.type) &&
@@ -100,11 +120,13 @@ export function createCineSession(
   frame: Frame,
   tmdbId: number | string,
   emit: (state: CineState) => void,
+  identity: EpisodeIdentity = movieIdentity,
 ) {
   let state = emptyCineState();
   let disposed = false;
   let seekTimer: ReturnType<typeof setTimeout> | undefined;
   let reportedTime: number | null = null;
+  let episodeChanged = false;
   const publish = () => {
     if (!disposed) emit({ ...state, capabilities: { ...state.capabilities } });
   };
@@ -115,9 +137,16 @@ export function createCineSession(
     publish();
   };
   function receive(event: Pick<MessageEvent, 'origin' | 'source' | 'data'>) {
-    if (disposed) return;
-    const data = readCineMessage(event, frame, tmdbId);
+    if (disposed || episodeChanged) return;
+    const data = readCineMessage(event, frame, tmdbId, identity);
     if (!data) return;
+    if (data.type === 'cinesrc:nextepisode') {
+      episodeChanged = true;
+      reset();
+      state.status = 'error';
+      publish();
+      return;
+    }
     if (data.type === 'cinesrc:ready') requestClock();
     if (data.type === 'cinesrc:sourceused') {
       reset();
@@ -170,7 +199,7 @@ export function createCineSession(
     command: 'seek' | 'pause' | 'play' | 'getCurrentTime' | 'getDuration',
     args: number[] = [],
   ) {
-    if (disposed || !isBoundFrame(frame, tmdbId)) return false;
+    if (disposed || episodeChanged || !isBoundFrame(frame, tmdbId, identity)) return false;
     if (!command.startsWith('get') && state.time === null) return false;
     frame.contentWindow!.postMessage({ type: 'cinesrc:command', command, args }, CINESRC_ORIGIN);
     return true;

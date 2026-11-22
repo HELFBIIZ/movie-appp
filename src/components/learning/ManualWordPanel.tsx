@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import type { AlignedCue, WordNote } from '@/lib/learning/types';
+import { dictionaryMeaning } from '@/lib/learning/dictionary';
 
 export default function ManualWordPanel({
   selection,
@@ -13,7 +14,8 @@ export default function ManualWordPanel({
   canSave: boolean;
   onSave: (note: WordNote) => void;
 }) {
-  const [meaning, setMeaning] = useState('');
+  const suggestion = dictionaryMeaning(selection.note.word);
+  const [meaning, setMeaning] = useState(suggestion ?? '');
   const [grammar, setGrammar] = useState('');
   const { note, cue } = selection;
   return (
@@ -23,8 +25,18 @@ export default function ManualWordPanel({
     >
       <h3 className="text-xl font-semibold text-amber-200">{note.word}</h3>
       <p className="mt-2 text-sm leading-6 text-slate-400">
-        Энэ өгүүлбэр дэх утгыг өөрийн үгээр тэмдэглээрэй.
+        {suggestion
+          ? 'Үгийн суурь утга. Энэ өгүүлбэртэй тулгаж, хэрэгтэй бол засаж хадгалаарай.'
+          : 'Монгол хадмалтай тулгаж, энэ өгүүлбэр дэх утгыг тэмдэглээрэй.'}
       </p>
+      <a
+        href={`https://en.wiktionary.org/wiki/${encodeURIComponent(note.word)}`}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-2 inline-block text-sm text-amber-200 underline"
+      >
+        Англи толиос харах ↗
+      </a>
       <blockquote lang="en" className="mt-3 border-l-2 border-amber-400/30 pl-3 text-sm leading-6">
         {cue.text}
       </blockquote>

@@ -50,13 +50,13 @@ const PANEL_TO_SUBTIS = {
   ind: 'ind',
 };
 
-async function searchOpenSubtitles({ tmdbId, lang, query, type }) {
+async function searchOpenSubtitles({ tmdbId, lang, query, type, season, episode }) {
   const apiKey = process.env.OPENSUBTITLES_API_KEY;
   if (!apiKey) {
     return { error: 'OpenSubtitles API key not configured', used: 'subt' };
   }
 
-  const results = await osSearch({ tmdbId, lang, title: query, type });
+  const results = await osSearch({ tmdbId, lang, title: query, type, season, episode });
 
   return { results: results || [], provider: 'opensubtitles', used: 'subt' };
 }
@@ -100,7 +100,7 @@ async function searchSubtIs({ title, year, type, season, episode, lang }) {
 
   if (lang) {
     const matching = subs.filter((s) => s.language === lang);
-    if (matching.length) subs = matching;
+    subs = matching;
   }
 
   return { results: subs.slice(0, 10), provider: 'subtis', used: 'subt' };
@@ -114,21 +114,36 @@ export async function GET(request) {
   const type = searchParams.get('type') || 'episode';
   const title = searchParams.get('title');
   const year = searchParams.get('year');
+  const season = searchParams.get('season');
+  const episode = searchParams.get('episode');
 
   try {
     if (process.env.OPENSUBTITLES_API_KEY) {
       const osLang = PANEL_TO_OS[lang] || lang;
-      const osResult = await searchOpenSubtitles({ tmdbId, lang: osLang, query, type });
+      const osResult = await searchOpenSubtitles({
+        tmdbId,
+        lang: osLang,
+        query,
+        type,
+        season,
+        episode,
+      });
       if (!osResult.error && osResult.results?.length) return NextResponse.json(osResult);
 
       if (osLang === 'mn') {
-        const enFallback = await searchOpenSubtitles({ tmdbId, lang: 'en', query, type });
+        const enFallback = await searchOpenSubtitles({
+          tmdbId,
+          lang: 'en',
+          query,
+          type,
+          season,
+          episode,
+        });
         if (!enFallback.error && enFallback.results?.length) {
           return NextResponse.json({
             ...enFallback,
             fallbackFrom: 'mn',
-            message:
-              'No native Mongolian subtitles exist for this title — showing English subs to translate.',
+            message: 'Энэ хайлтад Монгол хадмал олдсонгүй. Орчуулах Англи эхийг харуулж байна.',
           });
         }
       }

@@ -6,6 +6,9 @@ import SubtitleTranscript from './SubtitleTranscript';
 import VocabularyPanel from './VocabularyPanel';
 import QuizPanel from './QuizPanel';
 import { tabs, type LearningController, type LearningSource } from './useLearningController';
+import { useState } from 'react';
+import { usePlacementProfile } from './usePlacementProfile';
+import { OPEN_PLACEMENT_EVENT, placementBands } from '@/lib/learning/placement';
 export default function LearningPanels({
   controller,
   source,
@@ -13,6 +16,10 @@ export default function LearningPanels({
   controller: LearningController;
   source: LearningSource;
 }) {
+  const { profile } = usePlacementProfile();
+  const [translationOverride, setTranslationOverride] = useState<boolean | null>(null);
+  const translations =
+    translationOverride ?? (profile ? placementBands[profile.band].showTranslations : true);
   const {
     tab,
     setTab,
@@ -43,6 +50,24 @@ export default function LearningPanels({
     !lesson.error;
   return (
     <div id="learning-panels" className="min-w-0 overflow-hidden rounded-xl border border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 p-3 text-xs text-slate-400">
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event(OPEN_PLACEMENT_EVENT))}
+          className="text-amber-200"
+        >
+          {profile
+            ? `${placementBands[profile.band].label} · ${placementBands[profile.band].words} үгийн зорилго`
+            : 'Түвшнээ шалгах · 2 минут'}
+        </button>
+        <button
+          type="button"
+          aria-pressed={translations}
+          onClick={() => setTranslationOverride(!translations)}
+        >
+          Монгол тайлбар: {translations ? 'харагдана' : 'нуусан'}
+        </button>
+      </div>
       <div
         className="flex gap-1 border-b border-white/10 bg-slate-900/80 p-2"
         role="group"
@@ -80,6 +105,7 @@ export default function LearningPanels({
           activeIds={active.map((cue) => cue.id)}
           canSeek={source === 'movie' ? moviePlayer.time !== null : ready}
           curated={source === 'sample'}
+          translations={translations}
           canSave={!!progress && !lesson.loading}
           savedSentences={savedSentences}
           onSeek={(seconds) => {

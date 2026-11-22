@@ -22,7 +22,7 @@ function fixtureEnv(context, values) {
 test('Wire signatures and QPay callbacks reject missing, wrong and tampered credentials', () => {
   const raw = '{"id":"fixture-payment","status":"succeeded"}';
   const secret = 'fixture-signing-secret';
-  const timestamp = '1795233600';
+  const timestamp = String(Math.floor(Date.now() / 1000));
   const signature = crypto.createHmac('sha256', secret).update(`${timestamp}.${raw}`).digest('hex');
   assert.equal(verifyWireSignature(raw, `t=${timestamp},v1=${signature}`, secret), true);
   assert.equal(verifyWireSignature(raw + ' ', `t=${timestamp},v1=${signature}`, secret), false);
@@ -39,7 +39,7 @@ test('Wire signatures and QPay callbacks reject missing, wrong and tampered cred
 
 test('Wire intent/checkout and QPay polling retain their request contracts without real network', async (context) => {
   fixtureEnv(context, {
-    WIRE_API_BASE: 'https://wire.fixture.test',
+    WIRE_API_BASE: 'https://api.wire.mn',
     WIRE_SECRET_KEY: 'fixture-key',
     QPAY_INVOICE_AUTH: 'fixture-auth',
     QPAY_PAYMENT_CHECK_URL: 'https://qpay.fixture.test/check',

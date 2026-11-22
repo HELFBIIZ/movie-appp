@@ -22,6 +22,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { createClient } from '@libsql/client';
+import { fulfillPayment } from './payment-fulfillment.mjs';
 
 const REPO_DATA_DIR = path.join(process.cwd(), 'data', 'db');
 // Netlify/AWS Lambda filesystem is read-only except /tmp — keep the writable
@@ -435,7 +436,7 @@ export async function requireRole(token, ...roles) {
 // ────────────────────────────────────────────────────────────────────────
 const buckets = new Map();
 const WINDOW_MS = 60_000;
-export function rateLimit(key, { max, windowMs = WINDOW_MS } = {}) {
+export function rateLimit(key, { max = 10, windowMs = WINDOW_MS } = {}) {
   const now = Date.now();
   let b = buckets.get(key);
   if (!b || now - b.until > windowMs) {
@@ -463,7 +464,7 @@ export async function getActiveSubscription(userId) {
      FROM subscriptions s
      JOIN subscription_plans p ON p.id = s.plan_id
      WHERE s.user_id = ? AND s.status = 'ACTIVE'
-       AND s.expires_at > datetime('now')
+       AND datetime(s.expires_at) > datetime('now')
      ORDER BY s.expires_at DESC LIMIT 1`,
     [userId],
   );
@@ -779,52 +780,14 @@ export async function activatePaymentSuccess(txnId) {
   }
   const plan = await getPlanById(payment.planId);
   if (!plan) return { error: { code: 'UNKNOWN_PLAN' } };
-  const now = new Date();
-  const active = await getActiveSubscription(payment.userId);
-  const base = active && new Date(active.expiresAt) > now ? new Date(active.expiresAt) : now;
-  const expiresAt = addDays(base, plan.durationDays);
-
-  await batchWrite([
-    {
-      sql: `UPDATE payments SET status = 'SUCCESSFUL', verified_at = datetime('now'), updated_at = datetime('now')
-            WHERE txn_id = ? AND status != 'SUCCESSFUL'`,
-      args: [txnId],
-    },
-    {
-      sql: `INSERT INTO subscriptions (id, user_id, plan_id, status, start_date, expires_at, created_at, updated_at)
-            VALUES (?, ?, ?, 'ACTIVE', ?, ?, datetime('now'), datetime('now'))`,
-      args: [
-        crypto.randomUUID(),
-        payment.userId,
-        plan.id,
-        now.toISOString(),
-        expiresAt.toISOString(),
-      ],
-    },
-    {
-      sql: `INSERT INTO payment_methods (id, user_id, provider, token, last4, is_default, created_at, updated_at)
-            VALUES (?, ?, ?, ?, NULL, 1, datetime('now'), datetime('now'))
-            ON CONFLICT(id) DO UPDATE SET is_default = 1`,
-      args: [
-        `pm:${payment.userId}:${payment.provider}`,
-        payment.userId,
-        payment.provider,
-        payment.providerRef || txnId,
-      ],
-    },
-    {
-      sql: `INSERT INTO security_logs (id, user_id, type, detail, ip, created_at)
-            VALUES (?, ?, 'payment-verify', ?, NULL, datetime('now'))`,
-      args: [
-        crypto.randomUUID(),
-        payment.userId,
-        `${plan.code} activated via ${payment.provider} (${txnId})`,
-      ],
-    },
-  ]);
+  const result = await fulfillPayment(await getDb(), txnId);
+  const fresh = await getPaymentByTxn(txnId);
+  if (fresh.status !== 'SUCCESSFUL')
+    return { error: { code: 'INVALID_PAYMENT_STATE', status: fresh.status } };
   return {
-    payment: await getPaymentByTxn(txnId),
+    payment: fresh,
     subscription: await getActiveSubscription(payment.userId),
+    alreadyActivated: !result.activated,
   };
 }
 /** Grant a VIP pass without a payment row (XP redemption). Stacks on expiry. Returns the fresh ACTIVE subscription. */

@@ -6,7 +6,7 @@ import LearningPanels from './LearningPanels';
 import LearningProgress from './LearningProgress';
 import { useLearningController, type LearningSource } from './useLearningController';
 import type { MoviePlayerContext } from './useMoviePlayer';
-import { SPIDER_MAN } from '@/lib/learning/movie';
+import Link from 'next/link';
 import MovieLearningStatus from './MovieLearningStatus';
 import WordDialog from './WordDialog';
 import LearningGuide from './LearningGuide';
@@ -27,7 +27,7 @@ export default function LearningDock({
   intro = false,
 }: Props) {
   const controller = useLearningController(movieId, source, movieContext);
-  const movieSpecific = movieId === SPIDER_MAN.slug;
+  const movieSpecific = movieId === 'spider-man-brand-new-day';
   const { lesson, videoRef, active, setTime, setReady } = controller;
 
   return (
@@ -42,6 +42,9 @@ export default function LearningDock({
         <p className="mt-2 text-sm text-slate-400">
           Сонсоорой. Мэдэхгүй үгээ дараарай. Хадгалаад, утгыг нь санаж үзээрэй.
         </p>
+        <Link href="/learning" className="mt-3 inline-block text-sm text-amber-200 underline">
+          Миний ахиц →
+        </Link>
         {!intro && (
           <details className="mt-3 text-sm">
             <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
@@ -78,15 +81,8 @@ export default function LearningDock({
         {(source !== 'movie' || lesson.cues.length > 0) && (
           <LearningGuide controller={controller} source={source} />
         )}
-        {source === 'movie' && movieSpecific ? (
+        {source === 'movie' ? (
           <MovieLearningStatus controller={controller} context={movieContext} />
-        ) : source === 'movie' ? (
-          <div role="status" className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
-            <p className="font-medium text-amber-200">Хадмал тоглуулагчтай холбогдоогүй байна.</p>
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              Тохиргооноос сургалтын жишээ эсвэл өөрийн видео сонгож болно.
-            </p>
-          </div>
         ) : (
           <p className="mb-4 text-sm leading-6 text-slate-400">
             {source === 'sample'

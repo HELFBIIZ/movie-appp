@@ -89,6 +89,18 @@ export default function MovieLearningStatus({
               <p className="mt-3 text-slate-400">
                 Монгол: {lesson.mnCount} мөр · Англи: {lesson.enCount} мөр
               </p>
+              <label className="mt-3 block text-slate-300">
+                Монгол хадмал (.vtt)
+                <input
+                  type="file"
+                  accept=".vtt"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) void lesson.loadMongolian(file);
+                  }}
+                  className="mt-2 block w-full min-w-0 rounded-lg border border-white/10 p-2"
+                />
+              </label>
               <details className="mt-3">
                 <summary className="w-fit cursor-pointer text-slate-400">
                   Хадмалын цаг тааруулах
@@ -119,6 +131,11 @@ export default function MovieLearningStatus({
       <p className="mt-3 text-xs leading-5 text-slate-500">
         Хадмалын орчуулга, кинотой таарах эсэхийг шалгаагүй.
       </p>
+      {lesson.warning && (
+        <p role="status" className="mt-2 text-sm text-amber-200">
+          {lesson.warning}
+        </p>
+      )}
     </div>
   );
 }

@@ -8,7 +8,8 @@ import { useLearningStorage } from './useLearningStorage';
 import { useLesson } from './useLesson';
 import { useMovieLesson } from './useMovieLesson';
 import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
-import { SPIDER_MAN } from '@/lib/learning/movie';
+import { useLearningAccount } from './LearningAccount';
+import { listenedSeconds } from '@/lib/learning/snapshot';
 export type LearningSource = 'sample' | 'local' | 'movie';
 export const tabs = [
   { id: 'transcript', label: 'Хадмал' },
@@ -29,15 +30,19 @@ export function useLearningController(
   const [selection, setSelection] = useState<{ note: WordNote; cue: AlignedCue } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { progress, storageError, update } = useLearningStorage();
+  const account = useLearningAccount();
+  const accountRef = useRef(account);
+  useEffect(() => {
+    accountRef.current = account;
+  }, [account]);
   const baseLesson = useLesson(source);
-  const movieLesson = useMovieLesson(
-    source === 'movie',
-    !!context?.allowed,
-    movieId,
-    context?.englishSubtitleUrl,
-  );
-  const isMovie = source === 'movie' && movieId === SPIDER_MAN.slug;
+  const movieLesson = useMovieLesson(source === 'movie', !!context?.allowed, movieId, context);
+  const isMovie = source === 'movie';
   const moviePlayer = useMoviePlayer(isMovie, context);
+  const movieTime = useRef<number | null>(null);
+  useEffect(() => {
+    movieTime.current = moviePlayer.time;
+  }, [moviePlayer.time]);
   const lesson = isMovie
     ? {
         ...baseLesson,
@@ -52,6 +57,53 @@ export function useLearningController(
   const mediaKey = `${lesson.mediaId}:${lesson.videoUrl}`;
   const ready = readyMedia === mediaKey;
   const setReady = useCallback(() => setReadyMedia(mediaKey), [mediaKey]);
+  useEffect(() => {
+    let previous: { media: number; wall: number } | null = null;
+    let seconds = 0;
+    const flush = () => {
+      if (seconds < 1) return;
+      const value = Math.min(30, seconds);
+      if (
+        accountRef.current.update((snapshot) => ({
+          ...snapshot,
+          activity: [
+            ...snapshot.activity,
+            {
+              id: crypto.randomUUID(),
+              kind: 'listen' as const,
+              at: Date.now(),
+              movieId,
+              seconds: value,
+            },
+          ].slice(-5000),
+        }))
+      )
+        seconds = 0;
+    };
+    const timer = setInterval(() => {
+      const media =
+        source === 'movie'
+          ? movieTime.current
+          : videoRef.current && !videoRef.current.paused && !videoRef.current.seeking
+            ? videoRef.current.currentTime
+            : null;
+      const wall = Date.now();
+      if (document.visibilityState !== 'visible' || media === null) {
+        previous = null;
+        flush();
+        return;
+      }
+      seconds += listenedSeconds(previous, media, wall);
+      previous = { media, wall };
+      if (seconds >= 15) flush();
+    }, 1000);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      clearInterval(timer);
+      flush();
+      window.removeEventListener('pagehide', flush);
+    };
+  }, [movieId, lesson.mediaId, source]);
   useEffect(() => {
     const tick = () => setNow(Date.now());
     const timer = setInterval(tick, 30_000);
@@ -73,7 +125,7 @@ export function useLearningController(
     (item) =>
       item.movieId === movieId &&
       (isMovie
-        ? item.mediaId.startsWith(`movie:${SPIDER_MAN.tmdbId}:`)
+        ? item.mediaId.startsWith(`${movieLesson.prefix}:`)
         : item.mediaId === lesson.mediaId),
   );
   const active = displayTime === null ? [] : activeCues(lesson.cues, displayTime);
@@ -103,7 +155,10 @@ export function useLearningController(
       incorrect: 0,
       dueAt: savedAt,
       savedAt,
-      tmdbId: isMovie ? SPIDER_MAN.tmdbId : undefined,
+      tmdbId:
+        isMovie && Number.isSafeInteger(Number(context?.tmdbId)) && Number(context?.tmdbId) > 0
+          ? Number(context?.tmdbId)
+          : undefined,
       grammar: note?.grammar,
       context: note?.context,
       provenance:
@@ -123,11 +178,24 @@ export function useLearningController(
   }
   function review(id: string, remembered: boolean) {
     const timestamp = Date.now();
-    const success = update((current) => ({
-      ...current,
-      items: current.items.map((item) =>
-        item.id === id ? reviewItem(item, remembered, timestamp) : item,
-      ),
+    const success = account.update((snapshot) => ({
+      ...snapshot,
+      progress: {
+        ...snapshot.progress,
+        items: snapshot.progress.items.map((item) =>
+          item.id === id ? reviewItem(item, remembered, timestamp) : item,
+        ),
+      },
+      activity: [
+        ...snapshot.activity,
+        {
+          id: crypto.randomUUID(),
+          kind: 'review' as const,
+          at: timestamp,
+          movieId,
+          correct: remembered,
+        },
+      ].slice(-5000),
     }));
     if (success) {
       setNow(timestamp);
@@ -137,10 +205,17 @@ export function useLearningController(
   }
   function answer(question: Question, correct: boolean) {
     if (question.itemId) return review(question.itemId, correct);
-    return update((current) => ({
-      ...current,
-      contextCorrect: current.contextCorrect + (correct ? 1 : 0),
-      contextIncorrect: current.contextIncorrect + (correct ? 0 : 1),
+    return account.update((snapshot) => ({
+      ...snapshot,
+      progress: {
+        ...snapshot.progress,
+        contextCorrect: snapshot.progress.contextCorrect + (correct ? 1 : 0),
+        contextIncorrect: snapshot.progress.contextIncorrect + (correct ? 0 : 1),
+      },
+      activity: [
+        ...snapshot.activity,
+        { id: crypto.randomUUID(), kind: 'context' as const, at: Date.now(), movieId, correct },
+      ].slice(-5000),
     }));
   }
   const wordSaved = selection

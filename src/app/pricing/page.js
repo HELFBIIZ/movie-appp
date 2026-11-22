@@ -1,11 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import WirePaymentStatus from '@/components/payments/WirePaymentStatus';
+import { safeReturnTo } from '@/lib/safe-return';
+import { checkoutKey } from '@/lib/checkout-key';
+import { useRouter } from 'next/navigation';
 
 export default function PricingPage() {
+  const router = useRouter();
   const [me, setMe] = useState(null);
   const [plans, setPlans] = useState([]);
   const [rewards, setRewards] = useState([]);
@@ -17,8 +22,21 @@ export default function PricingPage() {
   const [note, setNote] = useState('');
   const [imageData, setImageData] = useState(null);
   const [imageName, setImageName] = useState('');
+  const [options, setOptions] = useState({ bank: true, qpay: false, wire: false, demo: false });
+  const [returnTo, setReturnTo] = useState('/learning');
+  const [pendingTxn, setPendingTxn] = useState('');
+  const wireKeys = useRef({});
 
   useEffect(() => {
+    fetch('/api/payment-options')
+      .then((response) => response.json())
+      .then((data) => {
+        setOptions(data);
+        const query = new URLSearchParams(window.location.search);
+        setReturnTo(safeReturnTo(query.get('returnTo')));
+        if (/^tx_[a-f0-9-]{36}$/.test(query.get('txn') || '')) setPendingTxn(query.get('txn'));
+      })
+      .catch(() => {});
     fetch('/api/auth/me')
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => setMe(d?.me ?? null));
@@ -34,43 +52,71 @@ export default function PricingPage() {
   }, []);
 
   async function checkout(planCode, provider) {
-    setBusy(`${planCode}:${provider}`);
-    setNotice(null);
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ planCode, provider }),
-    });
-    const data = await res.json();
-    setBusy(null);
-    if (!res.ok) {
-      setNotice({
-        kind: 'error',
-        text: `${data.error?.code ?? 'CHECKOUT_FAILED'}${data.error?.retryAfterSeconds ? ` (retry in ${data.error.retryAfterSeconds}s)` : ''}`,
-      });
+    if (!me) {
+      router.push(
+        `/login?next=${encodeURIComponent('/pricing?returnTo=' + encodeURIComponent(returnTo))}`,
+      );
       return;
     }
-    if (data.subscription) {
-      setNotice({
-        kind: 'ok',
-        text: `VIP active until ${new Date(data.subscription.expiresAt).toLocaleDateString()} · ${data.payment.txnId}`,
+    setBusy(`${planCode}:${provider}`);
+    setNotice(null);
+    try {
+      if (provider === 'wire' && !wireKeys.current[planCode]) {
+        const keyName = `vxnta.wire.${me.id}.${planCode}`;
+        wireKeys.current[planCode] = checkoutKey(keyName);
+      }
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(provider === 'wire' ? { 'Idempotency-Key': wireKeys.current[planCode] } : {}),
+        },
+        body: JSON.stringify({ planCode, provider, returnTo }),
       });
-      const fresh = await (await fetch('/api/auth/me')).json();
-      setMe(fresh.me ?? null);
-    } else if (data.wire?.checkoutUrl) {
-      setNotice({ kind: 'ok', text: 'Төлбөрийн хуудас нээгдлээ — Wire-ээр төлнө уу.' });
-      window.open(data.wire.checkoutUrl, '_blank');
-    } else if (data.qpay?.url) {
+      const data = await res.json();
+      setBusy(null);
+      if (!res.ok) {
+        if (data.payment?.txnId) setPendingTxn(data.payment.txnId);
+        setNotice({
+          kind: 'error',
+          text:
+            provider === 'wire'
+              ? 'Wire төлбөрийн хуудас нээгдсэнгүй. Төлбөрийн төлөвөө шалгаад дахин оролдоно уу.'
+              : `${data.error?.code ?? 'CHECKOUT_FAILED'}`,
+        });
+        return;
+      }
+      if (data.subscription) {
+        setNotice({
+          kind: 'ok',
+          text: `VIP active until ${new Date(data.subscription.expiresAt).toLocaleDateString()} · ${data.payment.txnId}`,
+        });
+        const fresh = await (await fetch('/api/auth/me')).json();
+        setMe(fresh.me ?? null);
+      } else if (data.wire?.checkoutUrl) {
+        setPendingTxn(data.payment.txnId);
+        window.location.assign(data.wire.checkoutUrl);
+      } else if (data.payment?.status === 'SUCCESSFUL') {
+        setPendingTxn(data.payment.txnId);
+      } else if (data.qpay?.url) {
+        setNotice({
+          kind: 'ok',
+          text: 'Invoice ready — open the QPay link to pay, then it activates automatically.',
+        });
+        window.open(data.qpay.url, '_blank');
+      } else {
+        setNotice({
+          kind: 'ok',
+          text: data.note || 'Payment recorded as PENDING (no gateway configured for sandbox).',
+        });
+      }
+    } catch {
       setNotice({
-        kind: 'ok',
-        text: 'Invoice ready — open the QPay link to pay, then it activates automatically.',
+        kind: 'error',
+        text: 'Холболт тасарлаа. Төлбөрийн төлөвөө шалгаад дахин оролдоно уу.',
       });
-      window.open(data.qpay.url, '_blank');
-    } else {
-      setNotice({
-        kind: 'ok',
-        text: data.note || 'Payment recorded as PENDING (no gateway configured for sandbox).',
-      });
+    } finally {
+      setBusy(null);
     }
   }
 
@@ -187,6 +233,29 @@ export default function PricingPage() {
             {notice.text}
           </div>
         )}
+        {pendingTxn && (
+          <WirePaymentStatus
+            txn={pendingTxn}
+            returnTo={returnTo}
+            onNew={() => {
+              wireKeys.current = {};
+              for (const plan of plans) {
+                try {
+                  sessionStorage.removeItem(`vxnta.wire.${me?.id}.${plan.code}`);
+                } catch {
+                  /* In-memory retries remain available. */
+                }
+              }
+              setPendingTxn('');
+              setNotice(null);
+            }}
+          />
+        )}
+        {!options.wire && (
+          <p className="mt-4 text-sm text-slate-400">
+            Wire төлбөр одоогоор боломжгүй байна. Банкны шилжүүлгийн хэсгийг ашиглаж болно.
+          </p>
+        )}
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold">VIP plans</h2>
@@ -200,22 +269,24 @@ export default function PricingPage() {
                 </div>
                 <div className="text-sm text-slate-400">{p.durationDays} days</div>
                 <div className="mt-4 flex flex-col gap-2">
+                  {options.demo && (
+                    <button
+                      disabled={busy === `${p.code}:local_dev`}
+                      onClick={() => checkout(p.code, 'local_dev')}
+                      className="rounded-xl bg-gradient-to-r from-[#c9a227] via-[#e7c779] to-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110 shadow-[0_8px_24px_-8px_rgba(214,180,86,0.45)] disabled:opacity-50 disabled:shadow-none"
+                    >
+                      {busy === `${p.code}:local_dev` ? 'Activating…' : 'Buy with card (demo)'}
+                    </button>
+                  )}
                   <button
-                    disabled={busy === `${p.code}:local_dev`}
-                    onClick={() => checkout(p.code, 'local_dev')}
-                    className="rounded-xl bg-gradient-to-r from-[#c9a227] via-[#e7c779] to-[#c9a227] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110 shadow-[0_8px_24px_-8px_rgba(214,180,86,0.45)] disabled:opacity-50 disabled:shadow-none"
-                  >
-                    {busy === `${p.code}:local_dev` ? 'Activating…' : 'Buy with card (demo)'}
-                  </button>
-                  <button
-                    disabled={busy === `${p.code}:wire`}
+                    disabled={Boolean(busy) || !options.wire}
                     onClick={() => checkout(p.code, 'wire')}
                     className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-4 py-2 text-sm font-medium text-emerald-300 transition-all hover:border-emerald-400 hover:bg-emerald-900/40 hover:text-white disabled:opacity-50"
                   >
                     {busy === `${p.code}:wire` ? '…' : `Wire-ээр төлөх ${fmt(p.priceMnt)}`}
                   </button>
                   <button
-                    disabled={busy === `${p.code}:qpay`}
+                    disabled={Boolean(busy) || !options.qpay}
                     onClick={() => checkout(p.code, 'qpay')}
                     className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
                   >

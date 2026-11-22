@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ClerkOAuth from '@/components/ClerkOAuth';
+import { safeReturnTo } from '@/lib/safe-return';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -49,7 +50,8 @@ export default function LoginPage() {
     }
 
     setBusy(false);
-    router.push('/');
+    window.dispatchEvent(new Event('vxnta:session-change'));
+    router.push(safeReturnTo(new URLSearchParams(window.location.search).get('next'), '/'));
     router.refresh();
   }
 

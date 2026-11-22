@@ -35,6 +35,7 @@ export default function Header() {
     await fetch('/api/auth/logout', { method: 'POST' });
     setIsLoggedIn(false);
     setIsAdmin(false);
+    window.dispatchEvent(new Event('vxnta:session-change'));
     router.push('/');
     router.refresh();
   }
@@ -72,7 +73,7 @@ export default function Header() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+            className="lg:hidden p-2 rounded-lg text-[#8a7540] dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
