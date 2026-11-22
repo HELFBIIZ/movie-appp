@@ -4,14 +4,29 @@ test('a new visitor starts a real free lesson, hears a sentence, saves a word an
   page,
 }) => {
   const accessRequests: string[] = [];
+  let allowVideo = () => {};
+  const videoGate = new Promise<void>((resolve) => {
+    allowVideo = resolve;
+  });
+  await page.route('**/learning/last-train.webm', async (route) => {
+    await videoGate;
+    await route.continue();
+  });
   page.on('request', (request) => {
     if (request.url().includes('/api/watch/')) accessRequests.push(request.url());
   });
-  await page.goto('/learn');
+  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: 'Нэг өгүүлбэрээс эхэлье.' })).toBeVisible();
   await expect(page.getByText('38 секундийн сургалтын жишээ · Киноны хэсэг биш.')).toBeVisible();
   const video = page.getByLabel('The Last Train sample lesson video');
-  await page.getByRole('button', { name: 'Сонсоод эхлэх', exact: true }).click();
+  try {
+    const start = page.getByRole('button', { name: 'Сонсоод эхлэх', exact: true });
+    await expect(start).toBeEnabled();
+    expect(await video.evaluate((element: HTMLVideoElement) => element.readyState)).toBe(0);
+    await start.click();
+  } finally {
+    allowVideo();
+  }
   await expect
     .poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime >= 1))
     .toBe(true);

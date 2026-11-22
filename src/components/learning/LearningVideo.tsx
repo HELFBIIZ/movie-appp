@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type RefObject } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 import type { AlignedCue } from '@/lib/learning/types';
 
 export default function LearningVideo({
@@ -19,6 +19,10 @@ export default function LearningVideo({
   sample: boolean;
 }) {
   const [error, setError] = useState(false);
+  useEffect(() => {
+    // Cached metadata can arrive before React attaches its event handler.
+    if (videoRef.current && videoRef.current.readyState >= 1) onReady();
+  }, [url, videoRef, onReady]);
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
       <video
