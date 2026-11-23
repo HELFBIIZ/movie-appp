@@ -9,10 +9,10 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'vxnta-visual-'));
 assert.ok(path.resolve(temporary).startsWith(path.resolve(os.tmpdir()) + path.sep));
 const baseline = path.join(temporary, 'learning-baseline');
-// The requested placement/dashboard/payment UI intentionally changes the old
-// refactor baseline. Compare this reviewed feature implementation, rebuilt in
+// The requested sentence practice/daily plan intentionally changes the previous
+// feature baseline. Compare this feature implementation, rebuilt in
 // the same browser, while retaining the original baseline in Git history.
-const baselineCommit = '1771883174ed100d409b9822f5338b86939ceee9';
+const baselineCommit = '1fd0c15e6ba55a0fc40d175d32e58bc7ae10b133';
 const env = { ...process.env };
 for (const key of Object.keys(env)) {
   if (/TURSO|CLERK|WIRE_|QPAY_|OPENSUBTITLES|TRANSLATE|TMDB|^NETLIFY$/.test(key)) delete env[key];
