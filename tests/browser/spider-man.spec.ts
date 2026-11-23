@@ -24,7 +24,7 @@ test('real Spider-Man route: guest gate, no sample substitution, unknown clock, 
   const dock = page.getByRole('region', { name: 'SceneChain Learning Dock' });
   await expect(
     dock.getByRole('group', { name: 'Learning panels' }).getByRole('button'),
-  ).toHaveCount(3);
+  ).toHaveCount(4);
   const settings = dock.locator('details').first();
   await expect(settings).not.toHaveAttribute('open');
   await expect(page.getByRole('button', { name: 'Өөрийн видео', exact: true })).toBeHidden();

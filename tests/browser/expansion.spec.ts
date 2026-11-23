@@ -104,6 +104,7 @@ for (const title of [
     if (title.slug === 'yellowstone') {
       expect(saved.mediaId).toMatch(/^tv:73586:1:1:/);
       await page.getByLabel('Episode', { exact: true }).selectOption('2');
+      await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
       await expect(page.getByRole('list', { name: 'Bilingual transcript' })).toContainText(
         'Original fixture episode 2.',
       );
