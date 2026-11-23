@@ -53,6 +53,15 @@ export function retrievePaymentIntent(id) {
     return Promise.resolve({ error: { code: 'INVALID_INTENT' } });
   return wireRequest(`/payment_intents/${encodeURIComponent(id)}`);
 }
+// Read-only preflight endpoints; neither creates an intent or moves money.
+export function previewWireRouting(amountMnt) {
+  if (!Number.isSafeInteger(amountMnt) || amountMnt <= 0)
+    return Promise.resolve({ error: { code: 'INVALID_AMOUNT' } });
+  return wireRequest(`/routing/preview?amount=${amountMnt}`);
+}
+export function listWireBankAccounts() {
+  return wireRequest('/bank_accounts');
+}
 export function hostedCheckoutUrl(input) {
   try {
     const url = new URL(input);
