@@ -4,7 +4,7 @@ import { wireConfigured, previewWireRouting, listWireBankAccounts } from './wire
 const CHECK_AMOUNT_MNT = 5900;
 const previewSchema = z.object({
   object: z.literal('routing_preview'),
-  selected: z.string().regex(/^op_[a-zA-Z0-9_-]+$/),
+  selected: z.string().trim().min(1).max(200),
 });
 const accountsSchema = z.object({
   object: z.literal('list'),

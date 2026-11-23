@@ -47,6 +47,12 @@ test('Wire preflight returns aggregate readiness and never exposes private provi
   const serialized = JSON.stringify(result);
   for (const secret of ['op_fixture', 'private name', '1234', 'private routing metadata'])
     assert.equal(serialized.includes(secret), false);
+  const opaqueOperator = createWireReadinessCheck({
+    configured: () => true,
+    preview: async () => ({ object: 'routing_preview', selected: 'qpay' }),
+    banks: async () => accounts(),
+  });
+  assert.equal((await opaqueOperator()).routingAvailable, true);
 });
 test('preflight distinguishes rejected authentication, unavailable operators, missing default settlement and invalid responses', async () => {
   const cases = [
