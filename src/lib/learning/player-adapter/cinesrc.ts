@@ -126,12 +126,14 @@ export function createCineSession(
   let disposed = false;
   let seekTimer: ReturnType<typeof setTimeout> | undefined;
   let reportedTime: number | null = null;
+  let range: { start: number; end: number; loop: boolean; waiting: boolean } | null = null;
   let episodeChanged = false;
   const publish = () => {
     if (!disposed) emit({ ...state, capabilities: { ...state.capabilities } });
   };
   const reset = () => {
     clearTimeout(seekTimer);
+    range = null;
     state = emptyCineState();
     reportedTime = null;
     publish();
@@ -160,6 +162,7 @@ export function createCineSession(
     }
     if (data.type === 'cinesrc:play') state.capabilities.play = true;
     if (data.type === 'cinesrc:pause') state.capabilities.pause = true;
+    if (data.type === 'cinesrc:pause') range = null;
     if (data.type === 'cinesrc:loadedmetadata') state.duration = data.duration ?? null;
     if (data.type === 'cinesrc:response') {
       if (data.command === 'getDuration') state.duration = data.result!;
@@ -185,6 +188,21 @@ export function createCineSession(
         state.capabilities.seek = true;
         state.pendingSeek = null;
         state.status = 'connected';
+        if (range?.waiting && Math.abs(data.currentTime! - range.start) <= 0.75) {
+          range.waiting = false;
+          send('play');
+        } else if (range?.waiting) {
+          range = null;
+        }
+      }
+      if (range && !range.waiting && data.currentTime! >= range.end) {
+        if (range.loop) {
+          range.waiting = true;
+          seek(range.start);
+        } else {
+          range = null;
+          send('pause');
+        }
       }
     }
     if (state.time !== null && state.duration !== null && state.time > state.duration) {
@@ -208,35 +226,55 @@ export function createCineSession(
     send('getDuration');
     send('getCurrentTime');
   }
+  function seek(seconds: number) {
+    if (
+      !Number.isFinite(seconds) ||
+      seconds < 0 ||
+      state.duration === null ||
+      seconds > state.duration
+    )
+      return false;
+    if (!send('seek', [seconds])) return false;
+    clearTimeout(seekTimer);
+    state.pendingSeek = seconds;
+    state.capabilities.seek = false;
+    state.status = 'seek-pending';
+    publish();
+    seekTimer = setTimeout(() => {
+      range = null;
+      state.pendingSeek = null;
+      state.status = 'seek-unconfirmed';
+      publish();
+    }, 5000);
+    return true;
+  }
   return {
     receive,
     reset,
     requestClock,
+    cancelReplay: () => {
+      range = null;
+    },
     play: () => send('play'),
-    pause: () => send('pause'),
+    pause: () => {
+      range = null;
+      return send('pause');
+    },
     seek(seconds: number) {
-      if (
-        !Number.isFinite(seconds) ||
-        seconds < 0 ||
-        state.duration === null ||
-        seconds > state.duration
-      )
+      range = null;
+      return seek(seconds);
+    },
+    replay(start: number, end: number, loop = false) {
+      if (!Number.isFinite(end) || end <= start || state.duration === null || end > state.duration)
         return false;
-      if (!send('seek', [seconds])) return false;
-      clearTimeout(seekTimer);
-      state.pendingSeek = seconds;
-      state.capabilities.seek = false;
-      state.status = 'seek-pending';
-      publish();
-      seekTimer = setTimeout(() => {
-        state.pendingSeek = null;
-        state.status = 'seek-unconfirmed';
-        publish();
-      }, 5000);
-      return true;
+      range = { start, end, loop, waiting: true };
+      if (seek(start)) return true;
+      range = null;
+      return false;
     },
     dispose() {
       disposed = true;
+      range = null;
       clearTimeout(seekTimer);
     },
   };

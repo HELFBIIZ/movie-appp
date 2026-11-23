@@ -28,7 +28,7 @@ export default function LearningDock({
 }: Props) {
   const controller = useLearningController(movieId, source, movieContext);
   const movieSpecific = movieId === 'spider-man-brand-new-day';
-  const { lesson, videoRef, active, setTime, setReady } = controller;
+  const { lesson, videoRef, active, setTime, setReady, tab } = controller;
 
   return (
     <section
@@ -78,7 +78,7 @@ export default function LearningDock({
         )}
       </div>
       <div className="p-4 md:p-5">
-        {(source !== 'movie' || lesson.cues.length > 0) && (
+        {(intro || tab !== 'practice') && (source !== 'movie' || lesson.cues.length > 0) && (
           <LearningGuide controller={controller} source={source} />
         )}
         {source === 'movie' ? (
@@ -108,6 +108,7 @@ export default function LearningDock({
                   active={active}
                   onTime={setTime}
                   onReady={setReady}
+                  hideTranslation={tab === 'practice'}
                   sample={source === 'sample'}
                 />
               )}

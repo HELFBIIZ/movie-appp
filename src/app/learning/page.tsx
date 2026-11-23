@@ -3,21 +3,24 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import QuizPanel from '@/components/learning/QuizPanel';
+import RecallPractice from '@/components/learning/RecallPractice';
+import GuestProgressImport from '@/components/learning/GuestProgressImport';
 import { useLearningAccount } from '@/components/learning/LearningAccount';
 import { usePlacementProfile } from '@/components/learning/usePlacementProfile';
 import { OPEN_PLACEMENT_EVENT, assessPlacement, placementBands } from '@/lib/learning/placement';
 import { learningMetrics } from '@/lib/learning/metrics';
-import { vocabularyQuestions } from '@/lib/learning/quiz';
+import { recallQueue } from '@/lib/learning/recall';
 import { reviewItem } from '@/lib/learning/srs';
-import type { Question } from '@/lib/learning/types';
+import type { LearningItem } from '@/lib/learning/types';
 
 export default function LearningDashboard() {
   const account = useLearningAccount();
   const { profile, history } = usePlacementProfile();
   const [now, setNow] = useState(() => Date.now());
   const [practicing, setPracticing] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [cards, setCards] = useState<LearningItem[]>([]);
+  const goal = profile ? placementBands[profile.band].words : 3;
+  const reviewGoal = Math.min(goal, 5);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(timer);
@@ -43,7 +46,7 @@ export default function LearningDashboard() {
         </p>
         <h1 className="mt-2 text-3xl font-bold">Англи хэлний минь ахиц</h1>
         <p className="mt-3 text-sm leading-6 text-slate-400">
-          Өнөөдөр 5 үг хадгалаад, давтах үгсээ санаж үзээрэй.
+          Өдөрт 5 минут: нэг хэсэг сонсож, {goal} үг сонгоод, утгыг нь санаж үзээрэй.
         </p>
         <p role="status" className="mt-3 text-xs text-slate-400">
           {account.sync || (!account.loaded ? 'Ахиц ачаалж байна…' : '')}
@@ -62,6 +65,7 @@ export default function LearningDashboard() {
             Хоёр төхөөрөмжийн хадгалсан үг, тестийг нэгтгэх
           </button>
         )}
+        <GuestProgressImport />
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/movies"
@@ -97,20 +101,42 @@ export default function LearningDashboard() {
             </div>
             <section className="mt-5 rounded-2xl border border-white/10 p-5">
               <h2 className="text-lg font-semibold">Өнөөдрийн жижиг зорилго</h2>
+              <p className="mt-2 text-xs text-slate-400">
+                {stats.streak
+                  ? `${stats.streak} өдөр дараалан дасгал хийсэн`
+                  : 'Өнөөдрийн нэг жижиг дасгалаас эхэлье.'}
+              </p>
+              <ol
+                className="mt-4 grid gap-2 text-sm sm:grid-cols-3"
+                aria-label="Өнөөдрийн сурах төлөвлөгөө"
+              >
+                <li className="rounded-lg bg-white/5 p-3">
+                  {stats.todaySeconds >= 60 ? '✓' : '1.'} Сонсох ·{' '}
+                  {Math.min(60, Math.floor(stats.todaySeconds))}/60 сек
+                </li>
+                <li className="rounded-lg bg-white/5 p-3">
+                  {stats.todayWords >= goal ? '✓' : '2.'} Үг хадгалах ·{' '}
+                  {Math.min(stats.todayWords, goal)}/{goal}
+                </li>
+                <li className="rounded-lg bg-white/5 p-3">
+                  {stats.todayReviews >= reviewGoal ? '✓' : '3.'} Санаж үзэх ·{' '}
+                  {Math.min(stats.todayReviews, reviewGoal)}/{reviewGoal}
+                </li>
+              </ol>
               <p className="mt-2 text-sm text-slate-300">
-                {Math.min(stats.todayWords, 5)} / 5 үг хадгалсан
+                {Math.min(stats.todayWords, goal)} / {goal} үг хадгалсан
               </p>
               <progress
                 aria-label="Өнөөдрийн үгийн зорилго"
-                value={Math.min(stats.todayWords, 5)}
-                max={5}
+                value={Math.min(stats.todayWords, goal)}
+                max={goal}
                 className="mt-3 h-3 w-full accent-amber-400"
               />
               <button
                 type="button"
                 disabled={!stats.due.length}
                 onClick={() => {
-                  setQuestions(vocabularyQuestions(stats.due).slice(0, 10));
+                  setCards(recallQueue(stats.due, now, goal));
                   setPracticing(true);
                 }}
                 className="mt-4 rounded-xl bg-[#c9a227] px-4 py-2 font-semibold text-slate-950 disabled:opacity-40"
@@ -118,17 +144,16 @@ export default function LearningDashboard() {
                 Давтах үгсээ шалгах
               </button>
               {practicing && (
-                <QuizPanel
-                  questions={questions}
-                  onAnswer={(question, correct) =>
+                <RecallPractice
+                  items={cards}
+                  onDone={() => setPracticing(false)}
+                  onReview={(id, correct) =>
                     account.update((snapshot) => ({
                       ...snapshot,
                       progress: {
                         ...snapshot.progress,
                         items: snapshot.progress.items.map((item) =>
-                          item.id === question.itemId
-                            ? reviewItem(item, correct, Date.now())
-                            : item,
+                          item.id === id ? reviewItem(item, correct, Date.now()) : item,
                         ),
                       },
                       activity: [

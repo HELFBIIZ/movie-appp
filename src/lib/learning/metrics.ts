@@ -1,7 +1,8 @@
 import type { LearningSnapshot } from './snapshot.ts';
 const DAY = 86_400_000;
 export function learningMetrics(snapshot: LearningSnapshot, now: number) {
-  const reviews = snapshot.activity.filter((event) => event.kind === 'review');
+  const activity = snapshot.activity.filter((event) => event.at <= now);
+  const reviews = activity.filter((event) => event.kind === 'review');
   const window = (start: number, end: number) =>
     reviews.filter((event) => event.at >= start && event.at < end);
   const rate = (events: typeof reviews) =>
@@ -15,7 +16,7 @@ export function learningMetrics(snapshot: LearningSnapshot, now: number) {
   const today = dayKey(now);
   const days = Array.from({ length: 14 }, (_, index) => {
     const key = dayKey(now - (13 - index) * DAY);
-    const events = snapshot.activity.filter((event) => dayKey(event.at) === key);
+    const events = activity.filter((event) => dayKey(event.at) === key);
     return {
       key,
       seconds: events
@@ -29,7 +30,27 @@ export function learningMetrics(snapshot: LearningSnapshot, now: number) {
     retained: snapshot.progress.items.filter((item) => item.kind === 'word' && item.stage >= 2)
       .length,
     due: snapshot.progress.items.filter((item) => item.kind === 'word' && item.dueAt <= now),
-    seconds: snapshot.activity
+    todayReviews: reviews.filter((event) => dayKey(event.at) === today && event.at <= now).length,
+    todaySeconds: days.at(-1)?.seconds ?? 0,
+    streak: (() => {
+      const active = new Set(
+        activity
+          .filter(
+            (event) =>
+              event.at <= now &&
+              (event.kind === 'review' || (event.kind === 'listen' && (event.seconds ?? 0) > 0)),
+          )
+          .map((event) => dayKey(event.at)),
+      );
+      let offset = active.has(today) ? 0 : 1;
+      let count = 0;
+      while (active.has(dayKey(now - offset * DAY))) {
+        count++;
+        offset++;
+      }
+      return count;
+    })(),
+    seconds: activity
       .filter((event) => event.kind === 'listen')
       .reduce((sum, event) => sum + (event.seconds ?? 0), 0),
     recentRate: rate(recent),
@@ -37,7 +58,7 @@ export function learningMetrics(snapshot: LearningSnapshot, now: number) {
     recentCount: recent.length,
     previousCount: previous.length,
     todayWords: snapshot.progress.items.filter(
-      (item) => item.kind === 'word' && dayKey(item.savedAt) === today,
+      (item) => item.kind === 'word' && item.savedAt <= now && dayKey(item.savedAt) === today,
     ).length,
     days,
   };

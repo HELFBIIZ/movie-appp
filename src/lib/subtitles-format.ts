@@ -51,3 +51,16 @@ export function buildVtt(cues: SubtitleCue[]): string {
 export function normalizeToVtt(content: string): string {
   return buildVtt(parseCues(content));
 }
+
+export function buildSrt(cues: SubtitleCue[]): string {
+  return cues
+    .map((cue, index) => {
+      const timing = cue.timing.replace(
+        /\b(\d{2}:\d{2}(?::\d{2})?)[.,](\d{3})/g,
+        (_match, clock: string, milliseconds: string) =>
+          `${clock.split(':').length === 2 ? '00:' : ''}${clock},${milliseconds}`,
+      );
+      return `${index + 1}\n${timing}\n${cue.text}\n`;
+    })
+    .join('\n');
+}

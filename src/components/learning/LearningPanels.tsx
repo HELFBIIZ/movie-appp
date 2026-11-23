@@ -3,6 +3,9 @@ import { vocabularyQuestions } from '@/lib/learning/quiz';
 import { contextQuestion } from '@/lib/learning/sample';
 import { htmlVideoAdapter } from '@/lib/learning/player-adapter';
 import SubtitleTranscript from './SubtitleTranscript';
+import SentencePractice from './SentencePractice';
+import RecallPractice from './RecallPractice';
+import { recallQueue } from '@/lib/learning/recall';
 import VocabularyPanel from './VocabularyPanel';
 import QuizPanel from './QuizPanel';
 import { tabs, type LearningController, type LearningSource } from './useLearningController';
@@ -18,6 +21,7 @@ export default function LearningPanels({
 }) {
   const { profile } = usePlacementProfile();
   const [translationOverride, setTranslationOverride] = useState<boolean | null>(null);
+  const [recalling, setRecalling] = useState(false);
   const translations =
     translationOverride ?? (profile ? placementBands[profile.band].showTranslations : true);
   const {
@@ -86,11 +90,11 @@ export default function LearningPanels({
           </button>
         ))}
       </div>
-      {lesson.loading && tab === 'transcript' ? (
+      {lesson.loading && (tab === 'transcript' || tab === 'practice') ? (
         <p role="status" className="p-6 text-slate-400">
           Хадмал ачаалж байна…
         </p>
-      ) : lesson.error && tab === 'transcript' ? (
+      ) : lesson.error && (tab === 'transcript' || tab === 'practice') ? (
         <div className="p-6">
           <p role="alert" className="text-rose-300">
             {lesson.error}
@@ -99,6 +103,13 @@ export default function LearningPanels({
             Дахин ачаалах
           </button>
         </div>
+      ) : tab === 'practice' && !guestMovie ? (
+        <SentencePractice
+          key={lesson.mediaId}
+          controller={controller}
+          source={source}
+          translations={translations}
+        />
       ) : tab === 'transcript' && !guestMovie ? (
         <SubtitleTranscript
           cues={lesson.cues}
@@ -142,19 +153,51 @@ export default function LearningPanels({
       )}
       {tab === 'quiz' && (
         <>
-          <QuizPanel
-            key={lesson.mediaId}
-            questions={vocabularyQuestions(scoped)}
-            onAnswer={answer}
-            onBack={() => setTab('transcript')}
-          />
-          {source === 'sample' && (
-            <details className="border-t border-white/10 p-4">
-              <summary className="w-fit cursor-pointer text-sm text-slate-400">
-                Үзэгдлийн асуулт
-              </summary>
-              <QuizPanel key="sample-context" questions={[contextQuestion]} onAnswer={answer} />
-            </details>
+          <div className="flex flex-wrap gap-3 border-b border-white/10 p-3 text-sm">
+            <button
+              type="button"
+              aria-pressed={!recalling}
+              onClick={() => setRecalling(false)}
+              className={!recalling ? 'text-amber-200' : 'text-slate-400'}
+            >
+              Утгыг сонгох
+            </button>
+            <button
+              type="button"
+              aria-pressed={recalling}
+              onClick={() => setRecalling(true)}
+              className={recalling ? 'text-amber-200' : 'text-slate-400'}
+            >
+              Санаж бичих
+            </button>
+          </div>
+          {recalling ? (
+            <RecallPractice
+              key={lesson.mediaId}
+              items={recallQueue(scoped, now, profile ? placementBands[profile.band].words : 3)}
+              onReview={review}
+              onDone={() => {
+                setRecalling(false);
+                setTab('practice');
+              }}
+            />
+          ) : (
+            <>
+              <QuizPanel
+                key={lesson.mediaId}
+                questions={vocabularyQuestions(scoped)}
+                onAnswer={answer}
+                onBack={() => setTab('practice')}
+              />
+              {source === 'sample' && (
+                <details className="border-t border-white/10 p-4">
+                  <summary className="w-fit cursor-pointer text-sm text-slate-400">
+                    Үзэгдлийн асуулт
+                  </summary>
+                  <QuizPanel key="sample-context" questions={[contextQuestion]} onAnswer={answer} />
+                </details>
+              )}
+            </>
           )}
         </>
       )}

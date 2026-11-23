@@ -1,7 +1,8 @@
 const OS_API = process.env.OPENSUBTITLES_API_BASE || 'https://api.opensubtitles.com/api/v1';
 const UA = 'VXNTA v1.0';
 
-let tokenCache = { token: null, at: 0 };
+let tokenCache = { token: null, baseUrl: OS_API, at: 0 };
+let loginFlight;
 
 function osHeaders(extra = {}) {
   return {
@@ -14,6 +15,13 @@ function osHeaders(extra = {}) {
 }
 
 async function osLoginToken() {
+  if (!loginFlight)
+    loginFlight = login().finally(() => {
+      loginFlight = undefined;
+    });
+  return loginFlight;
+}
+async function login() {
   const now = Date.now();
   if (tokenCache.token && now - tokenCache.at < 55 * 60 * 1000) return tokenCache.token;
   const user = process.env.OPENSUBTITLES_USERNAME;
@@ -23,13 +31,24 @@ async function osLoginToken() {
     method: 'POST',
     headers: osHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ username: user, password: pass }),
+    signal: AbortSignal.timeout(15000),
   });
   if (!res.ok) return null;
   const data = await res.json();
   if (data.token) {
-    tokenCache = { token: data.token, at: now };
+    const host = ['api.opensubtitles.com', 'vip-api.opensubtitles.com'].includes(data.base_url)
+      ? data.base_url
+      : 'api.opensubtitles.com';
+    tokenCache = { token: data.token, baseUrl: `https://${host}/api/v1`, at: now };
   }
   return data.token || null;
+}
+
+export async function osAiSession() {
+  const token = await osLoginToken();
+  if (!token)
+    throw new Error('Монгол орчуулгын үйлчилгээ түр боломжгүй. MN хадмал файл нэмж болно.');
+  return { baseUrl: tokenCache.baseUrl, headers: osHeaders({ Authorization: `Bearer ${token}` }) };
 }
 
 export async function osSearch({ tmdbId, lang, title, year, type, season, episode, limit = 10 }) {
@@ -81,13 +100,14 @@ export async function osDownloadContent(fileId) {
   if (!apiKey) throw new Error('OpenSubtitles API key not configured');
 
   const token = await osLoginToken();
-  const res = await fetch(`${OS_API}/download`, {
+  const res = await fetch(`${token ? tokenCache.baseUrl : OS_API}/download`, {
     method: 'POST',
     headers: osHeaders({
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     }),
     body: JSON.stringify({ file_id: fileId, sub_format: 'srt' }),
+    signal: AbortSignal.timeout(15000),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || 'OpenSubtitles download failed');
@@ -95,73 +115,10 @@ export async function osDownloadContent(fileId) {
   const link = data.link;
   if (!link) throw new Error('OpenSubtitles download returned no link');
 
-  const dl = await fetch(link, { headers: { 'User-Agent': UA } });
+  const dl = await fetch(link, {
+    headers: { 'User-Agent': UA },
+    signal: AbortSignal.timeout(15000),
+  });
   if (!dl.ok) throw new Error(`OpenSubtitles file fetch failed (${dl.status})`);
   return dl.text();
-}
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function osAiTranslate(srtContent, api, token) {
-  const qs = new URLSearchParams({
-    api,
-    translate_from: 'en',
-    translate_to: 'mn',
-    file: srtContent,
-  });
-  const res = await fetch(`${OS_API}/ai/translate?${qs}`, {
-    method: 'POST',
-    headers: osHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    }),
-  });
-  const data = await res.json();
-  if (!res.ok)
-    throw new Error(
-      (data.message || `OpenSubtitles AI translate failed ${res.status}`) + ` | api=${api}`,
-    );
-  const correlationId = data.correlation_id;
-  if (!correlationId)
-    throw new Error(
-      `OpenSubtitles AI translate: no correlation_id (${JSON.stringify(data).slice(0, 120)})`,
-    );
-
-  for (let i = 0; i < 120; i++) {
-    const s = await fetch(`${OS_API}/ai/translate/${correlationId}`, {
-      headers: osHeaders(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
-    const sj = await s.json().catch(() => ({}));
-    if (sj.status === 'COMPLETED') {
-      const url = sj.data?.url;
-      if (!url) throw new Error('OpenSubtitles AI translate completed but no file url');
-      const f = await fetch(url, { headers: { 'User-Agent': UA } });
-      if (!f.ok) throw new Error(`OpenSubtitles AI translated file fetch failed (${f.status})`);
-      return { content: await f.text(), api };
-    }
-    if (/FAILED|ERROR/i.test(sj.status || ''))
-      throw new Error(sj.message || `OpenSubtitles AI translate failed (${sj.status})`);
-    await sleep(3000);
-  }
-  throw new Error('OpenSubtitles AI translate timed out');
-}
-
-export async function osTranslateToMongolian(srtContent) {
-  const apiKey = process.env.OPENSUBTITLES_API_KEY;
-  if (!apiKey) throw new Error('OpenSubtitles API key not configured');
-
-  const token = await osLoginToken();
-  if (!token) throw new Error('OpenSubtitles user login not configured');
-
-  let lastErr = null;
-  for (const api of ['deepl2', 'aws']) {
-    try {
-      return await osAiTranslate(srtContent, api, token);
-    } catch (err) {
-      if (/language|supported|not.*support|error/i.test(err.message || '')) lastErr = err;
-      else throw err;
-    }
-  }
-  if (lastErr) throw lastErr;
-  throw new Error('OpenSubtitles AI translate unavailable');
 }

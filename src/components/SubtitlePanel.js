@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Subtitles, Search, Loader2, Check, X, Languages, Zap } from 'lucide-react';
 
 const LANGUAGES = [
@@ -67,6 +67,8 @@ export default function SubtitlePanel({
   const [searchNotice, setSearchNotice] = useState(null);
   const [, setHasSearched] = useState(false);
   const [translating, setTranslating] = useState(false);
+  const translationRequest = useRef(null);
+  useEffect(() => () => translationRequest.current?.abort(), [slug, season, episode]);
   const [translateError, setTranslateError] = useState(null);
   const [translateWarning, setTranslateWarning] = useState(null);
   const [translateInfo, setTranslateInfo] = useState(null);
@@ -100,6 +102,11 @@ export default function SubtitlePanel({
     let cancelled = false;
 
     async function checkInstant() {
+      setTranslating(false);
+      setIsMongolian(false);
+      setTranslateInfo(null);
+      setTranslateError(null);
+      setTranslateWarning(null);
       setInstantReady(false);
       setSubtitleUrl(null);
       setLoadedLabel(null);
@@ -234,20 +241,71 @@ export default function SubtitlePanel({
     setTranslateError(null);
     setTranslateWarning(null);
     setTranslateInfo(null);
+    const controller = new AbortController();
+    translationRequest.current?.abort();
+    translationRequest.current = controller;
+    const pendingKey = `vxnta.subtitle-job:${slug}:${season || 0}:${episode || 0}`;
     try {
       const payload = subtitleUrl
         ? { subFileUrl: subtitleUrl, slug, title, year }
         : { tmdbId, title, year, type: isTV ? 'episode' : 'movie', season, episode, slug };
-      const res = await fetch('/api/subtitles/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
+      let pending;
+      try {
+        pending = sessionStorage.getItem(pendingKey);
+      } catch {
+        /* Optional resume storage. */
+      }
+      if (pending && !/^\/api\/subtitles\/jobs\/[a-f0-9-]{36}$/i.test(pending)) pending = null;
+      let res = await fetch(
+        pending || '/api/subtitles/translate',
+        pending
+          ? { signal: controller.signal }
+          : {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              signal: controller.signal,
+            },
+      );
+      let data = await res.json();
+      if (controller.signal.aborted) return;
+      for (let poll = 0; res.ok && data.status === 'pending' && poll < 150; poll++) {
+        if (!/^\/api\/subtitles\/jobs\/[a-f0-9-]{36}$/i.test(data.jobUrl))
+          throw new Error('Invalid translation job');
+        try {
+          sessionStorage.setItem(pendingKey, data.jobUrl);
+        } catch {
+          /* Resume is optional. */
+        }
+        setTranslateInfo(
+          'Монгол хадмал бэлтгэж байна. Энэ хуудсыг хаасан ч дараа дахин шалгаж болно.',
+        );
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        if (controller.signal.aborted) return;
+        res = await fetch(data.jobUrl, { signal: controller.signal, cache: 'no-store' });
+        data = await res.json();
+        if (controller.signal.aborted) return;
+      }
+      if (data.status === 'pending') {
+        setTranslateInfo('Хадмал бэлтгэгдэж байна. Дараа энэ товчоор дахин шалгаарай.');
+        return;
+      }
 
       if (!res.ok) {
+        if ([401, 403, 404, 409].includes(res.status)) {
+          try {
+            sessionStorage.removeItem(pendingKey);
+          } catch {
+            /* Optional storage. */
+          }
+        }
         setTranslateError(data.error || 'Translation failed');
         return;
+      }
+      try {
+        sessionStorage.removeItem(pendingKey);
+      } catch {
+        /* Optional storage. */
       }
 
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
@@ -268,9 +326,10 @@ export default function SubtitlePanel({
       }
       onSubtitleChange?.(absUrl, 'Mongolian');
     } catch {
+      if (controller.signal.aborted) return;
       setTranslateError('Translation request failed. Please try again.');
     } finally {
-      setTranslating(false);
+      if (!controller.signal.aborted) setTranslating(false);
     }
   }, [
     subtitleUrl,
@@ -436,17 +495,17 @@ export default function SubtitlePanel({
                     <Languages className="h-4 w-4" />
                   )}
                   {translating
-                    ? 'Fetching & translating to Mongolian...'
+                    ? 'Монгол хадмал бэлтгэж байна…'
                     : hasSubtitles
-                      ? 'Translate to Mongolian 🇲🇳'
-                      : 'Get Mongolian Subtitles 🇲🇳'}
+                      ? 'Монгол орчуулга бэлтгэх 🇲🇳'
+                      : 'Монгол хадмал авах 🇲🇳'}
                 </button>
                 <p className="max-w-[280px] text-xs text-slate-400">
                   {translating
-                    ? 'Finding a subtitle source and translating all lines to Cyrillic Mongolian. This can take a minute.'
+                    ? 'Хадмал хайж эсвэл орчуулж байна. Хэсэг хүлээгээрэй.'
                     : hasSubtitles
-                      ? 'Automatically translate the loaded subtitles into Mongolian.'
-                      : 'Automatically find a subtitle for this title and translate it into Mongolian.'}
+                      ? 'Сонгосон хадмалаа Монгол хэл рүү орчуулна.'
+                      : 'Энэ киноны Монгол хадмал хайна. Байхгүй бол орчуулах боломжийг шалгана.'}
                 </p>
               </div>
             </div>

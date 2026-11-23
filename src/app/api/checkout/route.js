@@ -128,7 +128,7 @@ export async function POST(request) {
     const pi = payment.providerRef
       ? { id: payment.providerRef }
       : await createPaymentIntent({
-          amountMnt: plan.priceMnt,
+          amountMnt: payment.amountMnt,
           description: `VXNTA — ${plan.name}`,
           reference: payment.txnId,
           idempotencyKey: `wire-${payment.txnId}`,

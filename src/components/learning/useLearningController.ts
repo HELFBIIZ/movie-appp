@@ -12,6 +12,7 @@ import { useLearningAccount } from './LearningAccount';
 import { listenedSeconds } from '@/lib/learning/snapshot';
 export type LearningSource = 'sample' | 'local' | 'movie';
 export const tabs = [
+  { id: 'practice', label: 'Сурах' },
   { id: 'transcript', label: 'Хадмал' },
   { id: 'saved', label: 'Хадгалсан' },
   { id: 'quiz', label: 'Давтах' },
@@ -22,7 +23,7 @@ export function useLearningController(
   source: LearningSource,
   context?: MoviePlayerContext,
 ) {
-  const [tab, setTab] = useState<(typeof tabs)[number]['id']>('transcript');
+  const [tab, setTab] = useState<(typeof tabs)[number]['id']>('practice');
   const [time, setTime] = useState(0);
   const [readyMedia, setReadyMedia] = useState('');
   const [now, setNow] = useState(() => Date.now());
@@ -177,6 +178,8 @@ export function useLearningController(
     return false;
   }
   function review(id: string, remembered: boolean) {
+    const card = account.snapshot.progress.items.find((item) => item.id === id);
+    if (!card) return false;
     const timestamp = Date.now();
     const success = account.update((snapshot) => ({
       ...snapshot,
@@ -192,7 +195,7 @@ export function useLearningController(
           id: crypto.randomUUID(),
           kind: 'review' as const,
           at: timestamp,
-          movieId,
+          movieId: card.movieId,
           correct: remembered,
         },
       ].slice(-5000),

@@ -25,6 +25,7 @@ export default function WordDialog({
     videoRef,
     ready,
     setMessage,
+    moviePlayer,
   } = controller;
   useEffect(() => {
     const dialog = ref.current;
@@ -47,6 +48,11 @@ export default function WordDialog({
     };
   }, [selection, source, videoRef]);
   async function replay() {
+    if (source === 'movie' && selection) {
+      if (!moviePlayer.replay(selection.cue.start, selection.cue.end))
+        setMessage('Тоглуулагчийн цаг холбогдсоны дараа дахин сонсоорой.');
+      return;
+    }
     const video = videoRef.current;
     if (!video || !selection || !ready) return;
     try {
@@ -96,10 +102,10 @@ export default function WordDialog({
           {storageError}
         </p>
       )}
-      {source !== 'movie' && selection && (
+      {selection && (
         <button
           type="button"
-          disabled={!ready}
+          disabled={source === 'movie' ? moviePlayer.time === null : !ready}
           onClick={() => void replay()}
           className="mt-3 rounded-lg border border-white/15 px-4 py-2 text-sm text-slate-300 disabled:opacity-40"
         >

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { createCineSession, emptyCineState } from '@/lib/learning/player-adapter/cinesrc';
 
 export type MoviePlayerContext = {
@@ -18,6 +18,9 @@ export type MoviePlayerContext = {
 export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
   const [observed, setObserved] = useState({ key: '', state: emptyCineState() });
   const session = useRef<ReturnType<typeof createCineSession> | null>(null);
+  const cancelReplay = useCallback(() => {
+    session.current?.cancelReplay();
+  }, []);
   const frameRef = context?.iframeRef;
   const tmdbId = context?.tmdbId;
   const provider = context?.provider;
@@ -51,5 +54,8 @@ export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
     ...(observed.key === key ? observed.state : emptyCineState()),
     seek: (seconds: number) => session.current?.seek(seconds) ?? false,
     pause: () => session.current?.pause() ?? false,
+    replay: (start: number, end: number, loop = false) =>
+      session.current?.replay(start, end, loop) ?? false,
+    cancelReplay,
   };
 }

@@ -98,6 +98,7 @@ test('CineSrc protocol fixture validates UI wiring only; this is not film playba
   await page.goto(route);
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();
   await expect(page.getByText('Тоглуулагчийн цаг:', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
   await expect(page.getByRole('list', { name: 'Bilingual transcript' }).locator('li')).toHaveCount(
     20,
   );

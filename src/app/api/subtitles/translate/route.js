@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { setTranslatedSubtitle, getAnySubtitle } from '@/lib/subtitle-store';
 import { saveGenerated } from '@/lib/generated-store';
-import { osSearch, osDownloadContent, osTranslateToMongolian } from '@/lib/opensubtitles';
-import { usableMongolian } from '@/lib/learning/captions';
+import { osSearch, osDownloadContent } from '@/lib/opensubtitles';
+import { usableMongolian, captionMatches } from '@/lib/learning/captions';
+import { startSubtitleTranslation } from '@/lib/subtitle-translation.mjs';
 import { getMovieBySlug } from '@/lib/movies';
 import { requireUser, rateLimit, getActiveSubscription, canWatch } from '@/db/index.mjs';
 import { readCaptionCache, writeCaptionCache } from '@/db/learning';
@@ -18,8 +19,15 @@ async function resolveOpenSubtitlesSource({ tmdbId, title, year, type, season, e
   if (!apiKey || (!tmdbId && !title)) return null;
 
   const native = await osSearch({ tmdbId, lang: 'mn', title, year, type, season, episode });
-  if (native?.length) {
-    const fileId = native[0].fileId;
+  const identity = {
+    tmdbId: Number(tmdbId),
+    mediaType: type === 'episode' ? 'tv' : 'movie',
+    season,
+    episode,
+  };
+  const nativeMatch = native?.find((candidate) => captionMatches(candidate, identity, 'mn'));
+  if (nativeMatch) {
+    const fileId = nativeMatch.fileId;
     if (fileId !== null && fileId !== undefined) {
       const content = await osDownloadContent(fileId);
       if (content)
@@ -28,8 +36,9 @@ async function resolveOpenSubtitlesSource({ tmdbId, title, year, type, season, e
   }
 
   const english = await osSearch({ tmdbId, lang: 'en', title, year, type, season, episode });
-  if (english?.length) {
-    const fileId = english[0].fileId;
+  const englishMatch = english?.find((candidate) => captionMatches(candidate, identity, 'en'));
+  if (englishMatch) {
+    const fileId = englishMatch.fileId;
     if (fileId !== null && fileId !== undefined) {
       const content = await osDownloadContent(fileId);
       if (content)
@@ -152,6 +161,16 @@ export async function POST(request) {
     if (!cues.length) {
       return NextResponse.json({ error: 'No subtitle cues found in file' }, { status: 400 });
     }
+    if (!nativeMongolian && process.env.OPENSUBTITLES_API_KEY) {
+      const mediaKey =
+        body.type === 'episode'
+          ? `${body.slug}-S${String(body.season).padStart(2, '0')}E${String(body.episode).padStart(2, '0')}`
+          : body.slug;
+      const result = await startSubtitleTranslation(user, mediaKey, content);
+      return NextResponse.json(result, {
+        status: result.status === 'pending' ? 202 : result.error ? 409 : 200,
+      });
+    }
 
     let vtt;
     let translatedUnique = 0;
@@ -161,40 +180,6 @@ export async function POST(request) {
 
     if (nativeMongolian) {
       vtt = buildVtt(cues);
-    } else if (osEnglish) {
-      try {
-        const ai = await osTranslateToMongolian(content);
-        vtt = buildVtt(parseCues(ai.content));
-        sourceDetail = `${sourceDetail} (${ai.api})`;
-      } catch {
-        if (!apiKey)
-          throw new Error(
-            'Монгол хадмал эсвэл орчуулгын үйлчилгээ одоогоор олдсонгүй. Өөрийн MN .vtt файл нэмж болно.',
-          );
-        const lines = cues.map((c) => c.text);
-        const result = await translateLinesToMongolian(apiKey, lines);
-        translatedUnique = result.translatedUnique;
-        googleTranslated = result.googleTranslated;
-        totalUnique = result.totalUnique;
-        quotaHit = result.quotaHit;
-
-        cues.forEach((cue, i) => {
-          cue.text = result.translated[i];
-        });
-
-        vtt = buildVtt(cues);
-        sourceDetail = `${sourceDetail} (translated)`;
-
-        const translatedTotal = translatedUnique + googleTranslated;
-        if (quotaHit && translatedTotal === 0) {
-          return NextResponse.json(
-            {
-              error: 'Translation service unavailable right now — try again in a few minutes.',
-            },
-            { status: 429 },
-          );
-        }
-      }
     } else {
       const lines = cues.map((c) => c.text);
       if (!apiKey) throw new Error('Орчуулгын үйлчилгээ одоогоор боломжгүй байна.');

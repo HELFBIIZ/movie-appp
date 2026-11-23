@@ -9,6 +9,7 @@ async function selectSource(page: Page, name: string) {
   await settings.locator('summary').first().click();
   await settings.getByRole('button', { name, exact: true }).click();
   await settings.locator('summary').first().click();
+  await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
 }
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() =>

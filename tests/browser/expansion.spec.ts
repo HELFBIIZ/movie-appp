@@ -86,6 +86,7 @@ for (const title of [
       }),
     );
     await page.goto(`/watch/${title.slug}?learn=1`, { waitUntil: 'domcontentloaded' });
+    await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
     await expect(page.getByLabel('The Last Train sample lesson video')).toHaveCount(0);
     await expect(page.getByRole('list', { name: 'Bilingual transcript' })).toContainText(
       'Original fixture episode 1.',
