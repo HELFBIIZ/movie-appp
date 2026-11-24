@@ -32,7 +32,6 @@ test.beforeEach(async ({ page }) => {
     sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
   );
   await page.clock.install({ time: new Date('2026-11-21T03:00:00Z') });
-  await page.clock.pauseAt(new Date('2026-11-21T04:00:00Z'));
   await page.route('**/api/auth/me', (route) =>
     route.fulfill({ status: 401, json: { error: { code: 'UNAUTHENTICATED' } } }),
   );
@@ -78,7 +77,13 @@ async function ready(page: Page) {
   ).toBeVisible();
 }
 
+const frozenPages = new WeakSet<Page>();
 async function appearance(page: Page, name: string) {
+  // Hydrate lazy client components before freezing their idle/timer callbacks.
+  if (!frozenPages.has(page)) {
+    await page.clock.pauseAt(new Date('2026-11-21T04:00:00Z'));
+    frozenPages.add(page);
+  }
   // Keep the lesson dialog visible even when it overlays the video rectangle.
   const mask = (await page.locator('dialog[open]').count()) ? [] : [page.locator('video, iframe')];
   await expect(page).toHaveScreenshot(name, { mask });
