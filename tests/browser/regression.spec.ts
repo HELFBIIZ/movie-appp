@@ -71,6 +71,8 @@ test.beforeEach(async ({ page }) => {
 async function ready(page: Page) {
   await expect(page.locator('main')).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
+  if (new URL(page.url()).pathname === '/')
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   // The header's authentication effect has settled when Sign In is visible.
   await expect(
     page.locator('header').getByRole('link', { name: 'Нэвтрэх', exact: true }),
@@ -82,8 +84,16 @@ async function appearance(page: Page, name: string) {
   // Hydrate lazy client components before freezing their idle/timer callbacks.
   if (!frozenPages.has(page)) {
     await page.clock.pauseAt(new Date('2026-11-21T04:00:00Z'));
+    // Finish a pending carousel transition before choosing its initial slide.
+    await page.clock.runFor(1000);
     frozenPages.add(page);
   }
+  const hero = page.getByRole('region', { name: /^Featured movie:/ });
+  if (await hero.count())
+    await hero
+      .getByRole('button', { name: /^Go to / })
+      .first()
+      .click();
   // Keep the lesson dialog visible even when it overlays the video rectangle.
   const mask = (await page.locator('dialog[open]').count()) ? [] : [page.locator('video, iframe')];
   await expect(page).toHaveScreenshot(name, { mask });
@@ -130,6 +140,8 @@ for (const [name, route] of [
       await expect(page.getByText('Сарын эрх', { exact: true }).first()).toBeVisible();
     if (name === 'dashboard')
       await expect(page.getByText('Хадгалсан үг', { exact: true })).toBeVisible();
+    if (name === 'learning')
+      await expect(page.getByRole('region', { name: 'SceneChain Learning Dock' })).toBeVisible();
     await appearance(page, `${name}-desktop.png`);
     await page.setViewportSize({ width: 390, height: 844 });
     await appearance(page, `${name}-mobile.png`);
