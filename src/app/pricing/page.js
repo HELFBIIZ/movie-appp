@@ -38,9 +38,20 @@ export default function PricingPage() {
         if (/^tx_[a-f0-9-]{36}$/.test(query.get('txn') || '')) setPendingTxn(query.get('txn'));
       })
       .catch(() => {});
-    fetch('/api/auth/me')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => setMe(d?.me ?? null));
+    let authController;
+    const refreshMe = () => {
+      authController?.abort();
+      const controller = new AbortController();
+      authController = controller;
+      void fetch('/api/auth/me', { cache: 'no-store', signal: controller.signal })
+        .then((response) => (response.ok ? response.json() : null))
+        .then((data) => {
+          if (!controller.signal.aborted) setMe(data?.me ?? null);
+        })
+        .catch(() => {});
+    };
+    refreshMe();
+    window.addEventListener('vxnta:session-change', refreshMe);
     fetch('/api/plans')
       .then((r) => r.json())
       .then((d) => setPlans(d.plans ?? []));
@@ -50,6 +61,10 @@ export default function PricingPage() {
         setRewards(d.rewards ?? []);
         setMyRewards(d.myRewards ?? []);
       });
+    return () => {
+      authController?.abort();
+      window.removeEventListener('vxnta:session-change', refreshMe);
+    };
   }, []);
 
   async function checkout(planCode, provider) {
@@ -246,7 +261,7 @@ export default function PricingPage() {
         />
         {pendingTxn && (
           <WirePaymentStatus
-            key={pendingTxn}
+            key={`${me?.id ?? 'guest'}:${pendingTxn}`}
             txn={pendingTxn}
             returnTo={returnTo}
             onNew={() => {

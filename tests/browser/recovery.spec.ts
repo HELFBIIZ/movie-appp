@@ -62,7 +62,16 @@ test('lost hosted-checkout return is recovered with an owned read and no new che
   let checkoutWrites = 0;
   await page.route('**/api/auth/me', (route) =>
     route.fulfill({
-      json: { me: { id: 'recovery-fixture', username: 'learner', roleCode: 'USER' } },
+      json: {
+        me: {
+          id: 'recovery-fixture',
+          username: 'learner',
+          roleCode: 'USER',
+          subscription: confirmed
+            ? { planName: 'Monthly', expiresAt: '2027-01-01T00:00:00Z' }
+            : null,
+        },
+      },
     }),
   );
   await page.route('**/api/learning/state', (route) =>
@@ -119,6 +128,7 @@ test('lost hosted-checkout return is recovered with an owned read and no new che
   expect(new URL(page.url()).searchParams.get('returnTo')).toBe(returnTo);
   confirmed = true;
   await page.getByRole('button', { name: 'Төлбөрөө дахин шалгах' }).click();
+  await expect(page.getByText('✓ Monthly until', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Киногоо үзэж, суралцах →' })).toHaveAttribute(
     'href',
     returnTo,
