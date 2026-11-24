@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WirePaymentStatus from '@/components/payments/WirePaymentStatus';
+import PendingWirePayments from '@/components/payments/PendingWirePayments';
 import { safeReturnTo } from '@/lib/safe-return';
 import { checkoutKey } from '@/lib/checkout-key';
 import { useRouter } from 'next/navigation';
@@ -233,8 +234,19 @@ export default function PricingPage() {
             {notice.text}
           </div>
         )}
+        <PendingWirePayments
+          userId={me?.id}
+          activeTxn={pendingTxn}
+          onResume={(payment) => {
+            setPendingTxn(payment.txnId);
+            setReturnTo(payment.returnTo);
+            const query = new URLSearchParams({ txn: payment.txnId, returnTo: payment.returnTo });
+            window.history.replaceState(null, '', `/pricing?${query}`);
+          }}
+        />
         {pendingTxn && (
           <WirePaymentStatus
+            key={pendingTxn}
             txn={pendingTxn}
             returnTo={returnTo}
             onNew={() => {

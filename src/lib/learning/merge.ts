@@ -21,6 +21,20 @@ export function mergeLearningSnapshots(
     ]),
   );
   return snapshotSchema.parse({
+    ...(local.retests || remote.retests
+      ? {
+          retests: [
+            ...new Map(
+              [...(remote.retests ?? []), ...(local.retests ?? [])].map((entry) => [
+                JSON.stringify(entry),
+                entry,
+              ]),
+            ).values(),
+          ]
+            .sort((a, b) => a.completedAt - b.completedAt)
+            .slice(-30),
+        }
+      : {}),
     progress: {
       items: [...items.values()],
       contextCorrect: Math.max(local.progress.contextCorrect, remote.progress.contextCorrect),

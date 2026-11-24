@@ -1,5 +1,6 @@
 import 'server-only';
 import { getDb } from './index.mjs';
+import { saveLearningState } from './learning-state.mjs';
 import { emptySnapshot, type LearningSnapshot } from '../lib/learning/snapshot';
 
 let ready: Promise<void> | undefined;
@@ -37,20 +38,7 @@ export async function writeLearningState(
   snapshot: LearningSnapshot,
 ) {
   const client = await database();
-  const result = await client.execute({
-    sql: `INSERT INTO learning_states (user_id, revision, body) SELECT ?, 1, ? WHERE ? = 0
-      ON CONFLICT(user_id) DO UPDATE SET revision = learning_states.revision + 1, body = excluded.body, updated_at = datetime('now') WHERE learning_states.revision = ?`,
-    args: [userId, JSON.stringify(snapshot), revision, revision],
-  });
-  // Existing rows need an UPDATE even when the caller's revision is nonzero.
-  if (!result.rowsAffected && revision > 0) {
-    const update = await client.execute({
-      sql: "UPDATE learning_states SET revision = revision + 1, body = ?, updated_at = datetime('now') WHERE user_id = ? AND revision = ?",
-      args: [JSON.stringify(snapshot), userId, revision],
-    });
-    return update.rowsAffected === 1;
-  }
-  return result.rowsAffected === 1;
+  return saveLearningState(client, userId, revision, snapshot);
 }
 export async function readCaptionCache(key: string): Promise<unknown | null> {
   const client = await database();

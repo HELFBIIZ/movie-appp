@@ -3,12 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ArrowRight, Sparkles, X } from 'lucide-react';
 import {
-  placementQuestions,
+  placementForms,
   placementBands,
   PLACEMENT_DISMISSED_KEY,
   OPEN_PLACEMENT_EVENT,
   type PlacementAnswers,
   type PlacementProfile,
+  type PlacementForm,
 } from '@/lib/learning/placement';
 import { usePlacementProfile } from './usePlacementProfile';
 import { useLearningAccount } from './LearningAccount';
@@ -19,10 +20,12 @@ export default function LevelCheck() {
   const heading = useRef<HTMLHeadingElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const { loaded, profile, error, save } = usePlacementProfile();
+  const { loaded, profile, error, save, nextForm } = usePlacementProfile();
   const { scope, sync } = useLearningAccount();
   const [stage, setStage] = useState<'welcome' | 'quiz' | 'result'>('welcome');
   const [index, setIndex] = useState(0);
+  const [form, setForm] = useState<PlacementForm>('a');
+  const questions = placementForms[form];
   const [answers, setAnswers] = useState<PlacementAnswers>({});
   const [result, setResult] = useState<PlacementProfile | null>(null);
   const markSeen = () => {
@@ -34,12 +37,13 @@ export default function LevelCheck() {
     }
   };
   const open = useCallback(() => {
+    setForm(nextForm);
     setStage('welcome');
     setIndex(0);
     setAnswers({});
     setResult(null);
     if (dialog.current && !dialog.current.open) dialog.current.showModal();
-  }, []);
+  }, [nextForm]);
   useEffect(() => {
     window.addEventListener(OPEN_PLACEMENT_EVENT, open);
     return () => window.removeEventListener(OPEN_PLACEMENT_EVENT, open);
@@ -68,14 +72,14 @@ export default function LevelCheck() {
     markSeen();
     dialog.current?.close();
   };
-  const question = placementQuestions[index];
+  const question = questions[index];
   const selected = answers[question.id];
   const answered = Object.hasOwn(answers, question.id);
   function next() {
     if (!answered) return;
-    if (index + 1 < placementQuestions.length) setIndex(index + 1);
+    if (index + 1 < questions.length) setIndex(index + 1);
     else {
-      const completed = save(answers);
+      const completed = save(answers, form);
       setResult(completed.profile);
       setStage('result');
       markSeen();
@@ -129,6 +133,12 @@ export default function LevelCheck() {
               {error}
             </p>
           )}
+          {profile && (
+            <p className="mt-3 text-xs leading-6 text-slate-400">
+              Өмнөх оролдлогоос өөр асуултуудтай. Хоёр хувилбар ээлжилнэ; оноо нь түвшний баримжаа
+              хэвээр.
+            </p>
+          )}
           <button
             type="button"
             onClick={() => setStage('quiz')}
@@ -147,19 +157,20 @@ export default function LevelCheck() {
       ) : stage === 'quiz' ? (
         <>
           <p role="status" className="text-sm text-slate-400">
-            Асуулт {index + 1} / {placementQuestions.length}
+            Асуулт {index + 1} / {questions.length}
+            {form === 'b' ? ' · Хувилбар B' : ''}
           </p>
           <div
             role="progressbar"
             aria-label="Түвшний тестийн явц"
             aria-valuemin={0}
-            aria-valuemax={placementQuestions.length}
+            aria-valuemax={questions.length}
             aria-valuenow={index}
             className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10"
           >
             <div
               className="h-full rounded-full bg-[#c9a227] transition-all"
-              style={{ width: `${(index / placementQuestions.length) * 100}%` }}
+              style={{ width: `${(index / questions.length) * 100}%` }}
             />
           </div>
           <p className="mt-6 text-sm text-amber-200">{question.scene}</p>
@@ -215,7 +226,7 @@ export default function LevelCheck() {
               onClick={next}
               className="rounded-xl bg-[#c9a227] px-5 py-3 font-semibold text-slate-950 disabled:opacity-35"
             >
-              {index + 1 === placementQuestions.length ? 'Үр дүнгээ харах' : 'Дараагийн асуулт'}
+              {index + 1 === questions.length ? 'Үр дүнгээ харах' : 'Дараагийн асуулт'}
             </button>
           </div>
           <p className="mt-4 text-xs text-slate-500">Сургалтын шинэ жишээнүүд · Киноны яриа биш.</p>

@@ -27,7 +27,9 @@ export default function LearningDashboard() {
   }, []);
   const stats = useMemo(() => learningMetrics(account.snapshot, now), [account.snapshot, now]);
   const baseline =
-    history.length > 1 ? assessPlacement(history[0].answers, history[0].completedAt) : null;
+    history.length > 1
+      ? assessPlacement(history[0].answers, history[0].completedAt, history[0].form)
+      : null;
   const change =
     stats.recentRate !== null &&
     stats.previousRate !== null &&
@@ -261,11 +263,12 @@ export default function LearningDashboard() {
                 </summary>
                 <ol className="mt-3 space-y-2 text-sm text-slate-400">
                   {history.map((entry) => {
-                    const result = assessPlacement(entry.answers, entry.completedAt);
+                    const result = assessPlacement(entry.answers, entry.completedAt, entry.form);
                     return (
                       <li key={entry.completedAt}>
                         {new Date(entry.completedAt).toLocaleDateString('mn-MN')} · {result.correct}
                         /{result.total} · {placementBands[result.band].label}
+                        {entry.form === 'b' ? ' · Хувилбар B' : ''}
                       </li>
                     );
                   })}

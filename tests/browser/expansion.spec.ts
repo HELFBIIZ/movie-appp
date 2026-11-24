@@ -206,6 +206,7 @@ test('new learning and payment endpoints retain real guest and admin guards', as
   for (const path of [
     '/api/learning/state',
     '/api/learning/subtitles?slug=inception',
+    '/api/payments/wire/pending',
     '/api/payments/tx_12345678-1234-1234-1234-123456789abc',
   ])
     expect((await request.get(path)).status()).toBe(401);

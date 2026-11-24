@@ -41,7 +41,8 @@ export default function GuestProgressImport() {
       ) : (
         <div className="mt-3 space-y-3">
           <p className="text-slate-300">
-            {preview.progress.items.length} карт · {preview.assessments.length} түвшний тест ·{' '}
+            {preview.progress.items.length} карт ·{' '}
+            {preview.assessments.length + (preview.retests?.length ?? 0)} түвшний тест ·{' '}
             {preview.activity.filter((event) => event.kind === 'review').length} давталт
           </p>
           <button

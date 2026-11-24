@@ -1,10 +1,11 @@
+import { retestQuestions } from './placement-retest.ts';
 export const PLACEMENT_KEY = 'vxnta.scenechain.placement.v1';
 export const PLACEMENT_DISMISSED_KEY = 'vxnta.scenechain.placement.dismissed.v1';
 export const PLACEMENT_EVENT = 'vxnta:placement-change';
 export const OPEN_PLACEMENT_EVENT = 'vxnta:placement-open';
 export type PlacementSkill = 'vocabulary' | 'grammar' | 'reading';
 export type PlacementBand = 'beginner' | 'foundation' | 'intermediate';
-type PlacementQuestion = {
+export type PlacementQuestion = {
   id: string;
   skill: PlacementSkill;
   difficulty: 'basic' | 'daily' | 'challenge';
@@ -124,7 +125,13 @@ export const placementBands = {
   },
 } as const;
 export type PlacementAnswers = Record<string, string | null>;
+export type PlacementForm = 'a' | 'b';
+export const placementForms = { a: placementQuestions, b: retestQuestions } as const;
+export function nextPlacementForm(last?: PlacementForm): PlacementForm {
+  return last === 'a' ? 'b' : 'a';
+}
 export type PlacementProfile = {
+  form: PlacementForm;
   band: PlacementBand;
   correct: number;
   total: number;
@@ -132,12 +139,18 @@ export type PlacementProfile = {
   completedAt: number;
 };
 
-export function assessPlacement(answers: PlacementAnswers, completedAt: number): PlacementProfile {
+export function assessPlacement(
+  answers: PlacementAnswers,
+  completedAt: number,
+  form: PlacementForm = 'a',
+): PlacementProfile {
+  const questions = placementForms[form];
   if (
+    !questions ||
     !answers ||
     typeof answers !== 'object' ||
     Array.isArray(answers) ||
-    Object.keys(answers).length !== placementQuestions.length ||
+    Object.keys(answers).length !== questions.length ||
     !Number.isSafeInteger(completedAt) ||
     completedAt < 0
   )
@@ -150,7 +163,7 @@ export function assessPlacement(answers: PlacementAnswers, completedAt: number):
   let correct = 0,
     basics = 0,
     challenges = 0;
-  for (const question of placementQuestions) {
+  for (const question of questions) {
     if (
       !Object.hasOwn(answers, question.id) ||
       (answers[question.id] !== null && !question.choices.includes(answers[question.id]!))
@@ -172,7 +185,7 @@ export function assessPlacement(answers: PlacementAnswers, completedAt: number):
       : correct >= 4 && basics >= 1
         ? 'foundation'
         : 'beginner';
-  return { band, correct, total: placementQuestions.length, skills, completedAt };
+  return { form, band, correct, total: questions.length, skills, completedAt };
 }
 
 export function decodePlacement(raw: string | null): PlacementProfile | null {

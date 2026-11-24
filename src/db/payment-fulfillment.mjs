@@ -47,14 +47,33 @@ export async function fulfillPayment(client, txnId) {
   return { activated: result[0].rowsAffected === 1 };
 }
 
-export async function checkoutRequest(
-  client,
-  { userId, requestKey, planId, amountMnt, provider, returnTo },
-) {
+async function prepareCheckouts(client) {
   await client.execute(`CREATE TABLE IF NOT EXISTS checkout_requests (
     user_id TEXT NOT NULL REFERENCES users(id), request_key TEXT NOT NULL, txn_id TEXT NOT NULL UNIQUE,
     return_to TEXT NOT NULL, checkout_url TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')),
     PRIMARY KEY (user_id, request_key))`);
+}
+export async function recentCheckoutRequests(client, userId) {
+  await prepareCheckouts(client);
+  return (
+    await client.execute({
+      sql: `SELECT r.txn_id AS txnId, r.return_to AS returnTo, r.checkout_url AS checkoutUrl,
+      r.created_at AS createdAt, p.status, p.amount_mnt AS amountMnt, plan.name AS planName
+      FROM checkout_requests r JOIN payments p ON p.txn_id = r.txn_id
+      JOIN subscription_plans plan ON plan.id = p.plan_id
+      WHERE r.user_id = ? AND p.user_id = ? AND p.provider = 'wire'
+      AND p.status IN ('PENDING', 'PROCESSING', 'SUCCESSFUL')
+      AND r.created_at >= datetime('now', '-1 day')
+      ORDER BY r.created_at DESC, r.rowid DESC LIMIT 3`,
+      args: [userId, userId],
+    })
+  ).rows;
+}
+export async function checkoutRequest(
+  client,
+  { userId, requestKey, planId, amountMnt, provider, returnTo },
+) {
+  await prepareCheckouts(client);
   const txnId = `tx_${crypto.randomUUID()}`;
   await client.batch(
     [

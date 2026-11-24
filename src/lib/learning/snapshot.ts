@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { decodeProgress, emptyProgress } from './storage.ts';
-import { assessPlacement, type PlacementAnswers } from './placement.ts';
+import { assessPlacement, type PlacementAnswers, type PlacementForm } from './placement.ts';
 
 export const activitySchema = z.object({
   id: z.string().uuid(),
@@ -32,6 +32,25 @@ export const snapshotSchema = z.object({
     }
   }),
   assessments: z.array(assessmentSchema).max(30),
+  // Optional extension: old clients must continue to see only valid form-A answers.
+  retests: z
+    .array(
+      z
+        .object({
+          form: z.literal('b'),
+          answers: z.record(z.string(), z.string().nullable()),
+          completedAt: z.number().int().nonnegative(),
+        })
+        .superRefine((value, context) => {
+          try {
+            assessPlacement(value.answers, value.completedAt, value.form);
+          } catch {
+            context.addIssue({ code: 'custom', message: 'Invalid retest' });
+          }
+        }),
+    )
+    .max(30)
+    .optional(),
   activity: z.array(activitySchema).max(5000),
 });
 export type LearningSnapshot = z.infer<typeof snapshotSchema>;
@@ -50,8 +69,14 @@ export function addAssessment(
   snapshot: LearningSnapshot,
   answers: PlacementAnswers,
   completedAt: number,
+  form: PlacementForm = 'a',
 ): LearningSnapshot {
-  assessPlacement(answers, completedAt);
+  assessPlacement(answers, completedAt, form);
+  if (form === 'b')
+    return {
+      ...snapshot,
+      retests: [...(snapshot.retests ?? []), { form, answers, completedAt }].slice(-30),
+    };
   return {
     ...snapshot,
     assessments: [...snapshot.assessments, { answers, completedAt }].slice(-30),
