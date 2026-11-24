@@ -89,8 +89,12 @@ export default function LevelCheck() {
     close();
     if (pathname?.startsWith('/movie/'))
       router.push(`/watch/${pathname.slice('/movie/'.length)}?learn=1`);
-    else if (pathname?.startsWith('/watch/')) router.push(`${pathname}?learn=1`);
-    else if (pathname !== '/learn') router.push('/learn');
+    else if (pathname?.startsWith('/watch/')) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('learn', '1');
+      router.replace(url.pathname + url.search);
+      window.dispatchEvent(new Event('vxnta:start-learning'));
+    } else router.push('/movies');
   }
   const recommendation = result ? placementBands[result.band] : null;
   return (
@@ -102,7 +106,7 @@ export default function LevelCheck() {
     >
       <div className="mb-5 flex items-center justify-between gap-3">
         <p className="flex items-center gap-2 text-sm font-semibold text-[#c9a227]">
-          <Sparkles size={17} aria-hidden="true" /> VXNTA · Танд тохируулъя
+          <Sparkles size={17} aria-hidden="true" /> Түвшний тест
         </p>
         <button
           type="button"
@@ -115,43 +119,31 @@ export default function LevelCheck() {
       </div>
       {stage === 'welcome' ? (
         <>
-          <p className="text-4xl" aria-hidden="true">
-            🍿
-          </p>
-          <h2 className="mt-4 text-2xl font-semibold leading-tight">Та аль түвшнээс эхлэх вэ?</h2>
+          <h2 className="mt-4 text-2xl font-semibold leading-tight">Англи хэлээ шалгая</h2>
           <p className="mt-3 text-sm leading-7 text-slate-400">
-            Киноны орой, найзын зурвас, нэг сонирхолтой хэллэг. 8 жижиг асуултаар эхлэх түвшнээ
-            баримжаалъя.
+            8 асуулт · 2 минут. Мэдэхгүй асуултаа алгасаж болно.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2 text-xs text-slate-300">
-            <span className="rounded-full bg-white/5 px-3 py-2">2–3 минут</span>
-            <span className="rounded-full bg-white/5 px-3 py-2">Бүртгэл хэрэггүй</span>
-            <span className="rounded-full bg-white/5 px-3 py-2">Мэдэхгүйг алгасаж болно</span>
-          </div>
           {error && (
             <p role="alert" className="mt-4 text-sm text-amber-200">
               {error}
             </p>
           )}
           {profile && (
-            <p className="mt-3 text-xs leading-6 text-slate-400">
-              Өмнөх оролдлогоос өөр асуултуудтай. Хоёр хувилбар ээлжилнэ; оноо нь түвшний баримжаа
-              хэвээр.
-            </p>
+            <p className="mt-3 text-xs leading-6 text-slate-400">Энэ удаа өөр асуултуудтай.</p>
           )}
           <button
             type="button"
             onClick={() => setStage('quiz')}
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#c9a227] px-4 py-3 font-semibold text-slate-950"
           >
-            Тестээ эхлэх <ArrowRight size={18} aria-hidden="true" />
+            Эхлэх <ArrowRight size={18} aria-hidden="true" />
           </button>
           <button
             type="button"
             onClick={close}
             className="mt-2 w-full rounded-lg px-4 py-3 text-sm text-slate-400"
           >
-            Дараа үзье
+            Дараа
           </button>
         </>
       ) : stage === 'quiz' ? (
@@ -245,22 +237,25 @@ export default function LevelCheck() {
           <p className="mt-4 text-sm text-slate-400">
             Зөв хариулт: {result.correct} / {result.total}
           </p>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {(
-              [
-                ['vocabulary', 'Үгийн утга'],
-                ['grammar', 'Дүрэм'],
-                ['reading', 'Унших'],
-              ] as const
-            ).map(([skill, label]) => (
-              <div key={skill} className="rounded-xl bg-white/5 p-3 text-center">
-                <p className="font-semibold text-slate-100">
-                  {result.skills[skill].correct}/{result.skills[skill].total}
-                </p>
-                <p className="mt-1 text-xs text-slate-400">{label}</p>
-              </div>
-            ))}
-          </div>
+          <details className="mt-4 text-sm text-slate-400">
+            <summary className="cursor-pointer">Дэлгэрэнгүй</summary>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {(
+                [
+                  ['vocabulary', 'Үгийн утга'],
+                  ['grammar', 'Дүрэм'],
+                  ['reading', 'Унших'],
+                ] as const
+              ).map(([skill, label]) => (
+                <div key={skill} className="rounded-xl bg-white/5 p-3 text-center">
+                  <p className="font-semibold text-slate-100">
+                    {result.skills[skill].correct}/{result.skills[skill].total}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-400">{label}</p>
+                </div>
+              ))}
+            </div>
+          </details>
           <p className="mt-4 text-xs leading-6 text-slate-500">
             Энэ нь эхлэх түвшний баримжаа. Сонсох, ярих, бичих чадварыг шалгаагүй; албан ёсны
             түвшний үнэлгээ биш.
@@ -277,7 +272,7 @@ export default function LevelCheck() {
           >
             {pathname?.startsWith('/movie/') || pathname?.startsWith('/watch/')
               ? 'Энэ киногоор сурах'
-              : 'Миний хичээлийг эхлэх'}
+              : 'Кино сонгох'}
           </button>
           <button
             type="button"

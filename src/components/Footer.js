@@ -37,28 +37,28 @@ export default function Footer() {
 
         <div className="flex max-w-full flex-wrap justify-center gap-4 text-sm md:justify-end">
           <a
-            href="#"
+            href="/movies"
             className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
-            Facebook
+            Кино
           </a>
           <a
-            href="#"
+            href="/learning"
             className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
-            Instagram
+            Миний үг
           </a>
           <a
-            href="#"
+            href="/pricing"
             className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
-            Twitter
+            VIP эрх
           </a>
           <a
-            href="#"
+            href="/profile"
             className="hover:underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
-            Youtube
+            Миний бүртгэл
           </a>
           <Link
             href="/help"
@@ -70,7 +70,7 @@ export default function Footer() {
             href="/admin"
             className="hover:underline text-gray-600 dark:text-gray-400 hover:text-[#c9a227] dark:hover:text-amber-200"
           >
-            Admin
+            Удирдлага
           </Link>
         </div>
       </div>

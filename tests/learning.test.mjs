@@ -24,7 +24,7 @@ import {
 } from '../src/lib/learning/storage.ts';
 import { isCorrect, vocabularyQuestions } from '../src/lib/learning/quiz.ts';
 import { htmlVideoAdapter, iframeProviders } from '../src/lib/learning/player-adapter/index.ts';
-import { contextQuestion, sampleLines } from '../src/lib/learning/sample.ts';
+import { contextQuestion, sampleLines } from './fixtures/lesson.ts';
 
 const vtt = (body) => `WEBVTT\n\n${body}`;
 const cue = (text = 'Hello', start = '00:01.000', end = '00:03.000') =>
@@ -193,9 +193,9 @@ test('iframe capabilities stay false; HTML video adapter controls only a real vi
   assert.equal(video.paused, true);
 });
 test('committed sample captions match the original script and actual narration-buffer timings', () => {
-  const en = parseVtt(fs.readFileSync('public/learning/last-train.en.vtt', 'utf8'));
-  const mn = parseVtt(fs.readFileSync('public/learning/last-train.mn.vtt', 'utf8'));
-  const manifest = JSON.parse(fs.readFileSync('public/learning/timings.json', 'utf8'));
+  const en = parseVtt(fs.readFileSync('tests/fixtures/last-train.en.vtt', 'utf8'));
+  const mn = parseVtt(fs.readFileSync('tests/fixtures/last-train.mn.vtt', 'utf8'));
+  const manifest = JSON.parse(fs.readFileSync('tests/fixtures/timings.json', 'utf8'));
   assert.deepEqual(
     en.map((c) => c.text),
     sampleLines.map((line) => line.en),
@@ -209,7 +209,7 @@ test('committed sample captions match the original script and actual narration-b
     assert.ok(Math.abs(c.end - manifest.cues[i].end) < 0.002);
   });
   assert.ok(en.at(-1).end < manifest.duration);
-  assert.ok(fs.statSync('public/learning/last-train.webm').size > 10000);
+  assert.ok(fs.statSync('tests/fixtures/last-train.webm').size > 10000);
 });
 
 function cineFixture() {

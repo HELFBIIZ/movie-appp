@@ -1,17 +1,18 @@
-import Link from 'next/link';
+'use client';
+import { useEffect, useRef } from 'react';
 import {
   Film,
-  Home,
-  ListVideo,
-  Calendar,
-  Star,
-  Tv2,
-  Mountain,
+  Bookmark,
+  BookOpen,
   LifeBuoy,
   LogOut,
+  Settings,
   User,
+  ChevronDown,
 } from 'lucide-react';
-import { genres, MobileNavLink } from './navigation';
+import { MobileNavLink } from './navigation';
+import { BrowseLinks } from './BrowseMenu';
+
 type Props = {
   isAdmin: boolean;
   isLoggedIn: boolean;
@@ -19,109 +20,71 @@ type Props = {
   onLogout: () => Promise<void>;
 };
 export default function MobileNavigation({ isAdmin, isLoggedIn, onClose, onLogout }: Props) {
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    root.current?.querySelector<HTMLAnchorElement>('a')?.focus();
+    function escape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        onClose();
+        document.getElementById('mobile-menu-toggle')?.focus();
+      }
+    }
+    document.addEventListener('keydown', escape);
+    return () => document.removeEventListener('keydown', escape);
+  }, [onClose]);
   return (
-    <div className="lg:hidden border-t bg-[#faf7f1] dark:bg-[#0f0c09] dark:border-black/70 animate-fade-in-down">
-      <nav className="container px-4 py-3 flex flex-col gap-1">
-        <MobileNavLink href="/" icon={<Home className="h-4 w-4" />} onClick={() => onClose()}>
-          Home
-        </MobileNavLink>
-        <MobileNavLink href="/movies" icon={<Film className="h-4 w-4" />} onClick={() => onClose()}>
-          All Movies
-        </MobileNavLink>
-        <MobileNavLink
-          href="/movies?category=upcoming"
-          icon={<Calendar className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          New Releases
-        </MobileNavLink>
-        <MobileNavLink
-          href="/movies?category=top-rated"
-          icon={<Star className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          Top Rated
-        </MobileNavLink>
-        <MobileNavLink
-          href="/movies?category=kdrama"
-          icon={<Tv2 className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          K-Dramas
-        </MobileNavLink>
-        <MobileNavLink
-          href="/movies?category=western"
-          icon={<Mountain className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          Western
-        </MobileNavLink>
-        <MobileNavLink
-          href="/watchlist"
-          icon={<ListVideo className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          Watchlist
-        </MobileNavLink>
-        <MobileNavLink
-          href="/help"
-          icon={<LifeBuoy className="h-4 w-4" />}
-          onClick={() => onClose()}
-        >
-          Тусламж
-        </MobileNavLink>
-        {isAdmin && (
-          <MobileNavLink
-            href="/admin"
-            icon={<Film className="h-4 w-4" />}
-            onClick={() => onClose()}
-          >
-            Admin
+    <div
+      ref={root}
+      id="mobile-navigation"
+      className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-[#c9a227]/15 bg-[#faf7f1] shadow-xl lg:hidden dark:bg-[#110e0a]"
+    >
+      <nav aria-label="Утасны цэс" className="container space-y-3 px-4 py-4">
+        <div className="grid grid-cols-3 gap-2 [&_a]:flex-col [&_a]:justify-center [&_a]:gap-2 [&_a]:bg-[#c9a227]/10 [&_a]:py-4">
+          <MobileNavLink href="/movies" icon={<Film size={21} />} onClick={onClose}>
+            Кино
           </MobileNavLink>
-        )}
-        {isLoggedIn ? (
-          <>
-            <MobileNavLink
-              href="/profile"
-              icon={<User className="h-4 w-4" />}
-              onClick={() => onClose()}
-            >
-              Profile
+          <MobileNavLink href="/learning" icon={<BookOpen size={21} />} onClick={onClose}>
+            Миний үг
+          </MobileNavLink>
+          <MobileNavLink href="/watchlist" icon={<Bookmark size={21} />} onClick={onClose}>
+            Жагсаалт
+          </MobileNavLink>
+        </div>
+        <details className="rounded-xl border border-[#c9a227]/15">
+          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+            Киноны ангилал <ChevronDown size={16} />
+          </summary>
+          <div className="px-2 pb-2">
+            <BrowseLinks onSelect={onClose} />
+          </div>
+        </details>
+        <div className="grid grid-cols-2 gap-1">
+          <MobileNavLink href="/help" icon={<LifeBuoy size={17} />} onClick={onClose}>
+            Тусламж
+          </MobileNavLink>
+          {isLoggedIn && (
+            <MobileNavLink href="/profile" icon={<User size={17} />} onClick={onClose}>
+              Миний бүртгэл
             </MobileNavLink>
+          )}
+          {isAdmin && (
+            <MobileNavLink href="/admin" icon={<Settings size={17} />} onClick={onClose}>
+              Удирдлага
+            </MobileNavLink>
+          )}
+          {isLoggedIn && (
             <button
+              type="button"
               onClick={() => {
-                onLogout();
+                void onLogout();
                 onClose();
               }}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 transition-colors w-full text-left"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-500"
             >
-              <LogOut className="h-4 w-4" />
-              Logout
+              <LogOut size={17} />
+              Гарах
             </button>
-          </>
-        ) : (
-          <MobileNavLink
-            href="/login"
-            icon={<LogOut className="h-4 w-4" />}
-            onClick={() => onClose()}
-          >
-            Sign In
-          </MobileNavLink>
-        )}
-        <div className="mt-2 pt-2 border-t border-[#e5dcc7] dark:border-black/60">
-          <p className="px-3 py-1 text-xs font-medium text-[#8a7540] dark:text-[#cbb277]">Genres</p>
-          <div className="grid grid-cols-3 gap-1 px-3">
-            {genres.map((genre) => (
-              <Link
-                key={genre.slug}
-                href={`/genre/${genre.slug}`}
-                onClick={() => onClose()}
-                className="rounded-lg px-2 py-1.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-[#f0e8d4] dark:hover:bg-white/5 dark:hover:text-amber-100 transition-colors"
-              >
-                {genre.label}
-              </Link>
-            ))}
-          </div>
+          )}
         </div>
       </nav>
     </div>

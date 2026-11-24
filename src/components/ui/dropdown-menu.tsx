@@ -107,12 +107,14 @@ export function DropdownMenuContent({
 }
 
 export function DropdownMenuItem({ children, onClick, ...props }: HTMLAttributes<HTMLDivElement>) {
+  const { setOpen } = React.useContext(DropdownContext);
   return (
     <div
       role="menuitem"
       className="px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-slate-700 dark:text-slate-200"
       onClick={(event) => {
         onClick?.(event);
+        setOpen(false);
       }}
       {...props}
     >

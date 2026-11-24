@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { activeCues } from '@/lib/learning/vtt';
 import { addItem, itemId } from '@/lib/learning/storage';
 import { reviewItem } from '@/lib/learning/srs';
@@ -10,12 +10,12 @@ import { useMovieLesson } from './useMovieLesson';
 import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
 import { useLearningAccount } from './LearningAccount';
 import { listenedSeconds } from '@/lib/learning/snapshot';
-export type LearningSource = 'sample' | 'local' | 'movie';
+export type LearningSource = 'local' | 'movie';
 export const tabs = [
-  { id: 'practice', label: 'Сурах' },
-  { id: 'transcript', label: 'Хадмал' },
-  { id: 'saved', label: 'Хадгалсан' },
+  { id: 'practice', label: 'Өгүүлбэр' },
+  { id: 'saved', label: 'Миний үг' },
   { id: 'quiz', label: 'Давтах' },
+  { id: 'transcript', label: 'Бүх хадмал' },
 ] as const;
 
 export function useLearningController(
@@ -121,7 +121,7 @@ export function useLearningController(
     setSelection(null);
     setMessage('');
   }, [lesson.mediaId]);
-  const items = progress?.items ?? [];
+  const items = useMemo(() => progress?.items ?? [], [progress?.items]);
   const scoped = items.filter(
     (item) =>
       item.movieId === movieId &&
@@ -140,43 +140,54 @@ export function useLearningController(
       )
       .map((cue) => cue.id),
   );
-  function save(kind: 'word' | 'sentence', cue: AlignedCue, note?: WordNote) {
-    const savedAt = Date.now();
-    const data = {
-      kind,
-      word: note?.word ?? cue.text,
-      meaning: note?.meaning ?? cue.translation,
-      example: cue.text,
-      movieId,
-      mediaId: lesson.mediaId,
-      cueStart: cue.start,
-      cueEnd: cue.end,
-      stage: 0,
-      correct: 0,
-      incorrect: 0,
-      dueAt: savedAt,
-      savedAt,
-      tmdbId:
-        isMovie && Number.isSafeInteger(Number(context?.tmdbId)) && Number(context?.tmdbId) > 0
-          ? Number(context?.tmdbId)
-          : undefined,
-      grammar: note?.grammar,
-      context: note?.context,
-      provenance:
-        source === 'sample'
-          ? ('curated' as const)
-          : note
-            ? ('user-note' as const)
-            : ('unverified-subtitle' as const),
-    };
-    const item: LearningItem = { ...data, id: itemId(data) };
-    if (update((current) => addItem(current, item))) {
-      setNow(savedAt);
-      setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} хадгалагдлаа.`);
-      return true;
-    }
-    return false;
-  }
+  const save = useCallback(
+    (
+      kind: 'word' | 'sentence',
+      cue: AlignedCue,
+      note?: WordNote,
+      provenance: LearningItem['provenance'] = 'unverified-subtitle',
+    ) => {
+      const savedAt = Date.now();
+      const data = {
+        kind,
+        word: note?.word ?? cue.text,
+        meaning: note?.meaning ?? cue.translation,
+        example: cue.text,
+        movieId,
+        mediaId: lesson.mediaId,
+        cueStart: cue.start,
+        cueEnd: cue.end,
+        stage: 0,
+        correct: 0,
+        incorrect: 0,
+        dueAt: savedAt,
+        savedAt,
+        tmdbId:
+          isMovie && Number.isSafeInteger(Number(context?.tmdbId)) && Number(context?.tmdbId) > 0
+            ? Number(context?.tmdbId)
+            : undefined,
+        grammar: note?.grammar,
+        context: note?.context,
+        provenance,
+      };
+      const baseId = itemId(data);
+      const duplicate = scoped.find(
+        (item) => item.kind === kind && item.word === data.word && item.meaning === data.meaning,
+      );
+      if (kind === 'word' && duplicate) return duplicate.id;
+      const id = items.some((item) => item.id === baseId && item.meaning !== data.meaning)
+        ? JSON.stringify([baseId, data.meaning])
+        : baseId;
+      const item: LearningItem = { ...data, id };
+      if (update((current) => addItem(current, item))) {
+        setNow(savedAt);
+        setMessage(`${kind === 'word' ? 'Үг' : 'Өгүүлбэр'} хадгалагдлаа.`);
+        return item.id;
+      }
+      return false;
+    },
+    [movieId, lesson.mediaId, isMovie, context?.tmdbId, scoped, items, update],
+  );
   function review(id: string, remembered: boolean) {
     const card = account.snapshot.progress.items.find((item) => item.id === id);
     if (!card) return false;

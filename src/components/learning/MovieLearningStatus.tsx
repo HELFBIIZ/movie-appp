@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { formatTime } from '@/lib/learning/vtt';
 import type { MoviePlayerContext } from './useMoviePlayer';
 import type { LearningController } from './useLearningController';
@@ -12,130 +11,101 @@ export default function MovieLearningStatus({
   context?: MoviePlayerContext;
 }) {
   const { movieLesson: lesson, moviePlayer: player } = controller;
+  if (!context?.allowed)
+    return (
+      <p role="status" className="mb-4 rounded-xl bg-white/5 p-4 text-sm text-slate-400">
+        Киноны эрхээ нээгээд хадмалаас нь үг сонгож сураарай.
+      </p>
+    );
   return (
-    <div className="mb-4 rounded-xl border border-white/10 bg-slate-900/50 p-4 text-sm">
-      {!context?.allowed ? (
-        <div>
-          <p role="status" className="leading-6 text-slate-300">
-            Хадмалтай сурахын тулд нэвтэрч, VIP эрхээ баталгаажуулна уу.
+    <div className="mb-3 text-xs text-slate-400">
+      {!lesson.hasEnglish && !lesson.loading && (
+        <p role="status" className="mb-3 text-amber-200">
+          Англи хадмал олдсонгүй. Файлаар нэмж болно.
+        </p>
+      )}
+      {lesson.hasEnglish && lesson.mnCount === 0 && (
+        <p role="status" className="mb-3 text-amber-200">
+          Монгол хадмал одоогоор алга. Үг дээр дараад утгыг нь үзэж болно.
+        </p>
+      )}
+      {lesson.hasEnglish &&
+        lesson.mnCount > 0 &&
+        /зарим мөр|дутуу|орчуулагдаагүй/i.test(lesson.warning) && (
+          <p role="status" className="mb-3 text-amber-200">
+            Монгол хадмалын зарим мөр дутуу байна.
           </p>
-          <Link
-            href="/learn"
-            className="mt-3 inline-flex rounded-lg bg-[#c9a227] px-4 py-2 font-semibold text-slate-950"
-          >
-            Үнэгүй дасгалаар эхлэх
-          </Link>
-          <p className="mt-2 text-xs text-slate-400">
-            Сургалтын богино жишээгээр эхлээд туршаарай.
-          </p>
-        </div>
-      ) : (
-        <>
-          {context.provider !== 'cine' ? (
+        )}
+      {player.status === 'error' && (
+        <p role="status" className="mb-3 text-amber-200">
+          Тоглуулагч холбогдсонгүй. Өөр тоглуулагч сонгоорой.
+        </p>
+      )}
+      <details id="movie-caption-settings">
+        <summary className="w-fit cursor-pointer">
+          {lesson.hasEnglish ? 'Хадмал тааруулах' : 'Англи хадмал нэмэх'}
+        </summary>
+        <div className="mt-3 space-y-3 rounded-xl border border-white/10 p-4">
+          {context.provider !== 'cine' && (
             <button
               type="button"
               onClick={() => context.onSelectProvider('cine')}
-              className="rounded-lg bg-[#c9a227] px-4 py-2 font-semibold text-slate-950"
+              className="rounded-lg border border-amber-400/30 px-3 py-2 text-amber-200"
             >
               Хадмалтай тоглуулагч сонгох
             </button>
-          ) : (
-            <p role="status" className="text-slate-300">
-              {player.time === null ? (
-                'Киногоо тоглуулаарай. Хадмал холбогдохыг хүлээж байна.'
-              ) : (
-                <>Тоглуулагчийн цаг: {formatTime(player.time)}</>
-              )}
-            </p>
           )}
-          {player.status === 'seek-pending' && (
-            <p role="status" className="mt-2 text-amber-200">
-              Хугацаа шилжүүлж байна…
-            </p>
-          )}
-          {player.status === 'seek-unconfirmed' && (
-            <p role="alert" className="mt-2 text-rose-300">
-              Шилжилт баталгаажаагүй. Видеогоо шалгаарай.
-            </p>
-          )}
-          {player.status === 'error' && (
-            <p role="alert" className="mt-2 text-rose-300">
-              Тоглуулагч холбогдсонгүй. Өөр тоглуулагч сонгоно уу.
-            </p>
-          )}
-          {lesson.supported && (
-            <details className="mt-3">
-              <summary className="w-fit cursor-pointer text-amber-200">
-                {lesson.hasEnglish ? 'Хадмалын тохиргоо' : 'Англи хадмал нэмэх'}
-              </summary>
-              <p className="mt-3 leading-6 text-slate-400">
-                <a href="#watch-subtitle-panel" className="text-amber-200 underline">
-                  Хадмалын хэсэг
-                </a>
-                -ээс English сонгох эсвэл өөрийн .vtt файл оруулна уу.
-              </p>
-              <label className="mt-3 block text-slate-300">
-                Англи хадмал (.vtt)
+          {player.time !== null && <p>Киноны хугацаа: {formatTime(player.time)}</p>}
+          <button type="button" onClick={lesson.retry} className="text-amber-200 underline">
+            Хадмалыг дахин хайх
+          </button>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block">
+              Англи хадмал (.vtt)
+              <input
+                type="file"
+                accept=".vtt"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void lesson.loadEnglish(file);
+                }}
+                className="mt-2 block w-full min-w-0 rounded-lg border border-white/15 p-2"
+              />
+            </label>
+            <label className="block">
+              Монгол хадмал (.vtt)
+              <input
+                type="file"
+                accept=".vtt"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void lesson.loadMongolian(file);
+                }}
+                className="mt-2 block w-full min-w-0 rounded-lg border border-white/15 p-2"
+              />
+            </label>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {(['en', 'mn'] as const).map((language) => (
+              <label key={language} className="block">
+                {language === 'en' ? 'Англи' : 'Монгол'} хадмалын зөрүү (секунд)
                 <input
-                  type="file"
-                  accept=".vtt"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) void lesson.loadEnglish(file);
-                  }}
-                  className="mt-2 block w-full min-w-0 rounded-lg border border-white/10 p-2"
+                  type="number"
+                  min={-120}
+                  max={120}
+                  step={0.25}
+                  value={language === 'en' ? lesson.enOffset : lesson.mnOffset}
+                  onChange={(event) => lesson.changeOffset(language, event.target.valueAsNumber)}
+                  className="mt-2 block w-full rounded-lg border border-white/15 bg-slate-900 p-2 text-white"
                 />
               </label>
-              <p className="mt-3 text-slate-400">
-                Монгол: {lesson.mnCount} мөр · Англи: {lesson.enCount} мөр
-              </p>
-              <label className="mt-3 block text-slate-300">
-                Монгол хадмал (.vtt)
-                <input
-                  type="file"
-                  accept=".vtt"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) void lesson.loadMongolian(file);
-                  }}
-                  className="mt-2 block w-full min-w-0 rounded-lg border border-white/10 p-2"
-                />
-              </label>
-              <details className="mt-3">
-                <summary className="w-fit cursor-pointer text-slate-400">
-                  Хадмалын цаг тааруулах
-                </summary>
-                <div className="mt-3 flex flex-wrap gap-4">
-                  {(['en', 'mn'] as const).map((language) => (
-                    <label key={language} className="text-slate-400">
-                      {language === 'en' ? 'Англи' : 'Монгол'} (сек)
-                      <input
-                        type="number"
-                        min={-600}
-                        max={600}
-                        step={0.1}
-                        value={language === 'en' ? lesson.enOffset : lesson.mnOffset}
-                        onChange={(event) =>
-                          lesson.changeOffset(language, event.target.valueAsNumber)
-                        }
-                        className="ml-2 w-24 rounded border border-white/15 bg-slate-950 p-2 text-white"
-                      />
-                    </label>
-                  ))}
-                </div>
-              </details>
-            </details>
-          )}
-        </>
-      )}
-      <p className="mt-3 text-xs leading-5 text-slate-500">
-        Хадмалын орчуулга, кинотой таарах эсэхийг шалгаагүй.
-      </p>
-      {lesson.warning && (
-        <p role="status" className="mt-2 text-sm text-amber-200">
-          {lesson.warning}
-        </p>
-      )}
+            ))}
+          </div>
+          <p>
+            Англи: {lesson.enCount} өгүүлбэр · Монгол: {lesson.mnCount} өгүүлбэр
+          </p>
+        </div>
+      </details>
     </div>
   );
 }

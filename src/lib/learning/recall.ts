@@ -23,7 +23,10 @@ export function recallQueue(items: LearningItem[], now: number, limit = 5) {
 }
 // Hide every occurrence, including contractions. Escape subtitle text before making a regexp.
 export function recallContext(item: Pick<LearningItem, 'word' | 'example'>) {
-  const word = item.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const word = normalizeRecall(item.word)
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/'/g, "['’‘]")
+    .replace(/-/g, '[-‐‑–—]');
   return item.example.replace(
     new RegExp(`(?<![\\p{L}\\p{N}])${word}(?![\\p{L}\\p{N}])`, 'giu'),
     '_____',

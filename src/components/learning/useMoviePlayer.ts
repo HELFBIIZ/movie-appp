@@ -54,6 +54,7 @@ export function useMoviePlayer(enabled: boolean, context?: MoviePlayerContext) {
     ...(observed.key === key ? observed.state : emptyCineState()),
     seek: (seconds: number) => session.current?.seek(seconds) ?? false,
     pause: () => session.current?.pause() ?? false,
+    play: () => session.current?.play() ?? false,
     replay: (start: number, end: number, loop = false) =>
       session.current?.replay(start, end, loop) ?? false,
     cancelReplay,

@@ -1,29 +1,40 @@
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 type NavLinkProps = { href: string; icon: ReactNode; children: ReactNode };
 
 export const genres = [
-  { label: 'Action', slug: 'action' },
-  { label: 'Drama', slug: 'drama' },
-  { label: 'Comedy', slug: 'comedy' },
-  { label: 'Sci-Fi', slug: 'sci-fi' },
-  { label: 'Horror', slug: 'horror' },
-  { label: 'Romance', slug: 'romance' },
-  { label: 'Thriller', slug: 'thriller' },
-  { label: 'Adventure', slug: 'adventure' },
-  { label: 'Fantasy', slug: 'fantasy' },
-  { label: 'Crime', slug: 'crime' },
-  { label: 'Animation', slug: 'animation' },
-  { label: 'Mystery', slug: 'mystery' },
-  { label: 'Documentary', slug: 'documentary' },
+  { label: 'Адал явдалт', slug: 'action' },
+  { label: 'Драм', slug: 'drama' },
+  { label: 'Инээдмийн', slug: 'comedy' },
+  { label: 'Шинжлэх ухааны', slug: 'sci-fi' },
+  { label: 'Аймшгийн', slug: 'horror' },
+  { label: 'Хайр дурлалын', slug: 'romance' },
+  { label: 'Түгшүүрт', slug: 'thriller' },
+  { label: 'Аялал, адал явдал', slug: 'adventure' },
+  { label: 'Зөгнөлт', slug: 'fantasy' },
+  { label: 'Гэмт хэргийн', slug: 'crime' },
+  { label: 'Хүүхэлдэйн', slug: 'animation' },
+  { label: 'Нууцлаг', slug: 'mystery' },
+  { label: 'Баримтат', slug: 'documentary' },
+];
+
+export const collections = [
+  { label: 'Шинээр гарах', href: '/movies?category=upcoming' },
+  { label: 'Өндөр үнэлгээтэй', href: '/movies?category=top-rated' },
+  { label: 'Солонгос цуврал', href: '/movies?category=kdrama' },
+  { label: 'Өрнөдийн кино', href: '/movies?category=western' },
 ];
 
 export function NavLink({ href, icon, children }: NavLinkProps) {
+  const pathname = usePathname();
+  const active = pathname === href || (href === '/movies' && pathname.startsWith('/genre/'));
   return (
     <Link
       href={href}
-      className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition-all hover:bg-[#f0e8d4] hover:text-[#8a6d1f] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-amber-200"
+      aria-current={active ? 'page' : undefined}
+      className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${active ? 'bg-[#c9a227]/15 text-[#8a6d1f] dark:text-amber-200' : 'text-slate-600 hover:bg-[#c9a227]/10 dark:text-slate-300'}`}
     >
       {icon}
       {children}

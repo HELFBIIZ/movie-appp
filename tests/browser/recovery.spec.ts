@@ -23,9 +23,9 @@ test('a returning learner gets different test questions, keeps old results and a
       );
   }, seed);
   await page.goto('/learning', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Түвшнээ дахин шалгах', exact: true }).click();
+  await page.getByRole('button', { name: /Тест дахин өгөх/ }).click();
   const dialog = page.getByRole('dialog', { name: 'Эхлэх түвшний тест' });
-  await dialog.getByRole('button', { name: 'Тестээ эхлэх', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Эхлэх', exact: true }).click();
   await expect(dialog).toContainText('Хувилбар B');
   for (let index = 0; index < placementForms.b.length; index++) {
     const question = placementForms.b[index];
@@ -41,15 +41,16 @@ test('a returning learner gets different test questions, keeps old results and a
   await expect(dialog.getByText('Зөв хариулт: 8 / 8')).toBeVisible();
   await dialog.getByRole('button', { name: 'Түвшний тестийг хаах' }).click();
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await expect(page.getByText('Эхний тест: 8/8 → Сүүлийн тест: 8/8')).toBeVisible();
+  await page.getByText('Дэлгэрэнгүй ахиц', { exact: true }).click();
+  await expect(page.getByRole('list').filter({ hasText: '8/8' }).locator('li')).toHaveCount(2);
   const snapshot = await page.evaluate(
     () => JSON.parse(localStorage.getItem('vxnta.learning.guest.v2')!).snapshot,
   );
   expect(snapshot.assessments).toHaveLength(1);
   expect(snapshot.retests).toHaveLength(1);
   expect(snapshot.retests[0].form).toBe('b');
-  await page.getByRole('button', { name: 'Түвшнээ дахин шалгах', exact: true }).click();
-  await dialog.getByRole('button', { name: 'Тестээ эхлэх', exact: true }).click();
+  await page.getByRole('button', { name: /Тест дахин өгөх/ }).click();
+  await dialog.getByRole('button', { name: 'Эхлэх', exact: true }).click();
   await expect(dialog).toContainText(placementForms.a[0].context!);
 });
 

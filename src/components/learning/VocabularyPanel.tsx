@@ -1,97 +1,117 @@
 'use client';
-
 import { useState } from 'react';
-import { formatTime } from '@/lib/learning/vtt';
+import { Trash2 } from 'lucide-react';
 import { isDue } from '@/lib/learning/srs';
 import type { LearningItem } from '@/lib/learning/types';
+import RecallPractice from './RecallPractice';
 
-type Props = {
+export default function VocabularyPanel({
+  items,
+  now,
+  onReview,
+  onRemove,
+}: {
   items: LearningItem[];
   now: number;
-  onReview: (id: string, remembered: boolean) => boolean;
+  onReview: (id: string, correct: boolean) => boolean;
   onRemove: (id: string) => void;
-};
-
-export default function VocabularyPanel({ items, now, onReview, onRemove }: Props) {
-  const [revealed, setRevealed] = useState<string | null>(null);
+}) {
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState<LearningItem | null>(null);
+  if (selected)
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => setSelected(null)}
+          className="px-4 pt-4 text-xs text-amber-200"
+        >
+          ← Миний үг
+        </button>
+        <RecallPractice
+          key={selected.id}
+          items={[selected]}
+          onReview={onReview}
+          onDone={() => setSelected(null)}
+        />
+      </div>
+    );
+  const search = query.toLocaleLowerCase('mn-MN').trim();
+  const words = items.filter((item) =>
+    `${item.word} ${item.meaning}`.toLocaleLowerCase('mn-MN').includes(search),
+  );
   if (!items.length)
     return (
-      <p className="p-6 text-slate-400">Хадмалын үг эсвэл өгүүлбэрийг хадгалахад энд гарна.</p>
+      <p className="p-5 text-sm text-slate-400">
+        Хадмалаас үг сонгоод «Энэ үгийг суръя» дарахад энд хадгалагдана.
+      </p>
     );
   return (
-    <ul className="max-h-[28rem] space-y-3 overflow-y-auto p-4" aria-label="Saved vocabulary">
-      {items.map((item) => {
-        const due = isDue(item, now);
-        const show = revealed === item.id;
-        return (
-          <li key={item.id} className="rounded-xl border border-white/10 bg-slate-900 p-4">
+    <div className="p-3">
+      {items.length > 5 && (
+        <input
+          aria-label="Үг хайх"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Үгээ хайх…"
+          className="mb-3 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm"
+        />
+      )}
+      <ul aria-label="Хадгалсан үгс" className="max-h-[28rem] space-y-2 overflow-y-auto">
+        {words.map((item) => (
+          <li key={item.id} className="rounded-xl bg-white/5 p-4">
             <div className="flex items-start justify-between gap-3">
-              <h4 className="break-words font-semibold text-amber-200">{item.word}</h4>
+              <div className="min-w-0">
+                <p className="break-words font-semibold text-amber-200" lang="en">
+                  {item.word}
+                </p>
+                <p className="mt-1 text-sm leading-6 text-slate-300" lang="mn">
+                  {item.meaning}
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => onRemove(item.id)}
-                aria-label={`Remove ${item.word}`}
-                className="shrink-0 rounded px-2 py-1 text-sm text-slate-400 hover:text-rose-300"
+                aria-label={`${item.word} — устгах`}
+                className="rounded-lg p-2 text-slate-500 hover:text-rose-300"
               >
-                Устгах
+                <Trash2 size={14} />
               </button>
             </div>
-            <p className="mt-2 text-sm text-slate-300">{item.example}</p>
-            {item.provenance === 'user-note' && (
-              <p className="mt-2 text-xs text-slate-500">Өөрийн тэмдэглэл</p>
-            )}
-            <p className="mt-2 text-sm text-slate-400">
-              {due
-                ? 'Давтахад бэлэн'
-                : `Дараагийн давтлага: ${new Date(item.dueAt).toLocaleString('mn-MN')}`}
-            </p>
-            <details className="mt-2 text-xs text-slate-500">
-              <summary className="w-fit cursor-pointer">Дэлгэрэнгүй</summary>
-              <p className="mt-2">
-                {item.kind === 'word' ? 'Үг' : 'Өгүүлбэр'} · {formatTime(item.cueStart)}
-              </p>
-              {item.grammar && <p className="mt-2">Дүрэм: {item.grammar}</p>}
-              <p className="mt-2">
-                Зөв {item.correct} · Буруу {item.incorrect} · Шат {item.stage}/4
-              </p>
-            </details>
-            {due && !show && (
-              <button
-                type="button"
-                onClick={() => setRevealed(item.id)}
-                className="mt-3 rounded-lg border border-amber-400/30 px-3 py-2 text-sm text-amber-200"
-              >
-                Утгыг харах
-              </button>
-            )}
-            {(!due || show) && (
-              <p className="mt-3 text-slate-100">{item.meaning || 'Орчуулгагүй өгүүлбэр'}</p>
-            )}
-            {due && show && (
-              <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">
+              <details>
+                <summary className="w-fit cursor-pointer">Өгүүлбэрийг харах</summary>
+                <p className="mt-2 leading-6 text-slate-400" lang="en">
+                  {item.example}
+                </p>
+                {item.context && (
+                  <p className="mt-1 leading-6" lang="mn">
+                    {item.context}
+                  </p>
+                )}
+              </details>
+              {isDue(item, now) ? (
                 <button
                   type="button"
-                  onClick={() => {
-                    if (onReview(item.id, true)) setRevealed(null);
-                  }}
-                  className="rounded-lg bg-emerald-500/15 px-3 py-2 text-sm text-emerald-300"
+                  onClick={() => setSelected(item)}
+                  className="shrink-0 rounded-lg border border-amber-400/25 px-3 py-2 text-amber-200"
                 >
-                  Санаж байна
+                  Давтах
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onReview(item.id, false)) setRevealed(null);
-                  }}
-                  className="rounded-lg bg-rose-500/15 px-3 py-2 text-sm text-rose-300"
-                >
-                  Мартсан
-                </button>
-              </div>
-            )}
+              ) : (
+                <span className="shrink-0">
+                  {new Date(item.dueAt).toLocaleDateString('mn-MN', {
+                    month: 'numeric',
+                    day: 'numeric',
+                  })}
+                  -нд давтана
+                </span>
+              )}
+            </div>
           </li>
-        );
-      })}
-    </ul>
+        ))}
+      </ul>
+      {!words.length && <p className="p-4 text-sm text-slate-400">Таарах үг олдсонгүй.</p>}
+    </div>
   );
 }

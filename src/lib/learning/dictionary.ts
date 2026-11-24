@@ -223,3 +223,6 @@ const meanings: Record<string, string> = {
 export function dictionaryMeaning(word: string): string | null {
   return meanings[word.toLocaleLowerCase('en').trim()] ?? null;
 }
+export function dictionaryMeanings(): string[] {
+  return [...new Set(Object.values(meanings).map((meaning) => meaning.split(';')[0].trim()))];
+}

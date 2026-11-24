@@ -1,6 +1,7 @@
 export type Cue = { id: string; start: number; end: number; text: string };
 export type AlignedCue = Cue & { translation: string; language?: 'en' | 'mn' };
 export type WordNote = {
+  offset?: number;
   word: string;
   meaning: string;
   context: string;

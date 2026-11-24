@@ -1,36 +1,16 @@
 import { expect, test } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
 import { emptySnapshot } from '../../src/lib/learning/snapshot';
+import { openLocal, seedWords, dismissPlacement } from './learning-fixtures';
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() =>
-    sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
-  );
-});
-
-test('one-sentence practice uses the real video, hides the meaning, slows down and stops at the sentence end', async ({
+test('sentence replay uses real native video, slows down, stops at the cue end and can loop', async ({
   page,
 }) => {
-  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
-  const practice = page.getByRole('region', { name: 'Нэг өгүүлбэрээр сурах' });
-  const video = page.getByLabel('The Last Train sample lesson video');
-  await expect(page.getByRole('button', { name: 'Сурах', exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
-  await expect(practice).toContainText('Өгүүлбэр 1 / 6');
-  await expect(
-    practice.getByText('Сүүлчийн галт тэрэг арван минутын дараа явна.', { exact: true }),
-  ).toHaveCount(0);
-  await practice.getByRole('button', { name: 'Монгол утгыг нээх', exact: true }).click();
-  await expect(practice.locator('[lang="mn"]')).toBeVisible();
-  await expect(
-    practice.getByRole('button', { name: 'Өгүүлбэрийг сонсох', exact: true }),
-  ).toBeEnabled();
-  await video.evaluate((element: HTMLVideoElement) => {
-    element.muted = true;
-  });
-  await practice.getByLabel('Сонсох хурд', { exact: true }).selectOption('0.75');
-  await practice.getByRole('button', { name: 'Өгүүлбэрийг сонсох', exact: true }).click();
+  const video = await openLocal(page);
+  const practice = page.getByRole('region', { name: 'Өгүүлбэрээр үг сурах' });
+  await practice.getByText('Сонсох тохиргоо', { exact: true }).click();
+  await practice.getByLabel('Удаанаар сонсох', { exact: true }).check();
+  await practice.getByRole('button', { name: 'Дахин сонсох', exact: true }).click();
   await expect
     .poll(() =>
       video.evaluate(
@@ -49,8 +29,8 @@ test('one-sentence practice uses the real video, hides the meaning, slows down a
       { timeout: 15000 },
     )
     .toBe(true);
-  await practice.getByRole('checkbox', { name: 'Давтаж сонсох', exact: true }).check();
-  await practice.getByRole('button', { name: 'Өгүүлбэрийг сонсох', exact: true }).click();
+  await practice.getByLabel('Давтаж сонсох', { exact: true }).check();
+  await practice.getByRole('button', { name: 'Дахин сонсох', exact: true }).click();
   await video.evaluate((element: HTMLVideoElement) => {
     element.currentTime = 4.05;
   });
@@ -59,55 +39,51 @@ test('one-sentence practice uses the real video, hides the meaning, slows down a
       video.evaluate((element: HTMLVideoElement) => !element.paused && element.currentTime < 2),
     )
     .toBe(true);
-  await practice.getByRole('button', { name: 'Дараах өгүүлбэр →', exact: true }).click();
+  await practice.getByRole('button', { name: 'Дараагийн өгүүлбэр', exact: true }).click();
   await expect(practice).toContainText('Mira has lost her ticket.');
   expect(await video.evaluate((element: HTMLVideoElement) => element.paused)).toBe(true);
-  await page.setViewportSize({ width: 390, height: 844 });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: 'test-results/guided-learning-mobile.png', fullPage: true });
 });
 
-test('typed recall checks an actual saved word once, persists the wrong answer and updates the daily plan', async ({
+test('the same word teaches separate contextual senses and a phrase is learned together', async ({
   page,
 }) => {
-  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Explain last', exact: true }).click();
+  await openLocal(
+    page,
+    'WEBVTT\n\n00:01.000 --> 00:04.000\nTurn right at the station.\n\n00:07.000 --> 00:10.000\nYou are right about the tickets.\n\n00:12.000 --> 00:15.000\nWe can figure it out together.\n',
+  );
+  const practice = page.getByRole('region', { name: 'Өгүүлбэрээр үг сурах' });
   const dialog = page.getByRole('dialog', { name: 'Үгийн тайлбар' });
-  await dialog.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
-  await dialog.getByRole('button', { name: 'Энэ үгээ давтах', exact: true }).click();
-  await page.getByRole('button', { name: 'Санаж бичих', exact: true }).click();
-  const form = page.getByRole('form', { name: 'Санаж бичих дасгал' });
-  await expect(form).toContainText('The _____ train leaves in ten minutes.');
-  await form.getByLabel('Англи үгээ бичээрэй').fill('training');
-  await form.getByRole('button', { name: 'Шалгах', exact: true }).click();
-  await expect(form.getByRole('status')).toContainText('Дахиад давтъя. last');
-  await expect(form.getByLabel('Англи үгээ бичээрэй')).toBeDisabled();
-  await form.getByRole('button', { name: 'Үр дүнгээ харах', exact: true }).click();
-  await expect(page.getByText('Өнөөдрийн давтлагаа хийлээ!', { exact: true })).toBeVisible();
-  await page.goto('/learning', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('list', { name: 'Өнөөдрийн сурах төлөвлөгөө' })).toContainText(
-    'Санаж үзэх · 1/3',
-  );
+  mkdirSync('.refactor-evidence/preview', { recursive: true });
+  for (const meaning of ['баруун', 'зөв']) {
+    await practice.getByRole('button', { name: 'right — утгыг харах', exact: true }).click();
+    await expect(dialog).toContainText(meaning);
+    if (meaning === 'баруун') {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.screenshot({ path: '.refactor-evidence/preview/word-coach-mobile.png' });
+    }
+    await dialog.getByRole('button', { name: 'Энэ үгийг суръя', exact: true }).click();
+    await dialog.getByRole('button', { name: meaning, exact: true }).click();
+    await page.getByRole('button', { name: 'Тайлбарыг хаах', exact: true }).click();
+    await practice.getByRole('button', { name: 'Дараагийн өгүүлбэр', exact: true }).click();
+  }
+  await practice
+    .getByRole('button', { name: 'figure it out — утгыг харах', exact: true })
+    .first()
+    .click();
+  await expect(dialog).toContainText('учрыг нь олох');
   const saved = await page.evaluate(
-    () => JSON.parse(localStorage.getItem('vxnta.learning.guest.v2')!).snapshot,
+    () => JSON.parse(localStorage.getItem('vxnta.learning.guest.v2')!).snapshot.progress.items,
   );
-  expect(saved.progress.items[0]).toMatchObject({ word: 'last', correct: 0, incorrect: 1 });
-  expect(saved.activity.filter((event: { kind: string }) => event.kind === 'review')).toHaveLength(
-    1,
-  );
+  expect(saved).toHaveLength(2);
+  expect(new Set(saved.map((item: { id: string }) => item.id)).size).toBe(2);
+  expect(saved.map((item: { meaning: string }) => item.meaning)).toEqual(['баруун', 'зөв']);
 });
 
-test('account import asks which guest data belongs to the learner and merges it without duplicate cards', async ({
-  page,
-}) => {
+test('account import explicitly merges guest cards without duplicating them', async ({ page }) => {
+  await dismissPlacement(page);
+  await seedWords(page);
   let remote = emptySnapshot();
   let revision = 0;
-  await page.route('**/api/auth/me', (route) => route.fulfill({ status: 401, json: {} }));
-  await page.goto('/learn', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Explain last', exact: true }).click();
-  await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
-  await page.getByRole('button', { name: 'Тайлбарыг хаах', exact: true }).click();
-  await page.unroute('**/api/auth/me');
   await page.route('**/api/auth/me', (route) =>
     route.fulfill({ json: { me: { id: 'import-ui-fixture', roleCode: 'USER' } } }),
   );
@@ -118,28 +94,53 @@ test('account import asks which guest data belongs to the learner and merges it 
     }
     await route.fulfill({ json: { revision, snapshot: remote } });
   });
-  await page.goto('/learning', { waitUntil: 'domcontentloaded' });
+  await page.goto('/learning');
   await page.getByText('Нэвтрэхээс өмнө хийсэн дасгалаа нэмэх', { exact: true }).click();
   await page.getByRole('button', { name: 'Зочны дасгалыг шалгах', exact: true }).click();
-  await expect(
-    page.getByText('1 карт · 0 түвшний тест · 0 давталт', { exact: true }),
-  ).toBeVisible();
   expect(remote.progress.items).toHaveLength(0);
   await page.getByRole('button', { name: 'Миний дасгал мөн — нэгтгэх', exact: true }).click();
-  await expect.poll(() => remote.progress.items.length).toBe(1);
+  await expect.poll(() => remote.progress.items.length).toBe(2);
   await page.getByRole('button', { name: 'Зочны дасгалыг шалгах', exact: true }).click();
   await page.getByRole('button', { name: 'Миний дасгал мөн — нэгтгэх', exact: true }).click();
-  const data = await page.evaluate(() => ({
-    account: JSON.parse(localStorage.getItem('vxnta.learning.import-ui-fixture.v2')!),
-    guest: JSON.parse(localStorage.getItem('vxnta.learning.guest.v2')!),
-  }));
-  expect(data.account.snapshot.progress.items).toHaveLength(1);
-  expect(data.guest.snapshot.progress.items).toHaveLength(1);
+  expect(remote.progress.items).toHaveLength(2);
+});
+
+test('unknown word shows provider failure honestly and can retry without losing the selection', async ({
+  page,
+}) => {
+  let ready = false;
+  await page.route('**/api/learning/word?word=astonished', (route) =>
+    route.fulfill(
+      ready
+        ? {
+            json: {
+              word: 'astonished',
+              meaning: 'ихэд гайхсан',
+              tip: '',
+              example: '',
+              translation: '',
+              contextual: false,
+              source: 'mymemory',
+            },
+          }
+        : { status: 503, json: { error: { code: 'MEANING_UNAVAILABLE' } } },
+    ),
+  );
+  await openLocal(page, 'WEBVTT\n\n00:01.000 --> 00:04.000\nShe was astonished.\n');
+  await page.getByRole('button', { name: 'astonished — утгыг харах', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByRole('button', { name: 'Энэ үгийг суръя', exact: true })).toHaveCount(0);
+  await expect(dialog.getByRole('button', { name: 'Дахин хайх', exact: true })).toBeVisible();
+  ready = true;
+  await dialog.getByRole('button', { name: 'Дахин хайх', exact: true }).click();
+  await expect(dialog).toContainText('ихэд гайхсан');
+  await expect(dialog.getByRole('button', { name: 'Энэ үгийг суръя', exact: true })).toBeEnabled();
 });
 
 test('subtitle translation polls the existing job after navigation and applies its completed caption; protocol fixture only', async ({
   page,
 }) => {
+  await dismissPlacement(page);
   await page.route('**/api/watch/inception', (route) => route.fulfill({ json: { allowed: true } }));
   await page.route('https://vidsrcme.ru/**', (route) => route.abort());
   await page.route('**/api/subtitles/mongolian/**', (route) => route.fulfill({ status: 404 }));

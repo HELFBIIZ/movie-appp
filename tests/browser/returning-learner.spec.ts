@@ -38,6 +38,6 @@ test('returning learner waits for account history before the first-entry test is
   } finally {
     release();
   }
-  await expect(page.getByText('Дунд · 8/8', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Дунд · Тест дахин өгөх/ })).toBeVisible();
   await expect(page.getByRole('dialog', { name: 'Эхлэх түвшний тест' })).not.toBeVisible();
 });

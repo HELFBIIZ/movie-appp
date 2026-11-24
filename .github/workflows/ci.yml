@@ -42,6 +42,7 @@ jobs:
           path: |
             .refactor-evidence/baseline
             .refactor-evidence/after
+            .refactor-evidence/preview
             test-results
             playwright-report
           retention-days: 14

@@ -1,22 +1,20 @@
 'use client';
-import { BookOpen } from 'lucide-react';
+import { Settings2 } from 'lucide-react';
+import Link from 'next/link';
 import LocalMediaInput from './LocalMediaInput';
 import LearningVideo from './LearningVideo';
 import LearningPanels from './LearningPanels';
-import LearningProgress from './LearningProgress';
 import { useLearningController, type LearningSource } from './useLearningController';
 import type { MoviePlayerContext } from './useMoviePlayer';
-import Link from 'next/link';
 import MovieLearningStatus from './MovieLearningStatus';
 import WordDialog from './WordDialog';
-import LearningGuide from './LearningGuide';
+
 type Props = {
   movieId: string;
   movieTitle: string;
   source: LearningSource;
   onSource: (source: LearningSource) => void;
   movieContext?: MoviePlayerContext;
-  intro?: boolean;
 };
 export default function LearningDock({
   movieId,
@@ -24,101 +22,80 @@ export default function LearningDock({
   source,
   onSource,
   movieContext,
-  intro = false,
 }: Props) {
   const controller = useLearningController(movieId, source, movieContext);
-  const movieSpecific = movieId === 'spider-man-brand-new-day';
-  const { lesson, videoRef, active, setTime, setReady, tab } = controller;
-
+  const { lesson, videoRef, setTime, setReady } = controller;
   return (
     <section
       aria-label="SceneChain Learning Dock"
-      className="my-6 rounded-2xl border border-white/10 bg-slate-950 shadow-2xl"
+      className="my-5 overflow-hidden rounded-2xl border border-white/10 bg-slate-950"
     >
-      <div className="border-b border-white/10 p-4 md:p-5">
-        <h2 className="flex items-center gap-2 text-lg font-semibold">
-          <BookOpen size={19} className="text-[#c9a227]" aria-hidden="true" /> Англи үг суръя
-        </h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Сонсоорой. Мэдэхгүй үгээ дараарай. Хадгалаад, утгыг нь санаж үзээрэй.
-        </p>
-        <Link href="/learning" className="mt-3 inline-block text-sm text-amber-200 underline">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
+        <h2 className="font-semibold">Киногоор үг суръя</h2>
+        <Link href="/learning" className="text-xs text-amber-200">
           Миний ахиц →
         </Link>
-        {!intro && (
-          <details className="mt-3 text-sm">
-            <summary className="w-fit cursor-pointer text-slate-400 hover:text-white">
-              Тохиргоо
-            </summary>
-            <p className="mt-3 text-slate-400">{movieTitle} · Видеогоо сонгоно уу.</p>
-            <div
-              className="mt-3 flex flex-wrap gap-2"
-              role="group"
-              aria-label="Learning media source"
-            >
-              {[
-                { value: 'sample', label: 'Сургалтын жишээ' },
+      </div>
+      <div className="p-3 md:p-4">
+        <details
+          open={source === 'local' && !lesson.videoUrl ? true : undefined}
+          className="mb-3 text-sm"
+        >
+          <summary className="flex w-fit cursor-pointer items-center gap-2 text-xs text-slate-400">
+            <Settings2 size={14} />
+            Хадмал, видео
+          </summary>
+          <p className="mt-3 text-xs text-slate-500">{movieTitle}</p>
+          <div role="group" aria-label="Learning media source" className="mt-3 flex gap-2">
+            {(
+              [
                 { value: 'movie', label: 'Кино' },
                 { value: 'local', label: 'Өөрийн видео' },
-              ]
-                .filter(({ value }) => !movieSpecific || value !== 'sample')
-                .map(({ value, label }) => (
-                  <button
-                    type="button"
-                    key={value}
-                    aria-pressed={source === value}
-                    onClick={() => onSource(value as LearningSource)}
-                    className={`rounded-lg border px-3 py-2 text-sm transition ${source === value ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-slate-400 hover:text-white'}`}
-                  >
-                    {label}
-                  </button>
-                ))}
-            </div>
-          </details>
-        )}
-      </div>
-      <div className="p-4 md:p-5">
-        {(intro || tab !== 'practice') && (source !== 'movie' || lesson.cues.length > 0) && (
-          <LearningGuide controller={controller} source={source} />
-        )}
-        {source === 'movie' ? (
-          <MovieLearningStatus controller={controller} context={movieContext} />
-        ) : (
-          <p className="mb-4 text-sm leading-6 text-slate-400">
-            {source === 'sample'
-              ? '38 секундийн сургалтын жишээ · Киноны хэсэг биш.'
-              : 'Өөрийн видео · Хуудсыг шинэчилбэл файлаа дахин сонгоно.'}
-          </p>
-        )}
-        {source === 'local' && (
-          <div className="mb-4">
-            <LocalMediaInput onLoad={lesson.loadLocal} />
+              ] as const
+            ).map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={source === value}
+                onClick={() => onSource(value)}
+                className={`rounded-lg border px-3 py-2 text-xs ${source === value ? 'border-amber-400/40 text-amber-200' : 'border-white/10 text-slate-400'}`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-        )}
-        <div
-          className={`grid gap-5 ${source !== 'movie' ? 'lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]' : ''}`}
-        >
-          {source !== 'movie' && (
-            <div className="min-w-0">
-              {lesson.videoUrl && (
-                <LearningVideo
-                  key={lesson.videoUrl}
-                  url={lesson.videoUrl}
-                  videoRef={videoRef}
-                  active={active}
-                  onTime={setTime}
-                  onReady={setReady}
-                  hideTranslation={tab === 'practice'}
-                  sample={source === 'sample'}
-                />
-              )}
+          {source === 'local' && (
+            <div className="mt-3">
+              <LocalMediaInput onLoad={lesson.loadLocal} />
             </div>
           )}
-          <LearningPanels controller={controller} source={source} />
-        </div>
-        <WordDialog controller={controller} source={source} />
-        <LearningProgress controller={controller} />
+        </details>
+        {source === 'movie' && (
+          <MovieLearningStatus controller={controller} context={movieContext} />
+        )}
+        {source === 'local' && lesson.videoUrl && (
+          <div className="mb-4">
+            <LearningVideo
+              url={lesson.videoUrl}
+              videoRef={videoRef}
+              onTime={setTime}
+              onReady={setReady}
+            />
+          </div>
+        )}
+        <LearningPanels controller={controller} source={source} />
+        {controller.message && (
+          <p role="status" className="mt-3 text-xs text-slate-400">
+            {controller.message}
+          </p>
+        )}
+        {controller.storageError && (
+          <p role="alert" className="mt-3 text-sm text-rose-300">
+            {controller.storageError}
+          </p>
+        )}
       </div>
+      <WordDialog controller={controller} source={source} />
     </section>
   );
 }

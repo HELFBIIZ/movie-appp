@@ -64,8 +64,16 @@ export async function GET(request: NextRequest) {
     ongoing.set(
       key,
       (async () => {
+        // A missing MN track expires quickly; reuse EN instead of spending another download.
+        const englishKey = `english-source:v1:${mediaType}:${movie.tmdbId}:${key}`;
+        const savedEnglish = z
+          .string()
+          .max(1_000_000)
+          .safeParse(await readCaptionCache(englishKey));
         let english = uploaded.success ? uploaded.data.english : '',
           mongolian = uploaded.success ? uploaded.data.mongolian : '';
+        if (!english && savedEnglish.success && parseExistingVtt(savedEnglish.data).length)
+          english = savedEnglish.data;
         let partial = uploaded.success ? uploaded.data.partial : false;
         const notices: string[] = [];
         const local = getGenerated(key);
@@ -106,8 +114,10 @@ export async function GET(request: NextRequest) {
               const text = normalizeToVtt(await osDownloadContent(candidate.fileId));
               if (text.length > 1_000_000) continue;
               if (!parseExistingVtt(text).length) continue;
-              if (language === 'en') english = text;
-              else if (usableMongolian(text)) {
+              if (language === 'en') {
+                english = text;
+                await writeCaptionCache(englishKey, english, 7 * 86_400_000);
+              } else if (usableMongolian(text)) {
                 mongolian = text;
                 partial = false;
               }

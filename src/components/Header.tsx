@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Film, Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import NotificationBell from '@/components/NotificationBell';
@@ -16,6 +16,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const closeMenu = useCallback(() => setMobileOpen(false), []);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -43,18 +44,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/90 bg-[#faf7f1]/95 border-[#e5dcc7] dark:bg-[#110e0a]/92 dark:border-black/60 supports-[backdrop-filter]:dark:bg-[#110e0a]/80">
       <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-6">
+        <div className="flex min-w-0 items-center gap-6">
           <Link href="/" className="flex items-center gap-2 group">
-            <Film className="h-6 w-6 text-gold group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(214,180,86,0.5)]" />
-            <span className="font-display text-2xl tracking-[0.16em] gradient-text group-hover:drop-shadow-[0_0_14px_rgba(231,199,121,0.35)] transition-[filter]">
+            <Film className="hidden h-6 w-6 text-gold transition-transform group-hover:scale-110 sm:block" />
+            <span className="font-display text-xl tracking-[0.12em] gradient-text lg:text-2xl">
               VXNTA
             </span>
           </Link>
 
-          <DesktopNavigation isAdmin={isAdmin} />
+          <DesktopNavigation />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
           <NotificationBell />
 
           <button
@@ -69,12 +70,15 @@ export default function Header() {
             )}
           </button>
 
-          <AccountControls isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+          <AccountControls isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout} />
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 rounded-lg text-[#8a7540] dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
             aria-label="Toggle menu"
+            id="mobile-menu-toggle"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -85,7 +89,7 @@ export default function Header() {
         <MobileNavigation
           isAdmin={isAdmin}
           isLoggedIn={isLoggedIn}
-          onClose={() => setMobileOpen(false)}
+          onClose={closeMenu}
           onLogout={handleLogout}
         />
       )}

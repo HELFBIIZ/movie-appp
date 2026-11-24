@@ -1,4 +1,4 @@
-import type { Question, WordNote } from './types.ts';
+import type { Question, WordNote } from '../../src/lib/learning/types.ts';
 
 export const SAMPLE_ID = 'scenechain-last-train-v1';
 export const SAMPLE_TITLE = 'The Last Train';

@@ -49,6 +49,14 @@ export default function WatchPage() {
   const [source, setSource] = useState('vidsrc');
   const [learning, setLearning] = useState(false);
   useEffect(() => {
+    const start = () => {
+      setLearning(true);
+      setSource('cine');
+    };
+    window.addEventListener('vxnta:start-learning', start);
+    return () => window.removeEventListener('vxnta:start-learning', start);
+  }, []);
+  useEffect(() => {
     if (new URLSearchParams(window.location.search).get('learn') === '1') {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- Restore learning mode from the existing watch URL after hydration.
       setLearning(true);

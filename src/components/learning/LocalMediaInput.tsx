@@ -15,18 +15,24 @@ export default function LocalMediaInput({
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   async function load() {
-    if (!video || !en || !mn) return;
+    if (!video || !en) return;
     setLoading(true);
     setError('');
     try {
       if (!video.type.startsWith('video/') || video.size > 2_000_000_000)
         throw new Error('2 GB хүртэлх video файл сонгоно уу.');
-      if ([en, mn].some((file) => file.size > MAX_VTT_BYTES || !/\.vtt$/i.test(file.name)))
+      if (
+        [en, ...(mn ? [mn] : [])].some(
+          (file) => file.size > MAX_VTT_BYTES || !/\.vtt$/i.test(file.name),
+        )
+      )
         throw new Error('EN/MN файл нь .vtt өргөтгөлтэй, тус бүр 1 MB хүртэл байх ёстой.');
-      const [english, mongolian] = await Promise.all([en.text(), mn.text()]);
-      const aligned = alignCues(parseVtt(english), parseVtt(mongolian));
-      if (!aligned.length || !aligned.some((cue) => cue.translation))
-        throw new Error('Хугацаа давхцсан EN/MN cue олдсонгүй.');
+      const [english, mongolian] = await Promise.all([
+        en.text(),
+        mn?.text() ?? Promise.resolve(''),
+      ]);
+      const aligned = alignCues(parseVtt(english), mongolian ? parseVtt(mongolian) : []);
+      if (!aligned.length) throw new Error('Англи хадмалын өгүүлбэр олдсонгүй.');
       const digest = await crypto.subtle.digest(
         'SHA-256',
         new TextEncoder().encode(
@@ -46,14 +52,13 @@ export default function LocalMediaInput({
   return (
     <div className="space-y-3 rounded-xl border border-white/10 bg-slate-900/60 p-4">
       <p className="text-sm leading-6 text-slate-400">
-        Өөрийн ашиглах эрхтэй видео, англи болон монгол хадмалаа сонгоно уу. Файлууд серверт
-        илгээгдэхгүй.
+        Видео, англи хадмалаа сонгоорой. Файлууд энэ төхөөрөмжөөс илгээгдэхгүй.
       </p>
       <div className="grid gap-3 md:grid-cols-3">
         {[
           { label: 'Видео файл', accept: 'video/*', set: setVideo },
           { label: 'Англи хадмал (.vtt)', accept: '.vtt', set: setEn },
-          { label: 'Монгол хадмал (.vtt)', accept: '.vtt', set: setMn },
+          { label: 'Монгол хадмал (.vtt) — сонголттой', accept: '.vtt', set: setMn },
         ].map(({ label, accept, set }) => (
           <label key={label} className="min-w-0 text-sm text-slate-300">
             {label}
@@ -68,7 +73,7 @@ export default function LocalMediaInput({
       </div>
       <button
         type="button"
-        disabled={!video || !en || !mn || loading}
+        disabled={!video || !en || loading}
         onClick={load}
         className="rounded-lg bg-[#c9a227] px-4 py-2 text-sm font-semibold text-slate-950 disabled:opacity-40"
       >

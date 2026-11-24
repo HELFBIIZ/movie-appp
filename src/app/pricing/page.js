@@ -8,6 +8,7 @@ import WirePaymentStatus from '@/components/payments/WirePaymentStatus';
 import PendingWirePayments from '@/components/payments/PendingWirePayments';
 import { safeReturnTo } from '@/lib/safe-return';
 import { checkoutKey } from '@/lib/checkout-key';
+import { planLabel } from '@/lib/plan-label';
 import { useRouter } from 'next/navigation';
 
 export default function PricingPage() {
@@ -54,13 +55,17 @@ export default function PricingPage() {
     window.addEventListener('vxnta:session-change', refreshMe);
     fetch('/api/plans')
       .then((r) => r.json())
-      .then((d) => setPlans(d.plans ?? []));
+      .then((d) => setPlans(d.plans ?? []))
+      .catch(() =>
+        setNotice({ kind: 'error', text: 'Багцуудыг ачаалж чадсангүй. Хуудсаа дахин нээнэ үү.' }),
+      );
     fetch('/api/rewards')
       .then((r) => r.json())
       .then((d) => {
         setRewards(d.rewards ?? []);
         setMyRewards(d.myRewards ?? []);
-      });
+      })
+      .catch(() => {});
     return () => {
       authController?.abort();
       window.removeEventListener('vxnta:session-change', refreshMe);
@@ -137,33 +142,44 @@ export default function PricingPage() {
   }
 
   async function redeem(code) {
-    setBusy(`redeem:${code}`);
-    setNotice(null);
-    const res = await fetch('/api/actions/redeem', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rewardCode: code }),
-    });
-    const data = await res.json();
-    setBusy(null);
-    if (!res.ok) {
-      setNotice({
-        kind: 'error',
-        text: `${data.error?.code ?? 'REDEEM_FAILED'}${data.error?.needed ? ` — need ${data.error.needed} XP` : ''}`,
-      });
+    if (!me) {
+      router.push('/login?next=%2Fpricing');
       return;
     }
-    setNotice({
-      kind: 'ok',
-      text: `Unlocked ${data.reward.name} (-${data.reward ? '' : ''}XP, balance ${data.xpBalance})`,
-    });
-    const fresh = await (await fetch('/api/auth/me')).json();
-    setMe(fresh.me ?? null);
-    const rw = await (await fetch('/api/rewards')).json();
-    setMyRewards(rw.myRewards ?? []);
+    setBusy(`redeem:${code}`);
+    setNotice(null);
+    try {
+      const res = await fetch('/api/actions/redeem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rewardCode: code }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setNotice({
+          kind: 'error',
+          text: data.error?.needed
+            ? `${data.error.needed} XP хэрэгтэй байна.`
+            : 'Урамшуулал авах боломжгүй байна. Дахин оролдоно уу.',
+        });
+        return;
+      }
+      setNotice({
+        kind: 'ok',
+        text: `${data.reward.name} авлаа. Үлдэгдэл: ${data.xpBalance} XP.`,
+      });
+      const fresh = await (await fetch('/api/auth/me')).json();
+      setMe(fresh.me ?? null);
+      const rw = await (await fetch('/api/rewards')).json();
+      setMyRewards(rw.myRewards ?? []);
+    } catch {
+      setNotice({ kind: 'error', text: 'Холболт тасарлаа. Үлдэгдлээ шалгаад дахин оролдоно уу.' });
+    } finally {
+      setBusy(null);
+    }
   }
 
-  const bankPlans = plans.filter((p) => p.code === 'WEEKLY' || /^MONTHLY_\d+$/.test(p.code));
+  const bankPlans = plans.filter((p) => p.priceMnt > 0);
   const selectedBankPlan = bankPlans.find((p) => p.code === bankPlan);
 
   function onFile(e) {
@@ -172,7 +188,7 @@ export default function PricingPage() {
     setImageName('');
     if (!file) return;
     if (file.size > 1_500_000) {
-      setNotice({ kind: 'error', text: 'Receipt screenshot must be under 1.5 MB.' });
+      setNotice({ kind: 'error', text: 'Баримтын зураг 1.5 MB-аас бага байх ёстой.' });
       return;
     }
     const reader = new FileReader();
@@ -184,36 +200,48 @@ export default function PricingPage() {
   }
 
   async function submitBank() {
+    if (!me) {
+      router.push('/login?next=%2Fpricing');
+      return;
+    }
     if (!bankPlan || !phone.trim()) {
-      setNotice({ kind: 'error', text: 'Pick a plan and enter your phone number.' });
+      setNotice({ kind: 'error', text: 'Багцаа сонгоод утасны дугаараа оруулна уу.' });
       return;
     }
     setBusy('bank');
     setNotice(null);
-    const res = await fetch('/api/payments/manual', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        planCode: bankPlan,
-        phone: phone.trim(),
-        note: note.trim() || null,
-        imageData,
-      }),
-    });
-    const data = await res.json();
-    setBusy(null);
-    if (!res.ok) {
-      setNotice({ kind: 'error', text: data.error?.code ?? 'SUBMIT_FAILED' });
-      return;
+    try {
+      const res = await fetch('/api/payments/manual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planCode: bankPlan,
+          phone: phone.trim(),
+          note: note.trim() || null,
+          imageData,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setNotice({
+          kind: 'error',
+          text: 'Баримт илгээгдсэнгүй. Мэдээллээ шалгаад дахин оролдоно уу.',
+        });
+        return;
+      }
+      setNotice({
+        kind: 'ok',
+        text: `Баримт илгээгдлээ (${data.receipt.txnId}). Админ шалгаж баталгаажуулсны дараа VIP эрх нээгдэнэ.`,
+      });
+      setImageData(null);
+      setImageName('');
+      setPhone('');
+      setNote('');
+    } catch {
+      setNotice({ kind: 'error', text: 'Холболт тасарлаа. Баримтаа дахин илгээнэ үү.' });
+    } finally {
+      setBusy(null);
     }
-    setNotice({
-      kind: 'ok',
-      text: `Receipt submitted (${data.receipt.txnId}). VIP activates once an admin approves.`,
-    });
-    setImageData(null);
-    setImageName('');
-    setPhone('');
-    setNote('');
   }
 
   const fmt = (mnt) => `₮${mnt.toLocaleString('en-US')}`;
@@ -222,8 +250,10 @@ export default function PricingPage() {
     <main className="min-h-screen bg-slate-950 text-white page-enter">
       <Header />
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <p className="text-sm uppercase tracking-[0.25em] text-[#c9a227]">Membership</p>
-        <h1 className="mt-1 text-3xl font-bold md:text-4xl gradient-text">Plans &amp; XP shop</h1>
+        <h1 className="text-3xl font-bold md:text-4xl gradient-text">VIP эрхээ нээх</h1>
+        <p className="mt-3 text-sm text-slate-400">
+          Багцаа сонгоод кино үзэж, хадмалаас нь үг сураарай.
+        </p>
 
         {me && (
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm">
@@ -244,6 +274,7 @@ export default function PricingPage() {
 
         {notice && (
           <div
+            role="status"
             className={`mt-4 rounded-2xl border p-3 text-sm ${notice.kind === 'ok' ? 'border-emerald-700 bg-emerald-950/40 text-emerald-300' : 'border-red-700 bg-red-950/40 text-red-300'}`}
           >
             {notice.text}
@@ -285,16 +316,17 @@ export default function PricingPage() {
         )}
 
         <section className="mt-8">
-          <h2 className="text-xl font-semibold">VIP plans</h2>
+          <h2 className="text-xl font-semibold">VIP эрхийн багцууд</h2>
           <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {plans.map((p) => (
               <div key={p.code} className="luxe-card rounded-2xl p-5">
-                <div className="text-[#c9a227] text-xs uppercase tracking-wider">{p.code}</div>
-                <div className="mt-1 text-lg font-semibold break-words">{p.name}</div>
+                <div className="mt-1 text-lg font-semibold break-words">{planLabel(p)}</div>
                 <div className="mt-2 text-2xl font-bold gradient-text inline-block">
                   {fmt(p.priceMnt)}
                 </div>
-                <div className="text-sm text-slate-400">{p.durationDays} days</div>
+                <div className="text-sm text-slate-400">
+                  {p.durationDays} хоног · кино, хэл сурах
+                </div>
                 <div className="mt-4 flex flex-col gap-2">
                   {options.demo && (
                     <button
@@ -310,89 +342,61 @@ export default function PricingPage() {
                     onClick={() => checkout(p.code, 'wire')}
                     className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-4 py-2 text-sm font-medium text-emerald-300 transition-all hover:border-emerald-400 hover:bg-emerald-900/40 hover:text-white disabled:opacity-50"
                   >
-                    {busy === `${p.code}:wire` ? '…' : `Wire-ээр төлөх ${fmt(p.priceMnt)}`}
+                    {busy === `${p.code}:wire`
+                      ? 'Төлбөр бэлдэж байна…'
+                      : `Онлайнаар төлөх ${fmt(p.priceMnt)}`}
                   </button>
-                  <button
-                    disabled={Boolean(busy) || !options.qpay}
-                    onClick={() => checkout(p.code, 'qpay')}
-                    className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
-                  >
-                    {busy === `${p.code}:qpay` ? '…' : `QPay-ээр төлөх ${fmt(p.priceMnt)}`}
-                  </button>
+                  {options.qpay && (
+                    <button
+                      disabled={Boolean(busy) || !options.qpay}
+                      onClick={() => checkout(p.code, 'qpay')}
+                      className="rounded-xl border border-[#d6b456]/40 bg-black/20 px-4 py-2 text-sm font-medium text-gold-soft transition-all hover:border-[#e7c779] hover:bg-[#c9a227]/10 hover:text-white disabled:opacity-50"
+                    >
+                      {busy === `${p.code}:qpay` ? '…' : `QPay-ээр төлөх ${fmt(p.priceMnt)}`}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold">Pay by Khan Bank transfer</h2>
+        <details className="mt-10 rounded-2xl border border-white/10 p-5">
+          <summary className="cursor-pointer text-lg font-semibold">Банкны шилжүүлэг</summary>
           <p className="mt-1 text-sm text-slate-400">
-            Send the plan amount to the account below, then upload your receipt screenshot (or note
-            the transfer ID) and phone number. An operator approves it manually and your VIP is
-            extended automatically.
+            Дансанд багцын төлбөрөө шилжүүлээд баримтаа илгээнэ. Админ шалгасны дараа эрх нээгдэнэ.
           </p>
-
-          <div className="mt-4 grid gap-3 rounded-2xl border border-[#d6b456]/20 bg-black/30 p-5 sm:grid-cols-3">
-            <div>
-              <div className="font-display text-2xl text-gold-soft">1.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">
-                Хүссэн төлөвлөгөөгөө доор сонгоно уу (WEEKLY / MONTHLY / уян хатан сарууд).
-              </p>
-            </div>
-            <div>
-              <div className="font-display text-2xl text-gold-soft">2.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">
-                Khan Bank-р төлөвлөгөөний дүнг данс руу шилжүүлнэ:{' '}
-                <span className="font-semibold text-amber-200">
-                  Taivanbaatar — MN550005005771031864
-                </span>
-                .
-              </p>
-            </div>
-            <div>
-              <div className="font-display text-2xl text-gold-soft">3.</div>
-              <p className="mt-1 text-sm text-[#cdbf9c]">
-                Утасны дугаар, гүйлгээний мэдээлэл эсвэл чек-зураг оруулаад «Submit receipt» дарна.
-                Администратор баталгаажуулсны дараа VIP сунгагдана.
-              </p>
-            </div>
-          </div>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,320px)_1fr]">
             <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/40 to-slate-900 p-5">
-              <div className="text-xs uppercase tracking-wider text-amber-400">Khan Bank</div>
-              <div className="mt-3 text-sm text-slate-300">Account name</div>
+              <div className="text-xs uppercase tracking-wider text-amber-400">Хаан банк</div>
+              <div className="mt-3 text-sm text-slate-300">Хүлээн авагч</div>
               <div className="text-2xl font-black tracking-wide text-white">Taivanbaatar</div>
-              <div className="mt-3 text-sm text-slate-300">Account number</div>
+              <div className="mt-3 text-sm text-slate-300">Дансны дугаар</div>
               <div className="select-all rounded-lg bg-black/40 px-3 py-2 font-mono text-sm font-semibold text-amber-300">
                 MN550005005771031864
-              </div>
-              <div className="mt-4 text-xs text-slate-500">
-                No gateway fee — funds go straight to the merchant account; the app only records
-                receipts for approval.
               </div>
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block text-sm">
-                  <span className="text-slate-400">Plan</span>
+                  <span className="text-slate-400">Багц</span>
                   <select
                     value={bankPlan}
                     onChange={(e) => setBankPlan(e.target.value)}
                     className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-amber-500/60"
                   >
-                    <option value="">Select plan…</option>
+                    <option value="">Багцаа сонгох</option>
                     {bankPlans.map((p) => (
                       <option key={p.code} value={p.code}>
-                        {p.name} — {fmt(p.priceMnt)} / {p.durationDays} days
+                        {planLabel(p)} — {fmt(p.priceMnt)} / {p.durationDays} хоног
                       </option>
                     ))}
                   </select>
                 </label>
                 <label className="block text-sm">
-                  <span className="text-slate-400">Phone number</span>
+                  <span className="text-slate-400">Утасны дугаар</span>
                   <input
                     type="tel"
                     value={phone}
@@ -402,21 +406,21 @@ export default function PricingPage() {
                   />
                 </label>
                 <label className="block text-sm sm:col-span-2">
-                  <span className="text-slate-400">Transfer reference / note (optional)</span>
+                  <span className="text-slate-400">Гүйлгээний дугаар, тайлбар</span>
                   <input
                     type="text"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     maxLength={280}
-                    placeholder="e.g. transfer ID or your username"
+                    placeholder="Гүйлгээний дугаар эсвэл хэрэглэгчийн нэр"
                     className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-amber-500/60"
                   />
                 </label>
                 <div className="sm:col-span-2">
-                  <span className="text-sm text-slate-400">Receipt screenshot (optional)</span>
+                  <span className="text-sm text-slate-400">Баримтын зураг</span>
                   <div className="mt-1 flex items-center gap-3">
                     <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-slate-600 px-4 py-2 text-sm text-slate-300 hover:border-amber-500/50 hover:text-white">
-                      {imageName || 'Choose image…'}
+                      {imageName || 'Зураг сонгох'}
                       <input
                         type="file"
                         accept="image/png,image/jpeg,image/webp"
@@ -428,7 +432,7 @@ export default function PricingPage() {
                       // eslint-disable-next-line @next/next/no-img-element -- Preserve existing external/receipt image sizing and loading behavior.
                       <img
                         src={imageData}
-                        alt="receipt preview"
+                        alt="Баримтын зураг"
                         className="h-14 w-14 rounded-lg border border-slate-700 object-cover"
                       />
                     )}
@@ -438,32 +442,33 @@ export default function PricingPage() {
               <div className="mt-4 flex items-center justify-between gap-3">
                 <div className="text-sm text-slate-400">
                   {selectedBankPlan
-                    ? `Total due: ${fmt(selectedBankPlan.priceMnt)} → ${selectedBankPlan.durationDays} days of VIP`
-                    : 'Select a plan to see the total.'}
+                    ? `${fmt(selectedBankPlan.priceMnt)} · ${selectedBankPlan.durationDays} хоногийн VIP`
+                    : 'Багцаа сонгоно уу.'}
                 </div>
                 <button
-                  disabled={busy === 'bank'}
+                  disabled={Boolean(busy)}
                   onClick={submitBank}
                   className="rounded-xl bg-amber-400 px-5 py-2 text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/20 transition-all hover:bg-amber-300 disabled:opacity-50"
                 >
-                  {busy === 'bank' ? 'Submitting…' : 'Submit receipt'}
+                  {busy === 'bank' ? 'Илгээж байна…' : 'Баримт илгээх'}
                 </button>
               </div>
             </div>
           </div>
-        </section>
+        </details>
 
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold">XP shop</h2>
+        <details className="mt-6 rounded-2xl border border-white/10 p-5">
+          <summary className="cursor-pointer text-lg font-semibold">
+            Оноогоор урамшуулал авах
+          </summary>
           <p className="mt-1 text-sm text-slate-400">
-            Earn XP by watching, rating, reviewing and logging in daily. Spend it here.
+            Кино үзэж, үнэлгээ өгч цуглуулсан XP оноогоо ашиглаарай.
           </p>
           {!me ? (
             <p className="mt-3 text-sm text-slate-400">
               <Link href="/login" className="text-[#c9a227] hover:underline dark:text-amber-200">
-                Sign in
+                Нэвтрэх
               </Link>{' '}
-              to redeem.
             </p>
           ) : null}
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -489,27 +494,18 @@ export default function PricingPage() {
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-amber-300 font-semibold">◆ {r.xpPrice} XP</span>
                     <button
-                      disabled={busy === `redeem:${r.code}` || locked || tooPoor}
+                      disabled={Boolean(busy) || locked || tooPoor}
                       onClick={() => redeem(r.code)}
                       className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all disabled:opacity-40 ${locked ? 'bg-emerald-700 text-white' : 'bg-amber-400 text-slate-900 hover:bg-amber-300'}`}
                     >
-                      {locked ? 'Owned ✓' : owned ? 'Сунгах' : 'Redeem'}
+                      {locked ? 'Авсан ✓' : owned ? 'Сунгах' : 'Авах'}
                     </button>
                   </div>
                 </div>
               );
             })}
           </div>
-        </section>
-
-        <p className="mt-10 text-xs text-slate-500">
-          Payments MNT (₮). Wire-ээр төлбөр pay.wire.mn дээрх hosted хуудсаар төлнө; QPay/QR-ээр
-          төлнө; bank буюу Khan Bank шилжүүлэг admin-аар баталгаажуулна (
-          <Link href="/admin/payments" className="text-amber-400 hover:underline">
-            admin review page
-          </Link>
-          ).
-        </p>
+        </details>
       </div>
       <Footer />
     </main>

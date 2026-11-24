@@ -5,14 +5,14 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { chromium } from '@playwright/test';
-import { sampleLines } from '../src/lib/learning/sample.ts';
+import { sampleLines } from '../tests/fixtures/lesson.ts';
 
 if (process.platform !== 'win32')
   throw new Error(
     'Sample generation needs Windows SAPI; the generated assets are already committed.',
   );
 const audioDir = fs.mkdtempSync(path.join(os.tmpdir(), 'scenechain-audio-'));
-const outputDir = path.resolve('public/learning');
+const outputDir = path.resolve('tests/fixtures');
 fs.mkdirSync(outputDir, { recursive: true });
 execFileSync(
   'powershell.exe',

@@ -48,7 +48,7 @@ try {
     ['login', '/login'],
     ['pricing', '/pricing'],
     ['profile', '/profile'],
-    ['learning', '/learn'],
+    ['learning', '/watch/inception?learn=1'],
   ];
   for (const [name, route] of routes) {
     process.stdout.write(JSON.stringify({ opening: name, route }) + '\n');
@@ -85,7 +85,7 @@ try {
   const dock = page.getByRole('region', { name: 'SceneChain Learning Dock' });
   await dock.waitFor();
   report.learningTabs = await dock
-    .getByRole('group', { name: 'Learning panels' })
+    .getByRole('group', { name: 'Сурах хэсэг' })
     .getByRole('button')
     .allTextContents();
   await page.setViewportSize({ width: 390, height: 844 });

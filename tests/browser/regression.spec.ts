@@ -73,7 +73,7 @@ async function ready(page: Page) {
   await page.evaluate(() => document.fonts.ready);
   // The header's authentication effect has settled when Sign In is visible.
   await expect(
-    page.locator('header').getByRole('link', { name: 'Sign In', exact: true }),
+    page.locator('header').getByRole('link', { name: 'Нэвтрэх', exact: true }),
   ).toBeVisible();
 }
 
@@ -98,7 +98,7 @@ for (const [name, route] of [
   ['watch', '/watch/spider-man-brand-new-day'],
   ['login', '/login'],
   ['pricing', '/pricing'],
-  ['learning', '/learn'],
+  ['learning', '/watch/inception?learn=1'],
   ['dashboard', '/learning'],
 ]) {
   test(`current ${name} desktop and mobile appearance`, async ({ page }) => {
@@ -107,9 +107,9 @@ for (const [name, route] of [
     if (name === 'watch')
       await expect(page.getByRole('heading', { level: 2 })).toContainText('нэвтэрнэ');
     if (name === 'pricing')
-      await expect(page.getByText('Monthly Unlimited', { exact: true }).first()).toBeVisible();
+      await expect(page.getByText('Сарын эрх', { exact: true }).first()).toBeVisible();
     if (name === 'dashboard')
-      await expect(page.getByText('Сонссон минут', { exact: true })).toBeVisible();
+      await expect(page.getByText('Хадгалсан үг', { exact: true })).toBeVisible();
     await appearance(page, `${name}-desktop.png`);
     await page.setViewportSize({ width: 390, height: 844 });
     await appearance(page, `${name}-mobile.png`);
@@ -126,7 +126,10 @@ test('search and mobile navigation preserve their existing results and URLs', as
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Toggle menu', exact: true }).click();
   await appearance(page, 'mobile-navigation.png');
-  await page.getByRole('link', { name: 'All Movies', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Утасны цэс' })
+    .getByRole('link', { name: 'Кино', exact: true })
+    .click();
   await expect(page).toHaveURL(/\/movies$/);
 });
 
@@ -165,12 +168,12 @@ test('password login handles failure and success with mocked sessions', async ({
     );
   });
   await page.goto('/login');
-  await page.getByLabel('Email or username').fill('learner@example.test');
-  await page.getByLabel('Password', { exact: true }).fill('fixture-only-password');
-  await page.locator('form').getByRole('button', { name: 'Sign in', exact: true }).click();
-  await expect(page.getByText('INVALID_CREDENTIALS', { exact: true })).toBeVisible();
+  await page.getByLabel('Имэйл эсвэл хэрэглэгчийн нэр').fill('learner@example.test');
+  await page.getByLabel('Нууц үг', { exact: true }).fill('fixture-only-password');
+  await page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('нууц үг буруу');
   succeed = true;
-  await page.locator('form').getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }).click();
   await expect(page).toHaveURL('/');
 });
 
@@ -200,15 +203,16 @@ test('admin navigation and logout use mocked identity without changing server ro
   });
   await page.goto('/');
   await expect(
-    page.locator('header').getByRole('link', { name: 'Admin', exact: true }),
-  ).toBeVisible();
+    page.locator('header').getByRole('link', { name: 'Удирдлага', exact: true }),
+  ).toHaveCount(0);
   await page
     .locator('header button')
     .filter({ has: page.locator('svg.lucide-user') })
     .click();
-  await page.getByRole('menuitem').filter({ hasText: 'Logout' }).click();
+  await expect(page.getByRole('menuitem').filter({ hasText: 'Удирдлага' })).toBeVisible();
+  await page.getByRole('menuitem').filter({ hasText: 'Гарах' }).click();
   await expect(
-    page.locator('header').getByRole('link', { name: 'Sign In', exact: true }),
+    page.locator('header').getByRole('link', { name: 'Нэвтрэх', exact: true }),
   ).toBeVisible();
   expect(loggedIn).toBe(false);
 });
@@ -265,7 +269,7 @@ test('checkout sends server-priced plan and safe return route without creating a
   await expect(page.getByRole('button', { name: 'Buy with card (demo)', exact: true })).toHaveCount(
     0,
   );
-  await page.getByRole('button', { name: /Wire-ээр төлөх/ }).click();
+  await page.getByRole('button', { name: /Онлайнаар төлөх/ }).click();
   await page.getByRole('button', { name: /QPay-ээр төлөх/ }).click();
   expect(submitted).toEqual(
     ['wire', 'qpay'].map((provider) => ({ planCode: 'MONTHLY', provider, returnTo: '/learning' })),

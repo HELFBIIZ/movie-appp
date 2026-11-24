@@ -8,7 +8,7 @@ test('first entry offers eight questions, persists recommendations and retest hi
   await page.goto('/learning', { waitUntil: 'domcontentloaded' });
   const dialog = page.getByRole('dialog', { name: 'Эхлэх түвшний тест' });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Тестээ эхлэх' }).click();
+  await dialog.getByRole('button', { name: 'Эхлэх', exact: true }).click();
   for (let index = 0; index < placementQuestions.length; index++) {
     await dialog
       .getByRole('button', { name: placementQuestions[index].answer, exact: true })
@@ -24,9 +24,9 @@ test('first entry offers eight questions, persists recommendations and retest hi
   await dialog.getByRole('button', { name: 'Түвшний тестийг хаах' }).click();
   await page.reload({ waitUntil: 'domcontentloaded' });
   await expect(dialog).not.toBeVisible();
-  await expect(page.getByText('Дунд · 8/8', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Түвшнээ дахин шалгах', exact: true }).click();
-  await dialog.getByRole('button', { name: 'Тестээ эхлэх' }).click();
+  await expect(page.getByRole('button', { name: /Дунд · Тест дахин өгөх/ })).toBeVisible();
+  await page.getByRole('button', { name: /Тест дахин өгөх/ }).click();
+  await dialog.getByRole('button', { name: 'Эхлэх', exact: true }).click();
   for (let index = 0; index < 8; index++) {
     await dialog.getByRole('button', { name: 'Мэдэхгүй · Алгасах' }).click();
     await dialog
@@ -37,7 +37,8 @@ test('first entry offers eight questions, persists recommendations and retest hi
       .click();
   }
   await dialog.getByRole('button', { name: 'Түвшний тестийг хаах' }).click();
-  await expect(page.getByText('Эхний тест: 8/8 → Сүүлийн тест: 0/8')).toBeVisible();
+  await page.getByText('Дэлгэрэнгүй ахиц', { exact: true }).click();
+  await expect(page.getByRole('list').filter({ hasText: '8/8' })).toContainText('0/8');
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/learning-dashboard-mobile.png', fullPage: true });
@@ -47,10 +48,10 @@ test('entry test can be dismissed; payment and sign-in pages never force it', as
   await page.goto('/login', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('dialog', { name: 'Эхлэх түвшний тест' })).not.toBeVisible();
   await page.goto('/learning', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Дараа үзье' }).click();
+  await page.getByRole('button', { name: 'Дараа', exact: true }).click();
   await page.reload({ waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('dialog', { name: 'Эхлэх түвшний тест' })).not.toBeVisible();
-  await page.getByRole('button', { name: '2 минутын түвшний тест' }).click();
+  await page.getByRole('button', { name: 'Түвшнээ шалгах', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'Эхлэх түвшний тест' })).toBeVisible();
 });
 
@@ -72,7 +73,7 @@ for (const title of [
       episodeQueries.push(query.get('episode') ?? '');
       return route.fulfill({
         json: {
-          english: `WEBVTT\n\n00:01.000 --> 00:05.000\nOriginal fixture episode ${query.get('episode')}.\n`,
+          english: `WEBVTT\n\n00:01.000 --> 00:05.000\nTrain fixture episode ${query.get('episode')}.\n`,
           mongolian: 'WEBVTT\n\n00:01.000 --> 00:05.000\nСургалтын туршилтын өгүүлбэр.\n',
           notice: 'Protocol fixture, not movie dialogue.',
         },
@@ -86,15 +87,15 @@ for (const title of [
       }),
     );
     await page.goto(`/watch/${title.slug}?learn=1`, { waitUntil: 'domcontentloaded' });
-    await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
+    await page.getByRole('button', { name: 'Бүх хадмал', exact: true }).click();
     await expect(page.getByLabel('The Last Train sample lesson video')).toHaveCount(0);
-    await expect(page.getByRole('list', { name: 'Bilingual transcript' })).toContainText(
-      'Original fixture episode 1.',
+    await expect(page.getByRole('list', { name: 'Хадмалын жагсаалт' })).toContainText(
+      'Train fixture episode 1.',
     );
-    await expect(page.getByText('Тоглуулагчийн цаг: 00:02', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Select word original', exact: true }).click();
-    await page.getByLabel('Утга', { exact: true }).fill('өөрийн сургалтын тэмдэглэл');
-    await page.getByRole('button', { name: 'Үг хадгалах', exact: true }).click();
+    await page.getByText('Хадмал тааруулах', { exact: true }).click();
+    await expect(page.getByText('Киноны хугацаа: 00:02', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'train — утгыг харах', exact: true }).click();
+    await page.getByRole('button', { name: 'Энэ үгийг суръя', exact: true }).click();
     await page.getByRole('button', { name: 'Тайлбарыг хаах', exact: true }).click();
     const saved = await page.evaluate(
       () => JSON.parse(localStorage.getItem('vxnta.scenechain.v1')!).items[0],
@@ -104,9 +105,8 @@ for (const title of [
     if (title.slug === 'yellowstone') {
       expect(saved.mediaId).toMatch(/^tv:73586:1:1:/);
       await page.getByLabel('Episode', { exact: true }).selectOption('2');
-      await page.getByRole('button', { name: 'Хадмал', exact: true }).click();
-      await expect(page.getByRole('list', { name: 'Bilingual transcript' })).toContainText(
-        'Original fixture episode 2.',
+      await expect(page.getByRole('list', { name: 'Хадмалын жагсаалт' })).toContainText(
+        'Train fixture episode 2.',
       );
       expect(episodeQueries).toContain('2');
       expect(await page.getByTitle('Yellowstone player').getAttribute('src')).toContain('?s=1&e=2');
@@ -186,7 +186,7 @@ test('Wire hosted checkout return polls server confirmation then links back to t
     waitUntil: 'domcontentloaded',
   });
   await expect(page.getByRole('button', { name: 'Buy with card (demo)' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Wire-ээр төлөх ₮5,900' }).click();
+  await page.getByRole('button', { name: 'Онлайнаар төлөх ₮5,900' }).click();
   await page.getByRole('link', { name: 'Return fixture payment' }).click();
   await expect(page.getByRole('region', { name: 'Wire төлбөрийн төлөв' })).toContainText(
     'Төлбөр хүлээгдэж байна',

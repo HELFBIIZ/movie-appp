@@ -28,7 +28,7 @@ export default function RecallPractice({
         <p className="text-sm text-slate-300">
           {cards.length
             ? `${cards.length} үгээ санаж үзлээ · ${score} зөв. Хэцүү үгсийг 10 минутын дараа дахин давтана.`
-            : 'Кино эсвэл үнэгүй дасгалаас мэдэхгүй үгээ сонгоорой.'}
+            : 'Киноны хадмалаас мэдэхгүй үгээ сонгоорой.'}
         </p>
         <button
           type="button"

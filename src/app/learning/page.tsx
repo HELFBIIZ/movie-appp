@@ -3,58 +3,77 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import VocabularyPanel from '@/components/learning/VocabularyPanel';
 import RecallPractice from '@/components/learning/RecallPractice';
 import GuestProgressImport from '@/components/learning/GuestProgressImport';
+import LearningDetails from '@/components/learning/LearningDetails';
 import { useLearningAccount } from '@/components/learning/LearningAccount';
 import { usePlacementProfile } from '@/components/learning/usePlacementProfile';
-import { OPEN_PLACEMENT_EVENT, assessPlacement, placementBands } from '@/lib/learning/placement';
+import { OPEN_PLACEMENT_EVENT, placementBands } from '@/lib/learning/placement';
 import { learningMetrics } from '@/lib/learning/metrics';
 import { recallQueue } from '@/lib/learning/recall';
-import { reviewItem } from '@/lib/learning/srs';
+import { isDue, reviewItem } from '@/lib/learning/srs';
 import type { LearningItem } from '@/lib/learning/types';
 
 export default function LearningDashboard() {
   const account = useLearningAccount();
   const { profile, history } = usePlacementProfile();
   const [now, setNow] = useState(() => Date.now());
-  const [practicing, setPracticing] = useState(false);
-  const [cards, setCards] = useState<LearningItem[]>([]);
-  const goal = profile ? placementBands[profile.band].words : 3;
-  const reviewGoal = Math.min(goal, 5);
+  const [cards, setCards] = useState<LearningItem[] | null>(null);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(timer);
   }, []);
   const stats = useMemo(() => learningMetrics(account.snapshot, now), [account.snapshot, now]);
-  const baseline =
-    history.length > 1
-      ? assessPlacement(history[0].answers, history[0].completedAt, history[0].form)
-      : null;
-  const change =
-    stats.recentRate !== null &&
-    stats.previousRate !== null &&
-    stats.recentCount >= 5 &&
-    stats.previousCount >= 5
-      ? stats.recentRate - stats.previousRate
-      : null;
+  const goal = profile ? placementBands[profile.band].words : 3;
+  const words = account.snapshot.progress.items.filter((item) => item.kind === 'word');
+  function review(id: string, correct: boolean) {
+    const item = account.snapshot.progress.items.find((entry) => entry.id === id);
+    if (!item) return false;
+    if (!isDue(item, Date.now())) return true;
+    const at = Date.now();
+    return account.update((snapshot) => ({
+      ...snapshot,
+      progress: {
+        ...snapshot.progress,
+        items: snapshot.progress.items.map((entry) =>
+          entry.id === id ? reviewItem(entry, correct, at) : entry,
+        ),
+      },
+      activity: [
+        ...snapshot.activity,
+        { id: crypto.randomUUID(), kind: 'review' as const, at, movieId: item.movieId, correct },
+      ].slice(-5000),
+    }));
+  }
   const test = () => window.dispatchEvent(new Event(OPEN_PLACEMENT_EVENT));
-  const maxMinutes = Math.max(1, ...stats.days.map((day) => day.seconds / 60));
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <Header />
-      <div className="mx-auto max-w-5xl px-4 py-8">
-        <p className="text-sm uppercase tracking-widest text-[#c9a227]">
-          SceneChain · Миний сургалт
-        </p>
-        <h1 className="mt-2 text-3xl font-bold">Англи хэлний минь ахиц</h1>
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-3xl font-bold">Миний англи хэл</h1>
+          <button
+            type="button"
+            onClick={test}
+            className="rounded-full border border-white/15 px-3 py-2 text-xs text-amber-200"
+          >
+            {profile ? `${placementBands[profile.band].label} · Тест дахин өгөх` : 'Түвшнээ шалгах'}
+          </button>
+        </div>
         <p className="mt-3 text-sm leading-6 text-slate-400">
-          Өдөрт 5 минут: нэг хэсэг сонсож, {goal} үг сонгоод, утгыг нь санаж үзээрэй.
+          Киноноос өдөрт {goal} үг. Утгыг нь ойлгоод, санаж давтаарай.
         </p>
-        <p role="status" className="mt-3 text-xs text-slate-400">
-          {account.sync || (!account.loaded ? 'Ахиц ачаалж байна…' : '')}
-        </p>
+        {account.scope === 'guest' && (
+          <p className="mt-2 text-xs text-slate-500">
+            Ахиц энэ төхөөрөмжид хадгалагдана.{' '}
+            <Link href="/login?next=%2Flearning" className="text-amber-200">
+              Нэвтэрч хадгалах →
+            </Link>
+          </p>
+        )}
         {account.error && (
-          <p role="alert" className="mt-3 text-rose-300">
+          <p role="alert" className="mt-4 text-sm text-rose-300">
             {account.error}
           </p>
         )}
@@ -62,221 +81,89 @@ export default function LearningDashboard() {
           <button
             type="button"
             onClick={() => void account.merge()}
-            className="mt-3 text-sm text-amber-200 underline"
+            className="mt-4 text-sm text-amber-200 underline"
           >
-            Хоёр төхөөрөмжийн хадгалсан үг, тестийг нэгтгэх
+            Хоёр төхөөрөмжийн үгсийг нэгтгэх
           </button>
         )}
-        <GuestProgressImport />
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href="/movies"
-            className="rounded-xl bg-[#c9a227] px-4 py-3 font-semibold text-slate-950"
-          >
-            Киногоор сурах
-          </Link>
-          <Link href="/learn" className="rounded-xl border border-white/15 px-4 py-3">
-            Үнэгүй дасгал
-          </Link>
-          <button
-            type="button"
-            onClick={test}
-            className="rounded-xl border border-white/15 px-4 py-3"
-          >
-            {profile ? 'Түвшнээ дахин шалгах' : '2 минутын түвшний тест'}
-          </button>
-        </div>
-        {account.loaded && (
-          <>
-            <div className="mt-7 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {[
-                [stats.words, 'Хадгалсан үг'],
-                [stats.retained, '2+ удаа зөв санасан'],
-                [stats.due.length, 'Одоо давтах үг'],
-                [Math.floor(stats.seconds / 60), 'Сонссон минут'],
-              ].map(([value, label]) => (
-                <div key={label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-3xl font-semibold text-amber-200">{value}</p>
-                  <p className="mt-2 text-sm text-slate-400">{label}</p>
-                </div>
-              ))}
+        <div className="mt-6 grid grid-cols-3 gap-3">
+          {[
+            [stats.words, 'Хадгалсан үг'],
+            [stats.due.length, 'Одоо давтах'],
+            [stats.streak, 'Дараалсан өдөр'],
+          ].map(([value, label]) => (
+            <div key={label} className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <p className="text-2xl font-semibold text-amber-200">{value}</p>
+              <p className="mt-2 text-xs text-slate-400">{label}</p>
             </div>
-            <section className="mt-5 rounded-2xl border border-white/10 p-5">
-              <h2 className="text-lg font-semibold">Өнөөдрийн жижиг зорилго</h2>
-              <p className="mt-2 text-xs text-slate-400">
-                {stats.streak
-                  ? `${stats.streak} өдөр дараалан дасгал хийсэн`
-                  : 'Өнөөдрийн нэг жижиг дасгалаас эхэлье.'}
-              </p>
-              <ol
-                className="mt-4 grid gap-2 text-sm sm:grid-cols-3"
-                aria-label="Өнөөдрийн сурах төлөвлөгөө"
-              >
-                <li className="rounded-lg bg-white/5 p-3">
-                  {stats.todaySeconds >= 60 ? '✓' : '1.'} Сонсох ·{' '}
-                  {Math.min(60, Math.floor(stats.todaySeconds))}/60 сек
-                </li>
-                <li className="rounded-lg bg-white/5 p-3">
-                  {stats.todayWords >= goal ? '✓' : '2.'} Үг хадгалах ·{' '}
-                  {Math.min(stats.todayWords, goal)}/{goal}
-                </li>
-                <li className="rounded-lg bg-white/5 p-3">
-                  {stats.todayReviews >= reviewGoal ? '✓' : '3.'} Санаж үзэх ·{' '}
-                  {Math.min(stats.todayReviews, reviewGoal)}/{reviewGoal}
-                </li>
-              </ol>
-              <p className="mt-2 text-sm text-slate-300">
-                {Math.min(stats.todayWords, goal)} / {goal} үг хадгалсан
-              </p>
-              <progress
-                aria-label="Өнөөдрийн үгийн зорилго"
-                value={Math.min(stats.todayWords, goal)}
-                max={goal}
-                className="mt-3 h-3 w-full accent-amber-400"
-              />
+          ))}
+        </div>
+        <section
+          className="mt-5 rounded-2xl border border-white/10 p-5"
+          aria-label="Өнөөдрийн зорилго"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">Өнөөдөр</h2>
+            <span className="text-sm text-amber-200">
+              {Math.min(stats.todayWords, goal)} / {goal} үг
+            </span>
+          </div>
+          <progress
+            aria-label="Өнөөдрийн үгийн зорилго"
+            value={Math.min(stats.todayWords, goal)}
+            max={goal}
+            className="mt-4 h-2 w-full accent-amber-400"
+          />
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/movies"
+              className="rounded-xl bg-[#c9a227] px-4 py-3 text-sm font-semibold text-slate-950"
+            >
+              Кино сонгох
+            </Link>
+            {stats.due.length > 0 && (
               <button
                 type="button"
-                disabled={!stats.due.length}
-                onClick={() => {
-                  setCards(recallQueue(stats.due, now, goal));
-                  setPracticing(true);
-                }}
-                className="mt-4 rounded-xl bg-[#c9a227] px-4 py-2 font-semibold text-slate-950 disabled:opacity-40"
+                onClick={() => setCards(recallQueue(stats.due, now, goal))}
+                className="rounded-xl border border-white/15 px-4 py-3 text-sm"
               >
-                Давтах үгсээ шалгах
+                {stats.due.length} үгээ давтах
               </button>
-              {practicing && (
-                <RecallPractice
-                  items={cards}
-                  onDone={() => setPracticing(false)}
-                  onReview={(id, correct) =>
-                    account.update((snapshot) => ({
-                      ...snapshot,
-                      progress: {
-                        ...snapshot.progress,
-                        items: snapshot.progress.items.map((item) =>
-                          item.id === id ? reviewItem(item, correct, Date.now()) : item,
-                        ),
-                      },
-                      activity: [
-                        ...snapshot.activity,
-                        {
-                          id: crypto.randomUUID(),
-                          kind: 'review' as const,
-                          at: Date.now(),
-                          movieId: 'dashboard',
-                          correct,
-                        },
-                      ].slice(-5000),
-                    }))
-                  }
-                />
-              )}
-            </section>
-            <div className="mt-5 grid gap-5 md:grid-cols-2">
-              <section className="rounded-2xl border border-white/10 p-5">
-                <h2 className="text-lg font-semibold">Санах чадвар сайжирч байна уу?</h2>
-                <p className="mt-3 text-3xl text-amber-200">
-                  {stats.recentRate === null ? '—' : `${stats.recentRate}%`}
-                </p>
-                <p className="mt-2 text-sm text-slate-400">
-                  Сүүлийн 7 хоног · {stats.recentCount} давталтын зөв хариулт
-                </p>
-                <p className="mt-3 text-sm leading-6 text-slate-300">
-                  {change === null
-                    ? 'Хоёр долоо хоногт тус бүр 5-аас олон давталт хийвэл өмнөх долоо хоногтой харьцуулна.'
-                    : `Өмнөх 7 хоногоос ${change > 0 ? '+' : ''}${change} хувийн пункт. ${change > 0 ? 'Хадгалсан үгээ илүү сайн санаж байна.' : 'Хэцүү үгсээ дахин давтаарай.'}`}
-                </p>
-                <p className="mt-3 text-xs leading-5 text-slate-500">
-                  Энэ нь хадгалсан үгийн давталтын үзүүлэлт. Кино үзсэн хугацаа дангаараа хэлний
-                  түвшин ахисны баталгаа болохгүй.
-                </p>
-              </section>
-              <section className="rounded-2xl border border-white/10 p-5">
-                <h2 className="text-lg font-semibold">Миний эхлэх түвшин</h2>
-                {profile ? (
-                  <>
-                    <p className="mt-3 text-2xl text-amber-200">
-                      {placementBands[profile.band].label} · {profile.correct}/{profile.total}
-                    </p>
-                    <p className="mt-3 text-sm leading-6 text-slate-300">
-                      {placementBands[profile.band].plan}
-                    </p>
-                    {baseline && (
-                      <p className="mt-3 text-sm text-slate-400">
-                        Эхний тест: {baseline.correct}/{baseline.total} → Сүүлийн тест:{' '}
-                        {profile.correct}/{profile.total}
-                      </p>
-                    )}
-                    <p className="mt-3 text-xs leading-5 text-slate-500">
-                      Үг, дүрэм, уншлагын богино баримжаа. Давтан танил асуултад хариулах нь оноонд
-                      нөлөөлнө. Албан ёсны CEFR үнэлгээ биш.
-                    </p>
-                  </>
-                ) : (
-                  <p className="mt-3 text-sm text-slate-400">
-                    Богино тестээ өгөөд өөрт тохирох хичээлээс эхлээрэй.
-                  </p>
-                )}
-                <button
-                  type="button"
-                  onClick={test}
-                  className="mt-4 text-sm text-amber-200 underline"
-                >
-                  Тест нээх
-                </button>
-              </section>
-            </div>
-            <section className="mt-5 rounded-2xl border border-white/10 p-5">
-              <h2 className="text-lg font-semibold">Сүүлийн 14 өдрийн сонсголын дасгал</h2>
-              <div
-                className="mt-5 flex h-32 items-end gap-1.5"
-                role="img"
-                aria-label="Өдөр бүрийн сонссон минут"
-              >
-                {stats.days.map((day) => (
-                  <div
-                    key={day.key}
-                    className="flex h-full min-w-0 flex-1 flex-col items-center justify-end"
-                    title={`${day.key}: ${(day.seconds / 60).toFixed(1)} минут, ${day.reviews} давталт`}
-                  >
-                    <div
-                      className="w-full rounded-t bg-[#c9a227]"
-                      style={{
-                        height: `${Math.max(2, (day.seconds / 60 / maxMinutes) * 90)}%`,
-                        opacity: day.seconds ? 1 : 0.2,
-                      }}
-                    />
-                    <span className="mt-2 text-[10px] text-slate-500">{day.key.slice(-2)}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-4 text-xs leading-5 text-slate-500">
-                Зөвхөн нээлттэй хуудсан дээр тоглуулагчийн цаг бодитоор урагшилсан хугацааг тооцно.
-                Урагш үсрэх, гацах, өөр таб руу шилжих хугацааг нэмэхгүй.
-              </p>
-            </section>
-            {history.length > 0 && (
-              <details className="mt-5 rounded-2xl border border-white/10 p-5">
-                <summary className="cursor-pointer text-slate-300">
-                  Түвшний тестийн түүх ({history.length})
-                </summary>
-                <ol className="mt-3 space-y-2 text-sm text-slate-400">
-                  {history.map((entry) => {
-                    const result = assessPlacement(entry.answers, entry.completedAt, entry.form);
-                    return (
-                      <li key={entry.completedAt}>
-                        {new Date(entry.completedAt).toLocaleDateString('mn-MN')} · {result.correct}
-                        /{result.total} · {placementBands[result.band].label}
-                        {entry.form === 'b' ? ' · Хувилбар B' : ''}
-                      </li>
-                    );
-                  })}
-                </ol>
-              </details>
             )}
-          </>
-        )}
+          </div>
+          {stats.todayReviews > 0 && (
+            <p className="mt-3 text-xs text-slate-500">
+              Өнөөдөр {stats.todayReviews} удаа үгээ санаж шалгасан.
+            </p>
+          )}
+          {cards && (
+            <RecallPractice
+              key={cards.map((item) => item.id).join('|')}
+              items={cards}
+              onReview={review}
+              onDone={() => setCards(null)}
+            />
+          )}
+        </section>
+        <section className="mt-6 overflow-hidden rounded-2xl border border-white/10">
+          <h2 className="px-5 pt-5 font-semibold">Миний үгс</h2>
+          <VocabularyPanel
+            items={words}
+            now={now}
+            onReview={review}
+            onRemove={(id) =>
+              account.update((snapshot) => ({
+                ...snapshot,
+                progress: {
+                  ...snapshot.progress,
+                  items: snapshot.progress.items.filter((item) => item.id !== id),
+                },
+              }))
+            }
+          />
+        </section>
+        <LearningDetails stats={stats} history={history} />
+        <GuestProgressImport />
       </div>
       <Footer />
     </main>
