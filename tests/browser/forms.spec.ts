@@ -18,7 +18,7 @@ test('login recovers from a network failure and register asks for email exactly 
   await page.getByLabel('Имэйл эсвэл хэрэглэгчийн нэр', { exact: true }).fill('learner');
   await page.getByLabel('Нууц үг', { exact: true }).fill('fixture-password');
   await page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('Холбогдож чадсангүй');
+  await expect(page.locator('p[role="alert"]')).toContainText('Холбогдож чадсангүй');
   await expect(
     page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }),
   ).toBeEnabled();
@@ -28,7 +28,7 @@ test('login recovers from a network failure and register asks for email exactly 
   await page.getByLabel('Имэйл', { exact: true }).fill('learner@example.test');
   await page.getByLabel('Нууц үг', { exact: true }).fill('fixture-password');
   await page.locator('form').getByRole('button', { name: 'Бүртгэл үүсгэх', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('Энэ имэйлээр бүртгэл үүссэн');
+  await expect(page.locator('p[role="alert"]')).toContainText('Энэ имэйлээр бүртгэл үүссэн');
   await expect(page.getByText('EMAIL_TAKEN', { exact: true })).toHaveCount(0);
 });
 

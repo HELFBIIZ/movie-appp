@@ -105,6 +105,10 @@ for (const title of [
     if (title.slug === 'yellowstone') {
       expect(saved.mediaId).toMatch(/^tv:73586:1:1:/);
       await page.getByLabel('Episode', { exact: true }).selectOption('2');
+      await expect(page.getByRole('region', { name: 'Өгүүлбэрээр үг сурах' })).toContainText(
+        'Train fixture episode 2.',
+      );
+      await page.getByRole('button', { name: 'Бүх хадмал', exact: true }).click();
       await expect(page.getByRole('list', { name: 'Хадмалын жагсаалт' })).toContainText(
         'Train fixture episode 2.',
       );

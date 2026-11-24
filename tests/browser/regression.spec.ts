@@ -79,7 +79,8 @@ async function ready(page: Page) {
 }
 
 async function appearance(page: Page, name: string) {
-  const mask = [page.locator('video, iframe')];
+  // Keep the lesson dialog visible even when it overlays the video rectangle.
+  const mask = (await page.locator('dialog[open]').count()) ? [] : [page.locator('video, iframe')];
   await expect(page).toHaveScreenshot(name, { mask });
   if (process.env.VXNTA_AFTER_DIR) {
     fs.mkdirSync(process.env.VXNTA_AFTER_DIR, { recursive: true });
@@ -185,7 +186,7 @@ test('password login handles failure and success with mocked sessions', async ({
   await page.getByLabel('Имэйл эсвэл хэрэглэгчийн нэр').fill('learner@example.test');
   await page.getByLabel('Нууц үг', { exact: true }).fill('fixture-only-password');
   await page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('нууц үг буруу');
+  await expect(page.locator('p[role="alert"]')).toContainText('нууц үг буруу');
   succeed = true;
   await page.locator('form').getByRole('button', { name: 'Нэвтрэх', exact: true }).click();
   await expect(page).toHaveURL('/');
