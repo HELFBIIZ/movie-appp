@@ -46,6 +46,18 @@ export function teachingLesson(word: string, sentence: string, offset?: number):
   }
   const rules: Array<{ word: string; when: RegExp; meaning: string; tip: string }> = [
     {
+      word: 'train',
+      when: /\btrain\s+(?:me|you|him|her|them|us|hard|daily|every|for|to)\b/i,
+      meaning: 'сургах; бэлтгэл хийх',
+      tip: 'Энд галт тэрэг биш, сургах эсвэл бэлтгэл хийх гэсэн үйл үг.',
+    },
+    {
+      word: 'leaves',
+      when: /\b(?:green|fallen|autumn|tree)\s+leaves\b|\bleaves\s+(?:on|of|from)\s+(?:the |a )?tree\b/i,
+      meaning: 'навчнууд',
+      tip: 'Энд leave буюу явах үйл үг биш, leaf буюу навчийн олон тоо.',
+    },
+    {
       word: 'right',
       when: /\b(?:turn|on (?:the|your)|to (?:the|your)) right\b|\bright (?:side|hand)\b/i,
       meaning: 'баруун',
@@ -110,8 +122,8 @@ export function teachingLesson(word: string, sentence: string, offset?: number):
         word: normalized,
         meaning,
         tip: rule?.tip ?? '',
-        example: basic?.example ?? '',
-        translation: basic?.translation ?? '',
+        example: rule ? '' : (basic?.example ?? ''),
+        translation: rule ? '' : (basic?.translation ?? ''),
         contextual: !!rule,
         source: 'authored',
       }

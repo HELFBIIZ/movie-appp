@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { openLocal } from './learning-fixtures';
 
 // UI contract fixtures. All account/payment writes are intercepted, never charged.
 const me = {
@@ -90,6 +91,19 @@ async function appearance(page: Page, name: string) {
     });
   }
 }
+
+test('word lesson and quick meaning check desktop and mobile appearance', async ({ page }) => {
+  await openLocal(page);
+  await page.getByRole('button', { name: 'last — утгыг харах', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Үгийн тайлбар' })).toContainText('сүүлчийн');
+  await appearance(page, 'word-lesson-desktop.png');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await appearance(page, 'word-lesson-mobile.png');
+  await page.getByRole('button', { name: 'Энэ үгийг суръя', exact: true }).click();
+  await appearance(page, 'word-check-mobile.png');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await appearance(page, 'word-check-desktop.png');
+});
 
 for (const [name, route] of [
   ['home', '/'],

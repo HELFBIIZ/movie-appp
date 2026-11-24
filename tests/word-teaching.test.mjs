@@ -18,6 +18,9 @@ test('clicked word positions distinguish two senses in the same subtitle', () =>
   assert.equal(teachingLesson('right', sentence, sentence.lastIndexOf('right')).meaning, 'зөв');
   assert.equal(teachingLesson('last', 'I saw it last week.', 12).meaning, 'өнгөрсөн');
   assert.equal(teachingLesson('like', 'It looks like a train.', 9).meaning, 'шиг; адилхан');
+  assert.equal(teachingLesson('train', 'I train every day.', 2).meaning, 'сургах; бэлтгэл хийх');
+  assert.equal(teachingLesson('leaves', 'The green leaves fell.', 10).meaning, 'навчнууд');
+  assert.equal(teachingLesson('last', 'I saw it last week.', 12).example, '');
 });
 
 test('phrasal verbs teach the selected phrase together and contractions keep their meaning', () => {
