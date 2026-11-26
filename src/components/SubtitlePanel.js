@@ -81,9 +81,12 @@ export default function SubtitlePanel({
     (path, source = 'manual') => {
       if (!slug) return;
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const key = isTV
+        ? `${slug}-S${String(season ?? 1).padStart(2, '0')}E${String(episode ?? 1).padStart(2, '0')}`
+        : slug;
       const url = path
         ? `${origin}${path}`
-        : `${origin}/api/subtitles/mongolian/${encodeURIComponent(slug)}`;
+        : `${origin}/api/subtitles/mongolian/${encodeURIComponent(key)}`;
       setSubtitleUrl(url);
       setSubtitlesEnabled(true);
       setIsMongolian(true);
@@ -92,7 +95,7 @@ export default function SubtitlePanel({
       setTranslateWarning(null);
       onSubtitleChange?.(url, 'Mongolian', true, source);
     },
-    [slug, onSubtitleChange],
+    [slug, onSubtitleChange, isTV, season, episode],
   );
 
   const loadInstantMongolian = applyInstantMongolian;
