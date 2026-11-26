@@ -11,6 +11,7 @@ import SubtitlePanel from '@/components/SubtitlePanel';
 import LearningModeToggle from '@/components/learning/LearningModeToggle';
 import WatchAccessGate from '@/components/watch/WatchAccessGate';
 import MoviePlayer from '@/components/watch/MoviePlayer';
+import MovieComments from '@/components/MovieComments';
 import EpisodeSelector from '@/components/watch/EpisodeSelector';
 import { useWatchAccess } from '@/components/watch/useWatchAccess';
 import { getPlayerTabs } from '@/lib/watch/providers';
@@ -37,15 +38,41 @@ export default function WatchPage() {
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const gate = useWatchAccess(slug);
+  const lastProgressRef = useRef(0);
 
   const [subtitleUrl, setSubtitleUrl] = useState<string | null>(null);
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian');
   const [subtitleEnabled, setSubtitleEnabled] = useState(true);
-  const handleSubtitleChange = useCallback((url: string | null, label?: string, enabled = true) => {
-    setSubtitleUrl(url);
-    setSubtitleEnabled(enabled);
-    if (label) setSubtitleLabel(label);
-  }, []);
+  const handleSubtitleChange = useCallback(
+    (url: string | null, label?: string, enabled = true) => {
+      setSubtitleUrl(url);
+      setSubtitleEnabled(enabled);
+      if (label) setSubtitleLabel(label);
+      if (url && enabled && label === 'Mongolian') {
+        void fetch('/api/actions/xp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activity: 'SUBTITLE_HELP', key: `subtitle:${slug}` }),
+        }).catch(() => {});
+      }
+    },
+    [slug],
+  );
+  const handleProgress = useCallback(
+    (seconds: number) => {
+      if (!slug) return;
+      const now = Date.now();
+      if (now - lastProgressRef.current < 30_000) return;
+      lastProgressRef.current = now;
+      void fetch(`/api/watch/${encodeURIComponent(slug)}/progress`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ watchedSeconds: Math.floor(seconds) }),
+      }).catch(() => {});
+    },
+    [slug],
+  );
   const [source, setSource] = useState('vidsrc');
   const [learning, setLearning] = useState(false);
   useEffect(() => {
@@ -78,8 +105,8 @@ export default function WatchPage() {
   const subSlug = isTV
     ? `${slug}-S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`
     : slug;
-  // Five players: VidSrc (1, MN track), CineSrc (2), SuperEmbed (3),
-  // EmbedMaster (4, MN track), Embed API Stream (5).
+  // Binge (1, MN track), CineSrc (2), SuperEmbed (3), EmbedMaster (4, MN
+  // track), Embed API Stream (5) and a first-party HLS resolver (6).
   const visibleTabs = getPlayerTabs(movie, isTV, season, episode, subSlug, {
     url: subtitleUrl,
     label: subtitleLabel,
@@ -93,8 +120,15 @@ export default function WatchPage() {
   // to the first player instead of a stale tab.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    if (!sourceAvailable) setSource('vidsrc');
-  }, [sourceAvailable]);
+    if (!sourceAvailable) setSource(visibleTabs[0]?.id ?? 'vidsrc');
+  }, [sourceAvailable, visibleTabs]);
+
+  const handlePlayerFailure = useCallback(() => {
+    setSource((current) => {
+      const index = visibleTabs.findIndex((tab) => tab.id === current);
+      return visibleTabs[index + 1]?.id ?? current;
+    });
+  }, [visibleTabs, setSource]);
 
   if (!movie) {
     notFound();
@@ -145,11 +179,16 @@ export default function WatchPage() {
               source={source}
               season={season}
               episode={episode}
+              isTV={isTV}
+              subtitleUrl={subtitleUrl}
+              subtitleLabel={subtitleLabel}
               setSource={setSource}
               visibleTabs={visibleTabs}
               activeEmbed={activeEmbed}
               xp={gate.xp}
               movieIframeRef={movieIframeRef}
+              onPlayerFailure={handlePlayerFailure}
+              onProgress={handleProgress}
             />
 
             {showMoviePlayer && (
@@ -183,6 +222,8 @@ export default function WatchPage() {
               </summary>
               <p className="mt-3 leading-6">{movie.plot}</p>
             </details>
+
+            <MovieComments slug={movie.slug} title={movie.title} />
           </>
         )}
         {learning && (

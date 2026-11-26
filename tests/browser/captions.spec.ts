@@ -7,7 +7,7 @@ test('selected Mongolian caption and on/off control update the normal embed inst
     sessionStorage.setItem('vxnta.scenechain.placement.dismissed.v1', '1'),
   );
   await page.route('**/api/watch/inception', (route) => route.fulfill({ json: { allowed: true } }));
-  await page.route('https://vidsrcme.ru/**', (route) => route.abort());
+  await page.route('https://bingeapi.st/**', (route) => route.abort());
   await page.route('**/api/subtitles/mongolian/**', (route) => route.fulfill({ status: 404 }));
   await page.route('**/api/subtitles?**', (route) =>
     route.fulfill({

@@ -16,6 +16,12 @@ const resultSchema = z.object({
   partial: z.boolean().default(true),
 });
 const ongoing = new Map<string, Promise<z.infer<typeof resultSchema>>>();
+
+function usableEnglishCues(cues: { text: string }[]): boolean {
+  if (!cues.length) return false;
+  const english = cues.filter((cue) => (cue.text.match(/[A-Za-z]/g)?.length ?? 0) >= 2).length;
+  return english / cues.length >= 0.6;
+}
 export async function GET(request: NextRequest) {
   const { user, error } = await requireUser(request.cookies.get('mn_session')?.value);
   if (error) return NextResponse.json({ error }, { status: 401 });
@@ -113,8 +119,10 @@ export async function GET(request: NextRequest) {
               if (!candidate?.fileId) continue;
               const text = normalizeToVtt(await osDownloadContent(candidate.fileId));
               if (text.length > 1_000_000) continue;
-              if (!parseExistingVtt(text).length) continue;
+              const parsed = parseExistingVtt(text);
+              if (!parsed.length) continue;
               if (language === 'en') {
+                if (!usableEnglishCues(parsed)) continue;
                 english = text;
                 await writeCaptionCache(englishKey, english, 7 * 86_400_000);
               } else if (usableMongolian(text)) {

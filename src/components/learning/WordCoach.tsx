@@ -3,6 +3,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Check, Volume2 } from 'lucide-react';
 import { meaningChoices } from '@/lib/learning/teaching';
 import { isDue } from '@/lib/learning/srs';
+import { hasMongolianMeaning } from '@/lib/learning/sentence-text';
 import type { WordNote } from '@/lib/learning/types';
 import { useWordLesson } from './useWordLesson';
 import type { LearningController } from './useLearningController';
@@ -90,6 +91,13 @@ export default function WordCoach({
             : 'unverified-subtitle',
       );
     if (id) {
+      if (!existing) {
+        void fetch('/api/actions/xp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activity: 'WORD_LEARNED', key: `word:${word}` }),
+        }).catch(() => {});
+      }
       setCardId(id);
       setStep('check');
     }
@@ -204,7 +212,7 @@ export default function WordCoach({
             <p className="text-base leading-7 text-slate-100" lang="en">
               {cue.text}
             </p>
-            {cue.translation && (
+            {hasMongolianMeaning(cue.translation) && (
               <p className="mt-2 text-sm leading-6 text-slate-400" lang="mn">
                 {cue.translation}
               </p>

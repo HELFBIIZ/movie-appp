@@ -47,7 +47,11 @@ export async function POST(request) {
   // Gamification + audit wiring: one streak flip and DAILY_LOGIN award per day
   // (both internally rate-limited/idempotent), then a security log entry.
   const streak = await flipLoginStreak({ userId: user.id });
-  const daily = await awardXp({ userId: user.id, activity: 'DAILY_LOGIN' });
+  const daily = await awardXp({
+    userId: user.id,
+    activity: 'DAILY_LOGIN',
+    eventKey: `login:${user.id}:${new Date().toISOString().slice(0, 10)}`,
+  });
   await logSecurity({
     userId: user.id,
     type: 'login-success',

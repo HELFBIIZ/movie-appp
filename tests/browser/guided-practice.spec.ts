@@ -142,7 +142,7 @@ test('subtitle translation polls the existing job after navigation and applies i
 }) => {
   await dismissPlacement(page);
   await page.route('**/api/watch/inception', (route) => route.fulfill({ json: { allowed: true } }));
-  await page.route('https://vidsrcme.ru/**', (route) => route.abort());
+  await page.route('https://bingeapi.st/**', (route) => route.abort());
   await page.route('**/api/subtitles/mongolian/**', (route) => route.fulfill({ status: 404 }));
   let submissions = 0;
   let complete = false;

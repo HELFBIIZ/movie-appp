@@ -68,9 +68,18 @@ export default function MobileNavigation({ isAdmin, isLoggedIn, onClose, onLogou
             </MobileNavLink>
           )}
           {isAdmin && (
-            <MobileNavLink href="/admin" icon={<Settings size={17} />} onClick={onClose}>
-              Удирдлага
-            </MobileNavLink>
+            <>
+              <MobileNavLink href="/admin" icon={<Settings size={17} />} onClick={onClose}>
+                Удирдлага
+              </MobileNavLink>
+              <MobileNavLink
+                href="/admin/movie-requests"
+                icon={<Film size={17} />}
+                onClick={onClose}
+              >
+                Киноны хүсэлтүүд
+              </MobileNavLink>
+            </>
           )}
           {isLoggedIn && (
             <button

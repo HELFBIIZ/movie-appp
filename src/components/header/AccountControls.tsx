@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LogOut, User, BookOpen, Settings } from 'lucide-react';
+import { LogOut, User, BookOpen, Settings, Film } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,12 +30,20 @@ export default function AccountControls({ isLoggedIn, isAdmin, handleLogout }: P
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
             {isAdmin && (
-              <DropdownMenuItem>
-                <Link href="/admin" className="flex w-full items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  Удирдлага
-                </Link>
-              </DropdownMenuItem>
+              <>
+                <DropdownMenuItem>
+                  <Link href="/admin" className="flex w-full items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Удирдлага
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/admin/movie-requests" className="flex w-full items-center gap-2">
+                    <Film className="h-4 w-4" />
+                    Киноны хүсэлтүүд
+                  </Link>
+                </DropdownMenuItem>
+              </>
             )}
             <DropdownMenuItem>
               <Link href="/profile" className="flex items-center gap-2 w-full">

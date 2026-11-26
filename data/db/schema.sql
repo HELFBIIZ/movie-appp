@@ -83,8 +83,10 @@ CREATE TABLE IF NOT EXISTS xp_transactions (
   activity   TEXT NOT NULL,
   amount     INTEGER NOT NULL,
   reason     TEXT,
+  event_key  TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_tx_event ON xp_transactions(event_key) WHERE event_key IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_xp_tx_user ON xp_transactions(user_id, created_at);
 CREATE TABLE IF NOT EXISTS login_streaks (
   id              TEXT PRIMARY KEY,
@@ -222,6 +224,25 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id, read_at, created_at);
 
+-- User-submitted movie requests. Approved requests are reviewed by an admin;
+-- the request itself never grants playback or changes the static catalog.
+CREATE TABLE IF NOT EXISTS movie_requests (
+  id          TEXT PRIMARY KEY,
+  user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title       TEXT NOT NULL,
+  year        INTEGER,
+  type        TEXT NOT NULL DEFAULT 'movie',   -- movie|series
+  link        TEXT,
+  note        TEXT,
+  status      TEXT NOT NULL DEFAULT 'PENDING', -- PENDING|APPROVED|REJECTED|ADDED
+  admin_note  TEXT,
+  reviewed_by TEXT,
+  reviewed_at TEXT,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_movie_requests_user ON movie_requests(user_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_movie_requests_status ON movie_requests(status, created_at);
+
 -- Movies catalog (used by favorites)
 CREATE TABLE IF NOT EXISTS movies (
   id    TEXT PRIMARY KEY,
@@ -289,4 +310,40 @@ CREATE TABLE IF NOT EXISTS external_identities (
   PRIMARY KEY (provider, external_id)
 );
 CREATE INDEX IF NOT EXISTS idx_ext_identity_user ON external_identities(user_id);
+
+CREATE TABLE IF NOT EXISTS movie_comments (
+  id         TEXT PRIMARY KEY,
+  user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  slug       TEXT NOT NULL,
+  body       TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_movie_comments_slug ON movie_comments(slug, created_at);
+CREATE INDEX IF NOT EXISTS idx_movie_comments_user ON movie_comments(user_id, created_at);
+
+CREATE TABLE IF NOT EXISTS referral_codes (
+  user_id    TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  code       TEXT NOT NULL UNIQUE,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS referrals (
+  id             TEXT PRIMARY KEY,
+  inviter_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  invitee_id     TEXT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  code           TEXT NOT NULL,
+  reward_granted INTEGER NOT NULL DEFAULT 0,
+  created_at     TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_referrals_inviter ON referrals(inviter_id, created_at);
+
+CREATE TABLE IF NOT EXISTS vip_gifts (
+  id           TEXT PRIMARY KEY,
+  sender_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  recipient_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  days         INTEGER NOT NULL,
+  xp_spent     INTEGER NOT NULL,
+  created_at   TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_vip_gifts_sender ON vip_gifts(sender_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_vip_gifts_recipient ON vip_gifts(recipient_id, created_at);
 

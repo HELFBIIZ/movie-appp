@@ -1,31 +1,64 @@
-// src/lib/qpay.mjs — QPay RestInvoice client (server-only, env-gated).
-//
-// Truthfulness rule (same as db.mjs's doctrine): no QPay credential → these
-// calls return null; nothing here fakes an approval. The payment row stays
-// PENDING until a real, signature-checked webhook flips it. Configure with:
-//   QPAY_INVOICE_URL    e.g. https://merchant.qpay.mn/v2/auth/token then invoice URL
-//   QPAY_INVOICE_AUTH   base64("username:password")
-//   QPAY_CALLBACK_TOKEN shared secret the webhook verifies (x-qpay-signature)
-//   QPAY_PAYMENT_CHECK_URL  default https://merchant.qpay.mn/v2/payment/check
 import crypto from 'crypto';
 
 const env = (key) => process.env[key]?.trim();
 
+function basicAuth() {
+  const configured = env('QPAY_INVOICE_AUTH');
+  if (configured) {
+    return configured.includes(':') ? Buffer.from(configured).toString('base64') : configured;
+  }
+  const username = env('QPAY_USERNAME');
+  const password = env('QPAY_PASSWORD');
+  return username && password ? Buffer.from(`${username}:${password}`).toString('base64') : null;
+}
+
+async function accessToken() {
+  const existing = env('QPAY_ACCESS_TOKEN');
+  if (existing) return existing;
+  const auth = basicAuth();
+  const url = env('QPAY_TOKEN_URL') || 'https://merchant.qpay.mn/v2/auth/token';
+  if (!auth) return null;
+  const response = await fetch(url, {
+    method: 'POST',
+    cache: 'no-store',
+    headers: { 'Content-Type': 'application/json', Authorization: `Basic ${auth}` },
+  });
+  if (!response.ok)
+    return { error: { status: response.status, body: (await response.text()).slice(0, 300) } };
+  const data = await response.json();
+  return data?.access_token || data?.token || null;
+}
+
+function invoiceUrl() {
+  const configured = env('QPAY_INVOICE_URL');
+  if (env('QPAY_INVOICE_CREATE_URL')) return env('QPAY_INVOICE_CREATE_URL');
+  if (!configured || /\/auth\/token/i.test(configured))
+    return 'https://merchant.qpay.mn/v2/invoice';
+  return configured;
+}
+
 export async function createQpayInvoice({ txnId, amountMnt, description, callbackUrl }) {
-  const url = env('QPAY_INVOICE_URL');
-  const auth = env('QPAY_INVOICE_AUTH');
-  if (!url || !auth) {
-    console.error('[QPay] Missing config: QPAY_INVOICE_URL or QPAY_INVOICE_AUTH not set');
+  const auth = basicAuth();
+  if (!auth && !env('QPAY_ACCESS_TOKEN')) {
+    console.error(
+      '[QPay] Missing credentials: set QPAY_INVOICE_AUTH or QPAY_USERNAME/QPAY_PASSWORD',
+    );
     return null;
   }
   try {
+    const explicitUrl =
+      env('QPAY_INVOICE_CREATE_URL') ||
+      (env('QPAY_INVOICE_URL') && !/\/auth\/token/i.test(env('QPAY_INVOICE_URL')));
+    const token = env('QPAY_ACCESS_TOKEN') || (!explicitUrl ? await accessToken() : null);
+    if (token?.error) return { error: { stage: 'token', ...token.error } };
+    const url = invoiceUrl();
     new URL(url);
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${auth}`,
+        Authorization: token ? `Bearer ${token}` : `Basic ${auth}`,
       },
       body: JSON.stringify({
         invoice_description: String(description || 'Movie-App subscription').slice(0, 200),
@@ -34,22 +67,22 @@ export async function createQpayInvoice({ txnId, amountMnt, description, callbac
         callback_url: callbackUrl || null,
       }),
     });
-    if (!res.ok) {
-      const body = (await res.text()).slice(0, 300);
-      console.error(`[QPay] HTTP ${res.status}: ${body}`);
-      return { error: { status: res.status, body } };
+    if (!response.ok) {
+      const body = (await response.text()).slice(0, 300);
+      console.error(`[QPay] HTTP ${response.status}: ${body}`);
+      return { error: { stage: 'invoice', status: response.status, body } };
     }
-    const j = await res.json();
+    const data = await response.json();
     return {
-      invoiceId: j.invoice_id || null,
-      shortRef: j.qpay_shortRef || null,
-      qrImage: j.qr_image || null,
-      url: j.QR || j.payment_url || null,
+      invoiceId: data.invoice_id || null,
+      shortRef: data.qpay_shortRef || null,
+      qrImage: data.qr_image || null,
+      url: data.QR || data.payment_url || null,
     };
   } catch (err) {
-    const msg = String(err?.message || err);
-    console.error(`[QPay] fetch failed: ${msg} — URL: ${url}`);
-    return { error: { message: msg.slice(0, 200) } };
+    const message = String(err?.message || err);
+    console.error(`[QPay] fetch failed: ${message}`);
+    return { error: { stage: 'invoice', message: message.slice(0, 200) } };
   }
 }
 
@@ -61,37 +94,47 @@ export function verifyQpayToken(provided, secret) {
   return crypto.timingSafeEqual(a, b);
 }
 
-/**
- * Poll QPay for the real payment status of invoices we created.
- * QPay v2: POST /v2/payment/check { invoice_id: [...] } →
- *   { rows: [{ invoice_id, amount, payment_status: PAID|CLOSED|CREATED, … }] }
- * Without QPAY_INVOICE_AUTH (or a check URL) this returns null — never a fake
- * "paid". Used by both the payer-side poll route and the qpay-watcher daemon,
- * which then complete the payment server-side via the signed webhook.
- */
 export async function checkQpayInvoices(invoiceIds) {
-  const auth = env('QPAY_INVOICE_AUTH');
-  const base = env('QPAY_PAYMENT_CHECK_URL') || 'https://merchant.qpay.mn/v2/payment/check';
-  if (!auth || !invoiceIds?.length) return null;
+  const auth = basicAuth();
+  if ((!auth && !env('QPAY_ACCESS_TOKEN')) || !invoiceIds?.length) return null;
   try {
-    const res = await fetch(base, {
+    const explicitUrl = env('QPAY_PAYMENT_CHECK_URL');
+    const token = env('QPAY_ACCESS_TOKEN') || (!explicitUrl ? await accessToken() : null);
+    if (token?.error) return { error: { stage: 'token', ...token.error } };
+    const url = explicitUrl || 'https://merchant.qpay.mn/v2/payment/check';
+    const response = await fetch(url, {
       method: 'POST',
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${auth}`,
+        Authorization: token ? `Bearer ${token}` : `Basic ${auth}`,
       },
       body: JSON.stringify({ invoice_id: invoiceIds }),
     });
-    if (!res.ok) return { error: { status: res.status, body: (await res.text()).slice(0, 200) } };
-    const j = await res.json();
-    return { rows: Array.isArray(j.rows) ? j.rows : [] };
+    if (!response.ok)
+      return {
+        error: {
+          stage: 'check',
+          status: response.status,
+          body: (await response.text()).slice(0, 300),
+        },
+      };
+    const data = await response.json();
+    return { rows: Array.isArray(data.rows) ? data.rows : [] };
   } catch (err) {
-    return { error: { message: String(err?.message || err).slice(0, 200) } };
+    return { error: { stage: 'check', message: String(err?.message || err).slice(0, 200) } };
   }
 }
 
-/** True when a QPay /v2/payment/check row means money actually arrived. */
+export function qpayConfigured() {
+  return Boolean(env('QPAY_ACCESS_TOKEN') || basicAuth());
+}
+
 export function isQpayPaid(row) {
-  return !!row && (row.payment_status === 'PAID' || row.payment_status === 'SETTLED');
+  return Boolean(
+    row &&
+    ['PAID', 'SETTLED', 'SUCCESSFUL'].includes(
+      String(row.payment_status || row.status || '').toUpperCase(),
+    ),
+  );
 }

@@ -1,4 +1,5 @@
 import type { AlignedCue, Cue } from './types.ts';
+import { hasMongolianMeaning } from './sentence-text.ts';
 
 export const MAX_VTT_BYTES = 1_000_000;
 
@@ -60,7 +61,8 @@ export function alignCues(english: Cue[], mongolian: Cue[]): AlignedCue[] {
     translation: mongolian
       .filter(
         (translation) =>
-          Math.min(cue.end, translation.end) > Math.max(cue.start, translation.start),
+          Math.min(cue.end, translation.end) > Math.max(cue.start, translation.start) &&
+          hasMongolianMeaning(translation.text),
       )
       .map((translation) => translation.text)
       .join(' '),

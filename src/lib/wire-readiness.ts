@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { wireConfigured, previewWireRouting, listWireBankAccounts } from './wire.mjs';
 
-const CHECK_AMOUNT_MNT = 5900;
+const CHECK_AMOUNT_MNT = 4900;
 const previewSchema = z.object({
   object: z.literal('routing_preview'),
   selected: z.string().trim().min(1).max(200),

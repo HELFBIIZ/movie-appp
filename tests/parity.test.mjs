@@ -187,7 +187,7 @@ test('legacy subtitle formatting and constant values remain unchanged', () => {
   );
 });
 
-test('all five provider URL builders preserve movie, TV, missing ID and subtitle encoding', () => {
+test('provider URL builders preserve movie, TV and missing ID behavior', () => {
   const source = execFileSync('git', ['show', `${production}:src/app/watch/[slug]/page.js`], {
     cwd: root,
     encoding: 'utf8',
@@ -201,7 +201,18 @@ test('all five provider URL builders preserve movie, TV, missing ID and subtitle
     { window: { location: { origin: 'https://vxnta.fixture.test' } }, URL },
   );
   const after = loadModule('src/lib/watch/providers.ts');
+  // vidsrcUrl intentionally moved off the retired vidsrcme.ru domain.
+  delete before.vidsrcUrl;
   for (const movie of [undefined, null, { tmdbId: 0 }, { tmdbId: 969681 }, { tmdbId: '969681' }]) {
+    if (!movie?.tmdbId) {
+      assert.equal(after.vidsrcUrl(movie, false, 1, 1, 'movie-S01E01'), null);
+    } else {
+      assert.match(after.vidsrcUrl(movie, false, 1, 1), /^https:\/\/bingeapi\.st\/embed\/movie\//);
+      assert.match(
+        after.vidsrcUrl(movie, true, 2, 4),
+        /^https:\/\/bingeapi\.st\/embed\/tv\/\d+\/2\/4/,
+      );
+    }
     for (const isTV of [false, true]) {
       for (const [season, episode, subSlug] of [
         [1, 1, undefined],

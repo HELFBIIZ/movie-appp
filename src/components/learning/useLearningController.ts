@@ -3,6 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { activeCues } from '@/lib/learning/vtt';
 import { addItem, itemId } from '@/lib/learning/storage';
 import { reviewItem } from '@/lib/learning/srs';
+import { hasMongolianMeaning } from '@/lib/learning/sentence-text';
 import type { AlignedCue, LearningItem, Question, WordNote } from '@/lib/learning/types';
 import { useLearningStorage } from './useLearningStorage';
 import { useLesson } from './useLesson';
@@ -151,7 +152,7 @@ export function useLearningController(
       const data = {
         kind,
         word: note?.word ?? cue.text,
-        meaning: note?.meaning ?? cue.translation,
+        meaning: note?.meaning ?? (hasMongolianMeaning(cue.translation) ? cue.translation : ''),
         example: cue.text,
         movieId,
         mediaId: lesson.mediaId,

@@ -26,8 +26,8 @@ import {
 } from '../../../../db/index.mjs';
 import { awardXp } from '../../../../lib/xp.mjs';
 
-const VIDSRC_BASE = 'https://vidsrc.buzz';
-const VIDCORE_BASE = 'https://vidcore.org';
+const VIDSRC_BASE = 'https://bingeapi.st';
+const VIDCORE_BASE = 'https://embedmaster.link';
 
 function buildEmbedUrl(tmdbId, mediaType, season = null, episode = null) {
   if (!tmdbId) return null;
@@ -84,7 +84,11 @@ export async function POST(request, { params }) {
   // the watch for a ledger hiccup — these are best-effort side effects.
   try {
     await upsertWatchRecord({ userId: user.id, slug });
-    const xp = await awardXp({ userId: user.id, activity: 'VIDEO_VIEW' });
+    const xp = await awardXp({
+      userId: user.id,
+      activity: 'VIDEO_VIEW',
+      eventKey: `watch:${user.id}:${slug}:${new Date().toISOString().slice(0, 10)}`,
+    });
     return NextResponse.json({
       allowed: true,
       movie: { slug, tmdbId: movie.tmdbId, mediaType: movie.mediaType },

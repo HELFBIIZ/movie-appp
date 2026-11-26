@@ -79,7 +79,7 @@ for (const title of [
         },
       });
     });
-    await page.route('https://vidsrcme.ru/**', (route) => route.abort());
+    await page.route('https://bingeapi.st/**', (route) => route.abort());
     await page.route('https://cinesrc.st/embed/**', (route) =>
       route.fulfill({
         contentType: 'text/html',

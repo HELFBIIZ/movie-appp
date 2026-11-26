@@ -12,9 +12,10 @@ import {
   listUserPendingQpay,
   activatePaymentSuccess,
   getPlanById,
+  getActiveSubscription,
   createNotification,
 } from '../../../../db/index.mjs';
-import { checkQpayInvoices, isQpayPaid } from '../../../../lib/qpay.mjs';
+import { checkQpayInvoices, isQpayPaid, qpayConfigured } from '../../../../lib/qpay.mjs';
 
 export async function GET(request) {
   const token = request.cookies.get('mn_session')?.value;
@@ -25,6 +26,14 @@ export async function GET(request) {
   const payment = txnId ? await getPaymentByTxn(txnId) : null;
   if (txnId && !payment) {
     return NextResponse.json({ error: { code: 'UNKNOWN_TXN' } }, { status: 404 });
+  }
+  if (
+    payment &&
+    payment.userId !== user.id &&
+    user.roleCode !== 'SUPER_ADMIN' &&
+    user.role !== 'SUPER_ADMIN'
+  ) {
+    return NextResponse.json({ error: { code: 'FORBIDDEN' } }, { status: 403 });
   }
 
   // No txnId → check all of the user's live QPay invoices (page just loaded).
@@ -37,9 +46,11 @@ export async function GET(request) {
         return NextResponse.json({ error: { code: 'FORBIDDEN' } }, { status: 403 });
       }
       return NextResponse.json({
-        configured: false,
+        configured: qpayConfigured(),
         status: payment.status,
         payment,
+        subscription:
+          payment.status === 'SUCCESSFUL' ? await getActiveSubscription(payment.userId) : null,
         note: 'No live QPay invoice to check.',
       });
     }

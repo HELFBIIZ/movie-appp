@@ -31,7 +31,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   const token = request.cookies.get('mn_session')?.value;
-  const { error } = await requireRole(token, 'ADMIN', 'SUPER_ADMIN');
+  const { user, error } = await requireRole(token, 'ADMIN', 'SUPER_ADMIN');
   if (error) return NextResponse.json({ error }, { status: error.status || 401 });
 
   const body = await parseJsonBody(request);
@@ -56,7 +56,15 @@ export async function POST(request) {
       reviewedBy: user.id,
     });
     const payment = result.payment || (await getPaymentByTxn(body.txnId));
-    const plan = payment ? await getPlanById(payment.planId) : null;
+    if (!payment) {
+      return NextResponse.json({
+        ok: true,
+        payment: result.payment,
+        subscription: result.subscription,
+        receipt,
+      });
+    }
+    const plan = await getPlanById(payment.planId);
     await createNotification({
       userId: payment.userId,
       type: 'payment_approved',
@@ -83,6 +91,7 @@ export async function POST(request) {
     reviewedBy: user.id,
   });
   const payment = await getPaymentByTxn(body.txnId);
+  if (!payment) return NextResponse.json({ ok: true, receipt, note: 'Receipt rejected.' });
   await createNotification({
     userId: payment.userId,
     type: 'payment_rejected',

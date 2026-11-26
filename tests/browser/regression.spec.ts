@@ -253,17 +253,15 @@ test('admin navigation and logout use mocked identity without changing server ro
   expect(loggedIn).toBe(false);
 });
 
-test('all five existing player URLs remain selectable without loading third-party film', async ({
-  page,
-}) => {
+test('all six player URLs remain selectable without loading third-party film', async ({ page }) => {
   await page.route('**/api/watch/spider-man-brand-new-day', (route) =>
     route.fulfill({ json: { allowed: true } }),
   );
   await page.goto('/watch/spider-man-brand-new-day');
   const select = page.getByRole('combobox', { name: 'Тоглуулагч', exact: true });
-  await expect(select.getByRole('option')).toHaveCount(5);
+  await expect(select.getByRole('option')).toHaveCount(6);
   for (const [source, origin] of [
-    ['vidsrc', 'vidsrcme.ru'],
+    ['vidsrc', 'bingeapi.st'],
     ['cine', 'cinesrc.st'],
     ['superembed', 'multiembed.mov'],
     ['embedmaster', 'embedmaster.link'],

@@ -61,6 +61,7 @@ export default function UserReviews({ movieSlug }) {
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [xpNote, setXpNote] = useState('');
 
   useEffect(() => {
     const all = getReviews();
@@ -71,13 +72,29 @@ export default function UserReviews({ movieSlug }) {
     if (userRev) {
       setUserRating(userRev.rating);
     }
+    void (async () => {
+      try {
+        const response = await fetch(`/api/reviews?slug=${encodeURIComponent(movieSlug)}`, {
+          cache: 'no-store',
+        });
+        if (!response.ok) return;
+        const { reviews: serverReviews } = await response.json();
+        const mapped = (serverReviews || []).map((rev) => ({
+          userId: rev.username || 'member',
+          rating: rev.rating,
+          review: rev.text || '',
+          date: rev.createdAt ? new Date(rev.createdAt).toLocaleDateString() : '',
+        }));
+        setReviews((current) => [...mapped, ...current].slice(0, 40));
+      } catch {}
+    })();
   }, [movieSlug]);
 
   function handleRate(stars) {
     setUserRating(stars);
   }
 
-  function handleSubmitReview() {
+  async function handleSubmitReview() {
     if (userRating === 0 && !reviewText.trim()) return;
 
     const all = getReviews();
@@ -97,7 +114,22 @@ export default function UserReviews({ movieSlug }) {
     setUserRating(0);
     setReviewText('');
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setXpNote('');
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: movieSlug, rating: userRating, text: reviewText.trim() }),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        if (result.xp?.gained) setXpNote(`+${result.xp.gained} XP`);
+      }
+    } catch {}
+    setTimeout(() => {
+      setSubmitted(false);
+      setXpNote('');
+    }, 3000);
   }
 
   const ratedReviews = reviews.filter((r) => r.rating > 0);
@@ -137,6 +169,7 @@ export default function UserReviews({ movieSlug }) {
         >
           {submitted ? '✓ Submitted!' : 'Submit Review'}
         </button>
+        {xpNote && <span className="ml-3 text-sm font-semibold text-amber-600">{xpNote}</span>}
       </div>
 
       {/* Average rating display */}

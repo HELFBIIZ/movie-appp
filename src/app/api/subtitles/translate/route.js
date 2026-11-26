@@ -3,6 +3,7 @@ import { setTranslatedSubtitle, getAnySubtitle } from '@/lib/subtitle-store';
 import { saveGenerated } from '@/lib/generated-store';
 import { osSearch, osDownloadContent } from '@/lib/opensubtitles';
 import { usableMongolian, captionMatches } from '@/lib/learning/captions';
+import { hasMongolianMeaning } from '@/lib/learning/sentence-text';
 import { startSubtitleTranslation } from '@/lib/subtitle-translation.mjs';
 import { getMovieBySlug } from '@/lib/movies';
 import { requireUser, rateLimit, getActiveSubscription, canWatch } from '@/db/index.mjs';
@@ -189,11 +190,17 @@ export async function POST(request) {
       totalUnique = result.totalUnique;
       quotaHit = result.quotaHit;
 
-      cues.forEach((cue, i) => {
-        cue.text = result.translated[i];
-      });
+      const translatedCues = cues
+        .map((cue, i) => ({ ...cue, text: result.translated[i] || '' }))
+        .filter((cue) => hasMongolianMeaning(cue.text));
 
-      vtt = buildVtt(cues);
+      if (translatedCues.length === 0)
+        return NextResponse.json(
+          { error: 'Монгол орчуулга үүссэнгүй. Англи эхийг Монгол хадмал гэж хадгалаагүй.' },
+          { status: 502 },
+        );
+
+      vtt = buildVtt(translatedCues);
 
       const translatedTotal = translatedUnique + googleTranslated;
       if (quotaHit && translatedTotal === 0) {

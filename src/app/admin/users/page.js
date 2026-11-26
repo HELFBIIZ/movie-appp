@@ -13,6 +13,9 @@ export default function AdminUsersPage() {
   const [busy, setBusy] = useState(null);
   const [search, setSearch] = useState('');
   const [includeDeleted, setIncludeDeleted] = useState(false);
+  const [xpTarget, setXpTarget] = useState(null);
+  const [xpAmount, setXpAmount] = useState('');
+  const [xpReason, setXpReason] = useState('');
 
   const load = useCallback(async () => {
     setError(null);
@@ -46,6 +49,31 @@ export default function AdminUsersPage() {
       setError(data.error?.code ?? 'ACTION_FAILED');
       return;
     }
+    await load();
+  }
+
+  async function adjustXp(userId) {
+    const amount = Number(xpAmount);
+    if (!Number.isInteger(amount) || amount === 0 || Math.abs(amount) > 500) {
+      setError('XP_AMOUNT_INVALID');
+      return;
+    }
+    setBusy(`xp:${userId}`);
+    setError(null);
+    const res = await fetch('/api/admin/xp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, amount, reason: xpReason }),
+    });
+    const data = await res.json().catch(() => ({}));
+    setBusy(null);
+    if (!res.ok) {
+      setError(data.error?.code ?? 'XP_ADJUST_FAILED');
+      return;
+    }
+    setXpTarget(null);
+    setXpAmount('');
+    setXpReason('');
     await load();
   }
 
@@ -104,6 +132,7 @@ export default function AdminUsersPage() {
               <tr>
                 <th className="px-4 py-3">Хэрэглэгч</th>
                 <th className="px-4 py-3">Role</th>
+                <th className="px-4 py-3">XP</th>
                 <th className="px-4 py-3">VIP</th>
                 <th className="px-4 py-3">Баталгаатай төлбөр</th>
                 <th className="px-4 py-3">Demo төлбөр</th>
@@ -114,7 +143,7 @@ export default function AdminUsersPage() {
             <tbody>
               {users.length === 0 && !error && (
                 <tr>
-                  <td colSpan="7" className="px-4 py-10 text-center text-slate-500">
+                  <td colSpan="8" className="px-4 py-10 text-center text-slate-500">
                     Хэрэглэгч олдсонгүй.
                   </td>
                 </tr>
@@ -136,6 +165,54 @@ export default function AdminUsersPage() {
                     >
                       {user.roleCode}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="text-amber-200">
+                      Lv {user.level ?? 1} · {user.xp ?? 0} XP
+                    </div>
+                    {xpTarget === user.id ? (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        <input
+                          aria-label={`XP дүн ${user.username}`}
+                          type="number"
+                          min="-500"
+                          max="500"
+                          value={xpAmount}
+                          onChange={(event) => setXpAmount(event.target.value)}
+                          className="w-20 rounded bg-slate-950 px-2 py-1 text-xs"
+                          disabled={busy === `xp:${user.id}`}
+                        />
+                        <input
+                          aria-label={`XP шалтгаан ${user.username}`}
+                          value={xpReason}
+                          onChange={(event) => setXpReason(event.target.value)}
+                          placeholder="Шалтгаан"
+                          maxLength={200}
+                          className="min-w-[100px] flex-1 rounded bg-slate-950 px-2 py-1 text-xs"
+                          disabled={busy === `xp:${user.id}`}
+                        />
+                        <button
+                          onClick={() => adjustXp(user.id)}
+                          disabled={busy === `xp:${user.id}`}
+                          className="rounded bg-[#c9a227] px-2 py-1 text-xs font-bold text-slate-950"
+                        >
+                          Хадгалах
+                        </button>
+                        <button
+                          onClick={() => setXpTarget(null)}
+                          className="rounded border border-slate-600 px-2 py-1 text-xs"
+                        >
+                          Цуцлах
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setXpTarget(user.id)}
+                        className="mt-1 rounded border border-[#d6b456]/40 px-2 py-1 text-xs text-amber-200"
+                      >
+                        XP ±
+                      </button>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     {user.subscriptionStatus === 'ACTIVE' ? (

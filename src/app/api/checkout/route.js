@@ -166,11 +166,16 @@ export async function POST(request) {
   }
 
   // qpay — create the invoice and stash its id on the PENDING row for reconciliation.
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? 'https://vxnta-movie-app.onrender.com'
+      : new URL(request.url).origin);
   const invoice = await createQpayInvoice({
     txnId: payment.txnId,
     amountMnt: plan.priceMnt,
     description: plan.name,
-    callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/webhooks/qpay`,
+    callbackUrl: `${appUrl.replace(/\/$/, '')}/api/webhooks/qpay`,
   });
   if (invoice && !invoice.error && invoice.invoiceId)
     await setPaymentProviderRef(payment.txnId, invoice.invoiceId);

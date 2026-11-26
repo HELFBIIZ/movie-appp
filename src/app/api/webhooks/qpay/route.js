@@ -28,11 +28,14 @@ export async function POST(request) {
 
   const body = await parseJsonBody(request);
   // QPay echoes invoice_no + invoice_id; either reconciles to our payment row.
-  const payment =
-    body?.invoice_no || body?.txnId
-      ? await getPaymentByTxn(body.invoice_no || body.txnId)
-      : null || (body?.invoice_id ? await findPaymentByProviderRef(body.invoice_id) : null);
+  const txnFromBody = body?.invoice_no || body?.txnId;
+  let payment = txnFromBody ? await getPaymentByTxn(txnFromBody) : null;
+  if (!payment && body?.invoice_id) payment = await findPaymentByProviderRef(body.invoice_id);
   if (!payment) return NextResponse.json({ error: { code: 'UNKNOWN_TXN' } }, { status: 404 });
+
+  const status = String(body?.payment_status || body?.status || '').toUpperCase();
+  if (status && !['PAID', 'SETTLED', 'SUCCESSFUL'].includes(status))
+    return NextResponse.json({ action: 'ignored', status });
 
   const result = await activatePaymentSuccess(payment.txnId);
   if (result.error) return NextResponse.json({ error: result.error }, { status: 409 });

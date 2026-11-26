@@ -10,6 +10,7 @@ import {
   getActiveSubscription,
   listMyRewards,
 } from '../../../../db/index.mjs';
+import { rankForLevel } from '../../../../lib/xp-levels.mjs';
 
 const COOKIE_NAME = 'mn_session';
 
@@ -35,6 +36,7 @@ export async function GET(request) {
       // flat keys (the /me page reads these directly)
       xp: profile.xp,
       level: profile.level,
+      rank: rankForLevel(profile.level),
       streakDays: profile.streakDays,
       bestStreak: profile.bestStreak,
       lastLoginDate: profile.lastLoginDate,

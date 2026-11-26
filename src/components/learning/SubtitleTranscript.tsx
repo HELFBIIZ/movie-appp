@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { formatTime } from '@/lib/learning/vtt';
+import { hasMongolianMeaning } from '@/lib/learning/sentence-text';
 import type { AlignedCue, WordNote } from '@/lib/learning/types';
 import CueWords from './CueWords';
 const PAGE_SIZE = 20;
@@ -88,7 +89,7 @@ export default function SubtitleTranscript({
               </button>
             </div>
             <CueWords cue={cue} onWord={onWord} />
-            {translations && cue.translation && (
+            {translations && hasMongolianMeaning(cue.translation) && (
               <p lang="mn" className="mt-2 text-sm leading-6 text-slate-400">
                 {cue.translation}
               </p>

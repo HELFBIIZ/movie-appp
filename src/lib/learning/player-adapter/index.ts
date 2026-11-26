@@ -16,7 +16,7 @@ const unsupported: PlayerCapabilities = {
 // cinesrc.ts; capabilities are promoted only from observed, validated events.
 // This registry does not assert that a particular film/stream was verified.
 export const iframeProviders = [
-  { id: 'vidsrc', origin: 'https://vidsrcme.ru', capabilities: unsupported },
+  { id: 'vidsrc', origin: 'https://bingeapi.st', capabilities: unsupported },
   {
     id: 'cine',
     origin: 'https://cinesrc.st',

@@ -14,12 +14,14 @@ INSERT OR IGNORE INTO roles (id, code, name) VALUES
 -- by XP→VIP redemption (grantVipPass / redeemReward).
 INSERT OR IGNORE INTO subscription_plans (id, code, name, price_mnt, duration_days, is_active) VALUES
   ('pl_week',   'WEEKLY',        'Weekly Unlimited',         1500,  7,   1),
-  ('pl_month',  'MONTHLY',       'Monthly Unlimited',        5900,  30,  1),
-  ('pl_quarter','QUARTERLY',     'Quarterly Unlimited',      15900, 90,  1),
-  ('pl_semi',   'SEMI_ANNUAL',   'Semi-annual Unlimited',    29900, 180, 1),
-  ('pl_year',   'ANNUAL',        'Yearly Unlimited',         56900, 365, 1),
+  ('pl_month',  'MONTHLY',       'Monthly Unlimited',        4900,  30,  1),
+  ('pl_quarter','QUARTERLY',     'Quarterly Unlimited',      13500, 90,  1),
+  ('pl_semi',   'SEMI_ANNUAL',   'Semi-annual Unlimited',    29900, 180, 0),
+  ('pl_year',   'ANNUAL',        'Yearly Unlimited',         44900, 365, 1),
   ('pl_xp7',    'XP_PASS_7_DAYS','VIP Pass (7 days)',        0,     7,   1),
-  ('pl_xp30',   'XP_PASS_30_DAYS','VIP Pass (30 days)',      0,     30,  1);
+  ('pl_xp30',   'XP_PASS_30_DAYS','VIP Pass (30 days)',      0,     30,  1),
+  ('pl_xp90',   'XP_PASS_90_DAYS','VIP Pass (90 days)',      0,     90,  1),
+  ('pl_xp365',  'XP_PASS_365_DAYS','VIP Pass (365 days)',    0,    365,  1);
 
 -- XP shop catalog. `feature` rewards with days>0 grant a VIP pass on redeem.
 INSERT OR IGNORE INTO rewards (id, code, type, name, description, xp_price, days, is_active) VALUES

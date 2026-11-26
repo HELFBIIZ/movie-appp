@@ -72,7 +72,11 @@ export async function POST(request) {
   // advantaged over the other. Internally idempotent per calendar day.
   const [streak, daily] = await Promise.all([
     flipLoginStreak({ userId: resolved.userId }),
-    awardXp({ userId: resolved.userId, activity: 'DAILY_LOGIN' }),
+    awardXp({
+      userId: resolved.userId,
+      activity: 'DAILY_LOGIN',
+      eventKey: `login:${resolved.userId}:${new Date().toISOString().slice(0, 10)}`,
+    }),
   ]);
   await logSecurity({
     userId: resolved.userId,

@@ -9,7 +9,10 @@ export function normalizeSentence(value: unknown): string | null {
   return /[a-z]{2}/i.test(text) && new TextEncoder().encode(text).length <= 400 ? text : null;
 }
 export function hasMongolianMeaning(value: string): boolean {
-  return (value.match(/[А-Яа-яӨөҮүЁё]/g)?.length ?? 0) >= 2;
+  const text = String(value || '').trim();
+  const cyrillic = text.match(/[А-Яа-яӨөҮүЁё]/g)?.length ?? 0;
+  const latin = text.match(/[A-Za-z]/g)?.length ?? 0;
+  return cyrillic >= 2 && cyrillic >= latin;
 }
 export async function readSentenceBody(request: Request): Promise<unknown> {
   const reader = request.body?.getReader();

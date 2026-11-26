@@ -44,20 +44,38 @@ export default function SubtitledStreamPlayer({
   season = 1,
   episode = 1,
   variant = 0,
-  subtitleUrl = null,
+  subtitleUrl = '',
   subtitleLabel = 'Subtitles',
-  onKeyLoadError = null,
-  onStreamInfo = null,
+  onKeyLoadError = () => {},
+  onStreamInfo = (info) => {
+    void info;
+  },
+  onProgress = (seconds) => {
+    void seconds;
+  },
   isLastVariant = false,
 }) {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const cuesRef = useRef([]);
   const tickRef = useRef(null);
+  const progressRef = useRef(onProgress);
 
   const [stream, setStream] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    progressRef.current = onProgress;
+  }, [onProgress]);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const video = videoRef.current;
+      if (video && !video.paused && video.currentTime > 0) {
+        progressRef.current?.(video.currentTime);
+      }
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
   const [subsState, setSubsState] = useState('none'); // none | loading | on | error
   const [cue, setCue] = useState('');
 

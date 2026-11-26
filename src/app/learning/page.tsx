@@ -7,6 +7,7 @@ import VocabularyPanel from '@/components/learning/VocabularyPanel';
 import RecallPractice from '@/components/learning/RecallPractice';
 import GuestProgressImport from '@/components/learning/GuestProgressImport';
 import LearningDetails from '@/components/learning/LearningDetails';
+import LearningMoviePicker from '@/components/learning/LearningMoviePicker';
 import { useLearningAccount } from '@/components/learning/LearningAccount';
 import { usePlacementProfile } from '@/components/learning/usePlacementProfile';
 import { OPEN_PLACEMENT_EVENT, placementBands } from '@/lib/learning/placement';
@@ -86,15 +87,15 @@ export default function LearningDashboard() {
             Хоёр төхөөрөмжийн үгсийг нэгтгэх
           </button>
         )}
-        <div className="mt-6 grid grid-cols-3 gap-3">
+        <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
           {[
             [stats.words, 'Хадгалсан үг'],
             [stats.due.length, 'Одоо давтах'],
             [stats.streak, 'Дараалсан өдөр'],
           ].map(([value, label]) => (
-            <div key={label} className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="text-2xl font-semibold text-amber-200">{value}</p>
-              <p className="mt-2 text-xs text-slate-400">{label}</p>
+            <div key={label} className="rounded-xl border border-white/10 bg-white/5 p-2 sm:p-4">
+              <p className="text-xl font-semibold text-amber-200 sm:text-2xl">{value}</p>
+              <p className="mt-1 text-[10px] text-slate-400 sm:mt-2 sm:text-xs">{label}</p>
             </div>
           ))}
         </div>
@@ -115,12 +116,6 @@ export default function LearningDashboard() {
             className="mt-4 h-2 w-full accent-amber-400"
           />
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href="/movies"
-              className="rounded-xl bg-[#c9a227] px-4 py-3 text-sm font-semibold text-slate-950"
-            >
-              Кино сонгох
-            </Link>
             {stats.due.length > 0 && (
               <button
                 type="button"
@@ -145,6 +140,7 @@ export default function LearningDashboard() {
             />
           )}
         </section>
+        <LearningMoviePicker />
         <section className="mt-6 overflow-hidden rounded-2xl border border-white/10">
           <h2 className="px-5 pt-5 font-semibold">Миний үгс</h2>
           <VocabularyPanel

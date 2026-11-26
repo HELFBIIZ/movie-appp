@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { movies } from '@/lib/movies';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MovieRequestPanel from '@/components/MovieRequestPanel';
 
 export default function MoviesPage() {
   return (
@@ -19,6 +20,7 @@ export default function MoviesPage() {
 function MoviesContent() {
   const searchParams = useSearchParams();
   const [category, setCategory] = useState('');
+  const [query, setQuery] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -28,21 +30,31 @@ function MoviesContent() {
   }, [searchParams]);
 
   const filtered = useMemo(() => {
-    if (!category) return movies;
-
-    if (category === 'western-modern') {
-      return movies.filter(
-        (m) => (m.category || '').toLowerCase() === 'western' && m.year >= 2020 && m.year <= 2026,
+    const term = query.trim().toLocaleLowerCase();
+    const inCategory = (movie) => {
+      if (!category) return true;
+      if (category === 'western-modern') {
+        return (
+          (movie.category || '').toLowerCase() === 'western' &&
+          movie.year >= 2020 &&
+          movie.year <= 2026
+        );
+      }
+      const normalized = category;
+      return (
+        (movie.category || '').toLowerCase() === normalized ||
+        movie.genres.map((g) => g.toLowerCase()).includes(normalized)
       );
-    }
-
-    const normalized = category;
+    };
+    if (!term) return movies.filter(inCategory);
     return movies.filter(
-      (m) =>
-        (m.category || '').toLowerCase() === normalized ||
-        m.genres.map((g) => g.toLowerCase()).includes(normalized),
+      (movie) =>
+        inCategory(movie) &&
+        (movie.title.toLocaleLowerCase().includes(term) ||
+          movie.genres.some((g) => g.toLocaleLowerCase().includes(term)) ||
+          String(movie.year) === term),
     );
-  }, [category]);
+  }, [category, query]);
 
   const heading = !category
     ? 'All Movies'
@@ -79,6 +91,26 @@ function MoviesContent() {
             >
               Back to home
             </Link>
+          </div>
+
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <input
+              type="search"
+              aria-label="Кино хайх"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Кино, төрөл эсвэл оны нэрээр хайх…"
+              className="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c9a227] dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                className="rounded-lg border border-slate-300 px-4 py-3 text-sm dark:border-slate-700"
+              >
+                Хайлт цэвэрлэх
+              </button>
+            )}
           </div>
 
           {filtered.length === 0 ? (
@@ -128,6 +160,8 @@ function MoviesContent() {
               ))}
             </div>
           )}
+
+          <MovieRequestPanel />
         </div>
       </div>
 

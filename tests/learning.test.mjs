@@ -103,6 +103,11 @@ test('alignment uses positive overlap, multiple translations and half-open cue b
     '',
   );
 });
+test('alignment never renders untranslated English lines as Mongolian meanings', () => {
+  const en = parseVtt(vtt(cue('Hi. My name is Peter Parker.')));
+  const mn = parseVtt(vtt(cue('Hi. My name is Peter Parker.', '00:01.100', '00:02.900')));
+  assert.equal(alignCues(en, mn)[0].translation, '');
+});
 test('SRS schedules 1/3/7/14 days, caps at 14, and resets failure to ten minutes', () => {
   const now = 1000;
   let item = card();

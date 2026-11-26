@@ -1,4 +1,5 @@
 import { parseExistingVtt } from './movie.ts';
+import { hasMongolianMeaning } from './sentence-text.ts';
 
 export type CaptionCandidate = {
   fileId?: number;
@@ -23,11 +24,8 @@ export function captionMatches(
 export function usableMongolian(text: string): boolean {
   try {
     const cues = parseExistingVtt(text);
-    const characters = cues.map((cue) => cue.text).join('');
-    return (
-      cues.length > 0 &&
-      (characters.match(/[\u0400-\u04ff]/g)?.length ?? 0) / Math.max(1, characters.length) > 0.15
-    );
+    const mongolian = cues.filter((cue) => hasMongolianMeaning(cue.text)).length;
+    return cues.length > 0 && mongolian / cues.length >= 0.6;
   } catch {
     return false;
   }

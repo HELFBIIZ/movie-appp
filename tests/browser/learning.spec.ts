@@ -43,19 +43,19 @@ test('corrupt storage remains untouched and cannot claim a saved word', async ({
   expect(await page.evaluate(() => localStorage.getItem('vxnta.scenechain.v1'))).toBe('{broken');
 });
 
-test('authorized watch retains five providers and local learning never claims an iframe clock', async ({
+test('authorized watch retains six providers and local learning never claims an iframe clock', async ({
   page,
 }) => {
   await dismissPlacement(page);
   await page.route('**/api/watch/inception', (route) => route.fulfill({ json: { allowed: true } }));
   await page.route(
-    /https:\/\/(vidsrcme|cinesrc|multiembed|embedmaster|watch\.embed-api)\./,
+    /https:\/\/(bingeapi|cinesrc|multiembed|embedmaster|watch\.embed-api)\./,
     (route) => route.abort(),
   );
   await page.goto('/watch/inception');
   await expect(page.getByTitle('Inception player')).toBeVisible();
   const providers = page.getByRole('combobox', { name: 'Тоглуулагч', exact: true });
-  await expect(providers.getByRole('option')).toHaveCount(5);
+  await expect(providers.getByRole('option')).toHaveCount(6);
   await providers.selectOption('cine');
   await expect(page.getByTitle('Inception player')).toHaveAttribute('src', /cinesrc\.st/);
   await page.getByRole('button', { name: 'Үг сурах', exact: true }).click();

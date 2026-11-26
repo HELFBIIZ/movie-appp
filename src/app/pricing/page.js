@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WirePaymentStatus from '@/components/payments/WirePaymentStatus';
+import QPayPaymentStatus from '@/components/payments/QPayPaymentStatus';
 import PendingWirePayments from '@/components/payments/PendingWirePayments';
+import ReferralGiftPanel from '@/components/payments/ReferralGiftPanel';
 import { safeReturnTo } from '@/lib/safe-return';
 import { checkoutKey } from '@/lib/checkout-key';
 import { planLabel } from '@/lib/plan-label';
@@ -27,6 +29,7 @@ export default function PricingPage() {
   const [options, setOptions] = useState({ bank: true, qpay: false, wire: false, demo: false });
   const [returnTo, setReturnTo] = useState('/learning');
   const [pendingTxn, setPendingTxn] = useState('');
+  const [pendingProvider, setPendingProvider] = useState('');
   const wireKeys = useRef({});
 
   useEffect(() => {
@@ -36,7 +39,14 @@ export default function PricingPage() {
         setOptions(data);
         const query = new URLSearchParams(window.location.search);
         setReturnTo(safeReturnTo(query.get('returnTo')));
-        if (/^tx_[a-f0-9-]{36}$/.test(query.get('txn') || '')) setPendingTxn(query.get('txn'));
+        const txn = query.get('txn') || '';
+        if (/^tx_[a-f0-9-]{36}$/.test(txn)) {
+          setPendingTxn(txn);
+          void fetch(`/api/payments/${encodeURIComponent(txn)}`, { cache: 'no-store' })
+            .then((response) => (response.ok ? response.json() : null))
+            .then((data) => setPendingProvider(data?.payment?.provider ?? ''))
+            .catch(() => {});
+        }
       })
       .catch(() => {});
     let authController;
@@ -97,7 +107,10 @@ export default function PricingPage() {
       const data = await res.json();
       setBusy(null);
       if (!res.ok) {
-        if (data.payment?.txnId) setPendingTxn(data.payment.txnId);
+        if (data.payment?.txnId) {
+          setPendingTxn(data.payment.txnId);
+          setPendingProvider(data.payment.provider || provider);
+        }
         setNotice({
           kind: 'error',
           text:
@@ -106,6 +119,10 @@ export default function PricingPage() {
               : `${data.error?.code ?? 'CHECKOUT_FAILED'}`,
         });
         return;
+      }
+      if (data.payment?.txnId) {
+        setPendingTxn(data.payment.txnId);
+        setPendingProvider(data.payment.provider || provider);
       }
       if (data.subscription) {
         setNotice({
@@ -254,12 +271,15 @@ export default function PricingPage() {
         <p className="mt-3 text-sm text-slate-400">
           Багцаа сонгоод кино үзэж, хадмалаас нь үг сураарай.
         </p>
+        <p className="mt-2 text-xs text-amber-200">
+          Заргүй үзэх · өндөр чанартай дүрс · хадмалтай үг сурах · үзсэн киногоо коммент хийх
+        </p>
 
         {me && (
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm">
             <span>@{me.username}</span>
             <span className="text-amber-300">
-              ◆ {me.xp} XP · Lv {me.level}
+              ◆ {me.xp} XP · Lv {me.level} · {me.rank ?? 'Шинэ үзэгч'}
             </span>
             <span className={me.streakDays > 0 ? 'text-emerald-300' : 'text-slate-400'}>
               🔥 {me.streakDays}-day streak
@@ -285,30 +305,44 @@ export default function PricingPage() {
           activeTxn={pendingTxn}
           onResume={(payment) => {
             setPendingTxn(payment.txnId);
+            setPendingProvider('wire');
             setReturnTo(payment.returnTo);
             const query = new URLSearchParams({ txn: payment.txnId, returnTo: payment.returnTo });
             window.history.replaceState(null, '', `/pricing?${query}`);
           }}
         />
-        {pendingTxn && (
-          <WirePaymentStatus
-            key={`${me?.id ?? 'guest'}:${pendingTxn}`}
-            txn={pendingTxn}
-            returnTo={returnTo}
-            onNew={() => {
-              wireKeys.current = {};
-              for (const plan of plans) {
-                try {
-                  sessionStorage.removeItem(`vxnta.wire.${me?.id}.${plan.code}`);
-                } catch {
-                  /* In-memory retries remain available. */
+        {pendingTxn &&
+          (pendingProvider === 'qpay' ? (
+            <QPayPaymentStatus
+              key={`${me?.id ?? 'guest'}:${pendingTxn}`}
+              txn={pendingTxn}
+              returnTo={returnTo}
+              onNew={() => {
+                setPendingTxn('');
+                setPendingProvider('');
+                setNotice(null);
+              }}
+            />
+          ) : (
+            <WirePaymentStatus
+              key={`${me?.id ?? 'guest'}:${pendingTxn}`}
+              txn={pendingTxn}
+              returnTo={returnTo}
+              onNew={() => {
+                wireKeys.current = {};
+                for (const plan of plans) {
+                  try {
+                    sessionStorage.removeItem(`vxnta.wire.${me?.id}.${plan.code}`);
+                  } catch {
+                    /* In-memory retries remain available. */
+                  }
                 }
-              }
-              setPendingTxn('');
-              setNotice(null);
-            }}
-          />
-        )}
+                setPendingTxn('');
+                setPendingProvider('');
+                setNotice(null);
+              }}
+            />
+          ))}
         {!options.wire && (
           <p className="mt-4 text-sm text-slate-400">
             Wire төлбөр одоогоор боломжгүй байна. Банкны шилжүүлгийн хэсгийг ашиглаж болно.
@@ -506,6 +540,8 @@ export default function PricingPage() {
             })}
           </div>
         </details>
+
+        <ReferralGiftPanel xp={me?.xp ?? 0} />
       </div>
       <Footer />
     </main>

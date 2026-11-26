@@ -2,6 +2,8 @@ import type { Movie } from '../../types/movie';
 import { playerCaptionUrl, captionLanguage, type SelectedCaption } from './captions.ts';
 type ProviderMovie = Pick<Movie, 'tmdbId'> | null | undefined;
 export type PlayerTab = { id: string; label: string; url: string | null };
+// The former default (vidsrcme.ru) is a retired domain. BingeAPI accepts the
+// same TMDB ids, rotates its own streams and supports custom VTT subtitles.
 export function vidsrcUrl(
   movie: ProviderMovie,
   isTV: boolean,
@@ -14,11 +16,14 @@ export function vidsrcUrl(
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const subUrl = playerCaptionUrl(origin, subSlug, selection);
   const base = isTV
-    ? `https://vidsrcme.ru/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
-    : `https://vidsrcme.ru/embed/movie/${movie.tmdbId}`;
-  if (!subUrl) return base;
-  const label = selection?.label || 'Mongolian';
-  return `${base}?sub_url=${encodeURIComponent(subUrl)}&sub_label=${encodeURIComponent(label)}&sub_lang=${captionLanguage(label)}`;
+    ? `https://bingeapi.st/embed/tv/${movie.tmdbId}/${season || 1}/${episode || 1}`
+    : `https://bingeapi.st/embed/movie/${movie.tmdbId}`;
+  const params = ['theme=dark', 'color=c9a227'];
+  if (subUrl) {
+    params.push(`sub_url=${encodeURIComponent(subUrl)}`);
+    params.push(`sub_lang=${captionLanguage(selection?.label || 'Mongolian')}`);
+  }
+  return `${base}?${params.join('&')}`;
 }
 
 export function cinesrcUrl(
@@ -93,7 +98,7 @@ export function getPlayerTabs(
     ? [
         {
           id: 'vidsrc',
-          label: 'Player 1 · VidSrc',
+          label: 'Player 1 · Binge',
           url: vidsrcUrl(movie, isTV, season, episode, subSlug, selection),
         },
         {
@@ -116,6 +121,11 @@ export function getPlayerTabs(
           label: 'Player 5 · Embed API',
           url: embedApiStreamUrl(movie, isTV, season, episode),
         },
-      ].filter((t) => t.url)
+        {
+          id: 'hls',
+          label: 'Player 6 · Шууд HLS',
+          url: null,
+        },
+      ].filter((t) => t.id === 'hls' || t.url)
     : [];
 }

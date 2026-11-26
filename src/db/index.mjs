@@ -23,6 +23,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { createClient } from '@libsql/client';
 import { fulfillPayment } from './payment-fulfillment.mjs';
+import { levelForXp } from '../lib/xp-levels.mjs';
 
 const REPO_DATA_DIR = path.join(process.cwd(), 'data', 'db');
 // Netlify/AWS Lambda filesystem is read-only except /tmp — keep the writable
@@ -51,6 +52,16 @@ const firstExisting = (list) =>
   }) || null;
 const SCHEMA_FILE = firstExisting(SCHEMA_CANDIDATES);
 const SEED_FILE = firstExisting(SEED_CANDIDATES);
+
+async function ensureColumn(client, table, column, definition) {
+  try {
+    await client.execute(`SELECT ${column} FROM ${table} LIMIT 0`);
+    return;
+  } catch {}
+  try {
+    await client.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+  } catch {}
+}
 const REMOTE_URL = (process.env.TURSO_DATABASE_URL || '').trim();
 const REMOTE_TOKEN = process.env.TURSO_AUTH_TOKEN || '';
 const isRemote = !!REMOTE_URL;
@@ -97,6 +108,18 @@ async function getClient() {
           'subscriptions',
           'payments',
           'external_identities',
+          'notifications',
+          'movie_requests',
+          'movie_comments',
+          'referral_codes',
+          'referrals',
+          'vip_gifts',
+          'xp_accounts',
+          'xp_transactions',
+          'login_streaks',
+          'rewards',
+          'user_rewards',
+          'xp_redemptions',
         ];
         const missing = needTables.filter((t) => !have.has(t));
         if (missing.length) {
@@ -107,6 +130,13 @@ async function getClient() {
           await client.executeMultiple(fs.readFileSync(SEED_FILE, 'utf8'));
         }
       }
+      await ensureColumn(client, 'xp_transactions', 'event_key', 'TEXT');
+      try {
+        await client.execute(
+          `CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_tx_event ON xp_transactions(event_key) WHERE event_key IS NOT NULL`,
+        );
+      } catch {}
+      await ensurePlanCatalog(client);
       await ensureFlexiblePlans(client);
       _client = client;
     })();
@@ -140,6 +170,42 @@ async function batchWrite(statements) {
   );
 }
 
+async function ensurePlanCatalog(client) {
+  try {
+    const prices = [
+      ['WEEKLY', 1500],
+      ['MONTHLY', 4900],
+      ['QUARTERLY', 13500],
+      ['ANNUAL', 44900],
+    ];
+    const stmts = prices.map(([code, price]) => ({
+      sql: `UPDATE subscription_plans SET price_mnt = ?, is_active = 1 WHERE code = ?`,
+      args: [price, code],
+    }));
+    stmts.push({
+      sql: `UPDATE subscription_plans SET is_active = 0 WHERE code = 'SEMI_ANNUAL'`,
+      args: [],
+    });
+    stmts.push({
+      sql: `UPDATE subscription_plans SET is_active = 0 WHERE code LIKE 'MONTHLY_%'`,
+      args: [],
+    });
+    for (const days of [7, 30, 90, 365]) {
+      const code = `XP_PASS_${days}_DAYS`;
+      stmts.push({
+        sql: `INSERT OR IGNORE INTO subscription_plans (id, code, name, price_mnt, duration_days, is_active)
+              VALUES (?, ?, ?, 0, ?, 1)`,
+        args: [`pl_xp${days}`, code, `VIP Pass (${days} days)`, days],
+      });
+      stmts.push({
+        sql: `UPDATE subscription_plans SET price_mnt = 0, is_active = 1 WHERE code = ?`,
+        args: [code],
+      });
+    }
+    await client.batch(stmts, 'write');
+  } catch {}
+}
+
 // Flexible multi-month paid plans (2…9 months) priced on the same monthly rate
 // as the seeded MONTHLY plan: 30 days * n, 5900 MNT * n. Data is derived, so
 // the annual/quarterly rows stay authoritative and nothing needs a migration
@@ -156,7 +222,7 @@ async function ensureFlexiblePlans(client) {
     for (let n = 2; n <= 9; n++) {
       stmts.push({
         sql: `INSERT OR IGNORE INTO subscription_plans (id, code, name, price_mnt, duration_days, is_active)
-              VALUES (?, ?, ?, ?, ?, 1)`,
+              VALUES (?, ?, ?, ?, ?, 0)`,
         args: [
           `pl_mnth${n}`,
           `MONTHLY_${n}`,
@@ -504,7 +570,7 @@ export async function getXpProfile(userId) {
   );
   return {
     xp: acc?.xp ?? 0,
-    level: acc?.level ?? 1,
+    level: levelForXp(acc?.xp ?? 0),
     streakDays: streak?.current ?? acc?.streakDays ?? 0,
     bestStreak: streak?.best ?? 0,
     lastLoginDate: streak?.lastLoginDate ?? null,
@@ -739,6 +805,57 @@ export async function adminOverview() {
     totalXp: sum(await one(`SELECT COALESCE(SUM(xp), 0) AS s FROM xp_accounts`), 's'),
     reviews: n(await one(`SELECT COUNT(*) AS c FROM reviews`), 'c'),
     watchHistory: n(await one(`SELECT COUNT(*) AS c FROM watch_history`), 'c'),
+    revenueTodayMnt: sum(
+      await one(
+        `SELECT COALESCE(SUM(amount_mnt), 0) AS s FROM payments
+         WHERE status = 'SUCCESSFUL' AND date(created_at) = date('now')`,
+      ),
+      's',
+    ),
+    revenueMonthMnt: sum(
+      await one(
+        `SELECT COALESCE(SUM(amount_mnt), 0) AS s FROM payments
+         WHERE status = 'SUCCESSFUL' AND datetime(created_at) >= datetime('now', '-30 days')`,
+      ),
+      's',
+    ),
+    activeUsers30d: n(
+      await one(
+        `SELECT COUNT(DISTINCT user_id) AS c FROM watch_history
+         WHERE datetime(watched_at) >= datetime('now', '-30 days')`,
+      ),
+      'c',
+    ),
+    vipUsers: n(
+      await one(
+        `SELECT COUNT(DISTINCT user_id) AS c FROM subscriptions
+         WHERE status = 'ACTIVE' AND datetime(expires_at) > datetime('now')`,
+      ),
+      'c',
+    ),
+    renewalRate: await (async () => {
+      const active = n(
+        await one(
+          `SELECT COUNT(*) AS c FROM (
+             SELECT user_id FROM subscriptions
+             WHERE status = 'ACTIVE' AND datetime(expires_at) > datetime('now')
+             GROUP BY user_id HAVING COUNT(*) > 1
+           )`,
+        ),
+        'c',
+      );
+      const total = n(
+        await one(
+          `SELECT COUNT(*) AS c FROM (
+             SELECT user_id FROM subscriptions
+             WHERE status = 'ACTIVE' AND datetime(expires_at) > datetime('now')
+             GROUP BY user_id
+           )`,
+        ),
+        'c',
+      );
+      return total ? Math.round((active / total) * 1000) / 10 : 0;
+    })(),
   };
 
   return {
@@ -761,6 +878,10 @@ export async function adminOverview() {
       reviews: await all(
         `SELECT r.slug, r.rating, r.text, r.created_at AS createdAt, u.username
          FROM reviews r JOIN users u ON u.id = r.user_id ORDER BY r.updated_at DESC LIMIT 5`,
+      ),
+      topMovies: await all(
+        `SELECT slug, COUNT(*) AS views FROM watch_history
+         GROUP BY slug ORDER BY views DESC LIMIT 5`,
       ),
     },
   };
@@ -840,12 +961,21 @@ export async function redeemReward({ userId, code, ip = null }) {
   if (balance < reward.xpPrice) {
     return { error: { code: 'XP_INSUFFICIENT', balance, needed: reward.xpPrice } };
   }
+  const debit = await qRun(
+    `UPDATE xp_accounts SET xp = xp - ?, updated_at = datetime('now') WHERE user_id = ? AND xp >= ?`,
+    [reward.xpPrice, userId, reward.xpPrice],
+  );
+  if (!debit.rowsAffected) {
+    return {
+      error: {
+        code: 'XP_INSUFFICIENT',
+        balance: (await qOne('SELECT xp FROM xp_accounts WHERE user_id = ?', [userId]))?.xp ?? 0,
+        needed: reward.xpPrice,
+      },
+    };
+  }
 
   const stmts = [
-    {
-      sql: `UPDATE xp_accounts SET xp = xp - ?, updated_at = datetime('now') WHERE user_id = ? AND xp >= ?`,
-      args: [reward.xpPrice, userId, reward.xpPrice],
-    },
     {
       sql: `INSERT INTO xp_transactions (id, user_id, activity, amount, reason, created_at)
             VALUES (?, ?, 'XP_REDEEM', ?, ?, datetime('now'))`,
@@ -959,6 +1089,283 @@ export async function listAdminUserIds() {
   );
   return (rows || []).map((r) => r.id);
 }
+
+// ────────────────────────────────────────────────────────────────────────
+// MOVIE REQUESTS — users ask for titles/updates; admins review and answer.
+// ────────────────────────────────────────────────────────────────────────
+export async function createMovieRequest({
+  userId,
+  title,
+  year = null,
+  type = 'movie',
+  link = null,
+  note = null,
+}) {
+  const id = crypto.randomUUID();
+  await qRun(
+    `INSERT INTO movie_requests (id, user_id, title, year, type, link, note, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+    [id, userId, title, year, type, link, note],
+  );
+  return qOne(`SELECT * FROM movie_requests WHERE id = ?`, [id]);
+}
+
+export async function listMovieRequests({ userId = null, status = null, limit = 100 } = {}) {
+  const clauses = [],
+    args = [];
+  if (userId) {
+    clauses.push(`mr.user_id = ?`);
+    args.push(userId);
+  }
+  if (status) {
+    clauses.push(`mr.status = ?`);
+    args.push(status);
+  }
+  args.push(Math.min(Math.max(1, Number(limit) || 100), 200));
+  return qAll(
+    `SELECT mr.id, mr.user_id AS userId, mr.title, mr.year, mr.type, mr.link, mr.note,
+            mr.status, mr.admin_note AS adminNote, mr.created_at AS createdAt,
+            mr.reviewed_at AS reviewedAt, u.username, u.email
+     FROM movie_requests mr LEFT JOIN users u ON u.id = mr.user_id
+     ${clauses.length ? `WHERE ${clauses.join(' AND ')}` : ''}
+     ORDER BY mr.created_at DESC, mr.id DESC LIMIT ?`,
+    args,
+  );
+}
+
+export async function reviewMovieRequest({ id, status, adminNote = null, reviewedBy = null }) {
+  await qRun(
+    `UPDATE movie_requests SET status = ?, admin_note = ?, reviewed_by = ?,
+            reviewed_at = datetime('now') WHERE id = ?`,
+    [status, adminNote, reviewedBy, id],
+  );
+  return qOne(`SELECT * FROM movie_requests WHERE id = ?`, [id]);
+}
+
+/** Notify every active user (new movie announcements). Bounded fan-out. */
+export async function notifyAllUsers({ type, title, body = null, link = null, maxUsers = 5000 }) {
+  const rows = await qAll(`SELECT id FROM users WHERE deleted_at IS NULL ORDER BY id LIMIT ?`, [
+    Math.min(Math.max(1, Number(maxUsers) || 5000), 20000),
+  ]);
+  const statements = rows.map((row) => ({
+    sql: `INSERT INTO notifications (id, user_id, type, title, body, link, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, datetime('now'))`,
+    args: [crypto.randomUUID(), row.id, type, title, body, link],
+  }));
+  if (statements.length) await batchWrite(statements);
+  return statements.length;
+}
+
+export async function expireStaleSubscriptions() {
+  const result = await qRun(
+    `UPDATE subscriptions SET status = 'EXPIRED', updated_at = datetime('now')
+     WHERE status = 'ACTIVE' AND datetime(expires_at) <= datetime('now')`,
+  );
+  return result.rowsAffected ?? 0;
+}
+
+export async function listVipReminderCandidates() {
+  return qAll(
+    `SELECT s.user_id AS userId, s.expires_at AS expiresAt, p.code AS planCode
+     FROM subscriptions s JOIN subscription_plans p ON p.id = s.plan_id
+     WHERE s.status = 'ACTIVE'
+       AND datetime(s.expires_at) > datetime('now')
+       AND datetime(s.expires_at) <= datetime('now', '+3 days')`,
+  );
+}
+
+export async function listRecentlyExpiredVip() {
+  return qAll(
+    `SELECT DISTINCT s.user_id AS userId, s.expires_at AS expiresAt
+     FROM subscriptions s
+     WHERE s.status = 'ACTIVE'
+       AND datetime(s.expires_at) <= datetime('now')
+       AND datetime(s.expires_at) >= datetime('now', '-2 days')`,
+  );
+}
+
+export async function hasNotificationToday(userId, title) {
+  const row = await qOne(
+    `SELECT id FROM notifications WHERE user_id = ? AND title = ?
+     AND date(created_at) = date('now') LIMIT 1`,
+    [userId, title],
+  );
+  return Boolean(row);
+}
+
+async function creditXpDirect(userId, amount, activity, reason) {
+  const account = await qOne('SELECT xp FROM xp_accounts WHERE user_id = ?', [userId]);
+  const next = Math.max(0, (account?.xp ?? 0) + amount);
+  const statements = [
+    {
+      sql: `INSERT OR IGNORE INTO xp_accounts (id, user_id, xp, level, streak_days)
+            VALUES (?, ?, ?, 1, 0)`,
+      args: [userId, userId, 0],
+    },
+    {
+      sql: `UPDATE xp_accounts SET xp = ?, level = ?, updated_at = datetime('now') WHERE user_id = ?`,
+      args: [next, levelForXp(next), userId],
+    },
+    {
+      sql: `INSERT INTO xp_transactions (id, user_id, activity, amount, reason, created_at)
+            VALUES (?, ?, ?, ?, ?, datetime('now'))`,
+      args: [crypto.randomUUID(), userId, activity, amount, reason],
+    },
+  ];
+  await batchWrite(statements);
+  return next;
+}
+
+export async function hasVerifiedWatch(userId, slug) {
+  const row = await qOne(
+    `SELECT progress, completed FROM watch_history WHERE user_id = ? AND slug = ?`,
+    [userId, slug],
+  );
+  return Boolean(row && (row.completed === 1 || Number(row.progress) >= 0.3));
+}
+
+export async function createMovieComment({ userId, slug, body }) {
+  const id = crypto.randomUUID();
+  await qRun(
+    `INSERT INTO movie_comments (id, user_id, slug, body, created_at)
+     VALUES (?, ?, ?, ?, datetime('now'))`,
+    [id, userId, slug, body],
+  );
+  return qOne(
+    `SELECT c.id, c.body, c.created_at AS createdAt, u.username,
+            COALESCE(p.display_name, u.username) AS displayName
+     FROM movie_comments c JOIN users u ON u.id = c.user_id
+     LEFT JOIN profiles p ON p.user_id = u.id WHERE c.id = ?`,
+    [id],
+  );
+}
+
+export async function listMovieComments(slug, limit = 50) {
+  return qAll(
+    `SELECT c.id, c.body, c.created_at AS createdAt, u.username,
+            COALESCE(p.display_name, u.username) AS displayName
+     FROM movie_comments c JOIN users u ON u.id = c.user_id
+     LEFT JOIN profiles p ON p.user_id = u.id
+     WHERE c.slug = ?
+     ORDER BY datetime(c.created_at) DESC, c.rowid DESC LIMIT ?`,
+    [slug, Math.min(Math.max(1, Number(limit) || 50), 200)],
+  );
+}
+
+export async function getReferralCode(userId) {
+  const existing = await qOne('SELECT code FROM referral_codes WHERE user_id = ?', [userId]);
+  if (existing?.code) return existing.code;
+  const code = `VX-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+  await qRun(
+    `INSERT OR IGNORE INTO referral_codes (user_id, code, created_at)
+     VALUES (?, ?, datetime('now'))`,
+    [userId, code],
+  );
+  return (await qOne('SELECT code FROM referral_codes WHERE user_id = ?', [userId]))?.code ?? code;
+}
+
+export async function claimReferral({ userId, code }) {
+  const normalized = String(code || '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, '');
+  if (!/^VX-[A-F0-9]{8}$/.test(normalized)) return { error: { code: 'INVALID_REFERRAL_CODE' } };
+  const owner = await qOne('SELECT user_id AS userId FROM referral_codes WHERE code = ?', [
+    normalized,
+  ]);
+  if (!owner) return { error: { code: 'INVALID_REFERRAL_CODE' } };
+  if (owner.userId === userId) return { error: { code: 'SELF_REFERRAL' } };
+  const existing = await qOne('SELECT id FROM referrals WHERE invitee_id = ?', [userId]);
+  if (existing) return { error: { code: 'REFERRAL_ALREADY_CLAIMED' } };
+
+  const id = crypto.randomUUID();
+  try {
+    await qRun(
+      `INSERT INTO referrals (id, inviter_id, invitee_id, code, reward_granted, created_at)
+       VALUES (?, ?, ?, ?, 0, datetime('now'))`,
+      [id, owner.userId, userId, normalized],
+    );
+  } catch {
+    return { error: { code: 'REFERRAL_ALREADY_CLAIMED' } };
+  }
+  await creditXpDirect(userId, 500, 'REFERRAL_JOIN', 'Invited friend joined');
+  await creditXpDirect(owner.userId, 500, 'REFERRAL_JOIN', 'Friend joined with your code');
+  await qRun('UPDATE referrals SET reward_granted = 1 WHERE id = ?', [id]);
+  return { ok: true, code: normalized, xp: 500 };
+}
+
+export async function listReferrals(userId) {
+  const [code, invited, count] = await Promise.all([
+    getReferralCode(userId),
+    qAll(
+      `SELECT u.username, r.created_at AS createdAt
+       FROM referrals r JOIN users u ON u.id = r.invitee_id
+       WHERE r.inviter_id = ? ORDER BY datetime(r.created_at) DESC LIMIT 20`,
+      [userId],
+    ),
+    qOne('SELECT COUNT(*) AS c FROM referrals WHERE inviter_id = ?', [userId]),
+  ]);
+  return { code, invited, count: count?.c ?? 0 };
+}
+
+export async function giftVipDays({ senderId, recipient, days }) {
+  const validDays = [7, 30, 90, 365].map(Number);
+  const parsedDays = Number(days);
+  if (!validDays.includes(parsedDays)) return { error: { code: 'INVALID_GIFT_DAYS' } };
+  const costs = { 7: 2000, 30: 5000, 90: 12000, 365: 40000 };
+  const xpCost = costs[parsedDays];
+  const lookup = String(recipient || '')
+    .trim()
+    .toLowerCase();
+  if (!lookup) return { error: { code: 'RECIPIENT_REQUIRED' } };
+  const target = await qOne(
+    `SELECT id, username FROM users WHERE deleted_at IS NULL
+     AND (LOWER(username) = ? OR LOWER(email) = ?)`,
+    [lookup, lookup],
+  );
+  if (!target) return { error: { code: 'RECIPIENT_NOT_FOUND' } };
+  if (target.id === senderId) return { error: { code: 'SELF_GIFT' } };
+
+  const balance = (await qOne('SELECT xp FROM xp_accounts WHERE user_id = ?', [senderId]))?.xp ?? 0;
+  if (balance < xpCost) return { error: { code: 'XP_INSUFFICIENT', balance, needed: xpCost } };
+  const debit = await qRun(
+    `UPDATE xp_accounts SET xp = xp - ?, updated_at = datetime('now')
+     WHERE user_id = ? AND xp >= ?`,
+    [xpCost, senderId, xpCost],
+  );
+  if (!debit.rowsAffected) return { error: { code: 'XP_INSUFFICIENT', balance, needed: xpCost } };
+
+  const giftId = crypto.randomUUID();
+  await batchWrite([
+    {
+      sql: `INSERT INTO xp_transactions (id, user_id, activity, amount, reason, created_at)
+            VALUES (?, ?, 'VIP_GIFT', ?, ?, datetime('now'))`,
+      args: [
+        crypto.randomUUID(),
+        senderId,
+        -xpCost,
+        `Gift ${parsedDays}d VIP to @${target.username}`,
+      ],
+    },
+    {
+      sql: `INSERT INTO vip_gifts (id, sender_id, recipient_id, days, xp_spent, created_at)
+            VALUES (?, ?, ?, ?, ?, datetime('now'))`,
+      args: [giftId, senderId, target.id, parsedDays, xpCost],
+    },
+    {
+      sql: `INSERT INTO notifications (id, user_id, type, title, body, link, created_at)
+            VALUES (?, ?, 'vip_gift', 'Таныд VIP бэлэг ирлээ', ?, '/pricing', datetime('now'))`,
+      args: [crypto.randomUUID(), target.id, `${parsedDays} хоногийн VIP эрхийг бэлэглэлээ.`],
+    },
+  ]);
+  const granted = await grantVipPass({
+    userId: target.id,
+    days: parsedDays,
+    source: `GIFT:${senderId}`,
+  });
+  if (granted.error) return granted;
+  return { ok: true, days: parsedDays, xpSpent: xpCost, recipient: target.username };
+}
 // ────────────────────────────────────────────────────────────────────────
 // ADMIN USER MANAGEMENT — list, role lookup, revoke, ban/restore.
 // ────────────────────────────────────────────────────────────────────────
@@ -980,7 +1387,7 @@ export async function listUsers({ search = '', includeDeleted = false } = {}) {
     args.push(pattern, pattern);
   }
   const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
-  return qAll(
+  const rows = await qAll(
     `
     WITH active_subscriptions AS (
       SELECT s.*, ROW_NUMBER() OVER (PARTITION BY s.user_id ORDER BY datetime(s.expires_at) DESC, s.id DESC) AS rn
@@ -994,7 +1401,7 @@ export async function listUsers({ search = '', includeDeleted = false } = {}) {
     SELECT u.id, u.email, u.username, r.code AS roleCode,
            u.deleted_at AS deletedAt, u.created_at AS createdAt,
            s.status AS subscriptionStatus, s.expires_at AS subscriptionExpiresAt,
-           p.code AS planCode, p.name AS planName,
+           p.code AS planCode, p.name AS planName, x.xp AS xp,
            COUNT(DISTINCT CASE WHEN pay.status='SUCCESSFUL' AND pay.provider IN ('bank','qpay') THEN pay.id END) AS verifiedPayments,
            COUNT(DISTINCT CASE WHEN pay.status='SUCCESSFUL' AND pay.provider='local_dev' THEN pay.id END) AS demoPayments,
            pp.pendingTxnId
@@ -1004,12 +1411,14 @@ export async function listUsers({ search = '', includeDeleted = false } = {}) {
     LEFT JOIN subscription_plans p ON p.id = s.plan_id
     LEFT JOIN payments pay ON pay.user_id = u.id
     LEFT JOIN pending_payments pp ON pp.user_id = u.id AND pp.prn = 1
+    LEFT JOIN xp_accounts x ON x.user_id = u.id
     ${where}
-    GROUP BY u.id, s.id, pp.pendingTxnId
+    GROUP BY u.id, s.id, pp.pendingTxnId, x.xp
     ORDER BY u.created_at DESC
   `,
     args,
   );
+  return rows.map((row) => ({ ...row, level: levelForXp(row.xp ?? 0) }));
 }
 export async function revokeUserSubscriptions({ userId, reviewedBy = null } = {}) {
   const active = await qAll(

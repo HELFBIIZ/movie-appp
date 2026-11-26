@@ -133,6 +133,11 @@ export default function AdminPage() {
               <Card label="Total XP" value={data.stats.totalXp.toLocaleString()} />
               <Card label="Reviews" value={data.stats.reviews} />
               <Card label="Watch events" value={data.stats.watchHistory} />
+              <Card label="Revenue today" value={fmtMnt(data.stats.revenueTodayMnt)} />
+              <Card label="Revenue 30d" value={fmtMnt(data.stats.revenueMonthMnt)} />
+              <Card label="Active 30d" value={data.stats.activeUsers30d} />
+              <Card label="VIP users" value={data.stats.vipUsers} />
+              <Card label="Renewal rate" value={`${data.stats.renewalRate}%`} />
             </div>
 
             <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm">
@@ -189,6 +194,18 @@ export default function AdminPage() {
                   username: '@' + x.username,
                   xp: x.xp.toLocaleString(),
                   level: x.level,
+                }))}
+              />
+              <Table
+                title="Top watched movies"
+                cols={[
+                  { key: 'slug', label: 'Movie' },
+                  { key: 'views', label: 'Views' },
+                ]}
+                rows={(data.recent.topMovies ?? []).map((m) => ({
+                  key: m.slug,
+                  slug: m.slug,
+                  views: m.views,
                 }))}
               />
               <Table

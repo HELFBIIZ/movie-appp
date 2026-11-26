@@ -14,6 +14,13 @@ const GOOGLE_GROUP_CHARS = 1300;
 const GOOGLE_CONCURRENCY = 8;
 const NEWLINE_HOLDER = '\uE000';
 
+function isMongolianLine(value) {
+  const text = String(value || '').trim();
+  const cyrillic = text.match(/[А-Яа-яӨөҮүЁё]/g)?.length ?? 0;
+  const latin = text.match(/[A-Za-z]/g)?.length ?? 0;
+  return cyrillic >= 2 && cyrillic >= latin;
+}
+
 function translateKey(key) {
   return key.replace(/\n/g, NEWLINE_HOLDER);
 }
@@ -91,14 +98,16 @@ export async function translateLinesToMongolian(apiKey, lines) {
         outs = [];
         for (const item of group) {
           const single = await googleTranslateLine(restoreKey(item)).catch(() => null);
-          outs.push(single || item);
+          outs.push(single && isMongolianLine(restoreKey(single)) ? single : null);
         }
       }
       for (let j = 0; j < group.length; j++) {
         const key = restoreKey(group[j]);
         const out = outs[j];
-        for (const idx of dedupeMap.get(key)) translated[idx] = restoreKey(out) || key;
-        if (out && out !== group[j] && /[\u0400-\u04ff]/.test(out)) translatedCount++;
+        const text = out ? restoreKey(out) : '';
+        const usable = isMongolianLine(text) && text !== key;
+        for (const idx of dedupeMap.get(key)) translated[idx] = usable ? text : null;
+        if (usable) translatedCount++;
       }
     }
   }
@@ -106,7 +115,7 @@ export async function translateLinesToMongolian(apiKey, lines) {
   await Promise.all(Array.from({ length: Math.min(GOOGLE_CONCURRENCY, groups.length) }, worker));
 
   lines.forEach((_line, i) => {
-    if (translated[i] === null) translated[i] = lines[i];
+    if (translated[i] === null) translated[i] = '';
   });
 
   return {
