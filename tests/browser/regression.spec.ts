@@ -94,6 +94,10 @@ async function appearance(page: Page, name: string) {
       .getByRole('button', { name: /^Go to / })
       .first()
       .click();
+  // Focus/scroll anchoring can move the viewport during carousel selection.
+  // Compare the same viewport position after interactions in both builds.
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   // Keep the lesson dialog visible even when it overlays the video rectangle.
   const mask = (await page.locator('dialog[open]').count()) ? [] : [page.locator('video, iframe')];
   await expect(page).toHaveScreenshot(name, { mask });
