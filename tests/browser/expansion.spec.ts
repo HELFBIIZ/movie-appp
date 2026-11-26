@@ -247,6 +247,18 @@ test('real local accounts keep separate server progress, reject stale writes and
   try {
     await register(first);
     await register(second);
+    // A normal account can use the free learning endpoint; invalid input stops
+    // before any provider request, budget reservation or paid service.
+    expect(
+      (await first.post('/api/learning/sentence', { data: { text: 'a'.repeat(401) } })).status(),
+    ).toBe(400);
+    expect(
+      (
+        await first.post('/api/learning/sentence', {
+          data: { text: 'first paragraph\n\nsecond paragraph' },
+        })
+      ).status(),
+    ).toBe(400);
     const snapshot = {
       ...emptySnapshot(),
       progress: { items: [], contextCorrect: 1, contextIncorrect: 0 },
