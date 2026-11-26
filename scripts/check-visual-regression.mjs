@@ -11,7 +11,7 @@ assert.ok(path.resolve(temporary).startsWith(path.resolve(os.tmpdir()) + path.se
 const baseline = path.join(temporary, 'learning-baseline');
 // Include the reviewed OpenCode additions and the requested meaning-correction
 // control. Rebuild the feature in the same browser; retain prior baselines in Git.
-const baselineCommit = 'eb60ed6';
+const baselineCommit = 'eb60ed6320b3c1e1620741b1bcdb760bbd2fa2ec';
 const env = { ...process.env };
 for (const key of Object.keys(env)) {
   if (/TURSO|CLERK|WIRE_|QPAY_|OPENSUBTITLES|TRANSLATE|TMDB|^NETLIFY$/.test(key)) delete env[key];

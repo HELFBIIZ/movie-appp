@@ -213,10 +213,14 @@ export function useMovieLesson(
     refresh: () => {
       try {
         // Retain legacy/manual tracks before the user's explicit replacement.
-        localStorage.setItem(
-          `${settingsKey}.backup.${Date.now()}`,
-          JSON.stringify(settingsRef.current),
-        );
+        if (
+          settingsRef.current.englishSource !== 'automatic' ||
+          settingsRef.current.mongolianSource !== 'automatic'
+        )
+          localStorage.setItem(
+            `${settingsKey}.backup.${Date.now()}`,
+            JSON.stringify(settingsRef.current),
+          );
         change({
           ...initial,
           enOffset: settingsRef.current.enOffset,

@@ -63,7 +63,12 @@ export default function MovieLearningStatus({
             </button>
           )}
           {player.time !== null && <p>Киноны хугацаа: {formatTime(player.time)}</p>}
-          <button type="button" onClick={lesson.refresh} className="text-amber-200 underline">
+          <button
+            type="button"
+            onClick={lesson.refresh}
+            disabled={lesson.loading}
+            className="text-amber-200 underline disabled:opacity-40"
+          >
             Сайтын хадмалыг дахин авах
           </button>
           <div className="grid gap-3 sm:grid-cols-2">
