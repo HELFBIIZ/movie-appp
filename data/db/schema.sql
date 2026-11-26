@@ -86,7 +86,6 @@ CREATE TABLE IF NOT EXISTS xp_transactions (
   event_key  TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
-CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_tx_event ON xp_transactions(event_key) WHERE event_key IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_xp_tx_user ON xp_transactions(user_id, created_at);
 CREATE TABLE IF NOT EXISTS login_streaks (
   id              TEXT PRIMARY KEY,
