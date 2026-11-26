@@ -9,9 +9,9 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'vxnta-visual-'));
 assert.ok(path.resolve(temporary).startsWith(path.resolve(os.tmpdir()) + path.sep));
 const baseline = path.join(temporary, 'learning-baseline');
-// The requested zero-cost fallback adds an explicit selected-sentence control.
-// Rebuild that feature in the same browser; retain preceding UI baselines in Git.
-const baselineCommit = '4fd75d0d7955f52b1a21f86e925822085044a0f3';
+// Include the reviewed OpenCode additions and the requested meaning-correction
+// control. Rebuild the feature in the same browser; retain prior baselines in Git.
+const baselineCommit = 'eb60ed6';
 const env = { ...process.env };
 for (const key of Object.keys(env)) {
   if (/TURSO|CLERK|WIRE_|QPAY_|OPENSUBTITLES|TRANSLATE|TMDB|^NETLIFY$/.test(key)) delete env[key];
