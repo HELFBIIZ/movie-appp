@@ -43,12 +43,21 @@ export default function WatchPage() {
   const [subtitleUrl, setSubtitleUrl] = useState<string | null>(null);
   const [subtitleLabel, setSubtitleLabel] = useState('Mongolian');
   const [subtitleEnabled, setSubtitleEnabled] = useState(true);
+  const [subtitleSelectionSource, setSubtitleSelectionSource] = useState<'automatic' | 'manual'>(
+    'automatic',
+  );
   const handleSubtitleChange = useCallback(
-    (url: string | null, label?: string, enabled = true) => {
+    (
+      url: string | null,
+      label?: string,
+      enabled = true,
+      source: 'automatic' | 'manual' = 'manual',
+    ) => {
       setSubtitleUrl(url);
       setSubtitleEnabled(enabled);
+      setSubtitleSelectionSource(source);
       if (label) setSubtitleLabel(label);
-      if (url && enabled && label === 'Mongolian') {
+      if (url && enabled && label === 'Mongolian' && source === 'manual') {
         void fetch('/api/actions/xp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -241,6 +250,7 @@ export default function WatchPage() {
               onSelectProvider: setSource,
               englishSubtitleUrl: subtitleLabel === 'English' ? subtitleUrl : undefined,
               mongolianSubtitleUrl: subtitleLabel === 'Mongolian' ? subtitleUrl : undefined,
+              subtitleSelectionSource,
               mediaType: isTV ? 'tv' : 'movie',
               season,
               episode,

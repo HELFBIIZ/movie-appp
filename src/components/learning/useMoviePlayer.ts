@@ -10,6 +10,7 @@ export type MoviePlayerContext = {
   onSelectProvider: (provider: string) => void;
   englishSubtitleUrl?: string | null;
   mongolianSubtitleUrl?: string | null;
+  subtitleSelectionSource?: 'automatic' | 'manual';
   mediaType?: 'movie' | 'tv';
   season?: number;
   episode?: number;

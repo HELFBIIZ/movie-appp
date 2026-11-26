@@ -112,8 +112,11 @@ export function useMovieLesson(
   }, [enabled, allowed, movieId, settingsKey, season, episode, mediaType, change, retry]);
   const englishSelection = context?.englishSubtitleUrl;
   const mongolianSelection = context?.mongolianSubtitleUrl;
+  const selectionSource = context?.subtitleSelectionSource;
   useEffect(() => {
-    if (!enabled || !allowed) return;
+    // The canonical learning API already resolves automatic tracks. A default
+    // player subtitle must not race it or overwrite the learner's selected VTT.
+    if (!enabled || !allowed || selectionSource === 'automatic') return;
     const controller = new AbortController();
     const selections = [
       ['english', englishSelection],
@@ -144,7 +147,15 @@ export function useMovieLesson(
         });
     }
     return () => controller.abort();
-  }, [enabled, allowed, englishSelection, mongolianSelection, subtitleKey, change]);
+  }, [
+    enabled,
+    allowed,
+    englishSelection,
+    mongolianSelection,
+    selectionSource,
+    subtitleKey,
+    change,
+  ]);
   useEffect(() => {
     let cancelled = false;
     void transcriptFingerprint(settings.english, settings.mongolian)

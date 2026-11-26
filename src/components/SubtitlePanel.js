@@ -78,7 +78,7 @@ export default function SubtitlePanel({
   const [, setInstantChecked] = useState(false);
 
   const applyInstantMongolian = useCallback(
-    (path) => {
+    (path, source = 'manual') => {
       if (!slug) return;
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
       const url = path
@@ -90,7 +90,7 @@ export default function SubtitlePanel({
       setLoadedLabel('Mongolian');
       setTranslateError(null);
       setTranslateWarning(null);
-      onSubtitleChange?.(url, 'Mongolian');
+      onSubtitleChange?.(url, 'Mongolian', true, source);
     },
     [slug, onSubtitleChange],
   );
@@ -136,7 +136,7 @@ export default function SubtitlePanel({
       if (cancelled) return;
       if (okPath) {
         setInstantReady(true);
-        applyInstantMongolian(okPath);
+        applyInstantMongolian(okPath, 'automatic');
         if (partial) setTranslateWarning('Монгол хадмалын зарим мөр орчуулагдаагүй байна.');
       }
       setInstantChecked(true);
@@ -421,7 +421,7 @@ export default function SubtitlePanel({
             <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-4">
               <div className="flex flex-wrap items-center gap-3">
                 <button
-                  onClick={loadInstantMongolian}
+                  onClick={() => loadInstantMongolian()}
                   className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-green-500"
                 >
                   <Zap className="h-4 w-4" />

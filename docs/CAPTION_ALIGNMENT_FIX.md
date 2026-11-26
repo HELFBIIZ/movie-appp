@@ -18,6 +18,7 @@ The existing CI failure at that commit happened while generating the old visual 
 - Let the learner reject an incorrect subtitle meaning, then explicitly request the selected English sentence's meaning. Show the MyMemory notice before requesting it; retain the shared free budget, authentication and quota limits. No paid fallback or whole-film translation is introduced.
 - Share corrected meanings with word teaching, the transcript and sentence saving. Keep at most 200 corrections/rejections in browser storage, scoped to the media fingerprint. Preserve existing learning progress. Report storage failures.
 - Refresh cached automatic tracks when the site returns new captions. Preserve manual selections and ambiguous legacy settings. An explicit “Сайтын хадмалыг дахин авах” action backs up the previous settings before replacing tracks.
+- Distinguish the player panel's automatic default MN selection from a learner's explicit choice. The default previously raced the learning API and overwrote saved manual tracks, even labeling the replacement as manual. Automatic selections now use the canonical learning response; explicit subtitle choices still propagate to learning. Automatic application no longer awards subtitle-help XP. Fix the instant-subtitle button passing its click event as a URL.
 - Replace the unverified claim that selecting Binge guarantees the correct Mongolian translation. Our application cannot edit a third-party iframe's internal CC translation.
 
 ## Validation and limits
