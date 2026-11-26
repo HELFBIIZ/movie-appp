@@ -9,10 +9,9 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'vxnta-visual-'));
 assert.ok(path.resolve(temporary).startsWith(path.resolve(os.tmpdir()) + path.sep));
 const baseline = path.join(temporary, 'learning-baseline');
-// The requested compact navigation, Mongolian word coach and removal of the
-// free exercise intentionally replace the guided-practice appearance.
-// Rebuild this implementation in the same browser; retain earlier baselines in Git.
-const baselineCommit = '9be9a4c53051cf62b72cdfa2335ca3f519ceef49';
+// The requested zero-cost fallback adds an explicit selected-sentence control.
+// Rebuild that feature in the same browser; retain preceding UI baselines in Git.
+const baselineCommit = '4fd75d0d7955f52b1a21f86e925822085044a0f3';
 const env = { ...process.env };
 for (const key of Object.keys(env)) {
   if (/TURSO|CLERK|WIRE_|QPAY_|OPENSUBTITLES|TRANSLATE|TMDB|^NETLIFY$/.test(key)) delete env[key];
