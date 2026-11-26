@@ -5,6 +5,7 @@ import { readCaptionCache, writeCaptionCache } from '@/db/learning';
 import { reserveWordLookup } from '@/db/word-budget.mjs';
 import { createSentenceLookup, translateSentence } from '@/lib/learning/sentence-meaning';
 import { normalizeSentence, readSentenceBody } from '@/lib/learning/sentence-text';
+import { sentenceGuide } from '@/lib/learning/sentence-guide';
 
 const lookup = createSentenceLookup({
   read: readCaptionCache,
@@ -27,6 +28,9 @@ export async function POST(request: NextRequest) {
     );
     if (!text)
       return NextResponse.json({ error: { code: 'INVALID_SENTENCE' } }, { status: 400, headers });
+    const authored = sentenceGuide(text);
+    if (authored)
+      return NextResponse.json({ translation: authored, source: 'curated' }, { headers });
     const key = `learning-sentence:v1:${createHash('sha256').update(text).digest('hex')}`;
     const result = await lookup(key, text);
     return 'translation' in result

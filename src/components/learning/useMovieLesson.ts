@@ -3,6 +3,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { z } from 'zod';
 import { MAX_VTT_BYTES } from '@/lib/learning/vtt';
 import {
+  captionSettingsSchema,
+  initialCaptionSettings,
+  mergeAutomaticCaptions,
+} from '@/lib/learning/caption-settings';
+import {
   movieCues,
   internalEnglishSource,
   internalMongolianSource,
@@ -11,13 +16,8 @@ import {
 } from '@/lib/learning/movie';
 import type { MoviePlayerContext } from './useMoviePlayer';
 
-const settingsSchema = z.object({
-  english: z.string().max(MAX_VTT_BYTES),
-  mongolian: z.string().max(MAX_VTT_BYTES).default(''),
-  enOffset: z.number().finite().min(-600).max(600),
-  mnOffset: z.number().finite().min(-600).max(600),
-});
-const initial = { english: '', mongolian: '', enOffset: 0, mnOffset: 0 };
+const settingsSchema = captionSettingsSchema;
+const initial = initialCaptionSettings;
 export function useMovieLesson(
   enabled: boolean,
   allowed: boolean,
@@ -97,11 +97,7 @@ export function useMovieLesson(
         if (controller.signal.aborted) return;
         if (data.english) parseExistingVtt(data.english);
         if (data.mongolian) parseExistingVtt(data.mongolian);
-        const next = {
-          ...settingsRef.current,
-          english: settingsRef.current.english || data.english,
-          mongolian: settingsRef.current.mongolian || data.mongolian,
-        };
+        const next = mergeAutomaticCaptions(settingsRef.current, data);
         change(next);
         setNotice(data.notice);
       } catch {
@@ -135,7 +131,12 @@ export function useMovieLesson(
           if (!response.ok) throw new Error();
           const text = await response.text();
           if (!parseExistingVtt(text).length) throw new Error();
-          if (!controller.signal.aborted) change({ ...settingsRef.current, [language]: text });
+          if (!controller.signal.aborted)
+            change({
+              ...settingsRef.current,
+              [language]: text,
+              [language === 'english' ? 'englishSource' : 'mongolianSource']: 'manual',
+            });
         })
         .catch(() => {
           if (!controller.signal.aborted)
@@ -176,7 +177,11 @@ export function useMovieLesson(
         throw new Error('1 MB хүртэлх .vtt сонгоно уу.');
       const text = await file.text();
       if (!parseExistingVtt(text).length) throw new Error('Хадмалын мөр олдсонгүй.');
-      change({ ...settingsRef.current, [language]: text });
+      change({
+        ...settingsRef.current,
+        [language]: text,
+        [language === 'english' ? 'englishSource' : 'mongolianSource']: 'manual',
+      });
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'VTT уншиж чадсангүй.');
     }
@@ -195,6 +200,7 @@ export function useMovieLesson(
     hasEnglish: en.length > 0,
     mnCount: mn.length,
     enCount: en.length,
+    alignmentMissing: en.length > 0 && mn.length > 0 && cues.some((cue) => !cue.translation),
     enOffset: settings.enOffset,
     mnOffset: settings.mnOffset,
     changeOffset: (language: 'en' | 'mn', offset: number) => {
@@ -204,5 +210,22 @@ export function useMovieLesson(
     loadEnglish: (file: File) => loadFile(file, 'english'),
     loadMongolian: (file: File) => loadFile(file, 'mongolian'),
     retry: () => setRetry((value) => value + 1),
+    refresh: () => {
+      try {
+        // Retain legacy/manual tracks before the user's explicit replacement.
+        localStorage.setItem(
+          `${settingsKey}.backup.${Date.now()}`,
+          JSON.stringify(settingsRef.current),
+        );
+        change({
+          ...initial,
+          enOffset: settingsRef.current.enOffset,
+          mnOffset: settingsRef.current.mnOffset,
+        });
+        setRetry((value) => value + 1);
+      } catch {
+        setError('Хуучин хадмалыг хадгалж чадсангүй. Одоогийн файлыг солиогүй.');
+      }
+    },
   };
 }

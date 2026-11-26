@@ -29,13 +29,20 @@ export default function MovieLearningStatus({
           Монгол хадмал одоогоор алга. Үг дээр дараад утгыг нь үзэж болно.
         </p>
       )}
-      {lesson.hasEnglish &&
+      {lesson.alignmentMissing ? (
+        <p role="status" className="mb-3 text-amber-200">
+          Зарим монгол мөрийн цаг таарахгүй байна. «Монгол утгыг үзэх» товчоор англи өгүүлбэрийн
+          утгыг нээгээрэй.
+        </p>
+      ) : (
+        lesson.hasEnglish &&
         lesson.mnCount > 0 &&
         /зарим мөр|дутуу|орчуулагдаагүй/i.test(lesson.warning) && (
           <p role="status" className="mb-3 text-amber-200">
             Монгол хадмалын зарим мөр дутуу байна.
           </p>
-        )}
+        )
+      )}
       {player.status === 'error' && (
         <p role="status" className="mb-3 text-amber-200">
           Тоглуулагч холбогдсонгүй. Өөр тоглуулагч сонгоорой.
@@ -56,8 +63,8 @@ export default function MovieLearningStatus({
             </button>
           )}
           {player.time !== null && <p>Киноны хугацаа: {formatTime(player.time)}</p>}
-          <button type="button" onClick={lesson.retry} className="text-amber-200 underline">
-            Хадмалыг дахин хайх
+          <button type="button" onClick={lesson.refresh} className="text-amber-200 underline">
+            Сайтын хадмалыг дахин авах
           </button>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">

@@ -108,7 +108,7 @@ test('alignment never renders untranslated English lines as Mongolian meanings',
   const mn = parseVtt(vtt(cue('Hi. My name is Peter Parker.', '00:01.100', '00:02.900')));
   assert.equal(alignCues(en, mn)[0].translation, '');
 });
-test('alignment uses cue order when translated timings drift', () => {
+test('drifted tracks are not paired by cue order; an explicit offset aligns matching intervals', () => {
   const en = parseVtt(
     vtt(
       `${cue('Hi. My name is Peter Parker.')}\n\n${cue("You don't remember me, but I have something to tell you...", '00:04.000', '00:06.000')}\n\n${cue("that's gonna sound crazy.", '00:07.000', '00:08.000')}\n\n${cue("And I know you're gonna believe me...", '00:11.000', '00:13.000')}`,
@@ -116,10 +116,13 @@ test('alignment uses cue order when translated timings drift', () => {
   );
   const mn = parseVtt(
     vtt(
-      `${cue('Сайн уу, намайг Питер Паркер гэдэг.', '00:11.000', '00:13.000')}\n\n${cue('Чи санахгүй байх л даа, гэхдээ чамд хэлэх нэг юм байна.', '00:14.000', '00:16.000')}\n\n${cue('Итгэхэд хэцүү сонсогдох байх, гэхдээ...', '00:17.000', '00:18.000')}\n\n${cue('Чи надад итгэнэ гэдгийг би мэдэж байна.', '00:20.000', '00:22.000')}`,
+      `${cue('Сайн уу, намайг Питер Паркер гэдэг.', '00:11.000', '00:13.000')}\n\n${cue('Чи санахгүй байх л даа, гэхдээ чамд хэлэх нэг юм байна.', '00:14.000', '00:16.000')}\n\n${cue('Итгэхэд хэцүү сонсогдох байх, гэхдээ...', '00:17.000', '00:18.000')}\n\n${cue('Чи надад итгэнэ гэдгийг би мэдэж байна.', '00:21.000', '00:23.000')}`,
     ),
   );
-  const aligned = alignCues(en, mn);
+  // The first translated cue coincides exactly with a later EN cue. Timing
+  // alone cannot distinguish that accidental match on this short excerpt.
+  assert.equal(alignCues(en, mn)[2].translation, '');
+  const aligned = movieCues(mn, en, 0, -10);
   assert.equal(aligned[0].translation, 'Сайн уу, намайг Питер Паркер гэдэг.');
   assert.equal(aligned[1].translation, 'Чи санахгүй байх л даа, гэхдээ чамд хэлэх нэг юм байна.');
   assert.equal(aligned[2].translation, 'Итгэхэд хэцүү сонсогдох байх, гэхдээ...');

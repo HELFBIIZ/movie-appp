@@ -1,14 +1,28 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { hasMongolianMeaning } from '@/lib/learning/sentence-text';
+import { sentenceGuide } from '@/lib/learning/sentence-guide';
 
-export function useSentenceMeaning(text: string, provided: string) {
+export function useSentenceMeaning(
+  text: string,
+  provided: string,
+  onChange: (text: string, translation: string) => void,
+  source?: 'curated' | 'mymemory',
+) {
   const [values, setValues] = useState<Record<string, string>>({});
+  const [rejected, setRejected] = useState<Record<string, string>>({});
   const [state, setState] = useState({ text: '', loading: false, error: '' });
   const request = useRef<AbortController | null>(null);
   useEffect(() => () => request.current?.abort(), [text]);
-  const existing = hasMongolianMeaning(provided) ? provided : '';
-  const translation = existing || values[text] || '';
+  const existing = hasMongolianMeaning(provided) && rejected[text] !== provided ? provided : '';
+  const authored = sentenceGuide(text);
+  const translation = authored || values[text] || existing;
+  function rejectProvided() {
+    request.current?.abort();
+    setRejected((previous) => ({ ...previous, [text]: provided }));
+    onChange(text, '');
+    setState({ text, loading: false, error: '' });
+  }
   async function translate() {
     if (!text || translation) return;
     request.current?.abort();
@@ -54,6 +68,7 @@ export function useSentenceMeaning(text: string, provided: string) {
       if (!controller.signal.aborted) {
         const value = data.translation;
         setValues((previous) => ({ ...previous, [text]: value }));
+        onChange(text, value);
         setState({ text, loading: false, error: '' });
       }
     } catch {
@@ -63,7 +78,9 @@ export function useSentenceMeaning(text: string, provided: string) {
   }
   return {
     translation,
-    automatic: !existing && !!translation,
+    automatic: !authored && (!!values[text] || source === 'mymemory') && !!translation,
+    canCorrect: !!existing && !authored && !values[text] && source !== 'mymemory',
+    rejectProvided,
     translate,
     loading: state.text === text && state.loading,
     error: state.text === text ? state.error : '',

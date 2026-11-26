@@ -156,8 +156,8 @@ export default function MoviePlayer({
         )}
         {source === 'cine' && (
           <div className="border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
-            CineSrc дотоод монгол хадмал киноны дуутай таарахгүй байж болно. Зөв монгол орчуулгад «1
-            · Binge» сонгоно уу.
+            Тоглуулагчийн CC хадмал ба сургалтын хадмал тусдаа. Утга зөрвөл сургалтын «Утга
+            таарахгүй байна» товчийг ашиглаарай.
           </div>
         )}
         {frameStatus === 'failed' && !isDirectHls && (

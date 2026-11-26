@@ -63,37 +63,39 @@ function overlappingTranslations(cue: Cue, mongolian: Cue[]): Cue[] {
   );
 }
 
-function shouldAlignByIndex(english: Cue[], mongolian: Cue[]): boolean {
-  const difference = Math.abs(english.length - mongolian.length);
-  if (
-    !english.length ||
-    !mongolian.length ||
-    difference > Math.max(2, Math.ceil(english.length * 0.05))
-  ) {
-    return false;
-  }
-  const sample = Math.min(english.length, 50);
-  let drifted = 0;
-  for (let index = 0; index < sample; index += 1) {
-    const matches = overlappingTranslations(english[index], mongolian);
-    if (!matches.length) continue;
-    if (!matches.some((match) => mongolian.indexOf(match) === index)) drifted += 1;
-  }
-  return drifted >= Math.max(1, Math.ceil(sample * 0.02));
-}
-
 export function alignCues(english: Cue[], mongolian: Cue[]): AlignedCue[] {
-  const byIndex = shouldAlignByIndex(english, mongolian);
-  return english.map((cue, index) => {
-    const own = mongolian[index];
-    const translation =
-      byIndex && own && hasMongolianMeaning(own.text)
-        ? own.text
-        : overlappingTranslations(cue, mongolian)
-            .map((translation) => translation.text)
-            .join(' ');
-    return { ...cue, translation };
+  const aligned = english.map((cue) => {
+    const matches = overlappingTranslations(cue, mongolian);
+    // A small incidental overlap is not evidence of the same sentence. Permit
+    // split MN cues only when their combined interval also fits the EN cue.
+    const start = matches[0]?.start ?? Infinity;
+    const end = matches.reduce((latest, match) => Math.max(latest, match.end), -Infinity);
+    let covered = 0;
+    let previousEnd = cue.start;
+    for (const match of matches) {
+      const left = Math.max(cue.start, match.start, previousEnd);
+      const right = Math.min(cue.end, match.end);
+      covered += Math.max(0, right - left);
+      previousEnd = Math.max(previousEnd, right);
+    }
+    const fits =
+      Math.abs(start - cue.start) <= 0.55 &&
+      Math.abs(end - cue.end) <= 0.55 &&
+      covered / (cue.end - cue.start) >= 0.75;
+    return { ...cue, translation: fits ? matches.map((match) => match.text).join(' ') : '' };
   });
+  // Independent releases can have similar counts and coincidental overlaps.
+  // Never infer sentence correspondence from ordinal position or silently
+  // change user offsets. Incompatible tracks need matching VTTs or a lookup
+  // of the actual selected English sentence.
+  const available = mongolian.filter((cue) => hasMongolianMeaning(cue.text)).length;
+  const translated = aligned.filter((cue) => cue.translation).length;
+  if (
+    Math.min(english.length, available) >= 6 &&
+    translated / Math.min(english.length, available) < 0.5
+  )
+    return aligned.map((cue) => ({ ...cue, translation: '' }));
+  return aligned;
 }
 
 // Half-open intervals: a cue ending at 3s is no longer active at 3s.

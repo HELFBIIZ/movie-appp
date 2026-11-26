@@ -8,6 +8,7 @@ import type { AlignedCue, LearningItem, Question, WordNote } from '@/lib/learnin
 import { useLearningStorage } from './useLearningStorage';
 import { useLesson } from './useLesson';
 import { useMovieLesson } from './useMovieLesson';
+import { useSentenceCorrections } from './useSentenceCorrections';
 import { useMoviePlayer, type MoviePlayerContext } from './useMoviePlayer';
 import { useLearningAccount } from './LearningAccount';
 import { listenedSeconds } from '@/lib/learning/snapshot';
@@ -45,7 +46,7 @@ export function useLearningController(
   useEffect(() => {
     movieTime.current = moviePlayer.time;
   }, [moviePlayer.time]);
-  const lesson = isMovie
+  const rawLesson = isMovie
     ? {
         ...baseLesson,
         cues: movieLesson.cues,
@@ -55,6 +56,9 @@ export function useLearningController(
         retry: movieLesson.retry,
       }
     : baseLesson;
+  const meanings = useSentenceCorrections(rawLesson.mediaId, rawLesson.cues);
+  const lesson = { ...rawLesson, cues: meanings.cues };
+  const lessonMediaId = rawLesson.mediaId;
   const displayTime = source === 'movie' ? moviePlayer.time : time;
   const mediaKey = `${lesson.mediaId}:${lesson.videoUrl}`;
   const ready = readyMedia === mediaKey;
@@ -155,7 +159,7 @@ export function useLearningController(
         meaning: note?.meaning ?? (hasMongolianMeaning(cue.translation) ? cue.translation : ''),
         example: cue.text,
         movieId,
-        mediaId: lesson.mediaId,
+        mediaId: lessonMediaId,
         cueStart: cue.start,
         cueEnd: cue.end,
         stage: 0,
@@ -187,7 +191,7 @@ export function useLearningController(
       }
       return false;
     },
-    [movieId, lesson.mediaId, isMovie, context?.tmdbId, scoped, items, update],
+    [movieId, lessonMediaId, isMovie, context?.tmdbId, scoped, items, update],
   );
   function review(id: string, remembered: boolean) {
     const card = account.snapshot.progress.items.find((item) => item.id === id);
@@ -251,9 +255,10 @@ export function useLearningController(
     setSelection,
     videoRef,
     progress,
-    storageError,
+    storageError: storageError || meanings.error,
     update,
     lesson,
+    correctMeaning: meanings.correct,
     items,
     scoped,
     active,

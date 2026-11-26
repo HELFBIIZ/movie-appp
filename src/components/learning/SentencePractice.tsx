@@ -24,7 +24,12 @@ export default function SentencePractice({
       : cues.findIndex((cue) => cue.id === selected);
   const index = Math.max(0, current);
   const cue = cues[index];
-  const meaning = useSentenceMeaning(cue?.text ?? '', cue?.translation ?? '');
+  const meaning = useSentenceMeaning(
+    cue?.text ?? '',
+    cue?.translation ?? '',
+    controller.correctMeaning,
+    cue?.translationSource,
+  );
   function change(next: number) {
     playback.stop();
     setSelected(cues[next].id);
@@ -95,6 +100,15 @@ export default function SentencePractice({
         )}
         {meaning.automatic && (
           <p className="mt-2 text-[11px] text-slate-500">Автомат утга · MyMemory</p>
+        )}
+        {meaning.canCorrect && (
+          <button
+            type="button"
+            onClick={meaning.rejectProvided}
+            className="mt-2 text-xs text-slate-500 underline underline-offset-4"
+          >
+            Утга таарахгүй байна
+          </button>
         )}
         {meaning.error && (
           <p role="status" className="mt-2 text-xs leading-5 text-amber-200">
