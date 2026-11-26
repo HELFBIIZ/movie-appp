@@ -154,6 +154,12 @@ export default function MoviePlayer({
             <span>Монгол хадмал тоглуулагч дотор CC товчоор сонгогдоно.</span>
           </div>
         )}
+        {source === 'cine' && (
+          <div className="border-t border-slate-800 bg-amber-500/10 px-4 py-2 text-xs text-amber-300">
+            CineSrc дотоод монгол хадмал киноны дуутай таарахгүй байж болно. Зөв монгол орчуулгад «1
+            · Binge» сонгоно уу.
+          </div>
+        )}
         {frameStatus === 'failed' && !isDirectHls && (
           <p role="status" className="border-t border-slate-800 px-4 py-2 text-xs text-amber-300">
             Энэ плеер ачаалсангүй. Өөр плеер рүү шилжлээ — сонгож болно.

@@ -55,18 +55,45 @@ export function parseVtt(input: string): Cue[] {
   return cues.sort((a, b) => a.start - b.start || a.end - b.end);
 }
 
+function overlappingTranslations(cue: Cue, mongolian: Cue[]): Cue[] {
+  return mongolian.filter(
+    (translation) =>
+      Math.min(cue.end, translation.end) > Math.max(cue.start, translation.start) &&
+      hasMongolianMeaning(translation.text),
+  );
+}
+
+function shouldAlignByIndex(english: Cue[], mongolian: Cue[]): boolean {
+  const difference = Math.abs(english.length - mongolian.length);
+  if (
+    !english.length ||
+    !mongolian.length ||
+    difference > Math.max(2, Math.ceil(english.length * 0.05))
+  ) {
+    return false;
+  }
+  const sample = Math.min(english.length, 50);
+  let drifted = 0;
+  for (let index = 0; index < sample; index += 1) {
+    const matches = overlappingTranslations(english[index], mongolian);
+    if (!matches.length) continue;
+    if (!matches.some((match) => mongolian.indexOf(match) === index)) drifted += 1;
+  }
+  return drifted >= Math.max(1, Math.ceil(sample * 0.02));
+}
+
 export function alignCues(english: Cue[], mongolian: Cue[]): AlignedCue[] {
-  return english.map((cue) => ({
-    ...cue,
-    translation: mongolian
-      .filter(
-        (translation) =>
-          Math.min(cue.end, translation.end) > Math.max(cue.start, translation.start) &&
-          hasMongolianMeaning(translation.text),
-      )
-      .map((translation) => translation.text)
-      .join(' '),
-  }));
+  const byIndex = shouldAlignByIndex(english, mongolian);
+  return english.map((cue, index) => {
+    const own = mongolian[index];
+    const translation =
+      byIndex && own && hasMongolianMeaning(own.text)
+        ? own.text
+        : overlappingTranslations(cue, mongolian)
+            .map((translation) => translation.text)
+            .join(' ');
+    return { ...cue, translation };
+  });
 }
 
 // Half-open intervals: a cue ending at 3s is no longer active at 3s.

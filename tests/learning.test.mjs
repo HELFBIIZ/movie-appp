@@ -108,6 +108,23 @@ test('alignment never renders untranslated English lines as Mongolian meanings',
   const mn = parseVtt(vtt(cue('Hi. My name is Peter Parker.', '00:01.100', '00:02.900')));
   assert.equal(alignCues(en, mn)[0].translation, '');
 });
+test('alignment uses cue order when translated timings drift', () => {
+  const en = parseVtt(
+    vtt(
+      `${cue('Hi. My name is Peter Parker.')}\n\n${cue("You don't remember me, but I have something to tell you...", '00:04.000', '00:06.000')}\n\n${cue("that's gonna sound crazy.", '00:07.000', '00:08.000')}\n\n${cue("And I know you're gonna believe me...", '00:11.000', '00:13.000')}`,
+    ),
+  );
+  const mn = parseVtt(
+    vtt(
+      `${cue('Сайн уу, намайг Питер Паркер гэдэг.', '00:11.000', '00:13.000')}\n\n${cue('Чи санахгүй байх л даа, гэхдээ чамд хэлэх нэг юм байна.', '00:14.000', '00:16.000')}\n\n${cue('Итгэхэд хэцүү сонсогдох байх, гэхдээ...', '00:17.000', '00:18.000')}\n\n${cue('Чи надад итгэнэ гэдгийг би мэдэж байна.', '00:20.000', '00:22.000')}`,
+    ),
+  );
+  const aligned = alignCues(en, mn);
+  assert.equal(aligned[0].translation, 'Сайн уу, намайг Питер Паркер гэдэг.');
+  assert.equal(aligned[1].translation, 'Чи санахгүй байх л даа, гэхдээ чамд хэлэх нэг юм байна.');
+  assert.equal(aligned[2].translation, 'Итгэхэд хэцүү сонсогдох байх, гэхдээ...');
+  assert.equal(aligned[3].translation, 'Чи надад итгэнэ гэдгийг би мэдэж байна.');
+});
 test('SRS schedules 1/3/7/14 days, caps at 14, and resets failure to ten minutes', () => {
   const now = 1000;
   let item = card();
