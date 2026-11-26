@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, RotateCcw, Volume2 } from 'lucide-react';
 import { studyCues } from '@/lib/learning/study-cues';
 import CueWords from './CueWords';
 import { useSentencePlayback } from './useSentencePlayback';
+import { useSentenceMeaning } from './useSentenceMeaning';
 import type { LearningController, LearningSource } from './useLearningController';
 
 export default function SentencePractice({
@@ -23,6 +24,7 @@ export default function SentencePractice({
       : cues.findIndex((cue) => cue.id === selected);
   const index = Math.max(0, current);
   const cue = cues[index];
+  const meaning = useSentenceMeaning(cue?.text ?? '', cue?.translation ?? '');
   function change(next: number) {
     playback.stop();
     setSelected(cues[next].id);
@@ -66,15 +68,37 @@ export default function SentencePractice({
         className="rounded-xl bg-white/5 p-4 text-lg"
       >
         <CueWords
-          cue={cue}
+          cue={{ ...cue, translation: meaning.translation }}
           onWord={(note, selectedCue) => {
             playback.stop();
             setSelection({ note, cue: selectedCue });
           }}
         />
-        {cue.translation && (
+        {meaning.translation ? (
           <p lang="mn" className="mt-3 text-sm leading-6 text-slate-400">
-            {cue.translation}
+            {meaning.translation}
+          </p>
+        ) : (
+          <div className="mt-3">
+            <button
+              type="button"
+              disabled={meaning.loading}
+              onClick={() => void meaning.translate()}
+              className="rounded-lg border border-amber-400/25 px-3 py-2 text-sm text-amber-200 disabled:opacity-40"
+            >
+              {meaning.loading ? 'Утгыг хайж байна…' : 'Монгол утгыг үзэх'}
+            </button>
+            <p className="mt-2 text-[11px] leading-5 text-slate-500">
+              Энэ өгүүлбэр MyMemory үйлчилгээнд илгээгдэнэ · Үнэгүй, өдрийн хязгаартай.
+            </p>
+          </div>
+        )}
+        {meaning.automatic && (
+          <p className="mt-2 text-[11px] text-slate-500">Автомат утга · MyMemory</p>
+        )}
+        {meaning.error && (
+          <p role="status" className="mt-2 text-xs leading-5 text-amber-200">
+            {meaning.error}
           </p>
         )}
       </div>
