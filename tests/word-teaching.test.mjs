@@ -52,6 +52,22 @@ test('meaning quiz contains exactly one correct choice; recall hides typographic
   );
 });
 
+test('casual film expressions teach their spoken meaning and preserve the clicked word context', () => {
+  const sentence = "that's gonna sound crazy.";
+  assert.match(teachingLesson('gonna', sentence, sentence.indexOf('gonna')).tip, /going to/);
+  const phrase = contextualWord('sound', sentence, sentence.indexOf('sound'));
+  assert.equal(phrase, 'sound crazy');
+  assert.equal(
+    teachingLesson(phrase, sentence, sentence.indexOf('sound')).meaning,
+    'итгэмээргүй сонсогдох',
+  );
+  assert.equal(teachingLesson('wanna', 'I wanna help.', 2).meaning, '... хийхийг хүсэх');
+  assert.equal(teachingLesson('gotta', 'I gotta go.', 2).meaning, '... хийх хэрэгтэй');
+  const mixed = 'A sound woke me up. That sounds good.';
+  assert.equal(contextualWord('sound', mixed, mixed.indexOf('sound')), 'sound');
+  assert.equal(contextualWord('sounds', mixed, mixed.indexOf('sounds')), 'sounds good');
+});
+
 test('word translation sends only a bounded word query to the fixed documented endpoint', async () => {
   let calls = 0;
   const request = async (input, options) => {

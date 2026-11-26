@@ -8,8 +8,11 @@ export async function GET(request, { params }) {
   let entry = getGenerated(slug);
   try {
     const uploaded = await readCaptionCache(`uploaded:${slug}`);
-    const cached = uploaded?.mongolian ? uploaded : await readCaptionCache(slug);
-    if (cached?.mongolian)
+    const cached =
+      uploaded?.mongolian && mongolianTrack(uploaded.mongolian)
+        ? uploaded
+        : await readCaptionCache(slug);
+    if (cached?.mongolian && mongolianTrack(cached.mongolian))
       entry = {
         content: cached.mongolian,
         meta: { language: 'mn', partial: cached.partial !== false, sourceDetail: cached.notice },

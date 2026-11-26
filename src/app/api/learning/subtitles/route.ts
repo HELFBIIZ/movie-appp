@@ -22,12 +22,13 @@ const resultSchema = z.object({
 });
 const ongoing = new Map<string, Promise<z.infer<typeof resultSchema>>>();
 
-function cleanResult(value: z.infer<typeof resultSchema>) {
-  const track = mongolianTrack(value.mongolian);
+function cleanResult(value: z.infer<typeof resultSchema>, fallback = '', fallbackPartial = false) {
+  const original = mongolianTrack(value.mongolian);
+  const track = original ?? mongolianTrack(fallback);
   return {
     ...value,
     mongolian: track?.content ?? '',
-    partial: value.partial || !track || track.partial,
+    partial: value.partial || !track || track.partial || (!original && fallbackPartial),
   };
 }
 
@@ -67,7 +68,8 @@ export async function GET(request: NextRequest) {
       : movie.slug;
   const cached = resultSchema.safeParse(await readCaptionCache(key));
   const uploaded = resultSchema.safeParse(await readCaptionCache(`uploaded:${key}`));
-  if (cached.success)
+  if (cached.success) {
+    const local = getGenerated(key);
     return NextResponse.json(
       cleanResult(
         uploaded.success
@@ -79,9 +81,12 @@ export async function GET(request: NextRequest) {
               notice: `${uploaded.data.notice} ${cached.data.notice}`,
             }
           : cached.data,
+        local?.content ?? '',
+        Boolean(local?.meta.partial),
       ),
       { headers: { 'Cache-Control': 'private, no-store' } },
     );
+  }
   if (!ongoing.has(key))
     ongoing.set(
       key,

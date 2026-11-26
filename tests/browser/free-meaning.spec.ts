@@ -139,5 +139,16 @@ test('the reported phrase shows its authored meaning instead of an unrelated mat
   const practice = page.getByRole('region', { name: 'Өгүүлбэрээр үг сурах' });
   await expect(practice).toContainText('Сонсвол итгэмээргүй санагдах байх.');
   await expect(practice).not.toContainText('Чи надад итгэнэ');
+  await practice.getByRole('button', { name: 'gonna — утгыг харах', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Үгийн тайлбар' });
+  await expect(dialog).toContainText('... хийх гэж байна; ... болох байх');
+  await expect(dialog).toContainText('going to-ийн ярианы товчлол');
+  await expect(dialog).toContainText('Сонсвол итгэмээргүй санагдах байх.');
+  await page.keyboard.press('Escape');
+  await practice
+    .getByRole('button', { name: 'sound crazy — утгыг харах', exact: true })
+    .first()
+    .click();
+  await expect(dialog).toContainText('итгэмээргүй сонсогдох');
   expect(calls).toBe(0);
 });
