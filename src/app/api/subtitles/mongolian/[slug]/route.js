@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getGenerated } from '@/lib/generated-store';
 import { readCaptionCache } from '@/db/learning';
+import { mongolianTrack } from '@/lib/learning/captions';
 
 export async function GET(request, { params }) {
   const { slug } = await params;
@@ -20,17 +21,25 @@ export async function GET(request, { params }) {
     return new NextResponse('Not found', { status: 404 });
   }
 
+  const track = mongolianTrack(entry.content);
+  if (!track) return new NextResponse('Mongolian subtitles unavailable', { status: 404 });
+  const meta = {
+    ...entry.meta,
+    cueCount: track.cueCount,
+    partial: Boolean(entry.meta.partial || track.partial),
+  };
+
   const wantsMeta = new URL(request.url).searchParams.get('meta') === '1';
   if (wantsMeta) {
-    return NextResponse.json(entry.meta);
+    return NextResponse.json(meta);
   }
 
-  return new NextResponse(entry.content, {
+  return new NextResponse(track.content, {
     headers: {
       'Content-Type': 'text/vtt; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400',
+      'Cache-Control': 'public, max-age=300',
       'Access-Control-Allow-Origin': '*',
-      'X-Subtitle-Partial': entry.meta.partial ? 'true' : 'false',
+      'X-Subtitle-Partial': meta.partial ? 'true' : 'false',
     },
   });
 }

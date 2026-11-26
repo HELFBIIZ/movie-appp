@@ -7,7 +7,12 @@ import { getGenerated } from '@/lib/generated-store';
 import { osSearch, osDownloadContent } from '@/lib/opensubtitles';
 import { normalizeToVtt } from '@/lib/subtitles-format';
 import { parseExistingVtt } from '@/lib/learning/movie';
-import { captionMatches, usableMongolian, type CaptionCandidate } from '@/lib/learning/captions';
+import {
+  captionMatches,
+  mongolianTrack,
+  usableMongolian,
+  type CaptionCandidate,
+} from '@/lib/learning/captions';
 
 const resultSchema = z.object({
   english: z.string().max(1_000_000),
@@ -16,6 +21,15 @@ const resultSchema = z.object({
   partial: z.boolean().default(true),
 });
 const ongoing = new Map<string, Promise<z.infer<typeof resultSchema>>>();
+
+function cleanResult(value: z.infer<typeof resultSchema>) {
+  const track = mongolianTrack(value.mongolian);
+  return {
+    ...value,
+    mongolian: track?.content ?? '',
+    partial: value.partial || !track || track.partial,
+  };
+}
 
 function usableEnglishCues(cues: { text: string }[]): boolean {
   if (!cues.length) return false;
@@ -55,15 +69,17 @@ export async function GET(request: NextRequest) {
   const uploaded = resultSchema.safeParse(await readCaptionCache(`uploaded:${key}`));
   if (cached.success)
     return NextResponse.json(
-      uploaded.success
-        ? {
-            ...cached.data,
-            english: uploaded.data.english || cached.data.english,
-            mongolian: uploaded.data.mongolian || cached.data.mongolian,
-            partial: uploaded.data.mongolian ? uploaded.data.partial : cached.data.partial,
-            notice: `${uploaded.data.notice} ${cached.data.notice}`,
-          }
-        : cached.data,
+      cleanResult(
+        uploaded.success
+          ? {
+              ...cached.data,
+              english: uploaded.data.english || cached.data.english,
+              mongolian: uploaded.data.mongolian || cached.data.mongolian,
+              partial: uploaded.data.mongolian ? uploaded.data.partial : cached.data.partial,
+              notice: `${uploaded.data.notice} ${cached.data.notice}`,
+            }
+          : cached.data,
+      ),
       { headers: { 'Cache-Control': 'private, no-store' } },
     );
   if (!ongoing.has(key))
@@ -83,9 +99,11 @@ export async function GET(request: NextRequest) {
         let partial = uploaded.success ? uploaded.data.partial : false;
         const notices: string[] = [];
         const local = getGenerated(key);
-        if (!mongolian && local && usableMongolian(local.content)) {
-          mongolian = local.content;
+        const localTrack = local ? mongolianTrack(local.content) : null;
+        if (!mongolian && local && localTrack) {
+          mongolian = localTrack.content;
           partial = Boolean(
+            localTrack.partial ||
             local.meta.partial ||
             (typeof local.meta.translatedLineRatio === 'number' &&
               local.meta.translatedLineRatio < 0.98),
@@ -140,7 +158,7 @@ export async function GET(request: NextRequest) {
         if (!english) notices.push('EN хадмалын хэсгээс хайх эсвэл өөрийн .vtt нэмнэ үү.');
         if (!mongolian) notices.push('Монгол хадмал олдсонгүй. Өөрийн MN .vtt нэмэх боломжтой.');
         notices.push('Киноны хувилбар, хадмалын цагийг тулгаж шалгаарай.');
-        const value = { english, mongolian, notice: notices.join(' '), partial };
+        const value = cleanResult({ english, mongolian, notice: notices.join(' '), partial });
         await writeCaptionCache(
           key,
           value,
@@ -149,7 +167,10 @@ export async function GET(request: NextRequest) {
         return value;
       })().finally(() => ongoing.delete(key)),
     );
-  return NextResponse.json(await ongoing.get(key), {
+  const value = await ongoing.get(key);
+  if (!value)
+    return NextResponse.json({ error: { code: 'CAPTIONS_UNAVAILABLE' } }, { status: 503 });
+  return NextResponse.json(cleanResult(value), {
     headers: { 'Cache-Control': 'private, no-store' },
   });
 }

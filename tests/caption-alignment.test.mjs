@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { alignCues } from '../src/lib/learning/vtt.ts';
+import { alignCues, parseVtt } from '../src/lib/learning/vtt.ts';
+import { mongolianTrack } from '../src/lib/learning/captions.ts';
 import { movieCues } from '../src/lib/learning/movie.ts';
 import {
   captionSettingsSchema,
@@ -90,4 +91,18 @@ test('the reported conversational phrase has a natural, local meaning in every m
   );
   assert.equal(sentenceGuide("that's gonna sound crazy, but listen to me."), '');
   assert.equal(sentenceGuide('unlisted sentence'), '');
+});
+
+test('partial legacy files expose only translated lines in strict VTT with original timestamps', () => {
+  const mixed =
+    'WEBVTT\n\n1\n00:00:01.188 --> 00:00:03.771\nEnglish only\n2\n00:01:12.188 --> 00:01:14.771\nМонгол утга &amp; &lt;текст&gt;\n3\n00:01:16.000 --> 00:01:19.000\nUntranslated line\n';
+  const track = mongolianTrack(mixed);
+  assert.ok(track);
+  assert.equal(track.partial, true);
+  assert.equal(track.cueCount, 1);
+  assert.deepEqual(
+    parseVtt(track.content).map(({ start, end, text }) => ({ start, end, text })),
+    [{ start: 72.188, end: 74.771, text: 'Монгол утга & <текст>' }],
+  );
+  assert.equal(mongolianTrack('WEBVTT\n\n00:01.000 --> 00:03.000\nEnglish only\n'), null);
 });

@@ -30,3 +30,29 @@ export function usableMongolian(text: string): boolean {
     return false;
   }
 }
+
+function timestamp(seconds: number): string {
+  const millis = Math.round(seconds * 1000);
+  return `${String(Math.floor(millis / 3_600_000)).padStart(2, '0')}:${String(Math.floor(millis / 60_000) % 60).padStart(2, '0')}:${String(Math.floor(millis / 1000) % 60).padStart(2, '0')}.${String(millis % 1000).padStart(3, '0')}`;
+}
+
+// Retain available MN lines even in a mostly untranslated legacy file. Do not
+// relabel its English lines as MN or move later translations into earlier gaps.
+export function mongolianTrack(text: string) {
+  try {
+    const cues = parseExistingVtt(text);
+    const translated = cues.filter((cue) => hasMongolianMeaning(cue.text));
+    if (!translated.length) return null;
+    const blocks = translated.map((cue) => {
+      const plain = cue.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `${cue.id}\n${timestamp(cue.start)} --> ${timestamp(cue.end)}\n${plain}`;
+    });
+    return {
+      content: `WEBVTT\n\n${blocks.join('\n\n')}\n`,
+      cueCount: translated.length,
+      partial: translated.length / cues.length < 0.98,
+    };
+  } catch {
+    return null;
+  }
+}

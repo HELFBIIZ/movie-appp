@@ -1,4 +1,17 @@
 import { expect, test } from '@playwright/test';
+import { parseVtt } from '../../src/lib/learning/vtt';
+import { hasMongolianMeaning } from '../../src/lib/learning/sentence-text';
+
+test('the real partial subtitle endpoint serves valid MN cues without untranslated English or shifted timestamps', async ({
+  request,
+}) => {
+  const response = await request.get('/api/subtitles/mongolian/12-angry-men');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['x-subtitle-partial']).toBe('true');
+  const cues = parseVtt(await response.text());
+  expect(cues.length).toBeGreaterThan(0);
+  expect(cues.every((cue) => hasMongolianMeaning(cue.text))).toBe(true);
+});
 
 test('selected Mongolian caption and on/off control update the normal embed instead of only its label', async ({
   page,
