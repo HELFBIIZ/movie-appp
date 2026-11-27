@@ -94,7 +94,7 @@ export default function SentencePractice({
               {meaning.loading ? 'Утгыг хайж байна…' : 'Монгол утгыг үзэх'}
             </button>
             <p className="mt-2 text-[11px] leading-5 text-slate-500">
-              Энэ өгүүлбэр MyMemory үйлчилгээнд илгээгдэнэ · Үнэгүй, өдрийн хязгаартай.
+              Утга нээгдэнэ · өдрийн хязгааргүй.
             </p>
           </div>
         )}

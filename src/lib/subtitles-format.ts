@@ -36,16 +36,12 @@ export function parseCues(content: string): SubtitleCue[] {
 }
 
 export function buildVtt(cues: SubtitleCue[]): string {
-  return [
-    'WEBVTT',
-    '',
-    ...cues.map((c, i) => {
-      const timing = c.timing.replace(/,(\d{3})/g, '.$1');
-      const id = c.id || String(i + 1);
-      return `${id}\n${timing}\n${c.text}`;
-    }),
-    '',
-  ].join('\n');
+  const blocks = cues.map((c, i) => {
+    const timing = c.timing.replace(/,(\d{3})/g, '.$1');
+    const id = c.id || String(i + 1);
+    return `${id}\n${timing}\n${c.text}`;
+  });
+  return `WEBVTT\n\n${blocks.join('\n\n')}\n`;
 }
 
 export function normalizeToVtt(content: string): string {

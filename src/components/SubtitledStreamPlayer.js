@@ -1,43 +1,9 @@
 'use client';
-
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader2, RefreshCw, Subtitles } from 'lucide-react';
+import { captionLanguage } from '@/lib/watch/captions';
 
-// Client-side minimal WebVTT parser (sources: our own translated VTT files).
-function parseVtt(text) {
-  const lines = String(text || '')
-    .replace(/^\uFEFF/, '')
-    .replace(/\r\n?/g, '\n')
-    .split('\n');
-  const cues = [];
-  let i = 0;
-  while (i < lines.length) {
-    const line = lines[i].trim();
-    const m = line.match(
-      /^(\d{1,2}):(\d{1,2}):(\d{1,2})[.,](\d{1,3})\s*-->\s*(\d{1,2}):(\d{1,2}):(\d{1,2})[.,](\d{1,3})/,
-    );
-    if (m) {
-      const start = +m[1] * 3600 + +m[2] * 60 + +m[3] + +m[4] / 1000;
-      const end = +m[5] * 3600 + +m[6] * 60 + +m[7] + +m[8] / 1000;
-      const textLines = [];
-      i++;
-      while (i < lines.length && lines[i].trim() !== '') {
-        const t = lines[i].trim();
-        const h = t.toUpperCase();
-        if (!/^(WEBVTT|NOTE|STYLE|REGION)\b/.test(h) && !t.startsWith('-->')) {
-          textLines.push(t.replace(/<[^>]+>/g, ''));
-        }
-        i++;
-      }
-      const text = textLines.join('\n').trim();
-      if (text) cues.push({ start, end, text });
-      continue;
-    }
-    i++;
-  }
-  return cues;
-}
-
+/** @param {{ tmdbId: number|string, isTV?: boolean, season?: number, episode?: number, variant?: number, subtitleUrl?: string, subtitleLabel?: string, externalVideoRef?: (node: HTMLVideoElement|null) => void, onKeyLoadError?: () => void, onStreamInfo?: (info: {total:number,provider?:string,quality?:string}) => void, onProgress?: (seconds:number) => void, isLastVariant?:boolean }} props */
 export default function SubtitledStreamPlayer({
   tmdbId,
   isTV = false,
@@ -45,44 +11,40 @@ export default function SubtitledStreamPlayer({
   episode = 1,
   variant = 0,
   subtitleUrl = '',
-  subtitleLabel = 'Subtitles',
-  onKeyLoadError = () => {},
-  onStreamInfo = (info) => {
-    void info;
-  },
-  onProgress = (seconds) => {
-    void seconds;
-  },
+  subtitleLabel = 'Mongolian',
+  externalVideoRef,
+  onKeyLoadError,
+  onStreamInfo,
+  onProgress,
   isLastVariant = false,
 }) {
-  const videoRef = useRef(null);
-  const hlsRef = useRef(null);
-  const cuesRef = useRef([]);
-  const tickRef = useRef(null);
-  const progressRef = useRef(onProgress);
-
+  const internalVideoRef = useRef(null);
+  const videoRef = internalVideoRef;
+  const setVideoRef = useCallback(
+    (node) => {
+      internalVideoRef.current = node;
+      externalVideoRef?.(node);
+    },
+    [externalVideoRef],
+  );
+  const controllerRef = useRef(null);
+  const callbacks = useRef({ onKeyLoadError, onStreamInfo, onProgress, isLastVariant });
   const [stream, setStream] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [subtitleState, setSubtitleState] = useState({ url: '', status: 'loading' });
   useEffect(() => {
-    progressRef.current = onProgress;
-  }, [onProgress]);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const video = videoRef.current;
-      if (video && !video.paused && video.currentTime > 0) {
-        progressRef.current?.(video.currentTime);
-      }
-    }, 15000);
-    return () => clearInterval(timer);
-  }, []);
-  const [subsState, setSubsState] = useState('none'); // none | loading | on | error
-  const [cue, setCue] = useState('');
+    callbacks.current = { onKeyLoadError, onStreamInfo, onProgress, isLastVariant };
+  }, [onKeyLoadError, onStreamInfo, onProgress, isLastVariant]);
 
   const loadStream = useCallback(
     async (force = false) => {
+      controllerRef.current?.abort();
+      const controller = new AbortController();
+      controllerRef.current = controller;
       setLoading(true);
-      setError(null);
+      setError('');
+      setStream(null);
       try {
         const params = new URLSearchParams({
           tmdbId: String(tmdbId),
@@ -94,202 +56,170 @@ export default function SubtitledStreamPlayer({
           params.set('episode', String(episode));
         }
         if (force) params.set('refresh', '1');
-        const res = await fetch(`/api/stream/tmdb?${params}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || `Stream failed (${res.status})`);
-        setStream(data);
-        onStreamInfo?.({
-          total: Array.isArray(data.candidates) ? data.candidates.length : 1,
+        const response = await fetch('/api/stream/tmdb?' + params, { signal: controller.signal });
+        const data = await response.json();
+        if (!response.ok)
+          throw new Error(
+            typeof data.error === 'string' ? data.error : 'Тоглуулах эх сурвалж нээгдсэнгүй.',
+          );
+        if (typeof data.url !== 'string' || !data.url.trim())
+          throw new Error('Тоглуулах холбоос олдсонгүй.');
+        const url = new URL(data.url, window.location.origin);
+        if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password)
+          throw new Error('Тоглуулах холбоос буруу байна.');
+        if (controller.signal.aborted) return;
+        setStream({ ...data, url: url.href });
+        callbacks.current.onStreamInfo?.({
+          total: Array.isArray(data.candidates) ? Math.max(1, data.candidates.length) : 1,
           provider: data.provider,
           quality: data.quality,
         });
-      } catch (err) {
-        setError(err.message || 'Failed to load stream');
+      } catch (failure) {
+        if (!controller.signal.aborted)
+          setError(failure.message || 'Тоглуулах эх сурвалж нээгдсэнгүй.');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     },
-    [tmdbId, isTV, season, episode, variant, onStreamInfo],
+    [tmdbId, isTV, season, episode, variant],
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    loadStream();
-    return () => {
-      if (hlsRef.current) {
-        try {
-          hlsRef.current.destroy();
-        } catch {}
-        hlsRef.current = null;
-      }
-      if (tickRef.current) {
-        clearInterval(tickRef.current);
-        tickRef.current = null;
-      }
-    };
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Resolve this media identity after mount and cancel its request on replacement.
+    void loadStream();
+    return () => controllerRef.current?.abort();
   }, [loadStream]);
 
-  // (Re)load subtitle cues whenever the selected subtitle changes.
   useEffect(() => {
-    if (tickRef.current) {
-      clearInterval(tickRef.current);
-      tickRef.current = null;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
-    setCue('');
-    cuesRef.current = [];
-    if (!subtitleUrl) {
-      setSubsState('none');
-      return;
-    }
-    setSubsState('loading');
-    let cancelled = false;
-    fetch(subtitleUrl)
-      .then((r) => {
-        if (!r.ok) throw new Error('VTT fetch failed');
-        return r.text();
-      })
-      .then((text) => {
-        if (cancelled) return;
-        const parsed = parseVtt(text);
-        cuesRef.current = parsed;
-        setSubsState(parsed.length ? 'on' : 'error');
-        if (parsed.length) {
-          tickRef.current = setInterval(() => {
-            const video = videoRef.current;
-            if (!video) {
-              setCue('');
-              return;
-            }
-            const ct = video.currentTime;
-            const active = cuesRef.current.find((c) => ct >= c.start && ct <= c.end);
-            setCue(active ? active.text : '');
-          }, 200);
-        }
-      })
-      .catch(() => !cancelled && setSubsState('error'));
-    return () => {
-      cancelled = true;
-    };
-  }, [subtitleUrl]);
+    const timer = setInterval(() => {
+      const video = videoRef.current;
+      if (video && !video.paused && Number.isFinite(video.currentTime) && video.currentTime > 0)
+        callbacks.current.onProgress?.(video.currentTime);
+    }, 15000);
+    return () => clearInterval(timer);
+  }, [videoRef]);
 
-  // Attach the HLS stream to the <video>.
   useEffect(() => {
-    if (!stream || !stream.url || !videoRef.current) return;
     const video = videoRef.current;
+    if (!video || !stream?.url) return;
     let disposed = false;
-
-    async function attach() {
-      let Hls = null;
-      try {
-        const mod = await import('hls.js');
-        Hls = mod.default ?? mod;
-      } catch {}
+    let hls = null;
+    let retryTimer;
+    const play = () => {
+      if (!disposed) void video.play().catch(() => {});
+    };
+    const fail = () => {
       if (disposed) return;
-      const play = () => {
-        if (!disposed) video.play().catch(() => {});
-      };
-      if (Hls?.isSupported?.()) {
-        const hls = new Hls({ capLevelToPlayerSize: false });
-        hlsRef.current = hls;
+      setError('Видео ачаалсангүй. Өөр эх сурвалж сонгох эсвэл дахин оролдоорой.');
+      if (!callbacks.current.isLastVariant && callbacks.current.onKeyLoadError && !retryTimer)
+        retryTimer = setTimeout(() => {
+          if (!disposed) callbacks.current.onKeyLoadError?.();
+        }, 1200);
+    };
+    async function attach() {
+      // An authorized HTML5 file is also supported; tests use original local media.
+      if (/\.(?:mp4|webm|ogg)(?:[?#]|$)/i.test(stream.url)) {
+        video.addEventListener('loadedmetadata', play, { once: true });
+        video.src = stream.url;
+        return;
+      }
+      let Hls;
+      try {
+        Hls = (await import('hls.js')).default;
+      } catch {
+        /* Native HLS remains available. */
+      }
+      if (disposed) return;
+      if (Hls?.isSupported()) {
+        hls = new Hls({ capLevelToPlayerSize: false });
+        hls.on(Hls.Events.MANIFEST_PARSED, play);
+        hls.on(Hls.Events.ERROR, (_event, data) => {
+          if (data?.fatal) fail();
+        });
         hls.loadSource(stream.url);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, play);
-        hls.on(Hls.Events.ERROR, (_, data) => {
-          if (!data || !data.fatal) return;
-          const isKeyError = data.details === 'keyLoadError' || data.details === 'keyError';
-          const canAdvance = !isLastVariant && typeof onKeyLoadError === 'function';
-          if (isKeyError) {
-            setError(
-              canAdvance
-                ? '🔐 Энэ эх сурвалж шифрлэгдсэн тул тоглуулж чадахгүй байна. Одоо нөөц плеер рүү шилжиж байна…'
-                : '🔐 Бүх эх сурвалж шифрлэгдсэн эсвэл ажиллахгүй байна. Дараа дахин оролдоно уу.',
-            );
-          } else {
-            setError(
-              canAdvance
-                ? `⚠️ Stream ачаалсангүй (${data.details || 'manifest error'}) — нөөц плеер рүү шилжиж байна…`
-                : `⚠️ Stream ачаалсангүй (${data.details || 'manifest error'}). Дахин оролдоно уу.`,
-            );
-          }
-          try {
-            hls.destroy();
-          } catch {}
-          if (canAdvance) setTimeout(() => onKeyLoadError(), 1200);
-        });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = stream.url;
         video.addEventListener('loadedmetadata', play, { once: true });
-      } else {
-        setError('This browser cannot play HLS streams.');
-      }
+        video.src = stream.url;
+      } else fail();
     }
-
-    attach();
+    video.addEventListener('error', fail);
+    void attach();
     return () => {
       disposed = true;
+      clearTimeout(retryTimer);
+      video.removeEventListener('loadedmetadata', play);
+      video.removeEventListener('error', fail);
+      hls?.destroy();
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
     };
-  }, [stream, isLastVariant, onKeyLoadError]);
+  }, [stream, videoRef]);
 
-  const cueBar =
-    (subsState === 'on' || subsState === 'loading') && subtitleLabel
-      ? `${subtitleLabel}${subsState === 'loading' ? ' (loading…)' : ''}`
-      : 'Subtitles';
-
+  const showTrack = useCallback((node) => {
+    if (node) node.track.mode = 'showing';
+  }, []);
+  const subtitleStatus = subtitleState.url === subtitleUrl ? subtitleState.status : 'loading';
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-800 bg-black">
       <video
-        ref={videoRef}
+        ref={setVideoRef}
+        aria-label="Шууд видео тоглуулагч"
         className="h-full w-full"
         controls
         playsInline
         crossOrigin="anonymous"
-      />
-
-      {/* status chips */}
+      >
+        {subtitleUrl && (
+          <track
+            key={subtitleUrl}
+            ref={showTrack}
+            kind="subtitles"
+            src={subtitleUrl}
+            srcLang={captionLanguage(subtitleLabel) || 'mn'}
+            label={subtitleLabel}
+            default
+            onLoad={() => setSubtitleState({ url: subtitleUrl, status: 'on' })}
+            onError={() => setSubtitleState({ url: subtitleUrl, status: 'error' })}
+          />
+        )}
+      </video>
       <div className="pointer-events-none absolute left-3 top-3 z-10 flex gap-2">
         {stream && (
           <span className="rounded-full bg-black/50 px-3 py-1 text-xs text-white backdrop-blur">
             {stream.provider} · {stream.label || stream.quality || 'HD'}
           </span>
         )}
-        {(subsState === 'on' || subsState === 'loading') && (
-          <span className="flex items-center gap-1 rounded-full bg-black/50 px-3 py-1 text-xs text-green-300 backdrop-blur">
+        {subtitleUrl && (
+          <span
+            role="status"
+            className="flex items-center gap-1 rounded-full bg-black/50 px-3 py-1 text-xs text-green-300 backdrop-blur"
+          >
             <Subtitles className="h-3 w-3" />
-            {cueBar}
+            {subtitleStatus === 'error'
+              ? 'Хадмал ачаалсангүй'
+              : subtitleStatus === 'loading'
+                ? 'Хадмал ачаалж байна…'
+                : subtitleLabel}
           </span>
         )}
       </div>
-
-      {/* captions */}
-      {cue && (
-        <div className="pointer-events-none absolute bottom-12 left-6 right-6 z-10 flex justify-center">
-          <span className="whitespace-pre-wrap rounded bg-black/70 px-3 py-1 text-center text-sm text-white shadow-lg backdrop-blur sm:bottom-16 sm:text-base">
-            {cue}
-          </span>
-        </div>
-      )}
-
-      {/* loading / error overlays */}
       {loading && !stream && !error && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-slate-950/80 backdrop-blur">
           <Loader2 className="h-8 w-8 animate-spin text-[#c9a227]" />
-          <p className="text-sm text-slate-300">Resolving a playable stream…</p>
+          <p className="text-sm text-slate-300">Видеог нээж байна…</p>
         </div>
       )}
-
       {error && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-slate-950/85 p-6 text-center backdrop-blur">
-          <p className="text-2xl">⚠️</p>
           <p className="max-w-md text-sm text-slate-300">{error}</p>
           <button
-            onClick={() => {
-              setError(null);
-              loadStream(true);
-            }}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-4 py-2 text-sm font-bold text-[#1a150b] transition-all hover:brightness-110"
+            onClick={() => void loadStream(true)}
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a227] to-[#e7c779] px-4 py-2 text-sm font-bold text-[#1a150b]"
           >
-            <RefreshCw className="h-4 w-4" /> Try again
+            <RefreshCw className="h-4 w-4" />
+            Дахин оролдох
           </button>
         </div>
       )}

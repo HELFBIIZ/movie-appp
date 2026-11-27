@@ -20,6 +20,7 @@ type Props = {
   activeEmbed: string | null;
   xp?: WatchXp;
   movieIframeRef: RefObject<HTMLIFrameElement | null>;
+  nativeVideoRef?: (node: HTMLVideoElement | null) => void;
   onPlayerFailure?: () => void;
   onProgress?: (seconds: number) => void;
 };
@@ -38,6 +39,7 @@ export default function MoviePlayer({
   activeEmbed,
   xp,
   movieIframeRef,
+  nativeVideoRef,
   onPlayerFailure,
   onProgress,
 }: Props) {
@@ -118,6 +120,8 @@ export default function MoviePlayer({
         <div className="aspect-video w-full">
           {isDirectHls ? (
             <SubtitledStreamPlayer
+              key={`${movie.tmdbId}-${season}-${episode}`}
+              externalVideoRef={nativeVideoRef}
               tmdbId={movie.tmdbId}
               isTV={isTV}
               season={season}

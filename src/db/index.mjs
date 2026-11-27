@@ -75,6 +75,10 @@ let _client = null;
 let _ready = null;
 /** Lazy async client init. Boots schema (local) and flex plans on first use. */
 async function getClient() {
+  if (process.env.RENDER && !isRemote)
+    throw new Error(
+      'PERSISTENT_DATABASE_REQUIRED: configure TURSO_DATABASE_URL and TURSO_AUTH_TOKEN before deploying on Render.',
+    );
   if (_client) return _client;
   if (!_ready) {
     _ready = (async () => {

@@ -53,7 +53,7 @@ export default function MovieLearningStatus({
           {lesson.hasEnglish ? 'Хадмал тааруулах' : 'Англи хадмал нэмэх'}
         </summary>
         <div className="mt-3 space-y-3 rounded-xl border border-white/10 p-4">
-          {context.provider !== 'cine' && (
+          {!['cine', 'hls'].includes(context.provider) && (
             <button
               type="button"
               onClick={() => context.onSelectProvider('cine')}

@@ -50,8 +50,8 @@ export function useSentenceMeaning(
         const error =
           response.status === 401
             ? 'Нэвтэрч ороод өгүүлбэрийн утгыг үзээрэй.'
-            : code === 'FREE_LIMIT_REACHED'
-              ? 'Өнөөдрийн үнэгүй хязгаарт хүрлээ. Үг дээр дараад утгыг нь үзэж болно.'
+            : code === 'TRY_LATER'
+              ? 'Хэт олон хүсэлт илгээлээ. Хэсэг хүлээгээд дахин оролдоно уу.'
               : 'Утгыг одоогоор нээж чадсангүй. Дахин оролдоно уу.';
         if (!controller.signal.aborted) setState({ text, loading: false, error });
         return;

@@ -90,6 +90,8 @@ test('the reported conversational phrase has a natural, local meaning in every m
     'Сонсвол итгэмээргүй санагдах байх.',
   );
   assert.equal(sentenceGuide("that's gonna sound crazy, but listen to me."), '');
+  assert.equal(sentenceGuide('E.V.: Standing by.'), 'Би хүлээе.');
+  assert.equal(sentenceGuide('Standing by.'), 'Би хүлээе.');
   assert.equal(sentenceGuide('unlisted sentence'), '');
 });
 

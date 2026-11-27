@@ -2,6 +2,30 @@ import Link from 'next/link';
 import type { WatchGate } from '@/types/api';
 type Props = { showMoviePlayer: boolean; gate: WatchGate; returnTo?: string };
 export default function WatchAccessGate({ showMoviePlayer, gate, returnTo = '/learning' }: Props) {
+  if (
+    showMoviePlayer &&
+    gate.status === 'blocked' &&
+    (gate.code === 'NETWORK' || gate.statusCode === 429 || (gate.statusCode ?? 0) >= 500)
+  )
+    return (
+      <div
+        role="status"
+        className="flex aspect-video flex-col items-center justify-center gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 text-center"
+      >
+        <p className="text-slate-300">
+          {gate.statusCode === 429
+            ? 'Түр хүлээгээд дахин оролдоорой.'
+            : 'Холболт тасарлаа. Киноны эрхийг шалгаж чадсангүй.'}
+        </p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="rounded-xl border border-amber-300/40 px-5 py-2 text-amber-200"
+        >
+          Дахин оролдох
+        </button>
+      </div>
+    );
   return (
     <>
       {showMoviePlayer && gate.status === 'loading' && (

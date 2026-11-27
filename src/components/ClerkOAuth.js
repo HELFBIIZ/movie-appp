@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { ClerkAvailability } from './ClerkAvailability';
 import { useRouter } from 'next/navigation';
 import { useClerk, useUser } from '@clerk/nextjs';
 
@@ -12,7 +13,8 @@ import { useClerk, useUser } from '@clerk/nextjs';
 // password flow - nothing downstream knows this button was ever pressed.
 export default function ClerkOAuth(props) {
   // A keyless build has no ClerkProvider. Gate the component before its hooks mount.
-  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return null;
+  const configured = useContext(ClerkAvailability);
+  if (!configured || !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return null;
   return <EnabledClerkOAuth {...props} />;
 }
 

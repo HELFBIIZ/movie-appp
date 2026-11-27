@@ -72,8 +72,9 @@ export async function POST(request, { params }) {
     const [sub] = await Promise.all([getActiveSubscription(user.id)]);
     const verdict = await canWatch(user.id, movie, sub);
     if (!verdict.allowed) {
-      const status = verdict.code === 'NO_ACTIVE_SUBSCRIPTION' ? 402 : 403;
-      return NextResponse.json({ error: verdict }, { status });
+      const code = verdict.code || verdict.reason || 'SUBSCRIPTION_REQUIRED';
+      const status = code === 'NO_ACTIVE_SUBSCRIPTION' ? 402 : 403;
+      return NextResponse.json({ error: { ...verdict, code } }, { status });
     }
   }
 

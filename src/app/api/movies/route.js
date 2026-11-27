@@ -6,7 +6,7 @@ export async function GET() {
   const payload = tmdbMovies?.length ? tmdbMovies : fallbackMovies || movies;
 
   return Response.json({
-    source: process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY ? 'tmdb' : 'fallback',
+    source: tmdbMovies?.length ? 'tmdb' : 'fallback',
     movies: payload,
     count: payload.length,
   });

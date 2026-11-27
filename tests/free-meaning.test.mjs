@@ -68,18 +68,13 @@ test('free provider uses only the documented anonymous GET and never invokes a p
   assert.equal(calls, 1);
 });
 
-test('concurrent equal sentences share one lookup; a cache hit does not spend the shared budget', async () => {
+test('concurrent equal sentences share one lookup and a cache hit never calls the provider', async () => {
   const cache = new Map();
-  let reserved = 0,
-    translated = 0;
+  let translated = 0;
   const lookup = createSentenceLookup({
     read: async (key) => cache.get(key),
     write: async (key, value) => {
       cache.set(key, value);
-    },
-    reserve: async (bytes) => {
-      reserved += bytes;
-      return true;
     },
     translate: async () => {
       translated++;
@@ -92,13 +87,11 @@ test('concurrent equal sentences share one lookup; a cache hit does not spend th
     true,
   );
   assert.equal(translated, 1);
-  assert.equal(reserved, 6);
   assert.deepEqual(await lookup('same', 'Hello!'), { translation: 'Сайн байна уу!' });
   assert.equal(translated, 1);
-  assert.equal(reserved, 6);
 });
 
-test('exhausted budget and invalid translations never become successful cache entries', async () => {
+test('invalid translations never become successful cache entries', async () => {
   let calls = 0,
     writes = 0;
   const dependencies = {
@@ -106,19 +99,14 @@ test('exhausted budget and invalid translations never become successful cache en
     write: async () => {
       writes++;
     },
-    reserve: async () => false,
     translate: async () => {
       calls++;
       return 'English';
     },
   };
   assert.deepEqual(await createSentenceLookup(dependencies)('key', 'Hello!'), {
-    error: 'FREE_LIMIT_REACHED',
+    error: 'MEANING_UNAVAILABLE',
   });
-  assert.equal(calls, 0);
-  assert.deepEqual(
-    await createSentenceLookup({ ...dependencies, reserve: async () => true })('key', 'Hello!'),
-    { error: 'MEANING_UNAVAILABLE' },
-  );
+  assert.equal(calls, 1);
   assert.equal(writes, 0);
 });

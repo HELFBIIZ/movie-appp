@@ -32,11 +32,25 @@ export function saveGenerated(slug, content, meta = {}) {
 
 export function getGenerated(slug) {
   const manifest = readManifest();
-  const entry = manifest[slug];
-  if (!entry) return null;
-  const file = path.join(DIR, entry.file);
+  let alias;
+  try {
+    alias = JSON.parse(fs.readFileSync(path.join(DIR, 'aliases.json'), 'utf8'))[slug];
+  } catch {
+    /* Older stores have no aliases. */
+  }
+  const entry = Object.hasOwn(manifest, slug)
+    ? manifest[slug]
+    : typeof alias === 'string' && Object.hasOwn(manifest, alias)
+      ? manifest[alias]
+      : null;
+  if (!entry || typeof entry.file !== 'string') return null;
+  const file = path.resolve(DIR, entry.file);
+  if (!file.startsWith(path.resolve(DIR) + path.sep)) return null;
   if (!fs.existsSync(file)) return null;
-  return { content: fs.readFileSync(file, 'utf8'), meta: entry };
+  return {
+    content: fs.readFileSync(file, 'utf8'),
+    meta: alias ? { ...entry, aliasOf: alias } : entry,
+  };
 }
 
 export function getManifest() {

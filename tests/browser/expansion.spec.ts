@@ -247,6 +247,16 @@ test('real local accounts keep separate server progress, reject stale writes and
   try {
     await register(first);
     await register(second);
+    expect((await first.get('/api/stream/tmdb?tmdbId=27205&type=movie')).status()).toBe(402);
+    expect(
+      (
+        await first.post('/api/watch/inception/progress', { data: { watchedSeconds: 3000 } })
+      ).status(),
+    ).toBe(402);
+    expect((await first.get('/api/envtest')).status()).toBe(403);
+    const watchDenial = await first.post('/api/watch/inception');
+    expect(watchDenial.status()).toBe(402);
+    expect((await watchDenial.json()).error.code).toBe('NO_ACTIVE_SUBSCRIPTION');
     // A normal account can use the free learning endpoint; invalid input stops
     // before any provider request, budget reservation or paid service.
     expect(

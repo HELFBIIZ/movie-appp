@@ -30,6 +30,10 @@ const SERIES_CATEGORIES = new Set(['kdrama', 'western', 'tv', 'series']);
 
 export default function WatchPage() {
   const { slug } = useParams<{ slug: string }>();
+  return <WatchMovie key={slug} slug={slug} />;
+}
+
+function WatchMovie({ slug }: { slug: string }) {
   const movie = getMovieBySlug(slug);
 
   const isTV = SERIES_CATEGORIES.has(movie?.category ?? '') && (movie?.episodes ?? 0) > 1;
@@ -101,6 +105,10 @@ export default function WatchPage() {
   }, [slug]);
   const [learningSource, setLearningSource] = useState<LearningSource>('movie');
   const movieIframeRef = useRef<HTMLIFrameElement>(null);
+  const [nativeVideoNode, setNativeVideoNode] = useState<HTMLVideoElement | null>(null);
+  const handleNativeVideo = useCallback((node: HTMLVideoElement | null) => {
+    setNativeVideoNode(node);
+  }, []);
   const showMoviePlayer = !learning || learningSource === 'movie';
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Preserve production mount/source-reset timing; covered by browser regression.
@@ -170,7 +178,8 @@ export default function WatchPage() {
           enabled={learning}
           onChange={(next) => {
             setLearning(next);
-            if (next && learningSource === 'movie') setSource('cine');
+            if (next && learningSource === 'movie' && !['cine', 'hls'].includes(source))
+              setSource('cine');
           }}
         />
 
@@ -196,6 +205,7 @@ export default function WatchPage() {
               activeEmbed={activeEmbed}
               xp={gate.xp}
               movieIframeRef={movieIframeRef}
+              nativeVideoRef={handleNativeVideo}
               onPlayerFailure={handlePlayerFailure}
               onProgress={handleProgress}
             />
@@ -247,6 +257,7 @@ export default function WatchPage() {
               provider: source,
               allowed: gate.status === 'allowed' && showMoviePlayer,
               iframeRef: movieIframeRef,
+              nativeVideoNode,
               onSelectProvider: setSource,
               englishSubtitleUrl: subtitleLabel === 'English' ? subtitleUrl : undefined,
               mongolianSubtitleUrl: subtitleLabel === 'Mongolian' ? subtitleUrl : undefined,

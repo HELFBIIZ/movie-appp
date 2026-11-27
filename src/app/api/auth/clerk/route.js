@@ -15,6 +15,7 @@ import {
   logSecurity,
 } from '../../../../db/index.mjs';
 import { flipLoginStreak, awardXp } from '../../../../lib/xp.mjs';
+import { verifiedClerkEmail } from '@/lib/verified-email';
 
 export async function POST(request) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';
@@ -44,10 +45,8 @@ export async function POST(request) {
   } catch {
     clerkUser = null;
   }
-  const email =
-    clerkUser?.primaryEmailAddress?.emailAddress ||
-    clerkUser?.emailAddresses?.[0]?.emailAddress ||
-    null;
+  const email = verifiedClerkEmail(clerkUser);
+  if (!email) return NextResponse.json({ error: { code: 'EMAIL_NOT_VERIFIED' } }, { status: 403 });
   const displayName =
     [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(' ').trim() ||
     clerkUser?.username ||

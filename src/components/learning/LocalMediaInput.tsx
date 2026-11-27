@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { alignCues, MAX_VTT_BYTES, parseVtt } from '@/lib/learning/vtt';
+import { alignCues, MAX_VTT_BYTES } from '@/lib/learning/vtt';
+import { parseExistingVtt } from '@/lib/learning/movie';
 import type { AlignedCue } from '@/lib/learning/types';
 
 export default function LocalMediaInput({
@@ -31,7 +32,10 @@ export default function LocalMediaInput({
         en.text(),
         mn?.text() ?? Promise.resolve(''),
       ]);
-      const aligned = alignCues(parseVtt(english), mongolian ? parseVtt(mongolian) : []);
+      const aligned = alignCues(
+        parseExistingVtt(english),
+        mongolian ? parseExistingVtt(mongolian) : [],
+      );
       if (!aligned.length) throw new Error('Англи хадмалын өгүүлбэр олдсонгүй.');
       const digest = await crypto.subtle.digest(
         'SHA-256',

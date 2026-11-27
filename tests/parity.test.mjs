@@ -55,7 +55,24 @@ function loadModule(file, original = false, cache = new Map()) {
   );
   return exports;
 }
-const plain = (value) => JSON.parse(JSON.stringify(value));
+// Intentional audit fix: preserve all title records while giving the five
+// previously shadowed entries unique URLs. Other catalog data stays identical.
+const renamed = new Map([
+  ['whiplash:12182:1961', 'whiplash-1961'],
+  ['fury:228150:2014', 'fury-2014'],
+  ['taxi-driver:103:1976', 'taxi-driver-1976'],
+  ['the-handmaiden:290098:2016:popular', 'the-handmaiden-2016'],
+  ['the-hateful-eight:273248:2015', 'the-hateful-eight-2015'],
+]);
+const plain = (value) =>
+  JSON.parse(
+    JSON.stringify(value, (_key, item) => {
+      if (!item || typeof item !== 'object' || !item.slug) return item;
+      const key = `${item.slug}:${item.tmdbId}:${item.year}`;
+      const slug = renamed.get(`${key}:${item.category}`) ?? renamed.get(key);
+      return slug ? { ...item, slug } : item;
+    }),
+  );
 const current = (stem, oldExtension = 'js') =>
   fs.existsSync(path.join(root, `src/lib/${stem}.ts`))
     ? `src/lib/${stem}.ts`
@@ -169,7 +186,7 @@ test('validation retains coercion, empty values, stateful patterns and response 
   );
 });
 
-test('legacy subtitle formatting and constant values remain unchanged', () => {
+test('subtitle text/timing and constants stay identical while VTT gains required blank cue separators', () => {
   const before = loadModule('src/lib/subtitles-format.js', true);
   const after = loadModule(current('subtitles-format'));
   for (const input of [
@@ -178,7 +195,10 @@ test('legacy subtitle formatting and constant values remain unchanged', () => {
     '1\n00:00:01,000 --> 00:00:02,000\nLine one\nLine two\n\n2\n00:00:03,000 --> 00:00:04,000\nSecond',
     'corrupt input',
   ]) {
-    assert.equal(after.normalizeToVtt(input), before.normalizeToVtt(input));
+    assert.equal(
+      after.normalizeToVtt(input).replace(/\n+/g, '\n'),
+      before.normalizeToVtt(input).replace(/\n+/g, '\n'),
+    );
     assert.deepEqual(plain(after.parseCues(input)), plain(before.parseCues(input)));
   }
   assert.deepEqual(

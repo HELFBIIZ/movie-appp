@@ -5,6 +5,7 @@ import HelpButton from '@/components/HelpButton';
 import { ClerkProvider } from '@clerk/nextjs';
 import { LearningAccount } from '@/components/learning/LearningAccount';
 import LevelCheck from '@/components/learning/LevelCheck';
+import { ClerkAvailabilityProvider } from '@/components/ClerkAvailability';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -40,7 +41,9 @@ export default function RootLayout({ children }) {
         <div aria-hidden="true" className="aurora" />
         <ThemeProvider>
           <LearningAccount>
-            {clerkEnabled ? <ClerkProvider>{children}</ClerkProvider> : children}
+            <ClerkAvailabilityProvider enabled={clerkEnabled}>
+              {clerkEnabled ? <ClerkProvider>{children}</ClerkProvider> : children}
+            </ClerkAvailabilityProvider>
             <LevelCheck />
           </LearningAccount>
         </ThemeProvider>

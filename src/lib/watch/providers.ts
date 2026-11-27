@@ -22,6 +22,7 @@ export function vidsrcUrl(
   if (subUrl) {
     params.push(`sub_url=${encodeURIComponent(subUrl)}`);
     params.push(`sub_lang=${captionLanguage(selection?.label || 'Mongolian')}`);
+    params.push(`sub_label=${encodeURIComponent(selection?.label || 'Mongolian')}`);
   }
   return `${base}?${params.join('&')}`;
 }

@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getMovieBySlug } from '../../../../../lib/movies';
-import { requireUser, rateLimit, upsertWatchRecord } from '../../../../../db/index.mjs';
+import {
+  requireUser,
+  rateLimit,
+  upsertWatchRecord,
+  getActiveSubscription,
+  canWatch,
+} from '../../../../../db/index.mjs';
 
 function runtimeSeconds(value) {
   const text = String(value || '');
@@ -16,6 +22,11 @@ export async function POST(request, { params }) {
 
   const movie = getMovieBySlug(slug);
   if (!movie) return NextResponse.json({ error: { code: 'MOVIE_NOT_FOUND' } }, { status: 404 });
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(user.roleCode)) {
+    const verdict = await canWatch(user.id, movie, await getActiveSubscription(user.id));
+    if (!verdict.allowed)
+      return NextResponse.json({ error: { code: 'SUBSCRIPTION_REQUIRED' } }, { status: 402 });
+  }
 
   const rl = rateLimit(`watch-progress:${user.id}:${slug}`, { max: 240 });
   if (rl.limited) {

@@ -1,18 +1,47 @@
 import { NextResponse } from 'next/server';
 import { resolveStreamCandidates } from '@/lib/streams';
+import { movies } from '@/lib/movies';
+import { requireUser, rateLimit, getActiveSubscription, canWatch } from '@/db/index.mjs';
+import { z } from 'zod';
 
 export async function GET(request) {
+  const { user, error } = await requireUser(request.cookies.get('mn_session')?.value);
+  if (error) return NextResponse.json({ error }, { status: 401 });
+  if (rateLimit(`stream:${user.id}`, { max: 30 }).limited)
+    return NextResponse.json({ error: { code: 'RATE_LIMITED' } }, { status: 429 });
   const { searchParams } = new URL(request.url);
-  const tmdbId = searchParams.get('tmdbId');
-  const type = searchParams.get('type') === 'tv' ? 'tv' : 'movie';
-  const season = searchParams.get('season') ? Number(searchParams.get('season')) : undefined;
-  const episode = searchParams.get('episode') ? Number(searchParams.get('episode')) : undefined;
-  const variant = Number(searchParams.get('variant') || 0);
-  const forceRefresh = searchParams.get('refresh') === '1';
-
-  if (!tmdbId) {
-    return NextResponse.json({ error: 'Missing tmdbId' }, { status: 400 });
+  const parsed = z
+    .object({
+      tmdbId: z.coerce.number().int().positive(),
+      type: z.enum(['movie', 'tv']),
+      season: z.coerce.number().int().min(1).max(100),
+      episode: z.coerce.number().int().min(1).max(1000),
+      variant: z.coerce.number().int().min(0).max(100),
+    })
+    .safeParse({
+      tmdbId: searchParams.get('tmdbId'),
+      type: searchParams.get('type') || 'movie',
+      season: searchParams.get('season') || 1,
+      episode: searchParams.get('episode') || 1,
+      variant: searchParams.get('variant') || 0,
+    });
+  if (!parsed.success)
+    return NextResponse.json({ error: { code: 'INVALID_STREAM_REQUEST' } }, { status: 400 });
+  const { tmdbId, type, season, episode, variant } = parsed.data;
+  const movie = movies.find(
+    (item) =>
+      Number(item.tmdbId) === tmdbId &&
+      (['kdrama', 'western', 'tv', 'series'].includes(item.category) && item.episodes > 1
+        ? 'tv'
+        : 'movie') === type,
+  );
+  if (!movie) return NextResponse.json({ error: { code: 'MOVIE_NOT_FOUND' } }, { status: 404 });
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(user.roleCode)) {
+    const verdict = await canWatch(user.id, movie, await getActiveSubscription(user.id));
+    if (!verdict.allowed)
+      return NextResponse.json({ error: { code: 'SUBSCRIPTION_REQUIRED' } }, { status: 402 });
   }
+  const forceRefresh = searchParams.get('refresh') === '1';
 
   try {
     const candidates = await resolveStreamCandidates(tmdbId, {
@@ -36,7 +65,7 @@ export async function GET(request) {
       url: stream.url,
       candidates,
     });
-  } catch (err) {
-    return NextResponse.json({ error: err.message || 'Stream resolution failed' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Тоглуулах эх сурвалжийг нээж чадсангүй.' }, { status: 503 });
   }
 }

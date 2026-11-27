@@ -1,3 +1,4 @@
+import { clerkCspSources } from './src/lib/clerk-csp.mjs';
 /** @type {import('next').NextConfig} */
 
 // Helmet-equivalent for Next: a static, dependency-free security-header layer
@@ -8,12 +9,16 @@
 //   • HSTS is emitted in all environments; harmless on localhost, essential on
 //     the production domain (add preload when you control HSTS preload lists).
 const isDev = process.env.NODE_ENV === 'development';
+const clerkSources = clerkCspSources(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  Boolean(process.env.CLERK_SECRET_KEY),
+);
 // React dev + our dynamic import('hls.js') need eval to rebuild callstacks —
 // NEVER ship 'unsafe-eval' to production. worker-src blob: is required by
 // hls.js's optional WebWorker (MediaSource buffering) in both envs.
 const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : "script-src 'self' 'unsafe-inline'";
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'" + clerkSources
+  : "script-src 'self' 'unsafe-inline'" + clerkSources;
 
 const securityHeaders = [
   {
@@ -54,7 +59,8 @@ const securityHeaders = [
       "worker-src 'self' blob:",
       // Player iframes. Several providers (multiembed, embedmaster) immediately
       // redirect to a separate player origin, so those must be allowlisted too.
-      'frame-src https://bingeapi.st https://vidsrc.sh https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://www.youtube.com https://www.youtube-nocookie.com',
+      'frame-src https://bingeapi.st https://vidsrc.sh https://cinesrc.st https://multiembed.mov https://streamingnow.mov https://embedmaster.link https://embdmstrplayer.com https://watch.embed-api.stream https://www.youtube.com https://www.youtube-nocookie.com' +
+        clerkSources,
       "frame-ancestors 'none'",
       "object-src 'none'",
       "base-uri 'self'",

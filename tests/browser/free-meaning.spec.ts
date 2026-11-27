@@ -37,7 +37,7 @@ test('sentence meaning is on demand, returns to the word lesson and reuses the l
   expect(paidRequests).toEqual([]);
 });
 
-test('free limit and guest guards do not call a paid provider or show false subtitles', async ({
+test('provider failures and guest guards do not call a paid provider or show false subtitles', async ({
   page,
   request,
 }) => {
@@ -45,12 +45,14 @@ test('free limit and guest guards do not call a paid provider or show false subt
     (await request.post('/api/learning/sentence', { data: { text: 'Hello!' } })).status(),
   ).toBe(401);
   await page.route('**/api/learning/sentence', (route) =>
-    route.fulfill({ status: 429, json: { error: { code: 'FREE_LIMIT_REACHED' } } }),
+    route.fulfill({ status: 503, json: { error: { code: 'MEANING_UNAVAILABLE' } } }),
   );
   await openLocal(page);
   const practice = page.getByRole('region', { name: 'Өгүүлбэрээр үг сурах' });
   await practice.getByRole('button', { name: 'Монгол утгыг үзэх', exact: true }).click();
-  await expect(practice.getByRole('status')).toContainText('Өнөөдрийн үнэгүй хязгаарт хүрлээ');
+  await expect(practice.getByRole('status')).toContainText(
+    'Утгыг одоогоор нээж чадсангүй. Дахин оролдоно уу.',
+  );
   await expect(practice.locator('[lang="mn"]')).toHaveCount(0);
   await expect(
     practice.getByRole('button', { name: 'train — утгыг харах', exact: true }),
@@ -93,7 +95,7 @@ test('a wrong provided meaning can be replaced from the actual English line and 
   await practice.getByRole('button', { name: 'Утга таарахгүй байна', exact: true }).click();
   await expect(practice).not.toContainText('Чи надад итгэнэ');
   expect(calls).toBe(0);
-  await expect(practice).toContainText('Энэ өгүүлбэр MyMemory үйлчилгээнд илгээгдэнэ');
+  await expect(practice).toContainText('Утга нээгдэнэ · өдрийн хязгааргүй.');
   await practice.getByRole('button', { name: 'Монгол утгыг үзэх', exact: true }).click();
   await expect(practice).toContainText('Галт тэрэг удахгүй хөдөлнө.');
   await practice.getByRole('button', { name: 'train — утгыг харах', exact: true }).click();

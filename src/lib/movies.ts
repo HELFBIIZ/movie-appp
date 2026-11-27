@@ -7,6 +7,7 @@ import westernCatalog from './western.json';
 import type { Movie, MovieArtwork } from '../types/movie';
 import { popularFallbackMovies } from './catalog/curated';
 import { makePosterUrl, makeBannerUrl } from './catalog/art';
+import { assignCatalogSlugs } from './catalog/identity';
 
 const tmdbArt: Record<string, MovieArtwork | null> = tmdbArtData;
 const kdramaArt: Record<string, MovieArtwork | null> = kdramaArtData;
@@ -37,7 +38,7 @@ const westernCatalogMovies = (westernCatalog || [])
     banner: movie.banner || makeBannerUrl(movie.title),
   }));
 
-export const movies: Movie[] = [
+export const movies: Movie[] = assignCatalogSlugs([
   ...popularFallbackMovies.map((movie) => {
     const art = tmdbArt[movie.slug];
     return {
@@ -50,7 +51,7 @@ export const movies: Movie[] = [
   ...kdramaCatalogMovies,
   ...westernCatalogMovies,
   ...generatedMovies,
-];
+]);
 
 export const fallbackMovies = movies;
 export const featuredMovie = movies[0];
