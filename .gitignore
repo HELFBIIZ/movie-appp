@@ -32,10 +32,30 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
 
+# database backups (rotated by scripts/backup.mjs)
+/backups
+
+# Runtime user/payment/session data must never be published with application code.
+/data/db/*.db
+/data/db/*.db-wal
+/data/db/*.db-shm
+/data/db/*.db-journal
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off script output
+/fill.log
+/fill.err
+/sync.log
+
+# SceneChain local browser evidence
+/test-results/
+/playwright-report/
+/.refactor-evidence/

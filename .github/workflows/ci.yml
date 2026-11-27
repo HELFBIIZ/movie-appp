@@ -1,0 +1,49 @@
+name: VXNTA CI
+on:
+  pull_request:
+    branches: [main, vercel-turso]
+permissions:
+  contents: read
+concurrency:
+  group: vxnta-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality:
+    name: VXNTA quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+      HUSKY: '0'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - name: Compare learning UI with its feature baseline in the same browser
+        run: npm run test:visual
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: learning-browser-evidence
+          include-hidden-files: true
+          path: |
+            .refactor-evidence/baseline
+            .refactor-evidence/after
+            .refactor-evidence/preview
+            test-results
+            playwright-report
+          retention-days: 14

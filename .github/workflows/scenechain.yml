@@ -1,0 +1,30 @@
+name: SceneChain checks
+on:
+  push:
+    branches: [feat/scenechain-watch, feat/scenechain-spider-man]
+  pull_request:
+jobs:
+  learning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: scenechain-browser-failure
+          path: test-results
+          retention-days: 7
